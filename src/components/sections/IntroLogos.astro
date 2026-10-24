@@ -76,7 +76,7 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
     }
   }
   .intro :global(.intro__logos) {
-    width: min(100%, 64.4375rem); /* 1031px */
+    width: min(var(--width-content), 46rem); /* the strip was 1031px; the logos sit closer together */
   }
   @media (max-width: 767px) {
     .intro {

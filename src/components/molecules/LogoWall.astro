@@ -54,7 +54,7 @@ const { logos, class: className } = Astro.props;
     flex-flow: wrap;
   }
 
-  /* One row of 4 at every width */
+  /* One row of 4; 2×2 on phones */
   .logo-wall__item {
     width: 25%;
     position: relative;
@@ -71,15 +71,15 @@ const { logos, class: className } = Astro.props;
     position: relative;
   }
 
-  /* Lower cells than Osmo (66.66%); the logo box keeps its shape */
+  /* Lower cells than Osmo (66.66%) */
   .logo-wall__logo-before {
-    padding-top: 40%;
+    padding-top: 56%;
   }
 
   .logo-wall__logo-target {
     justify-content: center;
     align-items: center;
-    width: 66.66%;
+    width: 90%;
     height: 66.66%;
     display: flex;
     position: absolute;
@@ -94,16 +94,12 @@ const { logos, class: className } = Astro.props;
     aspect-ratio: var(--ratio);
   }
 
-  /* Phone: four in a row leaves little room, so the logos fill more of it */
   @media (max-width: 767px) {
+    .logo-wall__item {
+      width: 50%;
+    }
     .logo-wall__logo-before {
-      padding-top: 66.66%;
-    }
-    .logo-wall__logo-target {
-      width: 90%;
-    }
-    .logo-wall__logo-img {
-      width: min(100cqw, 45cqw * sqrt(var(--ratio)), 100cqh * var(--ratio));
+      padding-top: 45%;
     }
   }
 </style>

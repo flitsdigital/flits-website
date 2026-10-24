@@ -22,6 +22,8 @@ import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry
 const GAP = 96;
 
 gsap.registerPlugin(CustomEase);
+/** The site's motion curve (--ease-osmo in tokens.css) */
+const osmo = CustomEase.create('osmo', 'M0,0 C0.625,0.05 0,1 1,1');
 
 /** A GSAP ease from CSS: `cubic-bezier(a, b, c, d)` becomes a CustomEase, anything else is a GSAP ease name. */
 function easeFromCss(value: string) {
@@ -140,8 +142,8 @@ export function initRadialSliders(): () => void {
       stepping?.kill();
       stepping = gsap.to(state, {
         offset: target,
-        duration: reduceMotion ? 0 : 0.7,
-        ease: 'power3.out',
+        duration: reduceMotion ? 0 : 0.8, // the curve starts slowly, so a touch longer than 0.7s
+        ease: osmo,
         onUpdate: render,
         onComplete: () => (stepping = null),
       });
