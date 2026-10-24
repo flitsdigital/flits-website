@@ -1,7 +1,8 @@
 /**
- * Osmo "Rotating Image Trail", unchanged except: typed, every [data-trail-area] on the page, started
+ * Osmo "Rotating Image Trail", unchanged except: fewer photos that stay longer and fade out instead of
+ * spinning away (feedback 2026-10-24), typed, every [data-trail-area] on the page, started
  * per page view from app.ts (Swup) with a cleanup, and off with reduced motion. Moving the mouse over
- * the area spawns clones of the items in turn, which pop in and spin out.
+ * the area spawns clones of the items in turn, which pop in and fade out.
  */
 export function initRotatingImageTrail(): (() => void) | void {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -20,7 +21,7 @@ export function initRotatingImageTrail(): (() => void) | void {
     let lastCloneY: number | null = null;
 
     const cardWidth = items[0].getBoundingClientRect().width;
-    const stepDistance = cardWidth * 0.5;
+    const stepDistance = cardWidth * 1.25; // Osmo 0.5: fewer photos
     const timers = new Set<number>();
     const later = (fn: () => void, ms: number) => {
       const id = window.setTimeout(() => {
@@ -45,8 +46,8 @@ export function initRotatingImageTrail(): (() => void) | void {
 
       clone.setAttribute('data-trail-item', 'visible');
 
-      later(() => clone.setAttribute('data-trail-item', 'transition-out'), 400);
-      later(() => clone.remove(), 1200);
+      later(() => clone.setAttribute('data-trail-item', 'transition-out'), 1200); // Osmo 400: stays longer
+      later(() => clone.remove(), 1800);
 
       index = (index + 1) % items.length;
       lastCloneX = x;
