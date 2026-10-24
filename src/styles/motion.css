@@ -49,7 +49,8 @@ html.is-arriving::after {
 }
 
 /* ---------- Home entry (first load only; app.ts drops data-landing on the first navigation) ----------
-   Bolts fade in, the copy rises line by line, the yellow bar wipes in behind "Impact", then the photos. ~1.2s. */
+   Bolts fade in, the copy rises line by line, the yellow bar wipes in behind "Impact", then the photos. ~1.2s.
+   entry-animations branch: this is variant 0; variants 1–10 live in entry-variants.css. */
 @keyframes flits-rise {
   from {
     opacity: 0;
@@ -66,25 +67,25 @@ html.is-arriving::after {
     clip-path: inset(0 100% 0 0);
   }
 }
-html[data-landing] .hero > .bg-shapes {
+html[data-landing][data-entry="0"] .hero > .bg-shapes {
   animation: flits-fade 0.9s var(--ease-out) both;
 }
-html[data-landing] .hero .eyebrow {
+html[data-landing][data-entry="0"] .hero .eyebrow {
   animation: flits-rise 0.7s var(--ease-out) 0.1s both;
 }
-html[data-landing] .hero__title > span:first-child {
+html[data-landing][data-entry="0"] .hero__title > span:first-child {
   display: inline-block;
   animation: flits-rise 0.7s var(--ease-out) 0.2s both;
 }
-html[data-landing] .hero__highlight {
+html[data-landing][data-entry="0"] .hero__highlight {
   animation: flits-wipe 0.55s var(--ease-in-out) 0.45s both;
 }
-html[data-landing] .hero__intro {
+html[data-landing][data-entry="0"] .hero__intro {
   animation: flits-rise 0.7s var(--ease-out) 0.55s both;
 }
-html[data-landing] .hero + .hero-media {
+html[data-landing][data-entry="0"] .hero + .hero-media {
   animation: flits-rise 0.9s var(--ease-out) 0.65s both;
 }
-html[data-landing] .nav__bar {
+html[data-landing][data-entry="0"] .nav__bar {
   animation: flits-fade 0.6s var(--ease-out) both;
 }

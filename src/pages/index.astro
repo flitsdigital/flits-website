@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
+import EntrySwitcher from '../components/molecules/EntrySwitcher.astro';
 import HeroHome from '../components/sections/HeroHome.astro';
 import ImageFan from '../components/sections/ImageFan.astro';
 import IntroLogos from '../components/sections/IntroLogos.astro';
@@ -55,4 +56,6 @@ const founders = avatarsOf(team);
     members={[joery, jordi]}
   />
   <Showreel title="Een kijkje achter de schermen" screen={phoneScreen} />
+  <!-- entry-animations branch only -->
+  <EntrySwitcher />
 </PageLayout>
