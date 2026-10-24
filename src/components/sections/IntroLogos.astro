@@ -46,7 +46,7 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: var(--space-24);
-    width: min(var(--width-content), 37.5625rem); /* 601px */
+    width: var(--span-6);
   }
   .intro__text > :global(.ticker) {
     margin-bottom: calc(var(--space-16) - var(--space-24));
@@ -76,7 +76,7 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
     }
   }
   .intro :global(.intro__logos) {
-    width: min(var(--width-content), 46rem); /* the strip was 1031px; the logos sit closer together */
+    width: var(--span-8); /* columns 3–10 */
   }
   @media (max-width: 767px) {
     .intro {

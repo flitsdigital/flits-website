@@ -6,19 +6,13 @@
 
 /* ---------- Page transitions (Swup, src/scripts/app.ts) ----------
    The page itself never fades: the old page stays until the new one is in, then they swap at once,
-   so no background (light or dark) ever shows through. Only the new hero's content arrives:
-   it rises 12px into place in 320ms while every background stays solid. On brand: a yellow line
-   flashes across the top edge, like the bolt. app.ts sets html.is-arriving for ~0.6s after the swap. */
-/* transform (not translate): some hero parts centre themselves with `translate` */
-@keyframes flits-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(0.75rem);
-  }
-}
+   so no background (light or dark) ever shows through. Only the new hero's content arrives: it comes
+   into focus from a lens blur, like the home entry (flits-focus below), while every background stays
+   solid. On brand: a yellow line flashes across the top edge, like the bolt. app.ts sets
+   html.is-arriving for ~0.8s after the swap. */
 html.is-arriving #swup > section:first-child > :not(.bg-shapes, .photo-backdrop),
 html.is-arriving #swup > .hero-media {
-  animation: flits-arrive 0.32s var(--ease-out) both;
+  animation: flits-focus 0.6s var(--ease-osmo) both;
 }
 html.is-arriving #swup > .hero-media {
   animation-delay: 0.06s;

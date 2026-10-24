@@ -16,7 +16,7 @@ const { title, lead } = Astro.props;
 <!-- The text column comes first in the HTML so its h2 precedes the form's h3; the grid puts it right -->
 <section class="contact" id="contact">
   <div class="contact__side">
-    <SectionHeader title={title} lead={lead} softLead width={600} align="start" spaced={false} />
+    <SectionHeader title={title} lead={lead} softLead span={6} align="start" spaced={false} />
     <div class="contact__widgets">
       <ClockWidget layout="wide" />
       <WeatherWidget />
@@ -28,9 +28,9 @@ const { title, lead } = Astro.props;
 <style>
   .contact {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-48);
-    width: var(--width-content);
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* form 6 columns · text 6 columns */
+    gap: var(--grid-gap);
+    width: var(--grid-width);
     margin-inline: auto;
     padding-block: 2.8125rem 6.875rem; /* 109px under the FAQ (64px of it is the FAQ's margin) / 110px */
   }
@@ -40,16 +40,41 @@ const { title, lead } = Astro.props;
     display: flex;
     flex-direction: column;
   }
-  /* Clock bottom-aligned with the form, weather 40px under the lead on the right */
+  /* Clock (4 columns) bottom-aligned with the form, weather (2 columns) 40px under the lead on the right */
   .contact__widgets {
     flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: var(--space-24);
+    display: grid;
+    grid-template-columns: var(--span-4) var(--span-2);
+    align-items: end;
+    gap: var(--grid-gap);
     margin-top: 2.5rem; /* 40px */
   }
   .contact__widgets > :global(.weather) {
     align-self: flex-start;
+  }
+  /* Tablet: the side column is 3 columns → clock 2 + weather 1 */
+  @media (max-width: 991px) {
+    .contact__widgets {
+      grid-template-columns: var(--span-2) var(--span-1);
+    }
+    .contact__widgets > :global(*) {
+      width: 100%;
+    }
+  }
+  /* Phone: text and widgets above the form; the clock across, the weather on 2 columns */
+  @media (max-width: 767px) {
+    .contact {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .contact__side {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    .contact__widgets {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .contact__widgets > :global(.clock) {
+      grid-column: 1 / -1;
+    }
   }
 </style>

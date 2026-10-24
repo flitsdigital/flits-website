@@ -1,0 +1,100 @@
+---
+const cols = Array.from({ length: 12 });
+---
+
+<!-- Osmo "Animated Grid Overlay (Columns)": a design check, toggled with Shift+G only (no button).
+     Columns follow the site grid (--grid-columns / --grid-gap inside --width-content). Outside #swup,
+     so it stays put across page transitions. While it's open, hovering shows the element's box and
+     size like Figma's selection (grid-overlay.ts), so text blocks can be checked against the columns. -->
+<div data-animated-grid class="animated-grid" aria-hidden="true">
+  <div class="animated-grid__container">
+    <div class="animated-grid__row">
+      {cols.map(() => <div data-animated-grid-col class="animated-grid__col"></div>)}
+    </div>
+  </div>
+</div>
+<div class="grid-inspect" data-grid-inspect aria-hidden="true" hidden>
+  <span class="grid-inspect__size" data-grid-inspect-size></span>
+</div>
+
+<style>
+  .animated-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: none;
+    display: none; /* the script shows it */
+  }
+  .animated-grid__container {
+    width: var(--grid-width);
+    height: 100%;
+    margin-inline: auto;
+  }
+  .animated-grid__row {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    gap: var(--grid-gap);
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+  }
+  /* Osmo's #f4f4f4 disappears on our light-100 background; a mid grey reads on light and dark */
+  .animated-grid__col {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    opacity: 0.2;
+    background-color: #808080;
+  }
+  /* Figma-style selection: 1px blue outline, square corner handles, size tag underneath */
+  .grid-inspect {
+    position: fixed;
+    z-index: 201;
+    pointer-events: none;
+    border: 1px solid #0d99ff;
+  }
+  .grid-inspect::before,
+  .grid-inspect::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background:
+      linear-gradient(#0d99ff, #0d99ff) top left / 7px 7px,
+      linear-gradient(#0d99ff, #0d99ff) top right / 7px 7px,
+      linear-gradient(#0d99ff, #0d99ff) bottom left / 7px 7px,
+      linear-gradient(#0d99ff, #0d99ff) bottom right / 7px 7px;
+    background-repeat: no-repeat;
+  }
+  .grid-inspect::after {
+    inset: -3px;
+    background:
+      linear-gradient(#fff, #fff) top left / 5px 5px,
+      linear-gradient(#fff, #fff) top right / 5px 5px,
+      linear-gradient(#fff, #fff) bottom left / 5px 5px,
+      linear-gradient(#fff, #fff) bottom right / 5px 5px;
+    background-repeat: no-repeat;
+  }
+  .grid-inspect__size {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    translate: -50% 0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #0d99ff;
+    color: #fff;
+    font: 500 11px/1.4 system-ui, sans-serif;
+    white-space: nowrap;
+  }
+  /* Only the columns the grid has at this width */
+  @media screen and (max-width: 991px) {
+    .animated-grid__col:nth-child(n + 7) {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .animated-grid__col:nth-child(n + 5) {
+      display: none;
+    }
+  }
+</style>

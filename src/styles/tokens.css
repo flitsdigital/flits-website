@@ -109,6 +109,28 @@
   /* Fluid from 375px (mobile, inferred — Figma is desktop only) to 1440px (Figma) */
   --gutter: clamp(1.25rem, 7.136vw - 0.4225rem, 6rem);
   --gutter-panel: clamp(0.5rem, 3.756vw - 0.3803rem, 3rem);
+  /* Column grid inside --width-content: 12 × 60px with 48px gaps at 1440 (a project card = 6 columns);
+     6 columns on tablets, 4 on phones (Shift+G shows it, GridOverlay.astro) */
+  --grid-columns: 12;
+  --grid-gap: clamp(1rem, 0.2958rem + 3.005vw, 3rem);
+  /* Column sizes, the same in every element (inside panels too): from the page width, not the parent.
+     --page-width is set without the scrollbar by BaseLayout; 100vw is the fallback. Nothing may sit
+     in a gutter: give blocks a span, and centre only even spans (odd ones land half a column off). */
+  --page-width: 100vw;
+  --grid-width: min(var(--page-width) - 2 * var(--gutter), var(--container-max));
+  --grid-col: calc((var(--grid-width) - (var(--grid-columns) - 1) * var(--grid-gap)) / var(--grid-columns));
+  --span-1: min(var(--grid-width), 1 * var(--grid-col) + 0 * var(--grid-gap));
+  --span-2: min(var(--grid-width), 2 * var(--grid-col) + 1 * var(--grid-gap));
+  --span-3: min(var(--grid-width), 3 * var(--grid-col) + 2 * var(--grid-gap));
+  --span-4: min(var(--grid-width), 4 * var(--grid-col) + 3 * var(--grid-gap));
+  --span-5: min(var(--grid-width), 5 * var(--grid-col) + 4 * var(--grid-gap));
+  --span-6: min(var(--grid-width), 6 * var(--grid-col) + 5 * var(--grid-gap));
+  --span-7: min(var(--grid-width), 7 * var(--grid-col) + 6 * var(--grid-gap));
+  --span-8: min(var(--grid-width), 8 * var(--grid-col) + 7 * var(--grid-gap));
+  --span-9: min(var(--grid-width), 9 * var(--grid-col) + 8 * var(--grid-gap));
+  --span-10: min(var(--grid-width), 10 * var(--grid-col) + 9 * var(--grid-gap));
+  --span-11: min(var(--grid-width), 11 * var(--grid-col) + 10 * var(--grid-gap));
+  --span-12: min(var(--grid-width), 12 * var(--grid-col) + 11 * var(--grid-gap));
   /* Ready-made widths: the one place the mobile phase changes gutters */
   --width-content: min(100% - 2 * var(--gutter), var(--container-max));
   --width-narrow: min(100% - 2 * var(--gutter), var(--container-narrow));
@@ -128,4 +150,16 @@
   --ease-in: cubic-bezier(0.64, 0, 0.78, 0); /* things leaving */
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-osmo: cubic-bezier(0.625, 0.05, 0, 1); /* the home entry curve (GSAP: CustomEase from the same bezier) */
+}
+
+/* @group Grid breakpoints: 6 columns on tablets, 4 on phones */
+@media (max-width: 991px) {
+  :root {
+    --grid-columns: 6;
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --grid-columns: 4;
+  }
 }

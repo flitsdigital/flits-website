@@ -15,7 +15,7 @@ const { title, ticker, services } = Astro.props;
 ---
 
 <section class="services">
-  <SectionHeader title={title} ticker={ticker} width={813} gap={28} />
+  <SectionHeader title={title} ticker={ticker} span={8} gap={28} />
   <div class="services__grid">
     {
       services.map((s) => (
@@ -31,10 +31,10 @@ const { title, ticker, services } = Astro.props;
   }
   .services__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-48);
-    width: var(--width-content);
-    margin: calc(-1 * var(--space-16)) auto 0; /* Figma: cards start 16px into the header's bottom padding */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--grid-gap); /* two cards of 6 columns */
+    width: var(--grid-width);
+    margin-inline: auto; /* not tucked into the header's padding: the boxes would overlap */
   }
 
   @media (max-width: 767px) {
@@ -43,8 +43,7 @@ const { title, ticker, services } = Astro.props;
     }
     .services__grid {
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-16);
-      margin-top: 0;
+      gap: var(--grid-gap);
     }
   }
 </style>

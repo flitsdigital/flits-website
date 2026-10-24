@@ -17,7 +17,7 @@ const { title, lead, image, review } = Astro.props;
 
 <!-- Figma 1:3243 + 1:3258/1:3259: header in the 817 column, photo and the client's review side by side -->
 <section class="case-testimonial">
-  <SectionHeader title={title} lead={lead} width={817} align="start" spaced={false} />
+  <SectionHeader title={title} lead={lead} span={8} align="start" spaced={false} />
   <div class="case-testimonial__row">
     <Image class="case-testimonial__img" src={image} alt="" widths={[600, 1200]} sizes="(min-width: 1440px) 600px, 45vw" />
     <ReviewCard {...review.data} class="case-testimonial__review" />
@@ -32,9 +32,9 @@ const { title, lead, image, review } = Astro.props;
   }
   .case-testimonial__row {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-48);
-    width: var(--width-content);
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 6 columns each */
+    gap: var(--grid-gap);
+    width: var(--grid-width);
     margin-inline: auto;
   }
   .case-testimonial :global(.case-testimonial__img) {

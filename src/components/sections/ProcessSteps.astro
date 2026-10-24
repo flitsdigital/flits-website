@@ -19,7 +19,7 @@ const { title, lead, steps } = Astro.props;
 <section class="steps" data-steps>
   <Panel>
     <div class="steps__inner">
-      <SectionHeader title={title} lead={lead} width={817} spaced={false} />
+      <SectionHeader title={title} lead={lead} span={8} spaced={false} />
       <ol class="steps__track" data-steps-track>
         {steps.map((s, i) => <li><StepCard step={i + 1} {...s} /></li>)}
       </ol>
@@ -42,13 +42,13 @@ const { title, lead, steps } = Astro.props;
   .steps__track {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 24rem; /* 384px */
-    gap: var(--space-48);
+    grid-auto-columns: var(--span-4);
+    gap: var(--grid-gap);
     margin-top: 5.3125rem; /* 85px */
-    padding-inline: var(--gutter-panel);
+    padding-inline: calc((100% - var(--grid-width)) / 2); /* cards start on the first column */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter-panel);
+    scroll-padding-inline: calc((100% - var(--grid-width)) / 2);
     scrollbar-width: none;
   }
   .steps__track > li {
@@ -61,9 +61,9 @@ const { title, lead, steps } = Astro.props;
     top: 27.6875rem; /* 443px */
   }
   .steps :global(.steps__nav--next) {
-    right: calc((100% - var(--width-panel)) / 2 - 45px);
+    right: max(0px, (100% - var(--width-panel)) / 2 - 45px); /* never past the screen edge */
   }
   .steps :global(.steps__nav--prev) {
-    left: calc((100% - var(--width-panel)) / 2 - 45px);
+    left: max(0px, (100% - var(--width-panel)) / 2 - 45px);
   }
 </style>

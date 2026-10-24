@@ -16,7 +16,7 @@ const { title, lead, features, variant = 'pains' } = Astro.props;
 
 <!-- Figma 1:2493 + 1:2499 (social) / 1:3056 + 1:3062 (website): header in the 817 column, 3×2 cards -->
 <section class:list={['feature-grid', `feature-grid--${variant}`]}>
-  <SectionHeader title={title} lead={lead} width={817} spaced={false} />
+  <SectionHeader title={title} lead={lead} span={8} spaced={false} />
   <div class="feature-grid__cards">
     {features.map((f) => <FeatureCard {...f} />)}
   </div>
@@ -28,18 +28,25 @@ const { title, lead, features, variant = 'pains' } = Astro.props;
   }
   .feature-grid__cards {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    width: var(--width-content);
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 4 columns each */
+    width: var(--grid-width);
     margin-inline: auto;
   }
   .feature-grid--pains .feature-grid__cards {
     grid-auto-rows: 19.4375rem; /* 311px */
-    gap: 47px var(--space-48);
+    gap: 47px var(--grid-gap);
     margin-top: 3.6875rem; /* 59px */
   }
   .feature-grid--services .feature-grid__cards {
     grid-auto-rows: 16.5rem; /* 264px */
-    gap: 42px var(--space-48);
+    gap: 42px var(--grid-gap);
     margin-top: 4.5rem; /* 72px */
+  }
+  /* Phone: three across doesn't fit 4 columns, so the cards stack */
+  @media (max-width: 767px) {
+    .feature-grid__cards {
+      grid-template-columns: minmax(0, 1fr);
+      grid-auto-rows: auto;
+    }
   }
 </style>

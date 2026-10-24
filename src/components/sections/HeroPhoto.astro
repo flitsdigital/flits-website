@@ -42,8 +42,11 @@ const { image, title, mediaOverlap = 80 } = Astro.props;
     display: grid;
     justify-items: center;
     gap: 30px;
-    width: min(100% - 2 * var(--gutter), 33.375rem); /* 534px: wraps after "ZIJN" */
+    width: var(--span-6); /* still wraps after "ZIJN" */
     text-align: center;
     color: var(--color-light-100);
+  }
+  .hero-photo__title > :global(.heading) {
+    justify-self: stretch; /* title box = the 6 columns, text centred */
   }
 </style>

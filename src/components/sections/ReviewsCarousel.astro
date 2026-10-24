@@ -23,7 +23,7 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
 
 <section class="reviews">
   <img class="reviews__bg" src={bg.src} width={bg.width} height={bg.height} alt="" />
-  <SectionHeader title={title} ticker={ticker} width={813} gap={28}>
+  <SectionHeader title={title} ticker={ticker} span={8} gap={28}>
     {!ticker && <p slot="eyebrow" class="reviews__rating">
       <Icon name="google" size={18} />
       <span>Beoordeeld met een <strong>{rating.score}</strong> door <strong>{rating.count}</strong> bedrijven</span>
@@ -69,7 +69,7 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
   /* Slider box = the centre card's height (440px), its centre where Figma has it */
   .reviews :global(.reviews__stage) {
     height: 27.5rem; /* 440px */
-    margin: -19px 0 6px; /* centre card top sits 19px into the header's bottom padding; stage was 446px */
+    margin: 0 0 6px; /* not tucked into the header's padding: the boxes would overlap; stage was 446px */
   }
 
   /* Phone (inferred): no room beside the card, so the hands sit smaller underneath it */

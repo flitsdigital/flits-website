@@ -47,15 +47,17 @@ const hasMedia = Astro.slots.has('media');
     display: grid;
     justify-items: center;
     gap: var(--space-24);
-    width: min(100%, 62.8125rem); /* 1005px */
+    width: var(--span-10);
   }
   .hero-page__text {
     display: grid;
-    justify-items: center;
+    width: 100%; /* the title box fills the 10 columns, centred text */
+    min-width: 0; /* a long word wraps instead of widening the box */
     gap: var(--space-16);
   }
   .hero-page__intro {
-    max-width: 48.6875rem; /* 779px */
+    justify-self: center;
+    width: var(--span-8);
     color: var(--color-light-100);
   }
   .hero-page--l .hero-page__intro {

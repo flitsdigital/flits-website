@@ -34,7 +34,7 @@ const { projects, offset = 48, rowGap = 48, showYear, titleAs, class: className,
   .project-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--grid-row-gap) var(--space-48);
+    gap: var(--grid-row-gap) var(--grid-gap); /* two cards of 6 columns */
     padding-bottom: var(--grid-offset); /* room for the dropped column */
   }
   /* top, not translate: GSAP folds translate into its own transform during the reveal and drops it */

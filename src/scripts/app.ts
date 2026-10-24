@@ -9,6 +9,10 @@ import { initProcessSteps } from './process-steps';
 import { initLogoWallCycle } from './logo-wall';
 import { initAccordions } from './accordion';
 import { initQueuedScrollReveal } from './queued-reveal';
+import { initNumberOdometer } from './odometer';
+import { initAnimatedGrid } from './grid-overlay';
+import { initRotatingImageTrail } from './image-trail';
+import { initRotatingText } from './rotating-text';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -16,7 +20,7 @@ import { initQueuedScrollReveal } from './queued-reveal';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal];
+const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.
@@ -36,6 +40,7 @@ const unmount = () => {
 };
 
 mount();
+initAnimatedGrid(); // once: the overlay sits outside #swup
 
 const swup = new Swup({
   containers: ['#swup', '#nav-back'],
@@ -63,6 +68,6 @@ swup.hooks.on('content:replace', () => {
   void html.offsetWidth; // restart the animations on quick successive visits
   html.classList.add('is-arriving');
   clearTimeout(arriving);
-  arriving = window.setTimeout(() => html.classList.remove('is-arriving'), 600);
+  arriving = window.setTimeout(() => html.classList.remove('is-arriving'), 800);
 });
 swup.hooks.on('page:view', mount);

@@ -26,14 +26,13 @@ const { title, ticker, projects } = Astro.props;
 
 <style>
   .projects__body {
-    width: min(100% - 2 * var(--gutter-panel), var(--panel-max) - 2 * var(--gutter-panel)); /* the panel runs full width, the grid stays 1248px */
-    margin: calc(-1 * var(--space-12)) auto 0; /* Figma: cards start 12px into the header's bottom padding */
+    width: var(--grid-width); /* the panel runs full width, the cards stay on the grid */
+    margin-inline: auto; /* no longer tucked 12px into the header's padding: that made the boxes overlap */
     padding-bottom: calc(var(--space-64) + var(--space-8)); /* 72px under the lowest card; the grid adds the 48px drop */
   }
 
   @media (max-width: 767px) {
     .projects__body {
-      margin-top: 0;
       padding-bottom: var(--space-32);
     }
   }

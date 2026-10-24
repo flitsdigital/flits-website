@@ -5,6 +5,14 @@ import BgShapes from '../atoms/BgShapes.astro';
 import Heading from '../atoms/Heading.astro';
 import phone from '../../assets/images/behind-the-scenes/iphone-17-pro-silver.png';
 import badge from '../../assets/images/behind-the-scenes/bolt-badge.svg';
+import trail1 from '../../assets/images/behind-the-scenes/koffiekoets-draaidag.jpg';
+import trail2 from '../../assets/images/behind-the-scenes/fpv-drone.jpg';
+import trail3 from '../../assets/images/gallery/koffiekoets-1.jpg';
+import trail4 from '../../assets/images/behind-the-scenes/seat-cupra.jpg';
+import trail5 from '../../assets/images/gallery/koffiekoets-2.jpg';
+import trail6 from '../../assets/images/behind-the-scenes/draaidag-extra.jpg';
+import trail7 from '../../assets/images/gallery/koffiekoets-3.jpg';
+import trail8 from '../../assets/images/gallery/koffiekoets-4.jpg';
 
 interface Props {
   title: string;
@@ -13,14 +21,30 @@ interface Props {
 }
 
 const { title, screen } = Astro.props;
+const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
 ---
 
-<section class="showreel" data-theme="dark">
+<!-- Moving the mouse over the section leaves a trail of photos (Osmo "Rotating Image Trail", scripts/image-trail.ts) -->
+<section class="showreel" data-theme="dark" data-trail-area>
+  <div data-trail-collection class="rotating-image-trail__collection" aria-hidden="true">
+    <div class="rotating-image-trail__list">
+      {
+        trail.map((src) => (
+          <div data-trail-item class="rotating-image-trail__item">
+            <div class="rotating-image-trail__card">
+              <Image src={src} alt="" width={400} loading="eager" class="rotating-image-trail__card-img" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
   <BgShapes />
   <img class="showreel__badge showreel__badge--left" src={badge.src} width={badge.width} height={badge.height} alt="" />
   <img class="showreel__badge showreel__badge--right" src={badge.src} width={badge.width} height={badge.height} alt="" />
   <Heading size="96" class="showreel__title">{title}</Heading>
-  <div class="showreel__phone">
+  <!-- shortcut: phone hidden for now while the photo trail is tried out; remove `hidden` to bring it back -->
+  <div class="showreel__phone" hidden>
     <div class="showreel__screen"><Image src={screen} alt="" width={1080} /></div>
     <Image class="showreel__frame" src={phone} alt="" width={680} />
   </div>
@@ -37,9 +61,58 @@ const { title, screen } = Astro.props;
     border-radius: var(--radius-md);
     overflow: hidden;
   }
+  /* Osmo "Rotating Image Trail" CSS. The originals sit out of flow (only measured and cloned);
+     clones are placed in the section at the cursor. Global because the script makes the clones. */
+  .rotating-image-trail__collection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .rotating-image-trail__list {
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    flex-flow: wrap;
+    display: flex;
+  }
+  .showreel :global(.rotating-image-trail__item) {
+    z-index: 10;
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .showreel :global(.rotating-image-trail__card) {
+    aspect-ratio: 3 / 4;
+    width: 10vw;
+    position: relative;
+  }
+  .showreel :global(.rotating-image-trail__card-img) {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .showreel :global([data-trail-item='hidden']) {
+    transform: translate(-50%, -50%) scale(0) rotate(-20deg);
+    position: absolute;
+  }
+  .showreel :global([data-trail-item='visible']) {
+    transform: translate(-50%, -50%) scale(1) rotate(0.001deg);
+    transition: transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+    position: absolute;
+  }
+  .showreel :global([data-trail-item='transition-out']) {
+    transform: translate(-50%, -50%) scale(0) rotate(180deg);
+    transition: transform 0.8s cubic-bezier(0.625, 0, 0.875, 0);
+    position: absolute;
+  }
   .showreel :global(.showreel__title) {
     position: relative;
-    width: min(100%, 47.9375rem); /* 767px */
+    width: var(--span-8);
     text-align: center;
   }
   .showreel__badge {
@@ -99,7 +172,7 @@ const { title, screen } = Astro.props;
       padding-top: var(--space-48);
     }
     .showreel :global(.showreel__title) {
-      width: calc(100% - 2 * var(--space-16));
+      width: var(--span-4);
     }
     .showreel__badge {
       display: none;

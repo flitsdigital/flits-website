@@ -18,6 +18,8 @@ const { title, description, theme = 'light', noindex = false, image } = Astro.pr
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : undefined;
 import CursorMarquee from '../components/molecules/CursorMarquee.astro';
+import ProgressiveBlur from '../components/atoms/ProgressiveBlur.astro';
+import GridOverlay from '../components/atoms/GridOverlay.astro';
 ---
 
 <!doctype html>
@@ -40,10 +42,18 @@ import CursorMarquee from '../components/molecules/CursorMarquee.astro';
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
     <link rel="preload" href="/fonts/pp-right-grotesk-wide-black.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/gt-standard-l-semibold.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Page width without the scrollbar for the column tokens (100vw counts the scrollbar on Windows) -->
+    <script is:inline>
+      new ResizeObserver(() =>
+        document.documentElement.style.setProperty('--page-width', document.documentElement.clientWidth + 'px'),
+      ).observe(document.documentElement);
+    </script>
   </head>
   <body data-theme={theme}>
     <slot />
     <CursorMarquee />
+    <ProgressiveBlur />
+    <GridOverlay />
     <script>
       import '../scripts/app';
     </script>

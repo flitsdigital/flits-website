@@ -12,12 +12,16 @@ interface Props {
   avatars: { src: ImageMetadata; alt?: string }[];
   title: string;
   highlight: string;
+  /** Words the yellow bar rolls through (Osmo "Rotating Text"), starting with `highlight`. */
+  rotatingWords?: string[];
+  /** Seconds each word stays. */
+  stepDuration?: number;
   intro: string[];
   /** px the "media" slot (fan, phone…) reaches up into the hero. */
   mediaOverlap?: number;
 }
 
-const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.props;
+const { eyebrow, avatars, title, highlight, rotatingWords, stepDuration = 2.25, intro, mediaOverlap = 106 } = Astro.props;
 ---
 
 <section class="hero" data-theme="dark" style={`--hero-overlap:${mediaOverlap}px`}>
@@ -27,7 +31,13 @@ const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.
       <Eyebrow size="l" avatars={avatars} loading="eager">{eyebrow}</Eyebrow>
       <!-- {' '}: flex hides it visually, but keeps "Wij maken Impact" readable for search and screen readers -->
       <Heading as="h1" size="116" class="hero__title">
-        <span>{title}</span>{' '}<Highlight class="hero__highlight">{highlight}</Highlight>
+        <span>{title}</span>{' '}<Highlight class="hero__highlight"
+          ><span
+            class="hero__highlight-text"
+            data-rotating-words={rotatingWords?.join(', ')}
+            data-step-duration={rotatingWords && stepDuration}>{highlight}</span
+          ></Highlight
+        >
       </Heading>
     </div>
     <Text size="xl" class="hero__intro">{intro.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</Text>
@@ -37,7 +47,7 @@ const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.
   <script is:inline>
     (() => {
       const h1 = document.querySelector('.hero__title');
-      const bar = h1?.querySelector('.hero__highlight');
+      const bar = h1?.querySelector('.hero__highlight-text');
       if (!bar || h1.dataset.split) return;
       h1.dataset.split = '1';
       h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
@@ -69,17 +79,19 @@ const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.
     flex-direction: column;
     align-items: center;
     gap: var(--space-36);
-    width: min(var(--width-content), 62.8125rem); /* 1005px */
+    width: var(--span-10);
     margin-inline: auto;
     text-align: center;
   }
   .hero__heading {
+    align-self: stretch; /* heading box = the 10 columns, text centred */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-16);
   }
   .hero :global(.hero__title) {
+    align-self: stretch;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -91,9 +103,33 @@ const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.
   .hero :global(.hero__highlight) {
     margin-block: 0.0665em;
   }
+  /* Osmo "Rotating Text": the words are stacked and roll through the bar, which follows their width.
+     The word box is the mask (Osmo masks the whole line with SplitText, which would clash with the
+     letter split above). Global: rotating-text.ts builds these. */
+  .hero :global([data-rotating-words]) {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    overflow: clip;
+    padding-block: 0.1em;
+    margin-block: -0.1em;
+  }
+  .hero :global(.rotating-text__inner) {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    height: 1lh;
+  }
+  .hero :global(.rotating-text__word) {
+    display: block;
+    white-space: nowrap;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   .hero :global(.hero__intro) {
     display: grid;
-    width: min(100%, 48.6875rem); /* 779px */
+    width: var(--span-8);
   }
 
   /* Phone (inferred, Figma is desktop only): the hero hugs its content; below it, room for the media */

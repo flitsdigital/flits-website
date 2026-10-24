@@ -19,7 +19,7 @@ const { title, lead, faqs } = Astro.props;
   <Panel theme="dark">
     <BgShapes leftTop={254} rightTop={-237} leftX={-672 - 169.5} rightX={-672 + 718} />
     <div class="faq">
-      <SectionHeader title={title} lead={lead} width={601} align="start" spaced={false} />
+      <SectionHeader title={title} lead={lead} span={6} align="start" spaced={false} />
       <div class="faq__list">
         <ul class="faq__items" data-accordion-css-init data-accordion-close-siblings="true">
           {
@@ -47,11 +47,12 @@ const { title, lead, faqs } = Astro.props;
   .faq {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 37.5625rem) minmax(0, 37.5rem); /* 601 · 600 */
-    justify-content: space-between;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* header 6 columns · questions 6 columns */
     align-items: start;
-    gap: var(--space-48);
-    padding: 6.0625rem 3rem 4.75rem 2.9375rem; /* 97px top, 47px left, 76px under the CTA */
+    gap: var(--grid-gap);
+    width: var(--grid-width);
+    margin-inline: auto;
+    padding-block: 6.0625rem 4.75rem; /* 97px top, 76px under the CTA */
   }
   .faq__list,
   .faq__items {
@@ -70,5 +71,12 @@ const { title, lead, faqs } = Astro.props;
     margin-top: 1.8125rem; /* 49px under the last question (incl. the 20px gap) */
     font: var(--text-ui);
     color: var(--color-light-100-80);
+  }
+  /* Phone: header above the questions */
+  @media (max-width: 767px) {
+    .faq {
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: var(--space-64);
+    }
   }
 </style>

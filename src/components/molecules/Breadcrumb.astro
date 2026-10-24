@@ -27,6 +27,7 @@ const { items, class: className } = Astro.props;
 <style>
   .breadcrumb {
     display: inline-flex;
+    max-width: 100%;
     align-items: center;
     gap: var(--space-8);
     font: var(--text-body-l-medium);
@@ -35,7 +36,9 @@ const { items, class: className } = Astro.props;
   }
   ol {
     display: flex;
-    gap: var(--space-16);
+    flex-wrap: wrap; /* a long trail wraps on narrow phones instead of widening the hero */
+    justify-content: center;
+    gap: var(--space-8) var(--space-16);
   }
   li {
     display: flex;

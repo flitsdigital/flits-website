@@ -22,7 +22,7 @@ const { theme = 'surface', as: Tag = 'div', width = 'default', class: className 
     overflow: clip;
   }
   .panel--wide {
-    width: min(100% - 60px, 86.25rem);
+    width: max(var(--grid-width), min(100% - 60px, 86.25rem)); /* never inside the grid's edges */
   }
   .panel--full {
     width: calc(100% - 2 * var(--gutter-panel));

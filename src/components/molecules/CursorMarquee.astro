@@ -2,11 +2,13 @@
 // Osmo "Cursor with Marquee Effect": hover anything with [data-cursor-marquee-text="…"] and that text
 // scrolls in a pill that follows the pointer. One instance, in BaseLayout, outside the Swup container.
 // Changes to the Osmo resource: brand styling (the yellow name pill with a bolt), the pill sits above
-// the cursor, no idle dot when nothing is hovered, GSAP from npm, and off on touch screens (no hover).
+// the cursor, no idle dot when nothing is hovered, GSAP from npm, off on touch screens (no hover), and
+// the pill is two names wide (a short name like "Joery" was always cut off at one name wide).
 ---
 
 <div data-cursor-marquee-status="" class="cursor-marquee" aria-hidden="true">
   <div class="cursor-marquee__card">
+    <span data-cursor-marquee-text-target="" class="cursor-marquee__text-span">Hello world</span>
     <span data-cursor-marquee-text-target="" class="cursor-marquee__text-span">Hello world</span>
     <span data-cursor-marquee-text-target="" class="cursor-marquee__text-span is--duplicate">Hello world</span>
   </div>

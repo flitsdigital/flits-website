@@ -19,10 +19,10 @@ const { avatars, eyebrow, title, lead, stats } = Astro.props;
 <!-- Figma 1:1751 (over ons) and 1:3234 (case): white panel, intro in the 817 column, three stat cards -->
 <Panel as="section">
   <div class="stats-panel">
-    <SectionHeader title={title} lead={lead} width={817} gap={24} align="start" spaced={false}>
+    <SectionHeader title={title} lead={lead} span={8} gap={24} align="start" spaced={false}>
       <Eyebrow slot="eyebrow" avatars={avatars} size="l" tone="default">{eyebrow}</Eyebrow>
     </SectionHeader>
-    <dl class="stats-panel__stats">
+    <dl class="stats-panel__stats" data-odometer-group>
       {stats.map((s) => <StatCard {...s} />)}
     </dl>
   </div>
@@ -37,9 +37,15 @@ const { avatars, eyebrow, title, lead, stats } = Astro.props;
   }
   .stats-panel__stats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-48);
-    width: calc(100% - 2 * var(--gutter-panel));
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 4 columns each */
+    gap: var(--grid-gap);
+    width: var(--grid-width);
     margin-inline: auto;
+  }
+  /* Phone: three across doesn't fit 4 columns, so the cards stack */
+  @media (max-width: 767px) {
+    .stats-panel__stats {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

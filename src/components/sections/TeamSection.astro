@@ -25,7 +25,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
   {theme === 'light' && <BgShapes tone="light" leftTop={343} rightTop={-461} leftX={-885} rightX={195.5} />}
   <div class="team__grid">
     <div class="team__col">
-      <SectionHeader title={title} lead={lead} softLead width={708} align="start" spaced={false} />
+      <SectionHeader title={title} lead={lead} softLead span={7} align="start" spaced={false} />
       <div class="team__row team__row--top">
         <WeatherWidget />
         <TeamCard image={members[0].data.photo} name={members[0].data.name} role={members[0].data.role} tagSide="right" />
@@ -49,13 +49,13 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
   .team--surface {
     border-radius: var(--radius-section) var(--radius-section) 0 0;
   }
-  /* Figma collage (node 1:1177): columns 708 : 492 with a 48px gap, scaled with the container */
+  /* Figma collage (node 1:1177) on the grid: 7 + 5 columns; weather 2 + card 5; clock 2 + map 3 */
   .team__grid {
     position: relative; /* above the bolts */
     display: grid;
-    grid-template-columns: minmax(0, 708fr) minmax(0, 492fr);
-    column-gap: var(--space-48);
-    width: var(--width-content);
+    grid-template-columns: var(--span-7) var(--span-5);
+    column-gap: var(--grid-gap);
+    width: var(--grid-width);
     margin-inline: auto;
   }
   .team__col {
@@ -66,7 +66,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
     display: flex;
   }
   .team__row--top {
-    gap: 47px;
+    gap: var(--grid-gap);
     align-items: flex-start;
     margin-top: auto; /* card aligns to its 441px partner in the right column */
   }
@@ -77,13 +77,11 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
   .team__row--top > :global(.weather) {
     flex-shrink: 0;
   }
-  /* clock 168px + map up to 276px, pushed apart like Figma (48px at 1440) */
   .team__row--bottom {
     display: grid;
-    grid-template-columns: auto minmax(0, 17.25rem);
-    justify-content: space-between;
+    grid-template-columns: var(--span-2) var(--span-3);
     align-items: end;
-    gap: var(--space-24);
+    gap: var(--grid-gap);
     margin-top: var(--space-48);
   }
   .team__row--bottom > :global(.map) {
@@ -99,7 +97,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
         'card1 card1 card1 card2 card2 card2'
         'weather weather clock clock map map';
       align-items: center;
-      gap: var(--space-16);
+      gap: var(--space-16) var(--grid-gap);
     }
     .team__col,
     .team__row {
@@ -121,7 +119,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
     }
     .team__grid :global(.clock) {
       grid-area: clock;
-      justify-self: center;
+      width: 100%;
     }
     .team__grid :global(.map) {
       grid-area: map;
@@ -134,14 +132,13 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
       padding-block: var(--space-84) var(--space-64);
     }
     .team__grid {
-      width: min(var(--width-content), 30rem); /* large phones: keep the stack phone-sized */
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       grid-template-areas:
-        'head head'
-        'card1 card1'
-        'weather clock'
-        'card2 card2'
-        'map map';
+        'head head head head'
+        'card1 card1 card1 card1'
+        'weather weather clock clock'
+        'card2 card2 card2 card2'
+        'map map map map';
       align-items: stretch;
     }
     .team__grid :global(.weather) {

@@ -15,28 +15,43 @@ const { photo, screen } = Astro.props;
 <!-- Figma 1:2955 + 1:2973: 816×525 photo tilted 3.59° straddling the hero, a phone leaning over its right edge -->
 <div class="photo-phone">
   <Image class="photo-phone__photo" src={photo} alt="" width={1694} loading="eager" />
-  <PhoneMockup screen={screen} x={730} y={23} width={435} />
+  <PhoneMockup screen={screen} x={715} y={-2} width={435} />
 </div>
 
 <style>
-  /* Box = the tilted photo's bounds (847×575 at x=149, y=465); the phone is placed inside it */
-  /* Place it in a hero's "media" slot (overlap 106px); the hero sets the overlap */
+  /* Box = the photo (816×525 = 8 columns) on columns 1–8, tilted around its centre; the phone is
+     placed inside it. Place it in a hero's "media" slot (overlap 106px); the hero sets the overlap. */
   .photo-phone {
     position: relative;
-    display: grid;
-    place-items: center;
-    width: 52.9375rem; /* 847px */
-    max-width: calc(100% - 2 * var(--gutter));
-    aspect-ratio: 847 / 575;
-    /* left edge at x=149; the next section (110px top) starts 120px below */
-    margin: 0 0 0.625rem calc(50% - 571px);
+    width: var(--span-8);
+    aspect-ratio: 816 / 525;
+    /* the next section (110px top) starts 120px below the tilted photo's corner */
+    margin: 0 0 2.1875rem calc((100% - var(--grid-width)) / 2);
   }
   .photo-phone :global(.photo-phone__photo) {
-    width: 96.34%; /* 816 of 847 */
+    display: block;
+    width: 100%;
     height: auto;
     aspect-ratio: 816 / 525;
     object-fit: cover;
     border-radius: var(--radius-md);
     rotate: -3.59deg;
+  }
+  /* The phone in % of the photo (x 715, y -2, 435 wide on 816×525), so it scales along */
+  .photo-phone :global(.phone) {
+    top: -0.38%;
+    left: 87.62%;
+    width: 53.31%;
+  }
+  /* Narrower: a smaller photo, so the leaning phone still fits on screen */
+  @media (max-width: 991px) {
+    .photo-phone {
+      width: var(--span-4);
+    }
+  }
+  @media (max-width: 767px) {
+    .photo-phone {
+      width: var(--span-3);
+    }
   }
 </style>

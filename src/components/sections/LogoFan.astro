@@ -36,14 +36,14 @@ const { proof, cta, logos } = Astro.props;
     display: grid;
     justify-items: center;
     gap: 1.5rem;
-    width: max-content;
+    width: var(--span-4);
     margin-inline: auto;
     font: var(--text-body-desc);
     letter-spacing: var(--tracking-desc);
     text-align: center;
   }
-  .logo-fan__cta > :global(.btn) {
-    width: 100%;
+  .logo-fan__cta > p {
+    justify-self: stretch; /* the line spans the 4 columns, centred */
   }
   /* Slider box = one tile. Figma: 94px under the button; +40px so the rising outer tiles
      stay clear of the CTA (feedback 2026-10-24). */

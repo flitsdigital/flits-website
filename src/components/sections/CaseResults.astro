@@ -42,10 +42,10 @@ const { avatars, eyebrow, title, body, image } = Astro.props;
   .case-results__inner {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 33.8125rem) minmax(0, 38.5rem); /* 541 · 616 */
+    grid-template-columns: var(--span-5) var(--span-6); /* text columns 1–5, photo 7–12 */
     justify-content: space-between;
     align-items: center;
-    width: min(100% - 2 * var(--gutter), 78.0625rem); /* x=111 to 1359 */
+    width: var(--grid-width);
     margin-inline: auto;
   }
   .case-results__text {
@@ -63,5 +63,17 @@ const { avatars, eyebrow, title, body, image } = Astro.props;
     aspect-ratio: 616 / 786;
     object-fit: cover;
     border-radius: var(--radius-sm);
+  }
+  /* Tablet: text 3 columns · photo 3 columns; phone: stacked */
+  @media (max-width: 991px) {
+    .case-results__inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--grid-gap);
+    }
+  }
+  @media (max-width: 767px) {
+    .case-results__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

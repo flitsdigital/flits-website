@@ -35,10 +35,9 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
 <style>
   .split {
     display: grid;
-    grid-template-columns: minmax(0, 37.5rem) minmax(0, 43.5rem); /* 600 text · 696 media */
-    justify-content: space-between;
+    grid-template-columns: var(--span-6) minmax(0, 1fr); /* text on 6 columns · media from the 7th to the edge */
     align-items: center;
-    column-gap: var(--space-48);
+    column-gap: var(--grid-gap);
     max-width: 90rem; /* the 1440 Figma frame: past it the section stays in one centred block */
     margin-inline: auto;
     padding-block: 6.875rem; /* 110px */
@@ -54,6 +53,7 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
   }
   .split__actions {
     display: flex;
+    justify-self: stretch; /* the row spans the column; the buttons stay left */
     gap: var(--space-16);
     margin-top: var(--space-8); /* 24px total under the copy */
   }
@@ -70,9 +70,9 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
     scale: -1 1;
     pointer-events: none;
   }
-  /* Media right: text starts at the 96px gutter, block flush with the right edge */
+  /* Media right: text starts on the first column, block flush with the right edge */
   .split--media-right {
-    padding-left: var(--gutter);
+    padding-left: calc((min(100%, 90rem) - var(--grid-width)) / 2); /* % is the page; the split stops at 1440 */
   }
   .split--media-right .split__media {
     width: 100%;
@@ -80,8 +80,8 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
   }
   /* Media left: mirrored */
   .split--media-left {
-    grid-template-columns: minmax(0, 43.5rem) minmax(0, 37.5rem);
-    padding-right: var(--gutter);
+    grid-template-columns: minmax(0, 1fr) var(--span-6);
+    padding-right: calc((min(100%, 90rem) - var(--grid-width)) / 2);
   }
   .split--media-left .split__media {
     order: -1;
@@ -92,6 +92,26 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
   @media (min-width: 90.0625rem) {
     .split .split__media {
       border-radius: var(--radius-md);
+    }
+  }
+  /* Tablet and phone: text above the media, both across the grid (3 columns is too narrow for the title) */
+  @media (max-width: 991px) {
+    .split--media-right,
+    .split--media-left {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-48);
+      padding-inline: calc((100% - var(--grid-width)) / 2);
+      padding-block: var(--space-64);
+    }
+    .split--media-left .split__media {
+      order: 0;
+    }
+    .split .split__media {
+      height: 30rem;
+      border-radius: var(--radius-md);
+    }
+    .split__actions {
+      flex-wrap: wrap;
     }
   }
 </style>

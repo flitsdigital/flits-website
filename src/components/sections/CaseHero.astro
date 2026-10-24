@@ -41,7 +41,7 @@ const { image, client, year, title } = Astro.props;
     display: grid;
     justify-items: center;
     gap: 1.375rem; /* 22px */
-    width: min(100%, 45.1875rem); /* 723px */
+    width: var(--span-8);
     color: var(--color-light-0);
   }
   .case-hero__meta {
@@ -53,6 +53,7 @@ const { image, client, year, title } = Astro.props;
     letter-spacing: var(--tracking-display);
   }
   h1 {
+    justify-self: stretch; /* title box = the 8 columns, text centred */
     font: var(--text-title-medium-64);
     letter-spacing: var(--tracking-display);
   }

@@ -9,10 +9,15 @@ interface Props {
 const { label, value } = Astro.props;
 ---
 
-<!-- Figma 1:1761 / 1:3247: grey→white card, label on top, big number 64px lower -->
+<!-- Figma 1:1761 / 1:3247: grey→white card, label on top, big number 64px lower.
+     The number rolls in as an Osmo odometer (scripts/odometer.ts) when the card list scrolls into view;
+     screen readers get the plain value, not the rolling digit strips. -->
 <div class="stat-card">
   <dt>{label}</dt>
-  <dd><Heading as="span" size="64">{value}</Heading></dd>
+  <dd>
+    <span class="stat-card__sr">{value}</span>
+    <Heading as="span" size="64"><span data-odometer-element aria-hidden="true">{value}</span></Heading>
+  </dd>
 </div>
 
 <style>
@@ -31,5 +36,36 @@ const { label, value } = Astro.props;
   }
   dd {
     color: var(--color-dark-900);
+  }
+  .stat-card__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* Osmo "Number Odometer" CSS; global because the script builds these spans */
+  :global([data-odometer-element]) {
+    display: inline-flex;
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  :global([data-odometer-part='mask']),
+  :global([data-odometer-part='static']) {
+    display: inline-block;
+    overflow: clip;
+    padding: 0.05em;
+    margin: -0.05em;
+  }
+  :global([data-odometer-part='roller']) {
+    display: block;
+    white-space: pre;
+    text-align: center;
+    will-change: transform;
+  }
+  :global([data-odometer-part='static']) {
+    display: inline-block;
+    white-space: pre; /* keeps the space in "€ 7000,-" (a lone space collapses otherwise) */
   }
 </style>

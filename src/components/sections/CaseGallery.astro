@@ -44,23 +44,25 @@ const columns = [0, 1].map((col) => images.map((src, i) => ({ src, ratio: ratios
     margin-bottom: 9.5625rem; /* 153px to the dark results band */
   }
   .case-gallery__inner {
-    padding: 5.4375rem 3.1875rem 4.1875rem; /* 87px top, 51px sides, 67px bottom */
+    padding-block: 5.4375rem 4.1875rem; /* 87px top, 67px bottom */
   }
   .case-gallery__header {
     display: grid;
     justify-items: center;
     gap: 1.625rem; /* title 26px under the ticker */
-    width: min(100%, 40.6875rem); /* 651px */
+    width: var(--span-6);
     margin-inline: auto;
     text-align: center;
   }
   .case-gallery :global(.case-gallery__ticker) {
-    width: min(100vw - 2 * var(--gutter), 36rem); /* 576px */
+    width: 100%;
   }
   .case-gallery__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.875rem; /* 46px */
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 6 columns each */
+    gap: var(--grid-gap);
+    width: var(--grid-width);
+    margin-inline: auto;
     margin-top: 4.6875rem; /* photos 75px under the title */
   }
   .case-gallery__col {

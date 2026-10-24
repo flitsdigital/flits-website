@@ -34,12 +34,12 @@ const { title, services, website } = Astro.props;
     display: grid;
     justify-items: start;
     gap: 1.875rem; /* 30px */
-    width: min(100% - 2 * var(--gutter), 50.6875rem); /* 811px */
+    width: var(--span-8);
     margin-inline: auto;
     padding-block: 10.8125rem 16.8125rem; /* 173px under the hero; 269px to the video fan's centre card */
   }
   .case-intro__site {
-    width: min(100%, 21rem); /* 336px */
+    width: var(--span-4);
   }
   .case-intro__services {
     display: flex;

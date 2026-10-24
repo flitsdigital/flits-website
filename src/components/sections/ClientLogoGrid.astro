@@ -37,15 +37,21 @@ const { title, logos, cta } = Astro.props;
     padding-block: 10.625rem 8.4375rem; /* 170px / 135px */
   }
   .logo-grid :global(.logo-grid__title) {
-    width: var(--width-narrow);
+    width: var(--span-8);
     margin-inline: auto;
     text-align: center;
   }
   .logo-grid__tiles {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-48);
-    width: var(--width-content);
+    grid-template-columns: repeat(4, minmax(0, 1fr)); /* 3 columns each */
+    gap: var(--grid-gap);
+    width: var(--grid-width);
     margin-inline: auto;
+  }
+  /* Tablet and phone: the four tiles take one column each, centred */
+  @media (max-width: 991px) {
+    .logo-grid__tiles {
+      width: var(--span-4);
+    }
   }
 </style>

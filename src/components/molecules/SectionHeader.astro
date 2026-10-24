@@ -9,8 +9,8 @@ interface Props {
   lead?: string;
   /** Lead at 80% (Figma uses it on some intros: team, contact). */
   softLead?: boolean;
-  /** Figma text-box width in px; the title wraps exactly where the design does. */
-  width?: number;
+  /** Width in grid columns. Centred headers take an even number (an odd one lands half a column off). */
+  span?: 2 | 4 | 5 | 6 | 7 | 8 | 10 | 12;
   /** Space between ticker/eyebrow and the title: 16px (projects), 24px (stats) or 28px (reviews, services). */
   gap?: 16 | 24 | 28;
   align?: 'center' | 'start';
@@ -25,7 +25,7 @@ const {
   ticker,
   lead,
   softLead = false,
-  width = 757,
+  span = 8,
   gap = 16,
   align = 'center',
   spaced = true,
@@ -37,7 +37,7 @@ const {
 <!-- Ticker or eyebrow, then title + lead (16px apart), then optional actions -->
 <header
   class:list={['section-header', `section-header--${align}`, { 'section-header--spaced': spaced }, className]}
-  style={`--header-width:${width}px;--header-gap:${gap}px`}
+  style={`--header-width:var(--span-${span});--header-gap:${gap}px`}
 >
   <div class="section-header__text">
     {ticker && <Ticker items={ticker} class="section-header__ticker" />}
@@ -72,16 +72,18 @@ const {
   }
   .section-header__copy {
     display: grid;
+    width: 100%;
     gap: var(--space-16);
   }
   .section-header :global(.section-header__lead--soft) {
     opacity: 0.8;
   }
   .section-header :global(.section-header__ticker) {
-    width: min(100%, 33.75rem); /* 540px */
+    width: var(--span-6);
   }
   .section-header__actions {
     display: flex;
+    width: 100%;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-16);

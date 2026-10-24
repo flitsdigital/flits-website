@@ -49,14 +49,15 @@ const { logos, class: className } = Astro.props;
     width: 100%;
   }
 
+  /* One row of 4 on the grid's gaps: a 2-column container per logo in an 8-column wall; 2×2 on
+     tablets and phones */
   .logo-wall__list {
-    display: flex;
-    flex-flow: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--grid-gap);
   }
 
-  /* One row of 4; 2×2 on phones */
   .logo-wall__item {
-    width: 25%;
     position: relative;
   }
 
@@ -94,9 +95,9 @@ const { logos, class: className } = Astro.props;
     aspect-ratio: var(--ratio);
   }
 
-  @media (max-width: 767px) {
-    .logo-wall__item {
-      width: 50%;
+  @media (max-width: 991px) {
+    .logo-wall__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .logo-wall__logo-before {
       padding-top: 45%;
