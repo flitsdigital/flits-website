@@ -6,6 +6,7 @@ import { initRadialSliders } from './radial-slider';
 import { initClocks } from './clock';
 import { initProjectArchive } from './project-archive';
 import { initProcessSteps } from './process-steps';
+import { initLogoWallCycle } from './logo-wall';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -13,7 +14,7 @@ import { initProcessSteps } from './process-steps';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps];
+const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle];
 
 let cleanups: (() => void)[] = [];
 const mount = () => {

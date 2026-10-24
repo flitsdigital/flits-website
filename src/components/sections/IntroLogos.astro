@@ -4,7 +4,7 @@ import Avatar from '../atoms/Avatar.astro';
 import Heading from '../atoms/Heading.astro';
 import Text from '../atoms/Text.astro';
 import Ticker from '../molecules/Ticker.astro';
-import LogoTile from '../molecules/LogoTile.astro';
+import LogoWall from '../molecules/LogoWall.astro';
 
 interface Props {
   ticker: string[];
@@ -28,11 +28,7 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
     </Heading>
     <Text size="l" tone="secondary">{lead}</Text>
   </div>
-  <div class="intro__strip">
-    <div class="intro__track">
-      {[...clients, ...clients].map((c, i) => <LogoTile size="strip" {...c.data} decorative={i >= clients.length} />)}
-    </div>
-  </div>
+  <div class="intro__strip"><LogoWall clients={clients} /></div>
 </section>
 
 <style>
@@ -79,27 +75,10 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
   }
   .intro__strip {
     width: min(100%, 64.4375rem); /* 1031px */
-    padding: var(--space-8);
+    padding: 3px; /* + the wall's 5px per tile = the strip's 8px */
     border-radius: var(--radius-sm);
     background: var(--color-light-0);
-    overflow: hidden;
   }
-  .intro__track {
-    display: flex;
-    gap: var(--space-10);
-    width: max-content;
-    animation: strip 40s linear infinite;
-  }
-  /* WCAG 2.2.2: moving content can be paused (hover, like the Ticker) */
-  .intro__strip:hover .intro__track {
-    animation-play-state: paused;
-  }
-  @keyframes strip {
-    to {
-      translate: calc(-50% - var(--space-10) / 2) 0;
-    }
-  }
-
   @media (max-width: 767px) {
     .intro {
       padding-bottom: var(--space-64);
