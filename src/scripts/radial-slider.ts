@@ -8,7 +8,7 @@ import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry
  * adapted from text on a path to elements on an arc.
  *
  * [data-radial-slider-init]       wrapper
- *   -speed      px per second of autoplay drift (0 = no autoplay)        default 0
+ *   -speed      px per second of drift while the mouse is over it (0 = none) default 0
  *   -angle      tilt in degrees between neighbours (0 = straight row)     default 10
  *   -shape      arch (∩, sides drop) | valley (∪, sides rise)             default arch
  *   -equal      present: every item gets the height of the tallest one
@@ -102,31 +102,22 @@ export function initRadialSliders(): () => void {
       });
     };
 
-    // Autoplay drift on the GSAP ticker; paused off-screen, on hover/focus and while stepping.
-    // WCAG 2.2.2: a tap toggles a lasting pause (touch has no hover), and the slider is focusable
-    // so keyboard users can pause it by tabbing to it.
-    let inView = true;
-    let held = false;
-    let paused = false;
+    // Drift on the GSAP ticker only while the mouse is over the slider (nothing moves by itself, so
+    // WCAG 2.2.2 needs no pause control); the speed eases up and down over ~0.3s instead of jumping.
+    let hovered = false;
+    let velocity = 0;
     if (speed > 0) {
       const drift = (_t: number, deltaMs: number) => {
-        if (!inView || held || paused || stepping) return;
-        state.offset -= (speed * deltaMs) / 1000;
+        velocity += ((hovered && !stepping ? speed : 0) - velocity) * Math.min(1, deltaMs / 300);
+        if (velocity < 0.5) return;
+        state.offset -= (velocity * deltaMs) / 1000;
         render();
       };
       gsap.ticker.add(drift);
       cleanups.push(() => gsap.ticker.remove(drift));
-      wrap.tabIndex = 0;
-      wrap.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && (held = true));
-      wrap.addEventListener('pointerleave', () => (held = false));
-      wrap.addEventListener('focusin', () => (held = true));
-      wrap.addEventListener('focusout', () => (held = false));
-      wrap.addEventListener('click', (e) => {
-        if (!(e.target as Element).closest('button')) paused = !paused;
-      });
+      wrap.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && (hovered = true));
+      wrap.addEventListener('pointerleave', () => (hovered = false));
     }
-    const visibility = new IntersectionObserver((e) => (inView = !!e[0]?.isIntersecting));
-    visibility.observe(wrap);
 
     // Steps chain from the previous target, so two quick clicks move two items.
     const go = (dir: 1 | -1) => {
@@ -166,7 +157,6 @@ export function initRadialSliders(): () => void {
     document.fonts?.ready.then(layout); // card heights change once the web fonts arrive
     wrap.dataset.radialSliderReady = '';
     cleanups.push(() => {
-      visibility.disconnect();
       resize.disconnect();
       stepping?.kill();
     });

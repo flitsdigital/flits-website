@@ -65,11 +65,13 @@ const loop = [...items, ...items];
     gap: var(--space-8);
     padding-inline-end: var(--space-8);
     white-space: nowrap;
-    animation: ticker 24s linear infinite;
+    animation: ticker 24s linear infinite paused;
   }
-  /* WCAG 2.2.2: moving content can be paused */
-  .ticker:hover .ticker__track {
-    animation-play-state: paused;
+  /* Runs only while the mouse is over it: it continues where it stopped (touch: stays still) */
+  @media (hover: hover) and (pointer: fine) {
+    .ticker:hover .ticker__track {
+      animation-play-state: running;
+    }
   }
   @keyframes ticker {
     to {
