@@ -71,12 +71,18 @@ html[data-landing][data-entry='1'] .hero + .hero-media {
   from {
     clip-path: inset(0 100% 0 0);
   }
+  to {
+    clip-path: inset(0);
+  }
 }
 @keyframes ev2-line {
   from {
     opacity: 0;
     clip-path: inset(0 0 100% 0);
     transform: translateY(0.6em);
+  }
+  to {
+    clip-path: inset(0);
   }
 }
 html[data-landing][data-entry='2'] .hero__title .sw {
@@ -236,10 +242,16 @@ html[data-landing][data-entry='5'] .hero + .hero-media {
     clip-path: inset(100% 0 0 0);
     transform: translateY(25%);
   }
+  to {
+    clip-path: inset(0);
+  }
 }
 @keyframes ev6-photo {
   from {
     clip-path: inset(50% 50% 50% 50% round var(--radius-sm));
+  }
+  to {
+    clip-path: inset(0 round var(--radius-sm));
   }
 }
 html[data-landing][data-entry='6'] .hero .eyebrow {
@@ -398,11 +410,13 @@ html[data-landing][data-entry='11'] .hero__content {
 html[data-landing][data-entry='11'] .hero__title > span:first-child {
   animation: ev7-left 1.3s var(--ease-expo) both;
 }
-html[data-landing][data-entry='11'] .hero__title .hero__highlight .sw {
-  animation: ev7-right 1.3s var(--ease-expo) 0.08s both;
-}
+/* The bar itself doesn't move: it draws left → right in one wipe, its letters rise in just behind the edge */
 html[data-landing][data-entry='11'] .hero__highlight {
-  animation: ev2-bar 0.9s var(--ease-expo) 0.12s both;
+  animation: ev2-bar 0.85s var(--ease-in-out) 0.25s both;
+}
+html[data-landing][data-entry='11'] .hero__highlight .sc {
+  --rise: 0.35em;
+  animation: ev-rise 0.6s var(--ease-out) calc(0.38s + (var(--c) - 8) * 0.08s) both;
 }
 html[data-landing][data-entry='11'] .bg-shapes__left {
   animation: ev4-left 1.5s var(--ease-expo) both;
@@ -441,16 +455,18 @@ html[data-landing][data-entry='11'] .hero + .hero-media {
     filter: blur(6px);
   }
 }
-@keyframes ev12-right {
-  from {
-    opacity: 0;
-    transform: translateX(12%) scale(0.97);
-    filter: blur(6px);
-  }
-}
 @keyframes ev12-bar {
   from {
-    clip-path: inset(0 0 0 100%);
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes ev12-letter {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
   }
 }
 @keyframes ev12-bolt-left {
@@ -483,10 +499,12 @@ html[data-landing][data-entry='12'] .hero .eyebrow {
 html[data-landing][data-entry='12'] .hero__title > span:first-child {
   animation: ev12-left 0.9s var(--ease-out) 0.06s both;
 }
+/* The bar stays put and draws itself left → right (clip-path only); letters follow the edge, 30ms apart */
 html[data-landing][data-entry='12'] .hero__highlight {
-  animation:
-    ev12-right 0.9s var(--ease-out) 0.12s both,
-    ev12-bar 0.9s var(--ease-out) 0.12s both;
+  animation: ev12-bar 0.8s var(--ease-out) 0.18s both;
+}
+html[data-landing][data-entry='12'] .hero__highlight .sc {
+  animation: ev12-letter 0.6s var(--ease-out) calc(0.3s + (var(--c) - 8) * 0.03s) both;
 }
 html[data-landing][data-entry='12'] .hero__intro {
   animation: ev12-lens 0.9s var(--ease-out) 0.18s both;
@@ -509,7 +527,7 @@ html[data-landing][data-entry='12'] .hero + .hero-media [data-radial-slider-trac
   html[data-landing][data-entry='12'] :is(.hero .eyebrow, .hero__title > span:first-child, .hero__highlight, .hero__intro, .hero + .hero-media) {
     animation: ev12-fade 0.2s var(--ease-out) both !important;
   }
-  html[data-landing][data-entry='12'] :is(.bg-shapes__left, .bg-shapes__right, .hero + .hero-media [data-radial-slider-track]) {
+  html[data-landing][data-entry='12'] :is(.bg-shapes__left, .bg-shapes__right, .hero__highlight .sc, .hero + .hero-media [data-radial-slider-track]) {
     animation: none !important;
   }
 }

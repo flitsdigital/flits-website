@@ -66,6 +66,9 @@ html.is-arriving::after {
   from {
     clip-path: inset(0 100% 0 0);
   }
+  to {
+    clip-path: inset(0); /* explicit: inset() → none can't interpolate and would jump halfway */
+  }
 }
 html[data-landing][data-entry="0"] .hero > .bg-shapes {
   animation: flits-fade 0.9s var(--ease-out) both;
