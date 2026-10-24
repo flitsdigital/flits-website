@@ -20,15 +20,11 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
 <section class="intro">
   <div class="intro__text">
     <Ticker items={ticker} variant="light" />
-    <!-- Home-only title: the runs of spaces leave room for the avatars at their Figma coordinates
-         (601×116 box), so this text lives here and not in content. -->
+    <!-- Home-only title with the faces inline in the sentence. Hovering a face spins it slowly and shows
+         its name in the cursor marquee (CursorMarquee, BaseLayout). -->
     <Heading size="64" class="intro__title">
-      {'Wij zijn       Joery \nEn      Jordi'}
-      <span aria-hidden="true">
-        <Ticker items={['Jordi', 'Jordi', 'Jordi']} variant="pill" decorative class="intro__name-pill" />
-        <Avatar src={joery.data.avatar} size={48} class="intro__avatar-1" />
-        <span class="intro__avatar-2"><Avatar src={jordi.data.avatar} size={48} /></span>
-      </span>
+      Wij zijn <span class="intro__face" data-cursor-marquee-text="Joery"><Avatar src={joery.data.avatar} size={48} /></span> Joery<br />
+      En <span class="intro__face" data-cursor-marquee-text="Jordi"><Avatar src={jordi.data.avatar} size={48} /></span> Jordi
     </Heading>
     <Text size="l" tone="secondary">{lead}</Text>
   </div>
@@ -57,34 +53,29 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
   .intro__text > :global(.ticker) {
     margin-bottom: calc(var(--space-16) - var(--space-24));
   }
-  .intro :global(.intro__title) {
-    position: relative;
-    height: 7.25rem; /* 116px */
-    white-space: pre;
+  /* Faces sit in the line like a word: about the cap height, centred on the capitals */
+  .intro__face {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    margin-inline: 0.04em;
+    vertical-align: -0.06em;
+    animation: intro-face-spin 16s linear infinite paused;
   }
-  .intro :global(.intro__name-pill) {
-    position: absolute;
-    left: 187px;
-    top: 28px;
-    width: 116px;
-    font: var(--text-body-s);
-    letter-spacing: 0;
-    text-transform: none;
+  .intro__face :global(.avatar) {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
-  .intro :global(.intro__avatar-1) {
-    position: absolute;
-    left: 315px;
-    top: 4px;
+  @media (hover: hover) and (pointer: fine) {
+    .intro__face:hover {
+      animation-play-state: running;
+    }
   }
-  .intro__avatar-2 {
-    position: absolute;
-    left: 214.36px;
-    top: 57.36px;
-    display: grid;
-    place-items: center;
-    width: 57.28px;
-    height: 57.28px;
-    rotate: -12.54deg;
+  @keyframes intro-face-spin {
+    to {
+      rotate: 1turn;
+    }
   }
   .intro__strip {
     width: min(100%, 64.4375rem); /* 1031px */
@@ -109,25 +100,16 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
     }
   }
 
-  /* Phone (inferred): the avatar title is one fixed 601px composition at 64px; zoom shrinks it whole */
   @media (max-width: 767px) {
     .intro {
       padding-bottom: var(--space-64);
       gap: var(--space-32);
     }
-    .intro :global(.intro__title) {
-      font-size: 4rem;
-      zoom: 0.7;
-    }
   }
-  @media (max-width: 479px) {
+  /* narrow Androids (360px): keep "Wij zijn [face] Joery" on one line */
+  @media (max-width: 374px) {
     .intro :global(.intro__title) {
-      zoom: 0.54;
-    }
-  }
-  @media (max-width: 359px) {
-    .intro :global(.intro__title) {
-      zoom: 0.48;
+      font-size: 2rem;
     }
   }
 </style>

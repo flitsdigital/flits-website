@@ -17,6 +17,7 @@ interface Props {
 const { title, description, theme = 'light', noindex = false, image } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : undefined;
+import CursorMarquee from '../components/molecules/CursorMarquee.astro';
 ---
 
 <!doctype html>
@@ -42,6 +43,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
   </head>
   <body data-theme={theme}>
     <slot />
+    <CursorMarquee />
     <script>
       import '../scripts/app';
     </script>

@@ -1,0 +1,183 @@
+---
+// Osmo "Cursor with Marquee Effect": hover anything with [data-cursor-marquee-text="…"] and that text
+// scrolls in a pill that follows the pointer. One instance, in BaseLayout, outside the Swup container.
+// Changes to the Osmo resource: brand styling (the yellow name pill with a bolt), the pill sits above
+// the cursor, no idle dot when nothing is hovered, GSAP from npm, and off on touch screens (no hover).
+---
+
+<div data-cursor-marquee-status="" class="cursor-marquee" aria-hidden="true">
+  <div class="cursor-marquee__card">
+    <span data-cursor-marquee-text-target="" class="cursor-marquee__text-span">Hello world</span>
+    <span data-cursor-marquee-text-target="" class="cursor-marquee__text-span is--duplicate">Hello world</span>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initCursorMarqueeEffect() {
+    const hoverOutDelay = 0.4;
+    const followDuration = 0.4;
+    const speedMultiplier = 5;
+
+    const cursor = document.querySelector<HTMLElement>('[data-cursor-marquee-status]');
+    if (!cursor) return;
+    const targets = cursor.querySelectorAll<HTMLElement>('[data-cursor-marquee-text-target]');
+
+    const xTo = gsap.quickTo(cursor, 'x', { duration: followDuration, ease: 'power3' });
+    const yTo = gsap.quickTo(cursor, 'y', { duration: followDuration, ease: 'power3' });
+
+    let pauseTimeout: ReturnType<typeof setTimeout> | null = null;
+    let activeEl: Element | null = null;
+    let lastX = 0;
+    let lastY = 0;
+
+    function playFor(el: Element) {
+      if (!el) return;
+      if (pauseTimeout) clearTimeout(pauseTimeout);
+      const text = el.getAttribute('data-cursor-marquee-text') || '';
+      const sec = (text.length || 1) / speedMultiplier;
+      targets.forEach((t) => {
+        t.textContent = text;
+        t.style.animationPlayState = 'running';
+        t.style.animationDuration = sec + 's';
+      });
+      cursor!.setAttribute('data-cursor-marquee-status', 'active');
+      activeEl = el;
+    }
+
+    function pauseLater() {
+      cursor!.setAttribute('data-cursor-marquee-status', 'not-active');
+      if (pauseTimeout) clearTimeout(pauseTimeout);
+      pauseTimeout = setTimeout(() => {
+        targets.forEach((t) => {
+          t.style.animationPlayState = 'paused';
+        });
+      }, hoverOutDelay * 1000);
+      activeEl = null;
+    }
+
+    function checkTarget() {
+      const el = document.elementFromPoint(lastX, lastY);
+      const hit = el && el.closest('[data-cursor-marquee-text]');
+      if (hit !== activeEl) {
+        if (activeEl) pauseLater();
+        if (hit) playFor(hit);
+      }
+    }
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        lastX = e.clientX;
+        lastY = e.clientY;
+        xTo(lastX);
+        yTo(lastY);
+        checkTarget();
+      },
+      { passive: true },
+    );
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        xTo(lastX);
+        yTo(lastY);
+        checkTarget();
+      },
+      { passive: true },
+    );
+
+    setTimeout(() => {
+      cursor.setAttribute('data-cursor-marquee-status', 'not-active');
+    }, 500);
+  }
+
+  // Initialize Cursor with Marquee Effect (mouse/trackpad only: there is nothing to hover on touch)
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) initCursorMarqueeEffect();
+</script>
+
+<style>
+  .cursor-marquee {
+    z-index: 300; /* above the fixed navbar (100) */
+    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor-marquee__card {
+    color: var(--color-dark-900);
+    background-color: var(--color-brand-500);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    overflow: hidden;
+    transition:
+      clip-path 0.4s cubic-bezier(0.75, 0, 0.25, 1),
+      transform 0.4s cubic-bezier(0.75, 0, 0.25, 1),
+      opacity 0.15s linear 0.3s;
+    transform: translateY(0%) rotate(0.001deg);
+    clip-path: inset(calc(50% - 0.25em) round 50em);
+    will-change: clip-path;
+    opacity: 0;
+  }
+
+  /* Above the cursor (Osmo: -25%, over it) */
+  [data-cursor-marquee-status='active'] .cursor-marquee__card {
+    clip-path: inset(0 round 50em);
+    transform: translateY(calc(-50% - 1rem)) rotate(0.001deg);
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  /* CSS Keyframe Animation */
+  @keyframes translateXCursor {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* Flits name pill (Ticker "pill"): 14px label, bolt after every name */
+  .cursor-marquee__text-span {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    white-space: nowrap;
+    transform-origin: 0;
+    padding: var(--space-6) var(--space-8) var(--space-6) 0;
+    font: var(--text-body-s);
+    line-height: 1;
+    position: relative;
+  }
+  .cursor-marquee__text-span::before {
+    content: '';
+    width: var(--space-8);
+    height: var(--space-8);
+    margin-left: var(--space-8);
+    background: currentColor;
+    mask: url('../../assets/icons/bolt.svg') center / contain no-repeat;
+    order: 1;
+  }
+
+  .cursor-marquee__text-span {
+    animation: translateXCursor 10s linear infinite paused;
+    transition: opacity 0.15s ease-in-out 0.25s;
+    opacity: 0;
+  }
+
+  [data-cursor-marquee-status='active'] .cursor-marquee__text-span {
+    transition: opacity 0.15s ease-in-out 0s;
+    opacity: 1;
+  }
+
+  .cursor-marquee__text-span.is--duplicate {
+    position: absolute;
+    left: 100%;
+  }
+</style>
