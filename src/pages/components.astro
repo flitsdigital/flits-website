@@ -17,6 +17,8 @@ import AvatarStack from '../components/atoms/AvatarStack.astro';
 import Label from '../components/atoms/Label.astro';
 import Input from '../components/atoms/Input.astro';
 import BgShapes from '../components/atoms/BgShapes.astro';
+import WeatherWidget from '../components/molecules/WeatherWidget.astro';
+import { allScenes } from '../lib/weather';
 import jordi from '../assets/images/avatars/jordi.png';
 import joery from '../assets/images/avatars/joery.png';
 
@@ -24,6 +26,11 @@ const themes = ['light', 'surface', 'dark'] as const;
 // White icons are shown on a dark tile so they stay visible.
 const darkIcons = new Set<IconName>(['arrow-up-right', 'bolt-white', 'whatsapp', 'facebook', 'instagram', 'linkedin', 'tiktok', 'home']);
 const avatars = [{ src: jordi, alt: "Jordi" }, { src: joery, alt: "Joery" }];
+// Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
+const temps: Record<string, number> = { lente: 14, zomer: 22, herfst: 12, winter: 3, sneeuw: -1, vorst: -4, onweer: 21 };
+const weatherPanels = Object.entries(Object.groupBy(allScenes(), (s) => (['sneeuw', 'vorst', 'onweer'].includes(s.sky) ? 'vast seizoen' : s.season))).map(
+  ([title, scenes]) => ({ title, rows: Object.values(Object.groupBy(scenes!, (s) => s.sky)).map((r) => r!.map((s) => ({ ...s, temperature: `${temps[s.sky] ?? temps[s.season]} °` }))) }),
+);
 ---
 
 <BaseLayout title="Components — Flits" noindex>
@@ -220,6 +227,24 @@ const avatars = [{ src: jordi, alt: "Jordi" }, { src: joery, alt: "Joery" }];
         <BgShapes leftTop={120} rightTop={-142} />
         <Heading as="p" size="64" class="cg-above">Op elke dark sectie</Heading>
       </div>
+    </section>
+
+    <!-- WeatherWidget -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">WeatherWidget</Heading>
+        <code>live via Open-Meteo · scene? pint één foto (seizoen-dagdeel-weer) zonder live weer · 92 foto's</code>
+      </div>
+      {weatherPanels.map((panel) => (
+        <div class="cg-panel" data-theme="surface">
+          <span class="cg-tag">{panel.title} · ochtend · middag · avond · nacht</span>
+          {panel.rows.map((row) => (
+            <div class="cg-row">
+              {row.map((s) => <WeatherWidget scene={s.key} condition={s.label} temperature={s.temperature} date={s.sky} />)}
+            </div>
+          ))}
+        </div>
+      ))}
     </section>
   </main>
 </BaseLayout>
