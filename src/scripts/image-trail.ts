@@ -3,6 +3,8 @@
  * spinning away (feedback 2026-10-24), typed, every [data-trail-area] on the page, started
  * per page view from app.ts (Swup) with a cleanup, and off with reduced motion. Moving the mouse over
  * the area spawns clones of the items in turn, which pop in and fade out.
+ * Touch screens have no cursor: there a virtual one drifts through the area in a slow figure eight
+ * while it is on screen, and feeds the same trail.
  */
 export function initRotatingImageTrail(): (() => void) | void {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -54,12 +56,8 @@ export function initRotatingImageTrail(): (() => void) | void {
       lastCloneY = y;
     }
 
-    // Mouse movement logic
-    const onMove = (event: MouseEvent) => {
-      const rect = area.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
+    // Mouse movement logic (x, y relative to the area)
+    const trailTo = (x: number, y: number, rect: DOMRect) => {
       if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
         lastCloneX = null;
         lastCloneY = null;
@@ -79,11 +77,39 @@ export function initRotatingImageTrail(): (() => void) | void {
         spawnTrailItem(x, y);
       }
     };
+    const onMove = (event: MouseEvent) => {
+      const rect = area.getBoundingClientRect();
+      trailTo(event.clientX - rect.left, event.clientY - rect.top, rect);
+    };
     area.addEventListener('mousemove', onMove);
     cleanups.push(() => {
       area.removeEventListener('mousemove', onMove);
       timers.forEach(clearTimeout);
     });
+
+    // Touch: a virtual cursor on a figure eight (one loop ≈ 9s), only while the area is on screen
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      let frame = 0;
+      let start = 0;
+      const drift = (now: number) => {
+        start ||= now;
+        const t = (now - start) / 1000;
+        const rect = area.getBoundingClientRect();
+        const x = rect.width * (0.5 + 0.36 * Math.sin(t * 0.7));
+        const y = rect.height * (0.55 + 0.3 * Math.sin(t * 1.4));
+        trailTo(x, y, rect);
+        frame = requestAnimationFrame(drift);
+      };
+      const visibility = new IntersectionObserver(([entry]) => {
+        cancelAnimationFrame(frame);
+        if (entry?.isIntersecting) frame = requestAnimationFrame(drift);
+      });
+      visibility.observe(area);
+      cleanups.push(() => {
+        visibility.disconnect();
+        cancelAnimationFrame(frame);
+      });
+    }
   });
 
   return () => cleanups.forEach((fn) => fn());

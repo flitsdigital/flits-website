@@ -170,16 +170,25 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
      the phone at 75%, the badges left out */
   @media (max-width: 767px) {
     .showreel {
-      place-items: start center;
-      height: 48rem;
+      height: 36rem;
       margin-block: var(--space-24);
-      padding-top: var(--space-48);
+    }
+    /* The trail drifts by itself here (image-trail.ts): bigger photos, passing behind the title */
+    .showreel :global(.rotating-image-trail__card) {
+      width: 34vw;
     }
     .showreel :global(.showreel__title) {
+      z-index: 11;
       width: var(--span-4);
     }
     .showreel__badge {
       display: none;
+    }
+    /* With the phone shown, the title moves above it */
+    .showreel:has(.showreel__phone:not([hidden])) {
+      place-items: start center;
+      height: 48rem;
+      padding-top: var(--space-48);
     }
     .showreel__phone {
       top: calc(50% + 4.5rem);
