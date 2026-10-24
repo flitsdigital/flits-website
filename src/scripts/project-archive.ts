@@ -1,3 +1,4 @@
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { archiveView, type ArchiveSelection } from './project-filter';
 
 /** DOM adapter for /projecten: reads the cards once, keeps the selection, applies archiveView(). */
@@ -31,6 +32,7 @@ export function initProjectArchive() {
       empty.hidden = !view.empty;
       press(all, view.all);
       chips.forEach((c) => press(c, c.dataset.filterType ? sel.types.has(c.dataset.filterType) : sel.sectors.has(c.dataset.filterSector!)));
+      ScrollTrigger.refresh(); // cards moved: the queued reveal re-measures where each one enters
     };
 
     chips.forEach((btn) =>

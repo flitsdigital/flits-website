@@ -18,8 +18,9 @@ const { projects, offset = 48, rowGap = 48, showYear, titleAs, class: className,
 ---
 
 <!-- Two columns of project cards; every second card drops by `offset`. The drop is the
-     `is-offset` class (set here, and re-set by the archive filter when cards hide). -->
-<ul class:list={['project-grid', className]} style={`--grid-offset:${offset}px;--grid-row-gap:${rowGap}px`} {...rest}>
+     `is-offset` class (set here, and re-set by the archive filter when cards hide).
+     The cards rise in one after another as they scroll into view (scripts/queued-reveal.ts). -->
+<ul class:list={['project-grid', className]} data-queued-reveal-group data-queued-reveal-children style={`--grid-offset:${offset}px;--grid-row-gap:${rowGap}px`} {...rest}>
   {
     projects.map((p, i) => (
       <li class:list={{ 'is-offset': i % 2 === 1 }} data-types={p.data.types.join(',')} data-sector={p.data.sector} data-date={p.data.date.valueOf()}>
