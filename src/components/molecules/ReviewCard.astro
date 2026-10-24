@@ -64,4 +64,12 @@ const { logo, logoHeight, logoAlt, quote, author, avatar, class: className } = A
   .review-card__author span {
     opacity: 0.8;
   }
+
+  @media (max-width: 767px) {
+    .review-card {
+      width: min(37.5rem, 100vw - 4rem);
+      padding: var(--space-24);
+      gap: var(--space-24);
+    }
+  }
 </style>

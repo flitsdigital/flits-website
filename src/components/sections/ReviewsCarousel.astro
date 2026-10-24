@@ -71,4 +71,25 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
     height: 27.5rem; /* 440px */
     margin: -19px 0 6px; /* centre card top sits 19px into the header's bottom padding; stage was 446px */
   }
+
+  /* Phone (inferred): no room beside the card, so the hands sit smaller underneath it */
+  @media (max-width: 767px) {
+    .reviews {
+      padding-bottom: 8rem;
+    }
+    .reviews :global(.reviews__stage) {
+      height: 36rem;
+      margin-top: 0;
+    }
+    .reviews :global(.reviews__stage .radial-slider__hand) {
+      top: calc(100% + 3.5rem);
+      scale: 0.6;
+    }
+    .reviews :global(.reviews__stage .radial-slider__hand--prev) {
+      margin-left: -2.75rem;
+    }
+    .reviews :global(.reviews__stage .radial-slider__hand--next) {
+      margin-left: 2.75rem;
+    }
+  }
 </style>

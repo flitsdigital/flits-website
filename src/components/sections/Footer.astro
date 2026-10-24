@@ -116,4 +116,31 @@ const pages = [
     width: min(100% - 48px, 87rem); /* 1392px */
     translate: -50% 0;
   }
+
+  /* Phone/tablet (inferred): one column at content height; the wordmark follows, cut by the bottom edge */
+  @media (max-width: 767px) {
+    .footer {
+      height: auto;
+    }
+    .footer__inner {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      row-gap: var(--space-48);
+      height: auto;
+      padding-top: var(--space-84);
+    }
+    .footer__meta {
+      align-self: start;
+    }
+    .footer__legal {
+      flex-wrap: wrap;
+      margin-top: calc(-1 * var(--space-32));
+    }
+    .footer :global(.footer__logo) {
+      position: relative;
+      top: auto;
+      display: block;
+      margin: var(--space-64) 0 -4vw;
+    }
+  }
 </style>

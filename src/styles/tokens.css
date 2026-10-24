@@ -35,20 +35,21 @@
   --font-display: 'PP Right Grotesk', 'Arial Black', sans-serif;
   --font-body: 'GT Standard L', system-ui, sans-serif;
 
-  /* @group Typografie — display (PP Right Grotesk Wide Black, naam = px in Figma) */
-  --text-display-116: 900 7.2678rem/0.9 var(--font-display); /* 116.284px */
-  --text-display-96: 900 6rem/0.9 var(--font-display);
-  --text-display-76: 900 4.75rem/0.9 var(--font-display);
-  --text-display-64: 900 4rem/0.9 var(--font-display);
-  --text-display-48: 900 3rem/0.9 var(--font-display); /* case results */
-  --text-display-36: 900 2.25rem/1.1 var(--font-display);
+  /* @group Typografie — display (PP Right Grotesk Wide Black, naam = px in Figma)
+     The larger sizes are fluid: the Figma size at 1440px, a mobile size (inferred) at 375px. */
+  --text-display-116: 900 clamp(3.25rem, 1.835rem + 6.036vw, 7.268rem)/0.9 var(--font-display); /* 116.284px */
+  --text-display-96: 900 clamp(2.875rem, 1.775rem + 4.695vw, 6rem)/0.9 var(--font-display);
+  --text-display-76: 900 clamp(2.5rem, 1.708rem + 3.38vw, 4.75rem)/0.9 var(--font-display);
+  --text-display-64: 900 clamp(2.25rem, 1.634rem + 2.629vw, 4rem)/0.9 var(--font-display);
+  --text-display-48: 900 clamp(2rem, 1.648rem + 1.502vw, 3rem)/0.9 var(--font-display); /* case results */
+  --text-display-36: 900 clamp(1.75rem, 1.574rem + 0.7512vw, 2.25rem)/1.1 var(--font-display);
   --text-display-30: 900 1.8619rem/0.9 var(--font-display); /* 29.79px logowall CTA */
   --text-display-24: 900 1.5rem/0.9 var(--font-display);
   --text-display-16: 900 1rem/0.9 var(--font-display);
 
   /* @group Typografie — body (GT Standard L) */
-  --text-body-xl: 600 2rem/1.3 var(--font-body); /* 32px */
-  --text-body-l: 600 1.5rem/1.3 var(--font-body); /* 24px */
+  --text-body-xl: 600 clamp(1.375rem, 1.155rem + 0.939vw, 2rem)/1.3 var(--font-body); /* 32px */
+  --text-body-l: 600 clamp(1.188rem, 1.077rem + 0.4695vw, 1.5rem)/1.3 var(--font-body); /* 24px */
   --text-body-m: 600 1.25rem/1.3 var(--font-body); /* 20px */
   --text-body: 600 1rem/1.3 var(--font-body); /* 16px */
   --text-ui: 600 1rem/0.9 var(--font-body); /* 16px — buttons, nav */
@@ -57,9 +58,9 @@
   --text-body-desc: 500 1rem/1.3 var(--font-body); /* 16px Medium */
 
   /* @group Typografie — body Medium (vervangt Modern Gothic, zie ANALYSE F1) */
-  --text-title-medium-64: 500 4rem/0.9 var(--font-body); /* case hero title (GT Standard, not display) */
-  --text-body-xl-medium: 500 2rem/1.3 var(--font-body); /* 32px page intros */
-  --text-body-l-medium: 500 1.5rem/1.3 var(--font-body); /* 24px */
+  --text-title-medium-64: 500 clamp(2.25rem, 1.634rem + 2.629vw, 4rem)/0.9 var(--font-body); /* case hero title (GT Standard, not display) */
+  --text-body-xl-medium: 500 clamp(1.375rem, 1.155rem + 0.939vw, 2rem)/1.3 var(--font-body); /* 32px page intros */
+  --text-body-l-medium: 500 clamp(1.188rem, 1.077rem + 0.4695vw, 1.5rem)/1.3 var(--font-body); /* 24px */
   --text-body-m-medium: 500 1.25rem/1.3 var(--font-body); /* 20px */
   --text-quote: 500 1.25rem/1.4 var(--font-body); /* 20px reviews */
   --text-label: 500 1.125rem/1.3 var(--font-body); /* 18px footer labels */
@@ -97,22 +98,23 @@
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-ml: 24px; /* video cards */
-  --radius-section: 100px; /* top corners of the home team block */
-  --radius-lg: 48px;
+  --radius-section: clamp(2.5rem, 1.18rem + 5.634vw, 6.25rem); /* top corners of the home team block */
+  --radius-lg: clamp(1.5rem, 0.9718rem + 2.254vw, 3rem);
   --radius-pill: 1000px;
 
   /* @group Layout */
   --container-max: 78rem; /* 1248px */
   --container-narrow: 51.0625rem; /* 817px */
   --panel-max: 84rem; /* 1344px */
-  --gutter: var(--space-96);
-  --gutter-panel: var(--space-48);
+  /* Fluid from 375px (mobile, inferred — Figma is desktop only) to 1440px (Figma) */
+  --gutter: clamp(1.25rem, 7.136vw - 0.4225rem, 6rem);
+  --gutter-panel: clamp(0.5rem, 3.756vw - 0.3803rem, 3rem);
   /* Ready-made widths: the one place the mobile phase changes gutters */
   --width-content: min(100% - 2 * var(--gutter), var(--container-max));
   --width-narrow: min(100% - 2 * var(--gutter), var(--container-narrow));
   --width-panel: min(100% - 2 * var(--gutter-panel), var(--panel-max));
   /* Content of the first section starts below the overlaying navbar (Figma: 152px) */
-  --page-top: 9.5rem;
+  --page-top: clamp(7rem, 6.12rem + 3.756vw, 9.5rem);
 
   /* @group Overlays */
   --color-overlay-light-20: rgb(255 255 255 / 0.2);

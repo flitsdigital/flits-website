@@ -39,4 +39,14 @@ const { projects, offset = 48, rowGap = 48, showYear, titleAs, class: className,
   .project-grid > :global(.is-offset) {
     translate: 0 var(--grid-offset);
   }
+
+  @media (max-width: 767px) {
+    .project-grid {
+      grid-template-columns: minmax(0, 1fr);
+      padding-bottom: 0;
+    }
+    .project-grid > :global(.is-offset) {
+      translate: none;
+    }
+  }
 </style>

@@ -36,4 +36,15 @@ const { title, ticker, services } = Astro.props;
     width: var(--width-content);
     margin: calc(-1 * var(--space-16)) auto 0; /* Figma: cards start 16px into the header's bottom padding */
   }
+
+  @media (max-width: 767px) {
+    .services {
+      padding-bottom: var(--space-64);
+    }
+    .services__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-16);
+      margin-top: 0;
+    }
+  }
 </style>

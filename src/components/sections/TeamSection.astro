@@ -89,4 +89,63 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
   .team__row--bottom > :global(.map) {
     width: 100%;
   }
+
+  /* Tablet (inferred): header, both portraits side by side, then weather, clock and map in one row */
+  @media (max-width: 991px) {
+    .team__grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-areas:
+        'head head head head head head'
+        'card1 card1 card1 card2 card2 card2'
+        'weather weather clock clock map map';
+      align-items: center;
+      gap: var(--space-16);
+    }
+    .team__col,
+    .team__row {
+      display: contents;
+    }
+    .team__col > :global(.section-header) {
+      grid-area: head;
+      margin: 0 0 var(--space-16);
+    }
+    .team__row--top > :global(.team-card) {
+      grid-area: card1;
+    }
+    .team__col > :global(.team-card) {
+      grid-area: card2;
+    }
+    .team__grid :global(.weather) {
+      grid-area: weather;
+      width: 100%;
+    }
+    .team__grid :global(.clock) {
+      grid-area: clock;
+      justify-self: center;
+    }
+    .team__grid :global(.map) {
+      grid-area: map;
+      width: 100%;
+    }
+  }
+  /* Phone (inferred): header, Joery, weather + clock, Jordi, map */
+  @media (max-width: 767px) {
+    .team {
+      padding-block: var(--space-84) var(--space-64);
+    }
+    .team__grid {
+      width: min(var(--width-content), 30rem); /* large phones: keep the stack phone-sized */
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'head head'
+        'card1 card1'
+        'weather clock'
+        'card2 card2'
+        'map map';
+      align-items: stretch;
+    }
+    .team__grid :global(.weather) {
+      aspect-ratio: auto;
+    }
+  }
 </style>

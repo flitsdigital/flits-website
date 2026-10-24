@@ -30,4 +30,11 @@ const { title, ticker, projects } = Astro.props;
     margin: calc(-1 * var(--space-12)) auto 0; /* Figma: cards start 12px into the header's bottom padding */
     padding-bottom: calc(var(--space-64) + var(--space-8)); /* 72px under the lowest card; the grid adds the 48px drop */
   }
+
+  @media (max-width: 767px) {
+    .projects__body {
+      margin-top: 0;
+      padding-bottom: var(--space-32);
+    }
+  }
 </style>

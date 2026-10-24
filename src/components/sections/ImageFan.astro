@@ -35,4 +35,17 @@ const { images } = Astro.props;
     object-fit: cover;
     border-radius: var(--radius-sm);
   }
+
+  @media (max-width: 767px) {
+    .fan {
+      height: 15rem;
+    }
+    .fan :global(.fan__slider) {
+      height: 11rem;
+    }
+    .fan :global(.fan__photo) {
+      width: 15.3rem;
+      height: 11rem;
+    }
+  }
 </style>

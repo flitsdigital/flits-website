@@ -82,6 +82,16 @@ const {
   }
   .section-header__actions {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-16);
+  }
+  @media (max-width: 767px) {
+    .section-header--spaced {
+      padding-block: var(--space-64);
+    }
+    .section-header__actions {
+      gap: var(--space-8);
+    }
   }
 </style>

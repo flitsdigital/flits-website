@@ -51,4 +51,10 @@ const { href, image, label, class: className } = Astro.props;
     background: var(--color-light-0);
     color: var(--color-dark-900);
   }
+
+  @media (max-width: 767px) {
+    .service-card__label {
+      padding: var(--space-16);
+    }
+  }
 </style>

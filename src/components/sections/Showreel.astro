@@ -88,4 +88,25 @@ const { title, screen } = Astro.props;
     height: 688.421px;
     max-width: none;
   }
+
+  /* Phone (inferred): the title is too narrow to peek out beside the phone, so it moves above it;
+     the phone at 75%, the badges left out */
+  @media (max-width: 767px) {
+    .showreel {
+      place-items: start center;
+      height: 48rem;
+      margin-block: var(--space-24);
+      padding-top: var(--space-48);
+    }
+    .showreel :global(.showreel__title) {
+      width: calc(100% - 2 * var(--space-16));
+    }
+    .showreel__badge {
+      display: none;
+    }
+    .showreel__phone {
+      top: calc(50% + 4.5rem);
+      scale: 0.75;
+    }
+  }
 </style>

@@ -108,4 +108,26 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
       translate: calc(-50% - var(--space-10) / 2) 0;
     }
   }
+
+  /* Phone (inferred): the avatar title is one fixed 601px composition at 64px; zoom shrinks it whole */
+  @media (max-width: 767px) {
+    .intro {
+      padding-bottom: var(--space-64);
+      gap: var(--space-32);
+    }
+    .intro :global(.intro__title) {
+      font-size: 4rem;
+      zoom: 0.7;
+    }
+  }
+  @media (max-width: 479px) {
+    .intro :global(.intro__title) {
+      zoom: 0.54;
+    }
+  }
+  @media (max-width: 359px) {
+    .intro :global(.intro__title) {
+      zoom: 0.48;
+    }
+  }
 </style>
