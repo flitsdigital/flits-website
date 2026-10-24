@@ -37,8 +37,10 @@ const { projects, offset = 48, rowGap = 48, showYear, titleAs, class: className,
     gap: var(--grid-row-gap) var(--space-48);
     padding-bottom: var(--grid-offset); /* room for the dropped column */
   }
+  /* top, not translate: GSAP folds translate into its own transform during the reveal and drops it */
   .project-grid > :global(.is-offset) {
-    translate: 0 var(--grid-offset);
+    position: relative;
+    top: var(--grid-offset);
   }
 
   @media (max-width: 767px) {
@@ -47,7 +49,7 @@ const { projects, offset = 48, rowGap = 48, showYear, titleAs, class: className,
       padding-bottom: 0;
     }
     .project-grid > :global(.is-offset) {
-      translate: none;
+      top: 0;
     }
   }
 </style>
