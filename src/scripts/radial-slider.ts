@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { CustomEase } from 'gsap/CustomEase';
 import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry';
 
 /**
@@ -19,6 +20,9 @@ import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry
  */
 /** Visible space between neighbours, the same in every slider on the site (feedback 2026-10-24). */
 const GAP = 96;
+
+gsap.registerPlugin(CustomEase);
+CustomEase.create('osmo', 'M0,0 C0.625,0.05 0,1 1,1'); // same curve as --ease-osmo in CSS
 
 /** Starts every slider on the page; returns a cleanup for page transitions (ticker, observers, tweens). */
 export function initRadialSliders(): () => void {
@@ -145,7 +149,7 @@ export function initRadialSliders(): () => void {
         offset: to,
         duration: parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro-duration')) || 1.6,
         delay: parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro-delay')) || 0,
-        ease: 'expo.out',
+        ease: getComputedStyle(wrap).getPropertyValue('--radial-intro-ease').trim() || 'expo.out',
         onUpdate: render,
         onComplete: () => (stepping = null),
       });
