@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="380.002" height="48" viewBox="0 0 380.002 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 72">
+<foreignObject x="-4" y="-4" width="56" height="56"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_0_0_4_clip_path);height:100%;width:100%"></div></foreignObject><circle id="Ellipse 21" data-figma-bg-blur-radius="4" cx="24" cy="24" r="24" fill="white"/>
+<foreignObject x="328.002" y="-4" width="56" height="56"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_1_0_4_clip_path);height:100%;width:100%"></div></foreignObject><circle id="Ellipse 22" data-figma-bg-blur-radius="4" cx="356.002" cy="24" r="24" fill="white"/>
+<path id="Rectangle 135" d="M19 16.275C19 15.1414 20.6015 14.5737 21.5381 15.3752L30.5645 23.1003C31.1452 23.5972 31.1452 24.4028 30.5645 24.8997L21.5381 32.6248C20.6015 33.4263 19 32.8586 19 31.725L19 16.275Z" fill="#1D0C21"/>
+<path id="Rectangle 136" d="M351.002 16.275C351.002 15.1414 352.603 14.5737 353.54 15.3752L362.566 23.1003C363.147 23.5972 363.147 24.4028 362.566 24.8997L353.54 32.6248C352.603 33.4263 351.002 32.8586 351.002 31.725L351.002 16.275Z" fill="#1D0C21"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_0_4_clip_path" transform="translate(4 4)"><circle cx="24" cy="24" r="24"/>
+</clipPath><clipPath id="bgblur_1_0_4_clip_path" transform="translate(-328.002 4)"><circle cx="356.002" cy="24" r="24"/>
+</clipPath></defs>
+</svg>

@@ -1,0 +1,35 @@
+---
+import Heading from '../atoms/Heading.astro';
+
+interface Props {
+  label: string;
+  value: string;
+}
+
+const { label, value } = Astro.props;
+---
+
+<!-- Figma 1:1761 / 1:3247: grey→white card, label on top, big number 64px lower -->
+<div class="stat-card">
+  <dt>{label}</dt>
+  <dd><Heading as="span" size="64">{value}</Heading></dd>
+</div>
+
+<style>
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-64);
+    padding: var(--space-24);
+    border-radius: var(--radius-sm);
+    background: var(--gradient-card);
+  }
+  dt {
+    font: var(--text-body-l);
+    color: var(--color-dark-800);
+    opacity: 0.8;
+  }
+  dd {
+    color: var(--color-dark-900);
+  }
+</style>

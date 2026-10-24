@@ -1,0 +1,51 @@
+---
+import type { ImageMetadata } from 'astro';
+
+const icons = import.meta.glob<ImageMetadata>('../../assets/icons/*.svg', {
+  eager: true,
+  import: 'default',
+});
+const byName = Object.fromEntries(
+  Object.entries(icons).map(([path, meta]) => [path.split('/').pop()!.replace('.svg', ''), meta]),
+);
+
+import type { IconName } from '../../design-system/icons';
+export type { IconName };
+
+interface Props {
+  name: IconName;
+  /** Box size in px (the Figma icon frame); the SVG keeps its own size, centered. */
+  size?: number;
+  label?: string;
+  class?: string;
+}
+
+const { name, size = 24, label, class: className } = Astro.props;
+// Figma draws 👈 as the 👉 asset mirrored (rotate 180° + flip Y), so it shares one file.
+const flip = name === 'hand-left';
+const icon = byName[flip ? 'hand-right' : name];
+if (!icon) throw new Error(`Icon "${name}" not found in src/assets/icons`);
+---
+
+<span
+  class:list={['icon', { 'icon--flip': flip }, className]}
+  style={`--icon-size:${size}px`}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  <img src={icon.src} width={icon.width} height={icon.height} alt="" />
+</span>
+
+<style>
+  .icon {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
+  .icon--flip {
+    scale: -1 1;
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+import Text from '../atoms/Text.astro';
+import IconTile from '../atoms/IconTile.astro';
+import type { IconName } from '../atoms/Icon.astro';
+
+interface Props {
+  icon: IconName;
+  title: string;
+  text: string;
+}
+
+const { icon, title, text } = Astro.props;
+---
+
+<!-- Figma 1:2523: icon tile top-left, title + text pinned to the bottom of a fading card -->
+<article class="feature-card">
+  <IconTile icon={icon} />
+  <div class="feature-card__text">
+    <Text as="h3" size="l">{title}</Text>
+    <Text size="desc">{text}</Text>
+  </div>
+</article>
+
+<style>
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-24);
+    height: 100%;
+    padding: var(--space-24);
+    border-radius: var(--radius-md);
+    background: var(--gradient-card-fade);
+    color: var(--color-dark-800);
+  }
+  .feature-card__text {
+    display: grid;
+    gap: var(--space-6);
+  }
+</style>

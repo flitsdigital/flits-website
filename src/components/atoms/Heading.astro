@@ -1,0 +1,44 @@
+---
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span';
+  /** Figma font size in px (PP Right Grotesk Wide Black). */
+  size?: '116' | '96' | '76' | '64' | '48' | '36' | '24' | '16';
+  id?: string;
+  class?: string;
+}
+
+const { as: Tag = 'h2', size = '64', id, class: className } = Astro.props;
+---
+
+<Tag class:list={['heading', `heading--${size}`, className]} id={id}><slot /></Tag>
+
+<style>
+  .heading {
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+  .heading--116 {
+    font: var(--text-display-116);
+  }
+  .heading--96 {
+    font: var(--text-display-96);
+  }
+  .heading--76 {
+    font: var(--text-display-76);
+  }
+  .heading--64 {
+    font: var(--text-display-64);
+  }
+  .heading--48 {
+    font: var(--text-display-48);
+  }
+  .heading--36 {
+    font: var(--text-display-36);
+  }
+  .heading--24 {
+    font: var(--text-display-24);
+  }
+  .heading--16 {
+    font: var(--text-display-16);
+  }
+</style>

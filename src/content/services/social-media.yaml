@@ -1,0 +1,63 @@
+# Social media beheer (Figma 1:2397). Copy is still the Figma placeholder copy.
+order: 2
+label: Social media beheer
+teaserLabel: Content & social
+teaserImage: ../../assets/images/services/content-social.jpg
+teaserOrder: 1
+page:
+  breadcrumb: Socials
+  title: Social media beheer
+  description: Korte video's die mensen laten stoppen met scrollen. Flits filmt, monteert en plaatst social content voor ondernemers in Drenthe.
+  intro:
+    - Wij creëren op maat gemaakte websites die precies passen bij jouw bedrijf. Geen kant-en-klare templates, maar een uniek ontwerp en functies die werken voor jou.
+  heroMedia:
+    type: videoFan
+    posters: # the first one plays in the centre
+      - ../../assets/social/video-center.jpg
+      - ../../assets/social/video-side.jpg
+      - ../../assets/social/video-center.jpg
+      - ../../assets/social/video-side.jpg
+      - ../../assets/social/video-side.jpg
+  blocks:
+    - type: features
+      title: Misschien herken je dit wel...
+      lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.
+      items:
+        - { icon: quote, title: Je weet dat je iets moet, maar niet precies wat, text: Iedereen roept iets anders. Dus wacht je, en gebeurt er niks. }
+        - { icon: quote, title: Iemand zou het doen, maar het komt er nooit van, text: Zelf je website beheren? Geen probleem! Wij zorgen voor een eenvoudig systeem. }
+        - { icon: quote, title: Je hebt geen tijd voor social media, text: Klanten en offertes gaan voor. Filmen schiet er altijd bij in. }
+        - { icon: quote, title: Je post wel eens iets, maar er gebeurt niks, text: Drie likes, waarvan één van je moeder. }
+        - { icon: quote, title: Je staat niet graag voor de camera, text: Zodra de camera loopt, klinkt het ineens stijf. }
+        - { icon: quote, title: Je betaalde al eens voor content die niks opleverde, text: Mooie beelden, maar geen enkele nieuwe klant. }
+    - type: logoFan
+      proof: 25+ bedrijven gingen je al voor!
+      cta: { label: Ja, ik herken mezelf hier in..., href: '#contact' }
+    - type: behindTheScenes
+      title: Een kijkje achter de schermen
+    - type: split
+      eyebrow: Wat houd social media in?
+      title: Korte video's die mensen laten stoppen met scrollen
+      body:
+        - Je concurreert online niet met de zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto's van iemands neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe. Daarom maken wij staande video's van 15 tot 60 seconden die in de eerste seconde laten zien waarom iemand moet blijven kijken.
+      actions:
+        - { label: Ik heb interesse!, href: '#contact' }
+      phones:
+        - { screen: ../../assets/website/screen-2.png, x: 130, y: 136, width: 435 }
+    - type: steps
+      title: Hoe gaan we te werk?
+      lead: Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.
+      items:
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je doet met je bedrijf }
+        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: Waar staat je bedrijf in de markt, wat doet de concurrentie en hoe kunnen we hier van leren? }
+        - { image: ../../assets/steps/step-3.jpg, title: Ideeën op papier, text: We beginnen met een ontwerp voor jouw website. }
+        - { image: ../../assets/steps/step-1.jpg, title: Opnamedag, text: We komen langs met camera, licht en een plan. }
+    - type: projects
+      title: Short form content
+      ticker: [Short form content]
+      projectType: Video
+    - type: faq
+      title: Vragen die we vaak krijgen
+      lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.
+    - type: contact
+      title: Neem contact met ons op
+      lead: Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.

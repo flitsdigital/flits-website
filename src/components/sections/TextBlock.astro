@@ -1,0 +1,27 @@
+---
+import Prose from '../atoms/Prose.astro';
+import Heading from '../atoms/Heading.astro';
+
+interface Props {
+  title: string;
+  paragraphs: string[];
+}
+
+const { title, paragraphs } = Astro.props;
+---
+
+<!-- Figma 1:1749 + 1:1750: 817px column, big title, 24px body -->
+<section class="text-block">
+  <Heading>{title}</Heading>
+  <Prose paragraphs={paragraphs} tone="secondary" />
+</section>
+
+<style>
+  .text-block {
+    display: grid;
+    gap: 2.625rem; /* 42px */
+    width: var(--width-narrow);
+    margin-inline: auto;
+    padding-bottom: 7.3125rem; /* 117px to the stats panel */
+  }
+</style>

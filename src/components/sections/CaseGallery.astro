@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Heading from '../atoms/Heading.astro';
+import Panel from '../atoms/Panel.astro';
+import Ticker from '../molecules/Ticker.astro';
+
+interface Props {
+  title: string;
+  ticker: string[];
+  /** Fills two columns left/right in turn; heights follow the Figma rhythm tall·short / short·tall. */
+  images: ImageMetadata[];
+}
+
+const { title, ticker, images } = Astro.props;
+// Figma 1:3217–1:3220: 616px wide photos, heights 786 / 476 / 496 / 803, repeating.
+const ratios = ['616/786', '616/476', '616/496', '616/803'];
+const columns = [0, 1].map((col) => images.map((src, i) => ({ src, ratio: ratios[i % 4] })).filter((_, i) => i % 2 === col));
+---
+
+<!-- Figma 1:3202: 1380px white block, ticker + title, two staggered photo columns -->
+<section class="case-gallery">
+  <Panel width="wide">
+    <div class="case-gallery__inner">
+      <header class="case-gallery__header">
+        <Ticker items={ticker} class="case-gallery__ticker" />
+        <Heading>{title}</Heading>
+      </header>
+      <div class="case-gallery__grid">
+        {
+          columns.map((col) => (
+            <div class="case-gallery__col">
+              {col.map((img) => <Image src={img.src} alt="" widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" style={`aspect-ratio:${img.ratio}`} />)}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Panel>
+</section>
+
+<style>
+  .case-gallery {
+    margin-bottom: 9.5625rem; /* 153px to the dark results band */
+  }
+  .case-gallery__inner {
+    padding: 5.4375rem 3.1875rem 4.1875rem; /* 87px top, 51px sides, 67px bottom */
+  }
+  .case-gallery__header {
+    display: grid;
+    justify-items: center;
+    gap: 1.625rem; /* title 26px under the ticker */
+    width: min(100%, 40.6875rem); /* 651px */
+    margin-inline: auto;
+    text-align: center;
+  }
+  .case-gallery :global(.case-gallery__ticker) {
+    width: min(100vw - 2 * var(--gutter), 36rem); /* 576px */
+  }
+  .case-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.875rem; /* 46px */
+    margin-top: 4.6875rem; /* photos 75px under the title */
+  }
+  .case-gallery__col {
+    display: grid;
+    align-content: start;
+    gap: 2.75rem; /* 42–45px in Figma */
+  }
+  .case-gallery__col :global(img) {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+</style>

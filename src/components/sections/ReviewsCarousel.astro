@@ -1,0 +1,74 @@
+---
+import SectionHeader from '../molecules/SectionHeader.astro';
+import ReviewCard from '../molecules/ReviewCard.astro';
+import RadialSlider from '../molecules/RadialSlider.astro';
+import Icon from '../atoms/Icon.astro';
+import bg from '../../assets/images/reviews/reviews-bg.svg';
+import type { CollectionEntry } from 'astro:content';
+import { rating } from '../../data/site';
+
+interface Props {
+  title: string;
+  /** Any number of reviews; the second one starts in the centre (as in Figma). */
+  reviews: CollectionEntry<'reviews'>[];
+  /** Over ons shows a yellow ticker above the title instead of the Google rating. */
+  ticker?: string[];
+}
+
+const { title, reviews, ticker } = Astro.props;
+// The slider centres its first item; Figma centres the second review, and the order is circular.
+const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
+
+---
+
+<section class="reviews">
+  <img class="reviews__bg" src={bg.src} width={bg.width} height={bg.height} alt="" />
+  <SectionHeader title={title} ticker={ticker} width={813} gap={28}>
+    {!ticker && <p slot="eyebrow" class="reviews__rating">
+      <Icon name="google" size={18} />
+      <span>Beoordeeld met een <strong>{rating.score}</strong> door <strong>{rating.count}</strong> bedrijven</span>
+    </p>}
+  </SectionHeader>
+  <!-- Figma: 600px cards, neighbours tilted 10° and raised (∪). Steps with the hands. -->
+  <RadialSlider label="Reviews van klanten" shape="valley" angle={10} equalHeight hands={{ item: 'review' }} class="reviews__stage">
+    {centred.map((r) => <ReviewCard {...r.data} />)}
+  </RadialSlider>
+</section>
+
+<style>
+  .reviews {
+    position: relative;
+    overflow: hidden;
+    /* Figma frame starts 129px above the header but overlaps the panel above by 99px */
+    padding-top: 1.875rem; /* 30px */
+    padding-bottom: 4.1875rem; /* 67px: next section's header begins here */
+  }
+  .reviews__bg {
+    position: absolute;
+    top: -199px;
+    left: calc(50% - 1237px);
+    max-width: none;
+    scale: 1 -1;
+    pointer-events: none;
+  }
+  .reviews__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    border-radius: var(--radius-pill);
+    background: var(--color-light-0);
+    font: var(--text-body-s);
+    font-weight: 500;
+    color: var(--color-dark-900-80);
+  }
+  .reviews__rating strong {
+    font-weight: inherit;
+    color: var(--color-dark-900);
+  }
+  /* Slider box = the centre card's height (440px), its centre where Figma has it */
+  .reviews :global(.reviews__stage) {
+    height: 27.5rem; /* 440px */
+    margin: -19px 0 6px; /* centre card top sits 19px into the header's bottom padding; stage was 446px */
+  }
+</style>

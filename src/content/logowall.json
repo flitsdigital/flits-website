@@ -1,0 +1,14 @@
+[
+  { "id": "menges-de-vries", "name": "Menges & De Vries", "logo": "../assets/logos/menges-de-vries.svg", "row": 1, "column": 1 },
+  { "id": "groenmaat", "name": "Groenmaat", "logo": "../assets/logos/groenmaat.svg", "row": 1, "column": 2 },
+  { "id": "dvs", "name": "Drentse Vloerverwarming Specialist", "logo": "../assets/logos/drentse-vloerverwarming-specialist.svg", "row": 1, "column": 3 },
+  { "id": "jh-automotive", "name": "JH Automotive", "logo": "../assets/logos/jh-automotive.svg", "row": 2, "column": 1 },
+  { "id": "auto-van-dijk", "name": "Auto van Dijk", "logo": "../assets/logos/auto-van-dijk.svg", "row": 2, "column": 3 },
+  { "id": "premiumcars", "name": "PremiumCars.nl", "logo": "../assets/logos/premiumcars.svg", "row": 2, "column": 4 },
+  { "id": "plus", "name": "PLUS", "logo": "../assets/logos/plus.svg", "row": 3, "column": 1 },
+  { "id": "nnet-energy", "name": "nnet energy", "logo": "../assets/logos/nnet-energy.svg", "row": 3, "column": 2 },
+  { "id": "chocodoki", "name": "Chocodoki", "logo": "../assets/logos/chocodoki.svg", "row": 3, "column": 4 },
+  { "id": "cr-noord", "name": "Car Rally Noord", "logo": "../assets/logos/cr-noord.svg", "row": 4, "column": 2 },
+  { "id": "menges-de-vries-2", "name": "Menges & De Vries", "logo": "../assets/logos/menges-de-vries.svg", "row": 4, "column": 3 },
+  { "id": "jh-automotive-2", "name": "JH Automotive", "logo": "../assets/logos/jh-automotive.svg", "row": 4, "column": 4 }
+]

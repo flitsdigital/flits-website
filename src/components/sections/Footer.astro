@@ -1,0 +1,119 @@
+---
+import BgShapes from '../atoms/BgShapes.astro';
+import Icon from '../atoms/Icon.astro';
+import Logo from '../atoms/Logo.astro';
+import Heading from '../atoms/Heading.astro';
+import { contact, legal, socials } from '../../data/site';
+import { getServices, serviceHref } from '../../lib/content';
+
+const [firstService] = await getServices();
+const pages = [
+  { label: 'Home', href: '/' },
+  { label: 'Projecten', href: '/projecten' },
+  { label: 'Diensten', href: serviceHref(firstService.id) },
+  { label: 'Over ons', href: '/over-ons' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<footer class="footer" data-theme="dark">
+  <BgShapes leftTop={417} rightTop={-47} />
+  <div class="footer__inner">
+    <div class="footer__col">
+      <p class="footer__label">Contactinformatie</p>
+      <address class="footer__contact">
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+        <span>{contact.address.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</span>
+        <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
+      </address>
+    </div>
+    <nav class="footer__col" aria-label="Pagina’s">
+      <p class="footer__label">Pagina’s</p>
+      <ul class="footer__pages" role="list">
+        {pages.map((p) => <li><a href={p.href}><Heading as="span" size="64">{p.label}</Heading></a></li>)}
+      </ul>
+    </nav>
+    <p class="footer__meta" data-local-time data-region={contact.region}>17:45 in {contact.region}</p>
+    <div class="footer__meta footer__legal">
+      {legal.map((l) => <a href={l.href}>{l.label}</a>)}
+      <ul class="footer__socials" role="list">
+        {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
+      </ul>
+    </div>
+  </div>
+  <Logo variant="footer" class="footer__logo" />
+</footer>
+
+<script>
+  import { studioTime, everyTick } from '../../lib/time';
+
+  everyTick(() => {
+    const { hh, mm } = studioTime();
+    document.querySelectorAll<HTMLElement>('[data-local-time]').forEach((el) => {
+      el.textContent = `${hh}:${mm} in ${el.dataset.region}`;
+    });
+  }, 30_000);
+</script>
+
+<style>
+  .footer {
+    position: relative;
+    height: 64.125rem; /* 1026px; the wordmark is cut off by the bottom edge */
+    overflow: hidden;
+  }
+  /* Figma columns at x=96 (385px) and x=636 (426px) of the 1440 frame */
+  .footer__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 33.75rem 1fr; /* 540px = 636 - 96 */
+    grid-template-rows: auto 1fr;
+    row-gap: 0;
+    width: var(--width-content);
+    height: 48.5rem; /* 776px: meta row baseline box ends at y=776 in Figma */
+    margin-inline: auto;
+    padding-top: 7.0625rem; /* 113px */
+  }
+  .footer__col {
+    display: grid;
+    align-content: start;
+    gap: var(--space-24);
+  }
+  .footer__label {
+    font: var(--text-label);
+    color: var(--color-light-muted-on-dark);
+  }
+  .footer__contact {
+    display: grid;
+    gap: var(--space-16);
+    font: var(--text-body-l-medium);
+    font-style: normal;
+  }
+  .footer__contact span {
+    display: grid;
+  }
+  .footer__pages {
+    display: grid;
+    gap: var(--space-16);
+  }
+  .footer__meta {
+    align-self: end;
+    font: var(--text-body-m-medium);
+    color: var(--color-light-muted-on-dark);
+  }
+  .footer__legal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .footer__socials {
+    display: flex;
+    gap: var(--space-8);
+  }
+  .footer :global(.footer__logo) {
+    position: absolute;
+    left: 50%;
+    top: 52.4375rem; /* 839px */
+    width: min(100% - 48px, 87rem); /* 1392px */
+    translate: -50% 0;
+  }
+</style>

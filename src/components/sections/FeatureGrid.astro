@@ -1,0 +1,45 @@
+---
+import SectionHeader from '../molecules/SectionHeader.astro';
+import FeatureCard from '../molecules/FeatureCard.astro';
+import type { IconName } from '../atoms/Icon.astro';
+
+interface Props {
+  title: string;
+  lead: string;
+  features: { icon: IconName; title: string; text: string }[];
+  /** pains: social (311px cards) · services: website (264px cards) */
+  variant?: 'pains' | 'services';
+}
+
+const { title, lead, features, variant = 'pains' } = Astro.props;
+---
+
+<!-- Figma 1:2493 + 1:2499 (social) / 1:3056 + 1:3062 (website): header in the 817 column, 3×2 cards -->
+<section class:list={['feature-grid', `feature-grid--${variant}`]}>
+  <SectionHeader title={title} lead={lead} width={817} spaced={false} />
+  <div class="feature-grid__cards">
+    {features.map((f) => <FeatureCard {...f} />)}
+  </div>
+</section>
+
+<style>
+  .feature-grid {
+    padding-bottom: 7.1875rem; /* 115px (website: 111px) */
+  }
+  .feature-grid__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: var(--width-content);
+    margin-inline: auto;
+  }
+  .feature-grid--pains .feature-grid__cards {
+    grid-auto-rows: 19.4375rem; /* 311px */
+    gap: 47px var(--space-48);
+    margin-top: 3.6875rem; /* 59px */
+  }
+  .feature-grid--services .feature-grid__cards {
+    grid-auto-rows: 16.5rem; /* 264px */
+    gap: 42px var(--space-48);
+    margin-top: 4.5rem; /* 72px */
+  }
+</style>

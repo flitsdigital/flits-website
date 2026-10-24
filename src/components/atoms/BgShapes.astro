@@ -1,0 +1,53 @@
+---
+import left from '../../assets/shapes/bolt-left.svg';
+import right from '../../assets/shapes/bolt-right.svg';
+import leftLight from '../../assets/shapes/bolt-left-light.svg';
+import rightLight from '../../assets/shapes/bolt-right-light.svg';
+
+interface Props {
+  /** Top offsets in px from the Figma frame (hero defaults). */
+  leftTop?: number;
+  rightTop?: number;
+  /** Left edges in px from the frame centre (720); defaults match the hero. */
+  leftX?: number;
+  rightX?: number;
+  /** dark: on dark-900 sections · light: 2% shapes on light sections */
+  tone?: 'dark' | 'light';
+  /** Only the right bolt (case hero). */
+  rightOnly?: boolean;
+}
+
+const { leftTop = 322, rightTop = -142, leftX = -889.5, rightX = 266, tone = 'dark', rightOnly = false } = Astro.props;
+const [l, r] = tone === 'light' ? [leftLight, rightLight] : [left, right];
+---
+
+<div
+  class="bg-shapes"
+  aria-hidden="true"
+  style={`--left-top:${leftTop}px;--right-top:${rightTop}px;--left-x:${leftX}px;--right-x:${rightX}px`}
+>
+  {!rightOnly && <img class="bg-shapes__left" src={l.src} width={l.width} height={l.height} alt="" />}
+  <img class="bg-shapes__right" src={r.src} width={r.width} height={r.height} alt="" />
+</div>
+
+<style>
+  /* Parent must be position: relative. Positions are relative to the 1440 frame center. */
+  .bg-shapes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .bg-shapes img {
+    position: absolute;
+    max-width: none;
+  }
+  .bg-shapes__left {
+    top: var(--left-top);
+    left: calc(50% + var(--left-x));
+  }
+  .bg-shapes__right {
+    top: var(--right-top);
+    left: calc(50% + var(--right-x));
+  }
+</style>

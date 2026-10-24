@@ -1,0 +1,193 @@
+---
+import markers from '../../assets/images/widgets/clock-markers.svg';
+import { contact } from '../../data/site';
+
+interface Props {
+  city?: string;
+  /** stack: 168×201 card · wide: 384×201, labels left and right of the face (contact, 1:2804) */
+  layout?: 'stack' | 'wide';
+  class?: string;
+}
+
+const { city = contact.city, layout = 'stack', class: className } = Astro.props;
+---
+
+<!-- Clock mechanics + data-attributes: Osmo Supply "Analog Clock". Look: Figma widget 1:1194. -->
+<div class:list={['clock', `clock--${layout}`, className]}>
+  <p class="clock__label" data-clock-time>12:15 (CEST)</p>
+  <div data-analog-clock-init class="analog-clock" aria-hidden="true">
+    <div class="analog-clock__face">
+      <img class="analog-clock__face-svg" src={markers.src} width={markers.width} height={markers.height} alt="" />
+      <div class="analog-clock__numerals">
+        <div class="analog-clock__numerals-number"><span class="analog-clock__numerals-number-span">12</span></div>
+        <div class="analog-clock__numerals-number is--3"><span class="analog-clock__numerals-number-span is--3">3</span></div>
+        <div class="analog-clock__numerals-number is--6"><span class="analog-clock__numerals-number-span is--6">6</span></div>
+        <div class="analog-clock__numerals-number is--9"><span class="analog-clock__numerals-number-span is--9">9</span></div>
+      </div>
+      <div data-analog-clock-minute="" class="analog-clock__minute">
+        <div class="analog-clock__minute-hand"></div>
+      </div>
+      <div data-analog-clock-hour="" class="analog-clock__hour">
+        <div class="analog-clock__hour-center"></div>
+        <div class="analog-clock__hour-hand"></div>
+      </div>
+      <div data-analog-clock-second="" class="analog-clock__second">
+        <div class="analog-clock__second-center"></div>
+        <div class="analog-clock__second-hand"></div>
+      </div>
+    </div>
+  </div>
+  <p class="clock__label">{city}</p>
+</div>
+
+<!-- Behaviour: src/scripts/clock.ts (started per page by src/scripts/app.ts) -->
+
+<style>
+  /* Widget card (Figma 1:1194) */
+  .clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 10.5rem; /* 168px */
+    height: 12.5625rem; /* 201px */
+    padding-block: var(--space-12);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .clock--wide {
+    flex-direction: row;
+    width: 24rem; /* 384px */
+    padding-inline: var(--space-24);
+  }
+  .clock--wide .clock__label {
+    width: 5.0625rem; /* 81px: equal boxes keep the face centred */
+  }
+  .clock--wide .clock__label:last-child {
+    text-align: right;
+  }
+  .clock__label {
+    font: var(--text-widget-title);
+    line-height: 11.75px;
+    color: var(--color-dark-800);
+    opacity: 0.6;
+  }
+
+  /* Osmo clock, sized and coloured to the Figma face (126.9px, hands in a 112.2px frame) */
+  .analog-clock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 126.9px;
+    aspect-ratio: 1;
+    color: var(--color-dark-800);
+  }
+  .analog-clock__face {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--color-light-0);
+  }
+  .analog-clock__face-svg {
+    position: absolute;
+    width: 110.45px;
+    aspect-ratio: 1;
+  }
+  .analog-clock__numerals {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 118.322px;
+    aspect-ratio: 1;
+  }
+  .analog-clock__numerals-number {
+    position: absolute;
+    height: 100%;
+    text-align: center;
+  }
+  .analog-clock__numerals-number-span {
+    display: block;
+    font: var(--text-widget-title);
+    line-height: 11.75px;
+  }
+  .analog-clock__numerals-number.is--3 { transform: rotate(90deg); }
+  .analog-clock__numerals-number.is--6 { transform: rotate(180deg); }
+  .analog-clock__numerals-number.is--9 { transform: rotate(270deg); }
+  .analog-clock__numerals-number-span.is--3 { transform: rotate(-90deg); }
+  .analog-clock__numerals-number-span.is--6 { transform: rotate(-180deg); }
+  .analog-clock__numerals-number-span.is--9 { transform: rotate(-270deg); }
+
+  /* Default rotations = the Figma frame, until the script takes over */
+  .analog-clock__minute {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14.1px;
+    height: 112.213px;
+    transform: rotate(-168.47deg);
+  }
+  .analog-clock__minute-hand {
+    width: 2.938px;
+    height: 44.65px;
+    border-radius: var(--radius-pill);
+    background: var(--color-dark-800);
+    opacity: 0.4;
+    transform: translate(0, -50%);
+  }
+  .analog-clock__hour {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 12.925px;
+    height: 112.213px;
+    transform: rotate(-44.04deg);
+  }
+  .analog-clock__hour-center {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+    background: var(--color-dark-800);
+  }
+  .analog-clock__hour-hand {
+    position: absolute;
+    width: 2.938px;
+    height: 35.25px;
+    border-radius: var(--radius-pill);
+    background: var(--color-dark-800);
+    transform: translate(0, -50%);
+  }
+  .analog-clock__second {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 7.05px;
+    height: 112.213px;
+    transform: rotate(150deg);
+  }
+  [data-analog-clock-second] {
+    transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .analog-clock__second-center {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+    background: var(--color-brand-500);
+  }
+  /* Figma: runs 16px past the center */
+  .analog-clock__second-hand {
+    position: absolute;
+    top: 0;
+    width: 1.175px;
+    height: calc(50% + 16px);
+    border-radius: var(--radius-pill);
+    background: var(--color-brand-500);
+  }
+</style>

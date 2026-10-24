@@ -1,0 +1,331 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/atoms/Button.astro';
+import Pill from '../components/atoms/Pill.astro';
+import Heading from '../components/atoms/Heading.astro';
+import Text from '../components/atoms/Text.astro';
+import Highlight from '../components/atoms/Highlight.astro';
+import HandButton from '../components/atoms/HandButton.astro';
+import Panel from '../components/atoms/Panel.astro';
+import Icon from '../components/atoms/Icon.astro';
+import { iconNames as icons, type IconName } from '../design-system/icons';
+import IconTile from '../components/atoms/IconTile.astro';
+import ArrowTile from '../components/atoms/ArrowTile.astro';
+import Logo from '../components/atoms/Logo.astro';
+import Avatar from '../components/atoms/Avatar.astro';
+import AvatarStack from '../components/atoms/AvatarStack.astro';
+import Label from '../components/atoms/Label.astro';
+import Input from '../components/atoms/Input.astro';
+import BgShapes from '../components/atoms/BgShapes.astro';
+import jordi from '../assets/images/avatars/jordi.png';
+import joery from '../assets/images/avatars/joery.png';
+
+const themes = ['light', 'surface', 'dark'] as const;
+// White icons are shown on a dark tile so they stay visible.
+const darkIcons = new Set<IconName>(['arrow-up-right', 'bolt-white', 'whatsapp', 'facebook', 'instagram', 'linkedin', 'tiktok', 'home']);
+const avatars = [{ src: jordi, alt: "Jordi" }, { src: joery, alt: "Joery" }];
+---
+
+<BaseLayout title="Components — Flits" noindex>
+  <main class="cg">
+    <header>
+      <p class="cg-eyebrow">Flits design system · fase 2</p>
+      <Heading as="h1" size="116">Atoms</Heading>
+      <Text size="l" tone="secondary">Alle atoms in hun varianten, per ondergrond (<code>data-theme</code>).</Text>
+    </header>
+
+    <!-- Button -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Button</Heading>
+        <code>variant: primary | secondary | outline | step · href? · icon? · iconPosition? · disabled?</code>
+      </div>
+      <div class="cg-themes">
+        {themes.map((t) => (
+          <div class="cg-panel" data-theme={t}>
+            <span class="cg-tag">{t}</span>
+            <div class="cg-row">
+              <Button>Start een project</Button>
+              <Button variant="secondary">Bekijk al onze projecten</Button>
+            </div>
+            <div class="cg-row">
+              {t === 'dark' && <Button variant="outline" icon="whatsapp">Stuur een appje</Button>}
+              <Button href="#" disabled>Disabled</Button>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="cg-panel" data-theme="surface">
+        <span class="cg-tag">step (formulier)</span>
+        <div class="cg-row">
+          <Button variant="step" icon="hand-left" disabled>Vorige</Button>
+          <Button variant="step" icon="hand-right" iconPosition="end">Volgende</Button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pill -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Pill</Heading>
+        <code>variant: outline | solid | filter · active? (filter)</code>
+      </div>
+      <div class="cg-photo">
+        <Pill>2026</Pill><Pill>Logo</Pill><Pill>Huisstijl</Pill><Pill>Website</Pill>
+        <Pill variant="solid">Nieuw!</Pill><Pill variant="solid">Uitgelicht</Pill>
+      </div>
+      <div class="cg-themes">
+        {themes.map((t) => (
+          <div class="cg-panel" data-theme={t}>
+            <span class="cg-tag">{t} · filter</span>
+            <div class="cg-row">
+              <Pill variant="filter">Alles (48)</Pill>
+              <Pill variant="filter" active>Websites (12)</Pill>
+              <Pill variant="filter">Foto (1)</Pill>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- HandButton + Panel -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">HandButton &amp; Panel</Heading>
+        <code>HandButton direction: prev | next · tone: dark | light · label — Panel theme: surface | dark · as</code>
+      </div>
+      <div class="cg-themes">
+        {themes.map((t) => (
+          <div class="cg-panel" data-theme={t}>
+            <span class="cg-tag">{t}</span>
+            <div class="cg-row">
+              <HandButton direction="prev" label="Vorige" tone={t === 'dark' ? 'light' : 'dark'} />
+              <HandButton direction="next" label="Volgende" tone={t === 'dark' ? 'light' : 'dark'} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <Panel><div class="cg-panel">Panel · surface (1344px, radius 48)</div></Panel>
+      <Panel theme="dark"><div class="cg-panel">Panel · dark</div></Panel>
+    </section>
+
+    <!-- Heading + Highlight -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Heading &amp; Highlight</Heading>
+        <code>Heading as: h1–h4 | p | span · size: 116 | 96 | 76 | 64 | 48 | 36 | 24 | 16 (Figma px) — Highlight (fixed -1.64° tilt)</code>
+      </div>
+      <div class="cg-panel cg-center" data-theme="dark">
+        <Heading as="p" size="116">Wij maken<br /><Highlight>Impact</Highlight></Heading>
+      </div>
+      <div class="cg-themes">
+        {themes.map((t) => (
+          <div class="cg-panel cg-stack" data-theme={t}>
+            <span class="cg-tag">{t}</span>
+            <Heading as="p" size="64">Een verzameling</Heading>
+            <Heading as="p" size="36">Om te beginnen</Heading>
+            <Heading as="p" size="16">Volgende</Heading>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Text -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Text</Heading>
+        <code>size: xl | l | m | base | ui | s | caption | desc · tone: default | secondary | muted</code>
+      </div>
+      <div class="cg-themes">
+        {themes.map((t) => (
+          <div class="cg-panel cg-stack" data-theme={t}>
+            <span class="cg-tag">{t}</span>
+            <Text size="xl">Hier komt een leuke tekst</Text>
+            <Text size="l" tone="secondary">Je concurreert niet met die ene zaak verderop.</Text>
+            <Text size="m">Van 0 naar 100 door een gave huisstijl</Text>
+            <Text tone="muted">PremiumCars.nl</Text>
+            <Text size="s">Short form content</Text>
+            <Text size="caption">2026</Text>
+            <Text size="desc" tone="secondary">Zelf je website beheren? Geen probleem!</Text>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Icons -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Icon, IconTile &amp; ArrowTile</Heading>
+        <code>Icon name · size? (box px) · label? — IconTile icon — ArrowTile</code>
+      </div>
+      <div class="cg-icons">
+        {icons.map((name) => (
+          <figure class="cg-icon" data-theme={darkIcons.has(name) ? 'dark' : 'surface'}>
+            <Icon name={name} />
+            <figcaption>{name}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <div class="cg-panel cg-row" data-theme="surface">
+        <IconTile icon="quote" /><IconTile icon="brush" /><IconTile icon="checklist-search" />
+        <ArrowTile />
+      </div>
+    </section>
+
+    <!-- Logo + Avatars -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Logo, Avatar &amp; AvatarStack</Heading>
+        <code>Logo variant: nav | footer — Avatar src · size? · ring? — AvatarStack avatars[] · size?</code>
+      </div>
+      <div class="cg-themes">
+        {themes.map((t) => (
+          <div class="cg-panel cg-row" data-theme={t}>
+            <span class="cg-tag">{t}</span>
+            {t === 'dark' && <Logo />}
+            <Avatar src={jordi} alt="Jordi" />
+            <AvatarStack avatars={avatars} />
+            <Text size="l" tone="muted">Marketingbureau Emmen</Text>
+          </div>
+        ))}
+      </div>
+      <div class="cg-panel" data-theme="dark"><Logo variant="footer" /></div>
+    </section>
+
+    <!-- Form -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">Label &amp; Input</Heading>
+        <code>Label for · required? — Input: alle native input-attributen</code>
+      </div>
+      <div class="cg-panel cg-form" data-theme="surface">
+        <div class="cg-field">
+          <Label for="cg-voornaam" required>Voornaam</Label>
+          <Input id="cg-voornaam" name="voornaam" placeholder="Vul hier je naam in" required />
+        </div>
+        <div class="cg-field">
+          <Label for="cg-email" required>E-mailadres</Label>
+          <Input id="cg-email" name="email" type="email" placeholder="naam@mail.nl" required />
+        </div>
+      </div>
+    </section>
+
+    <!-- BgShapes -->
+    <section class="cg-block">
+      <div class="cg-head">
+        <Heading size="36">BgShapes</Heading>
+        <code>leftTop? · rightTop? (px, Figma-offsets) — ouder moet position: relative zijn</code>
+      </div>
+      <div class="cg-panel cg-shapes" data-theme="dark">
+        <BgShapes leftTop={120} rightTop={-142} />
+        <Heading as="p" size="64" class="cg-above">Op elke dark sectie</Heading>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .cg {
+    width: min(100% - 2 * var(--space-48), var(--container-max));
+    margin-inline: auto;
+    padding-block: var(--space-96);
+    display: grid;
+    gap: var(--space-96);
+  }
+  .cg-eyebrow {
+    font: var(--text-body-s);
+    background: var(--color-brand-500);
+    color: var(--color-dark-900);
+    display: inline-block;
+    padding: var(--space-4) var(--space-8);
+    margin-bottom: var(--space-16);
+  }
+  code {
+    font: var(--text-caption);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--color-text-muted);
+  }
+  .cg-block {
+    display: grid;
+    gap: var(--space-16);
+  }
+  .cg-head {
+    display: grid;
+    gap: var(--space-8);
+    margin-bottom: var(--space-8);
+  }
+  .cg-themes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+  }
+  .cg-panel {
+    position: relative;
+    padding: var(--space-32);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-16);
+    align-content: start;
+  }
+  .cg-tag {
+    font: var(--text-caption);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+  .cg-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .cg-row.cg-panel {
+    display: flex;
+  }
+  .cg-stack {
+    gap: var(--space-12);
+  }
+  .cg-center {
+    text-align: center;
+    padding-block: var(--space-64);
+  }
+  .cg-photo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding: var(--space-24);
+    border-radius: var(--radius-md);
+    background: var(--gradient-image-overlay), linear-gradient(135deg, #5b6a73, #2b3238);
+  }
+  .cg-icons {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: var(--space-8);
+  }
+  .cg-icon {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-8);
+    padding: var(--space-16) var(--space-8);
+    border-radius: var(--radius-sm);
+    font: var(--text-caption);
+    text-align: center;
+  }
+  .cg-form {
+    max-width: 31.375rem;
+    gap: var(--space-24);
+  }
+  .cg-field {
+    display: grid;
+    gap: 13px;
+  }
+  .cg-shapes {
+    min-height: 24rem;
+    overflow: hidden;
+    align-content: center;
+    justify-items: center;
+  }
+  .cg-shapes :global(.cg-above) {
+    position: relative;
+  }
+</style>

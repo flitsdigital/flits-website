@@ -1,0 +1,39 @@
+/*
+ * Surface themes. Figma has no variable modes; the design alternates three
+ * surfaces per section. Set data-theme on a section; components read only
+ * these semantic tokens so they adapt to their surface.
+ */
+:root,
+[data-theme='light'],
+[data-theme='surface'] {
+  --color-bg: var(--color-light-100);
+  --color-surface: var(--color-light-0);
+  --color-text: var(--color-dark-900);
+  --color-text-secondary: var(--color-dark-800);
+  --color-text-muted: var(--color-dark-900-60);
+  --color-border: var(--color-border-subtle);
+  --color-accent: var(--color-brand-500);
+  --color-on-accent: var(--color-dark-900);
+  --color-focus: var(--color-dark-800-60); /* muted but ≥3:1 on light-100/white (WCAG 2.4.11) */
+}
+
+/* surface = light text colours (set above) on swapped backgrounds; also inside a dark section */
+[data-theme='surface'] {
+  --color-bg: var(--color-light-0);
+  --color-surface: var(--color-light-100);
+}
+
+[data-theme='dark'] {
+  --color-bg: var(--color-dark-900);
+  --color-surface: var(--color-dark-800);
+  --color-text: var(--color-light-0);
+  --color-text-secondary: var(--color-light-100);
+  --color-text-muted: var(--color-light-100-80);
+  --color-border: var(--color-border-on-dark);
+  --color-focus: var(--color-accent);
+}
+
+[data-theme] {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}

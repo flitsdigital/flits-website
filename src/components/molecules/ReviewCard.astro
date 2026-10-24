@@ -1,0 +1,67 @@
+---
+import type { ImageMetadata } from 'astro';
+import Avatar from '../atoms/Avatar.astro';
+
+interface Props {
+  logo: ImageMetadata;
+  /** Rendered logo height in px (Figma slot size). */
+  logoHeight: number;
+  logoAlt: string;
+  quote: string[];
+  author: string;
+  avatar: ImageMetadata;
+  class?: string;
+}
+
+const { logo, logoHeight, logoAlt, quote, author, avatar, class: className } = Astro.props;
+---
+
+<figure class:list={['review-card', className]}>
+  <img
+    class="review-card__logo"
+    src={logo.src}
+    width={logo.width}
+    height={logo.height}
+    alt={logoAlt}
+    style={`height:${logoHeight}px`}
+  />
+  <blockquote class="review-card__quote">{quote.map((p) => <p>{p}</p>)}</blockquote>
+  <figcaption class="review-card__author">
+    <Avatar src={avatar} />
+    <span>{author}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .review-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-32);
+    width: 37.5rem; /* 600px */
+    padding: var(--space-48);
+    border-radius: var(--radius-md);
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+  }
+  .review-card__logo {
+    width: auto;
+  }
+  .review-card__quote {
+    display: grid;
+    gap: 1.4em;
+    font: var(--text-quote);
+  }
+  /* Pinned to the bottom when the card is stretched (equal-height sliders) */
+  .review-card__author {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font: var(--text-ui-medium);
+    color: var(--color-dark-800);
+  }
+  .review-card__author span {
+    opacity: 0.8;
+  }
+</style>

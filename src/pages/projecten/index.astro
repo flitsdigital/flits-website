@@ -1,0 +1,21 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import HeroPage from '../../components/sections/HeroPage.astro';
+import ProjectArchive from '../../components/sections/ProjectArchive.astro';
+import { getProjects } from '../../lib/content';
+
+// Projecten overzicht (Figma 1:2219). New projects: add a Markdown file to src/content/projects.
+const projects = await getProjects();
+---
+
+<PageLayout
+  title="Projecten — Flits"
+  description="Websites, webshops, video en advertenties die we maakten voor ondernemers in Drenthe. Filter op type en branche."
+>
+  <HeroPage
+    breadcrumb={[{ label: 'Projecten' }]}
+    title="Ons werk"
+    intro={['Hier komt een leuke korte tekst over Flits. Wie we zijn, wat we doen en het belangrijkste...', 'Voor wie we het doen!']}
+  />
+  <ProjectArchive projects={projects} />
+</PageLayout>

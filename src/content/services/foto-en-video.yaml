@@ -1,0 +1,28 @@
+# Foto & video: no Figma page yet. Inferred layout from the designed service pages
+# (hero, projects, way of working, FAQ, contact) with placeholder copy — replace when designed.
+order: 4
+label: Foto & video
+page:
+  breadcrumb: Foto & video
+  title: Foto & video
+  description: Fotografie en video voor je website, social media en advertenties, gemaakt door Flits in Emmen.
+  intro:
+    - Foto's en video's voor je website, socials en advertenties. Wij plannen de opnames, filmen en monteren.
+  blocks:
+    - type: projects
+      title: Foto en video die wij maakten
+      ticker: [Foto & video]
+      projectType: Video
+    - type: steps
+      title: Hoe gaan we te werk?
+      lead: Van idee tot montage, met een persoonlijke en duidelijke aanpak.
+      items:
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je wilt laten zien }
+        - { image: ../../assets/steps/step-2.jpg, title: Draaiplan, text: We schrijven het script en plannen de opnamedag. }
+        - { image: ../../assets/steps/step-3.jpg, title: Opnamedag, text: We komen langs met camera, licht en een plan. }
+    - type: faq
+      title: Vragen die we vaak krijgen
+      lead: Staat je vraag er niet bij? Stuur ons gerust een appje.
+    - type: contact
+      title: Neem contact met ons op
+      lead: Vertel kort wat je zoekt, dan nemen we binnen een werkdag contact met je op.

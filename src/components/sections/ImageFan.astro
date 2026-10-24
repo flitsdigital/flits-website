@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import RadialSlider from '../molecules/RadialSlider.astro';
+
+interface Props {
+  /** Photos riding the arc; the first one begins in the centre. */
+  images: ImageMetadata[];
+}
+
+const { images } = Astro.props;
+---
+
+<!-- Figma: three photos 352×253, tilted 10° per neighbour. Made into a slowly
+     drifting radial slider (pauses on hover/focus, off-screen and with reduced motion). -->
+<div class="fan">
+  <RadialSlider label="Foto's van ons werk" speed={40} angle={10} class="fan__slider">
+    {images.map((src) => <Image class="fan__photo" src={src} alt="" width={704} loading="eager" />)}
+  </RadialSlider>
+</div>
+
+<style>
+  /* Place it in a hero's "media" slot; the hero sets the overlap. */
+  .fan {
+    height: 22.125rem; /* 354px: distance to the next section */
+    overflow-x: clip; /* outer photos bleed past the viewport without horizontal scroll */
+  }
+  /* Slider box = the centre photo's height, so its centre lands where Figma has it (y=126.5) */
+  .fan :global(.fan__slider) {
+    height: 15.8125rem; /* 253px */
+  }
+  .fan :global(.fan__photo) {
+    width: 22rem; /* 352px */
+    height: 15.8125rem; /* 253px */
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+</style>

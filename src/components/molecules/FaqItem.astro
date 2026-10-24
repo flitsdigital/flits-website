@@ -1,0 +1,65 @@
+---
+import Icon from '../atoms/Icon.astro';
+
+interface Props {
+  question: string;
+  /** Group name: opening one item closes the others (native exclusive accordion). */
+  name?: string;
+}
+
+const { question, name } = Astro.props;
+---
+
+<!-- Figma 1:2462: white 72px row, question 24px, yellow 58px chevron tile on the right -->
+<details class="faq-item" name={name}>
+  <summary>
+    <span>{question}</span>
+    <span class="faq-item__icon" aria-hidden="true"><Icon name="chevron-bottom" size={24} /></span>
+  </summary>
+  <div class="faq-item__answer"><slot /></div>
+</details>
+
+<style>
+  .faq-item {
+    border-radius: var(--radius-sm);
+    background: var(--color-light-0);
+    color: var(--color-dark-800);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+    min-height: 4.5rem; /* 72px */
+    padding: var(--space-6) var(--space-6) var(--space-6) 27px;
+    font: var(--text-body-l);
+    list-style: none;
+    cursor: pointer;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 3.625rem; /* 58px */
+    aspect-ratio: 1;
+    border-radius: var(--radius-xs);
+    background: var(--color-brand-500);
+  }
+  /* Only the chevron turns; the yellow tile stays put */
+  .faq-item__icon > :global(.icon) {
+    transition: rotate 0.2s ease;
+  }
+  .faq-item[open] .faq-item__icon > :global(.icon) {
+    rotate: 180deg;
+  }
+  /* shortcut: answer styling is not in Figma (only closed rows) — inferred, review in fase 5 */
+  .faq-item__answer {
+    padding: 0 27px var(--space-24);
+    font: var(--text-body-desc);
+    letter-spacing: var(--tracking-desc);
+    opacity: 0.8;
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props extends Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'> {
+  /** outline: only designed for dark surfaces (white whatsapp icon). */
+  variant?: 'primary' | 'secondary' | 'outline' | 'step';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  icon?: IconName;
+  iconPosition?: 'start' | 'end';
+  disabled?: boolean;
+}
+
+const {
+  variant = 'primary',
+  href,
+  type = 'button',
+  icon,
+  iconPosition = 'start',
+  disabled,
+  class: className,
+  ...rest
+} = Astro.props;
+const Tag = href ? 'a' : 'button';
+const iconSize = variant === 'step' ? 20 : 18;
+---
+
+<Tag
+  class:list={['btn', `btn--${variant}`, className]}
+  href={disabled ? undefined : href}
+  type={href ? undefined : type}
+  disabled={href ? undefined : disabled}
+  role={href && disabled ? 'link' : undefined}
+  aria-disabled={href && disabled ? 'true' : undefined}
+  {...rest}
+>
+  {icon && iconPosition === 'start' && <Icon name={icon} size={iconSize} />}
+  <span class="btn__label"><slot /></span>
+  {icon && iconPosition === 'end' && <Icon name={icon} size={iconSize} />}
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    padding: var(--space-10) var(--space-12);
+    border-radius: var(--radius-pill);
+    font: var(--text-ui);
+    white-space: nowrap;
+    transition: filter 0.15s ease;
+  }
+  /* shortcut: hover/disabled states are not in Figma — inferred (ANALYSE.md F8), designed in fase 5 */
+  .btn:hover {
+    filter: brightness(0.94);
+  }
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .btn--primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .btn--secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  .btn--outline {
+    height: 2.125rem;
+    padding: var(--space-8) var(--space-12) var(--space-8) var(--space-8);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  .btn--outline .btn__label {
+    opacity: 0.6;
+  }
+  .btn--step {
+    height: 2.75rem;
+    padding: var(--space-4) var(--space-16);
+    background: var(--color-light-200);
+    color: var(--color-dark-900);
+    font: var(--text-display-16);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+</style>

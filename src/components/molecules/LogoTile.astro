@@ -1,0 +1,70 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  /** Omit logo + name for the yellow call-to-action tile (its text goes in the slot). */
+  logo?: ImageMetadata;
+  name?: string;
+  /** wall: 276×216 white (logowall, logo fan) · strip: 204×83 in the client's colour (home strip) */
+  size?: 'wall' | 'strip';
+  /** Tile colour from the client's brand (strip; none = transparent). */
+  background?: string;
+  /** Logo box in px as placed in Figma (strip); wall logos keep their 276px-frame size. */
+  logoWidth?: number;
+  logoHeight?: number;
+  /** Duplicate copy in a looping strip: hidden from assistive tech. */
+  decorative?: boolean;
+  class?: string;
+}
+
+const { logo, name = '', size = 'wall', background, logoWidth, logoHeight, decorative = false, class: className } = Astro.props;
+const bg = background ?? (size === 'strip' ? 'transparent' : undefined);
+---
+
+<!-- Figma 1:1772 (wall) / 1:1371 (strip): a logo centred in a rounded tile -->
+<div
+  class:list={['logo-tile', `logo-tile--${size}`, { 'logo-tile--cta': !logo }, className]}
+  style={bg ? `--tile-bg:${bg}` : undefined}
+>
+  {
+    logo ? (
+      <img src={logo.src} width={logoWidth ?? logo.width} height={logoHeight ?? logo.height} alt={decorative ? '' : name} loading="lazy" />
+    ) : (
+      <slot />
+    )
+  }
+</div>
+
+<style>
+  .logo-tile {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: var(--tile-bg, var(--color-light-0));
+    overflow: hidden;
+  }
+  .logo-tile--wall {
+    aspect-ratio: 276 / 216;
+  }
+  .logo-tile--wall img {
+    max-width: 100%;
+    height: auto;
+  }
+  .logo-tile--strip {
+    width: 12.75rem; /* 204px */
+    height: 5.1875rem; /* 83px */
+  }
+  .logo-tile--strip img {
+    object-fit: contain;
+  }
+  .logo-tile--cta {
+    padding: var(--space-24);
+    background: var(--color-brand-500);
+    color: var(--color-dark-900);
+    font: var(--text-display-30);
+    letter-spacing: var(--tracking-display);
+    text-align: center;
+    text-transform: uppercase;
+  }
+</style>

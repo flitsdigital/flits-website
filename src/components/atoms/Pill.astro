@@ -1,0 +1,59 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'span'> {
+  variant?: 'outline' | 'solid' | 'filter';
+  /** s: 12px tags (default) · m: 16px labels on photos ("Stap 1") */
+  size?: 's' | 'm';
+  /** Only for variant="filter": renders a toggle button. */
+  active?: boolean;
+}
+
+// ...rest lets filter chips carry data-*/value attributes for the projects filter script.
+const { variant = 'outline', size = 's', active = false, class: className, ...rest } = Astro.props;
+const isFilter = variant === 'filter';
+const Tag = isFilter ? 'button' : 'span';
+---
+
+<Tag
+  class:list={['pill', `pill--${variant}`, { 'pill--m': size === 'm', 'is-active': active }, className]}
+  type={isFilter ? 'button' : undefined}
+  aria-pressed={isFilter ? String(active) : undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4) var(--space-10);
+    border-radius: var(--radius-pill);
+    font: var(--text-caption);
+    white-space: nowrap;
+  }
+  .pill--m {
+    padding: var(--space-4) var(--space-8);
+    font: var(--text-body);
+  }
+  .pill--outline {
+    border: 1px solid var(--color-light-0);
+    color: var(--color-light-0);
+  }
+  .pill--solid {
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+  }
+  .pill--filter {
+    padding: var(--space-10) var(--space-12);
+    font: var(--text-ui-medium);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  .pill--filter.is-active {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+</style>

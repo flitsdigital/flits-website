@@ -1,0 +1,50 @@
+[
+  {
+    "id": "kaasloods28",
+    "logo": "../assets/logos/kaasloods.svg",
+    "logoAlt": "Kaasloods 28",
+    "logoHeight": 12,
+    "quote": [
+      "De mannen van Flits hebben een super mooie site voor mijn winkel Kaasloods 28 gebouwd. Super blij mee.",
+      "De samen werking super goed en de mannen kwamen met goede ideeën. Ook buiten het bouwen van de site kwamen ze met goede adviezen. Top bedrijf."
+    ],
+    "author": "Rik, Kaasloods28",
+    "avatar": "../assets/images/fan/kaasloods.jpg"
+  },
+  {
+    "id": "oldenziel",
+    "logo": "../assets/logos/oldenziel.svg",
+    "logoAlt": "Oldenziel Koelen en Verwarmen",
+    "logoHeight": 52,
+    "quote": [
+      "We zijn erg blij met het werk van de jongens van flits digital. Ook de prettige samenwerking tijdens onze contact momenten en het mooie ontwerp wat ze voor ons gemaakt hebben.",
+      "De reacties op onze nieuwe website zijn erg positief. Zeker een aanrader😁👍👍👍"
+    ],
+    "author": "Janfred, Oldenziel Airco Service",
+    "avatar": "../assets/images/reviews/avatar-placeholder.jpg"
+  },
+  {
+    "id": "premiumcars",
+    "logo": "../assets/logos/premiumcars-wordmark.svg",
+    "logoAlt": "PremiumCars.nl B.V.",
+    "logoHeight": 18,
+    "quote": [
+      "Begin 2025 zijn wij gestart met PremiumCars nl Vanaf dag één heeft Flits ons geholpen met het ontwikkelen van onze complete huisstijl én het bouwen van onze website.",
+      "Wat ik vooral waardeer, is hun betrokkenheid, creativiteit en bereikbaarheid. Je merkt dat hier een team zit dat echt met je meedenkt en net zo gedreven is om iets moois neer te zetten als jijzelf."
+    ],
+    "author": "Martijn, PremiumCars.nl BV",
+    "avatar": "../assets/images/reviews/avatar-placeholder.jpg"
+  },
+  {
+    "id": "de-koffiekoets",
+    "logo": "../assets/logos/koffiekoets.png",
+    "logoAlt": "De Koffiekoets",
+    "logoHeight": 79,
+    "quote": [
+      "We zijn erg blij met het werk van de jongens van flits digital. Ook de prettige samenwerking tijdens onze contact momenten en het mooie ontwerp wat ze voor ons gemaakt hebben.",
+      "De reacties op onze nieuwe website zijn erg positief. Zeker een aanrader😀👍👍👍"
+    ],
+    "author": "Thijs, De Koffiekoets",
+    "avatar": "../assets/images/reviews/thijs.jpg"
+  }
+]

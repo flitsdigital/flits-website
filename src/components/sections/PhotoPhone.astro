@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import PhoneMockup from '../molecules/PhoneMockup.astro';
+
+interface Props {
+  photo: ImageMetadata;
+  /** The site on the phone (pre-skewed screen export). */
+  screen: ImageMetadata;
+}
+
+const { photo, screen } = Astro.props;
+---
+
+<!-- Figma 1:2955 + 1:2973: 816×525 photo tilted 3.59° straddling the hero, a phone leaning over its right edge -->
+<div class="photo-phone">
+  <Image class="photo-phone__photo" src={photo} alt="" width={1694} loading="eager" />
+  <PhoneMockup screen={screen} x={730} y={23} width={435} />
+</div>
+
+<style>
+  /* Box = the tilted photo's bounds (847×575 at x=149, y=465); the phone is placed inside it */
+  /* Place it in a hero's "media" slot (overlap 106px); the hero sets the overlap */
+  .photo-phone {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 52.9375rem; /* 847px */
+    max-width: calc(100% - 2 * var(--gutter));
+    aspect-ratio: 847 / 575;
+    /* left edge at x=149; the next section (110px top) starts 120px below */
+    margin: 0 0 0.625rem calc(50% - 571px);
+  }
+  .photo-phone :global(.photo-phone__photo) {
+    width: 96.34%; /* 816 of 847 */
+    height: auto;
+    aspect-ratio: 816 / 525;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    rotate: -3.59deg;
+  }
+</style>

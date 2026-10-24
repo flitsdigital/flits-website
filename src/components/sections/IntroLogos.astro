@@ -1,0 +1,111 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Avatar from '../atoms/Avatar.astro';
+import Heading from '../atoms/Heading.astro';
+import Text from '../atoms/Text.astro';
+import Ticker from '../molecules/Ticker.astro';
+import LogoTile from '../molecules/LogoTile.astro';
+
+interface Props {
+  ticker: string[];
+  lead: string;
+  joery: CollectionEntry<'team'>;
+  jordi: CollectionEntry<'team'>;
+  clients: CollectionEntry<'clients'>[];
+}
+
+const { ticker, lead, joery, jordi, clients } = Astro.props;
+---
+
+<section class="intro">
+  <div class="intro__text">
+    <Ticker items={ticker} variant="light" />
+    <!-- Home-only title: the runs of spaces leave room for the avatars at their Figma coordinates
+         (601×116 box), so this text lives here and not in content. -->
+    <Heading size="64" class="intro__title">
+      {'Wij zijn       Joery \nEn      Jordi'}
+      <span aria-hidden="true">
+        <Ticker items={['Jordi', 'Jordi', 'Jordi']} variant="pill" decorative class="intro__name-pill" />
+        <Avatar src={joery.data.avatar} size={48} class="intro__avatar-1" />
+        <span class="intro__avatar-2"><Avatar src={jordi.data.avatar} size={48} /></span>
+      </span>
+    </Heading>
+    <Text size="l" tone="secondary">{lead}</Text>
+  </div>
+  <div class="intro__strip">
+    <div class="intro__track">
+      {[...clients, ...clients].map((c, i) => <LogoTile size="strip" {...c.data} decorative={i >= clients.length} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro {
+    padding-bottom: 6.4375rem; /* 103px to the next section */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-48);
+    text-align: center;
+  }
+  .intro__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+    width: min(var(--width-content), 37.5625rem); /* 601px */
+  }
+  .intro__text > :global(.ticker) {
+    margin-bottom: calc(var(--space-16) - var(--space-24));
+  }
+  .intro :global(.intro__title) {
+    position: relative;
+    height: 7.25rem; /* 116px */
+    white-space: pre;
+  }
+  .intro :global(.intro__name-pill) {
+    position: absolute;
+    left: 187px;
+    top: 28px;
+    width: 116px;
+    font: var(--text-body-s);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .intro :global(.intro__avatar-1) {
+    position: absolute;
+    left: 315px;
+    top: 4px;
+  }
+  .intro__avatar-2 {
+    position: absolute;
+    left: 214.36px;
+    top: 57.36px;
+    display: grid;
+    place-items: center;
+    width: 57.28px;
+    height: 57.28px;
+    rotate: -12.54deg;
+  }
+  .intro__strip {
+    width: min(100%, 64.4375rem); /* 1031px */
+    padding: var(--space-8);
+    border-radius: var(--radius-sm);
+    background: var(--color-light-0);
+    overflow: hidden;
+  }
+  .intro__track {
+    display: flex;
+    gap: var(--space-10);
+    width: max-content;
+    animation: strip 40s linear infinite;
+  }
+  /* WCAG 2.2.2: moving content can be paused (hover, like the Ticker) */
+  .intro__strip:hover .intro__track {
+    animation-play-state: paused;
+  }
+  @keyframes strip {
+    to {
+      translate: calc(-50% - var(--space-10) / 2) 0;
+    }
+  }
+</style>

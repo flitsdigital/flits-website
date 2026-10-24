@@ -1,0 +1,89 @@
+---
+import Prose from '../atoms/Prose.astro';
+import Heading from '../atoms/Heading.astro';
+import shape from '../../assets/shapes/bolt-split.svg';
+
+interface Props {
+  title: string;
+  body: string[];
+  /** Side the dark media block bleeds to. */
+  mediaSide?: 'right' | 'left';
+  class?: string;
+}
+
+const { title, body, mediaSide = 'right', class: className } = Astro.props;
+---
+
+<!-- Figma 1:2754 + 1:2764 (social), 1:2956/1:2977 and 1:2962/1:3127 (website):
+     600px text column + a 696×824 dark block running to the viewport edge, phones inside.
+     Slots: eyebrow (avatars or a badge), actions (buttons), media (absolutely placed PhoneMockups). -->
+<section class:list={['split', `split--media-${mediaSide}`, className]}>
+  <div class="split__text">
+    <slot name="eyebrow" />
+    <div class="split__copy">
+      <Heading>{title}</Heading>
+      <Prose paragraphs={body} size="m" tone="secondary" opacity={0.9} />
+    </div>
+    {Astro.slots.has('actions') && <div class="split__actions"><slot name="actions" /></div>}
+  </div>
+  <div class="split__media" data-theme="dark">
+    <img class="split__shape" src={shape.src} width={shape.width} height={shape.height} alt="" />
+    <slot name="media" />
+  </div>
+</section>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 37.5rem) minmax(0, 43.5rem); /* 600 text · 696 media */
+    justify-content: space-between;
+    align-items: center;
+    column-gap: var(--space-48);
+    padding-block: 6.875rem; /* 110px */
+  }
+  .split__text {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-16);
+  }
+  .split__copy {
+    display: grid;
+    gap: var(--space-16);
+  }
+  .split__actions {
+    display: flex;
+    gap: var(--space-16);
+    margin-top: var(--space-8); /* 24px total under the copy */
+  }
+  .split__media {
+    position: relative;
+    height: 51.5rem; /* 824px */
+    overflow: hidden;
+  }
+  .split__shape {
+    position: absolute;
+    top: 307px;
+    left: -260px;
+    max-width: none;
+    scale: -1 1;
+    pointer-events: none;
+  }
+  /* Media right: text starts at the 96px gutter, block flush with the right edge */
+  .split--media-right {
+    padding-left: var(--gutter);
+  }
+  .split--media-right .split__media {
+    width: 100%;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+  }
+  /* Media left: mirrored */
+  .split--media-left {
+    grid-template-columns: minmax(0, 43.5rem) minmax(0, 37.5rem);
+    padding-right: var(--gutter);
+  }
+  .split--media-left .split__media {
+    order: -1;
+    width: 100%;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+</style>

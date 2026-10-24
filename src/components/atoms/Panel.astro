@@ -1,0 +1,27 @@
+---
+interface Props {
+  theme?: 'surface' | 'dark';
+  as?: 'section' | 'div' | 'article';
+  /** default: 1344px with 48px page margin · wide: 1380px with 30px (case gallery) */
+  width?: 'default' | 'wide';
+  class?: string;
+}
+
+const { theme = 'surface', as: Tag = 'div', width = 'default', class: className } = Astro.props;
+---
+
+<Tag class:list={['panel', { 'panel--wide': width === 'wide' }, className]} data-theme={theme}><slot /></Tag>
+
+<style>
+  /* Figma: 1344px rounded block with 48px page margin */
+  .panel {
+    position: relative;
+    width: var(--width-panel);
+    margin-inline: auto;
+    border-radius: var(--radius-lg);
+    overflow: clip;
+  }
+  .panel--wide {
+    width: min(100% - 60px, 86.25rem);
+  }
+</style>

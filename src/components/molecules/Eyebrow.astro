@@ -1,0 +1,48 @@
+---
+import type { ImageMetadata } from 'astro';
+import AvatarStack from '../atoms/AvatarStack.astro';
+
+interface Props {
+  avatars: { src: ImageMetadata; alt?: string }[];
+  /** l: hero / results (24px) · m: section intro (20px medium) · s: split media (20px, 24px avatars) */
+  size?: 'l' | 'm' | 's';
+  /** l only: muted (hero, results) or full text colour with a wider gap (stats panels) */
+  tone?: 'muted' | 'default';
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const { avatars, size = 'm', tone = 'muted', loading, class: className } = Astro.props;
+---
+
+<p class:list={['eyebrow', `eyebrow--${size}`, `eyebrow--${tone}`, className]}>
+  <AvatarStack avatars={avatars} size={size === 's' ? 24 : 32} loading={loading} />
+  <span><slot /></span>
+</p>
+
+<style>
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-16);
+    color: var(--color-text-secondary);
+  }
+  .eyebrow--l {
+    gap: 7px;
+    font: var(--text-body-l);
+    line-height: 0.9;
+    color: var(--color-text-muted);
+  }
+  .eyebrow--l.eyebrow--default {
+    gap: var(--space-16);
+    color: var(--color-text);
+  }
+  .eyebrow--m {
+    font: var(--text-body-m-medium);
+  }
+  .eyebrow--s {
+    gap: var(--space-8);
+    font: var(--text-body-m);
+    line-height: 0.9;
+  }
+</style>

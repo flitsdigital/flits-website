@@ -1,0 +1,36 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import Footer from '../components/sections/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+  /** Share image (Open Graph), see BaseLayout. */
+  image?: string;
+  /** See Navbar: centred back link in the bar. */
+  backLink?: { label: string; href: string };
+}
+
+const { title, description, noindex, image, backLink } = Astro.props;
+---
+
+<!-- Page shell: the navbar overlays the first section, which must be dark and start its
+     content at var(--page-top). Sections own their own spacing, so a page is just a list. -->
+<BaseLayout title={title} description={description} noindex={noindex} image={image}>
+  <div class="page">
+    <Navbar backLink={backLink} />
+    <!-- Swup swaps this element on navigation; navbar and footer stay. -->
+    <main id="swup">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    position: relative;
+  }
+</style>

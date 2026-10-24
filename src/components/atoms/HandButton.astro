@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import hand from '../../assets/icons/hand-right.svg';
+
+interface Props extends HTMLAttributes<'button'> {
+  direction: 'prev' | 'next';
+  /** dark circle on light sections · light circle on dark sections */
+  tone?: 'dark' | 'light';
+  label: string;
+}
+
+// ...rest carries the slider hooks (data-radial-slider-prev/next, data-steps-next).
+const { direction, tone = 'dark', label, class: className, ...rest } = Astro.props;
+---
+
+<button class:list={['hand-btn', `hand-btn--${tone}`, `hand-btn--${direction}`, className]} type="button" aria-label={label} {...rest}>
+  <img src={hand.src} width={42} height={42} alt="" />
+</button>
+
+<style>
+  /* Figma: 123px circle with a 42px 👉; 👈 is the same asset mirrored */
+  .hand-btn {
+    display: grid;
+    place-items: center;
+    width: 7.6875rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transition: scale 0.2s ease;
+  }
+  .hand-btn:hover {
+    scale: 1.04;
+  }
+  .hand-btn--dark {
+    background: var(--color-dark-900);
+  }
+  .hand-btn--light {
+    background: var(--color-light-100);
+  }
+  .hand-btn--prev img {
+    scale: -1 1;
+  }
+</style>

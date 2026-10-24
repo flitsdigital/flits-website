@@ -1,0 +1,91 @@
+---
+import HandButton from '../atoms/HandButton.astro';
+
+interface Props {
+  /** Autoplay drift in px/s; 0 = only moves via the hands. */
+  speed?: number;
+  /** Tilt between neighbours in degrees (sets the curvature; 0 = straight row). */
+  angle?: number;
+  /** arch: sides drop (∩) · valley: sides rise (∪). */
+  shape?: 'arch' | 'valley';
+  /** Give every item the height of the tallest one. */
+  equalHeight?: boolean;
+  /** 👈 👉 buttons in the gaps beside the centre item; `item` names one slide ("review" → "Vorige review"). */
+  hands?: { item: string; tone?: 'dark' | 'light' };
+  label: string;
+  class?: string;
+}
+
+const { speed = 0, angle = 10, shape = 'arch', equalHeight = false, hands, label, class: className } = Astro.props;
+---
+
+<!-- Items are the direct children of the default slot; the first one starts in the centre.
+     Every slider shares one visible gap between items (set in scripts/radial-slider.ts). -->
+<div
+  class:list={['radial-slider', className]}
+  data-radial-slider-init
+  data-radial-slider-speed={speed}
+  data-radial-slider-angle={angle}
+  data-radial-slider-shape={shape}
+  data-radial-slider-equal={equalHeight || undefined}
+  role="region"
+  aria-roledescription="carousel"
+  aria-label={label}
+>
+  <div class="radial-slider__track" data-radial-slider-track>
+    <slot />
+  </div>
+  {
+    hands && (
+      <>
+        <HandButton direction="prev" tone={hands.tone} label={`Vorige ${hands.item}`} class="radial-slider__hand radial-slider__hand--prev" data-radial-slider-prev />
+        <HandButton direction="next" tone={hands.tone} label={`Volgende ${hands.item}`} class="radial-slider__hand radial-slider__hand--next" data-radial-slider-next />
+      </>
+    )
+  }
+</div>
+
+<!-- Behaviour: src/scripts/radial-slider.ts (started per page by src/scripts/app.ts) -->
+
+<style>
+  /* isolation: the per-item z-index (up to 1000) stays inside the slider and never beats the fixed nav */
+  .radial-slider {
+    position: relative;
+    isolation: isolate;
+  }
+  .radial-slider__track {
+    position: absolute;
+    inset: 0;
+  }
+  /* Items are centred on the wrapper's middle; the script places them on the arc. */
+  .radial-slider__track > :global(*) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    will-change: transform;
+  }
+  /* Before the script runs, only the centre item shows (no flash of a stacked pile). */
+  .radial-slider:not([data-radial-slider-ready]) .radial-slider__track > :global(*) {
+    translate: -50% -50%;
+  }
+  .radial-slider:not([data-radial-slider-ready]) .radial-slider__track > :global(:not(:first-child)) {
+    visibility: hidden;
+  }
+  /* Hands sit in the gap on either side of the centre item, vertically centred, above every card */
+  .radial-slider :global(.radial-slider__hand) {
+    position: absolute;
+    z-index: 2000;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+  }
+  .radial-slider :global(.radial-slider__hand--prev) {
+    margin-left: calc(-1 * var(--radial-slider-hand-x, 0px));
+  }
+  .radial-slider :global(.radial-slider__hand--next) {
+    margin-left: var(--radial-slider-hand-x, 0px);
+  }
+  .radial-slider:not([data-radial-slider-ready]) :global(.radial-slider__hand) {
+    visibility: hidden;
+  }
+</style>

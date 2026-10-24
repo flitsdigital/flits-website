@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import HeroHome from '../components/sections/HeroHome.astro';
+import ImageFan from '../components/sections/ImageFan.astro';
+import IntroLogos from '../components/sections/IntroLogos.astro';
+import ProjectsGrid from '../components/sections/ProjectsGrid.astro';
+import ReviewsCarousel from '../components/sections/ReviewsCarousel.astro';
+import ServicesTeaser from '../components/sections/ServicesTeaser.astro';
+import TeamSection from '../components/sections/TeamSection.astro';
+import Showreel from '../components/sections/Showreel.astro';
+import { serviceTicker } from '../data/site';
+import { getProjects, getTeaserServices, getFounders, avatarsOf } from '../lib/content';
+import fanLeft from '../assets/images/fan/truck-left.jpg';
+import fanCenter from '../assets/images/fan/kaasloods.jpg';
+import fanRight from '../assets/images/fan/truck-right.jpg';
+import phoneScreen from '../assets/images/behind-the-scenes/phone-screen.png';
+
+// Home (Figma 1:1176). Sections own their spacing, so a page is just the list in design order.
+const projects = await getProjects();
+const reviews = await getCollection('reviews');
+const clients = await getCollection('clients');
+const services = await getTeaserServices();
+const team = await getFounders();
+const [jordi, joery] = team;
+const founders = avatarsOf(team);
+---
+
+<PageLayout
+  title="Flits — Marketingbureau in Emmen"
+  description="Flits maakt websites, webshops, social content en advertenties voor ondernemers in Drenthe. Je praat altijd met degene die het maakt."
+>
+  <HeroHome
+    eyebrow="Marketingbureau Emmen"
+    avatars={founders}
+    title="Wij maken"
+    highlight="Impact"
+    intro={['Hier komt een leuke korte tekst over Flits. Wie we zijn, wat we doen en het belangrijkste...', 'Voor wie we het doen!']}
+  >
+    <ImageFan slot="media" images={[fanCenter, fanRight, fanLeft]} />
+  </HeroHome>
+  <IntroLogos
+    ticker={serviceTicker}
+    joery={joery}
+    jordi={jordi}
+    lead="Flits bestaat al sinds 2024, dat betekent dat we al flink 2 jaar onderweg zijn. In die 2 jaar hebben we al veel bedrijven mogen helpen met hun website, social media of online marketing vraagstuk!"
+    clients={clients}
+  />
+  <ProjectsGrid title="Een verzameling aan projecten" ticker={serviceTicker} projects={projects.slice(0, 4)} />
+  <ReviewsCarousel title="Waarom klanten met ons samenwerken" reviews={reviews} />
+  <ServicesTeaser title="Waar kunnen we je mee helpen?" ticker={serviceTicker} services={services} />
+  <TeamSection
+    title="Wie zijn wij?"
+    lead="Je praat altijd met degene die filmt, ontwerpt en bouwt. Zonder accountmanager, of doorgeefluik er tussen. Sinds 2024 werken we vanuit Emmen voor ondernemers in heel Drenthe"
+    members={[joery, jordi]}
+  />
+  <Showreel title="Een kijkje achter de schermen" screen={phoneScreen} />
+</PageLayout>

@@ -1,0 +1,23 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props {
+  icon: IconName;
+  class?: string;
+}
+
+const { icon, class: className } = Astro.props;
+---
+
+<span class:list={['icon-tile', className]}><Icon name={icon} /></span>
+
+<style>
+  .icon-tile {
+    display: inline-grid;
+    place-items: center;
+    width: var(--space-48);
+    height: var(--space-48);
+    border-radius: var(--radius-sm);
+    background: var(--color-brand-500);
+  }
+</style>

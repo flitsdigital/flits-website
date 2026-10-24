@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import { getFounders, avatarsOf } from '../lib/content';
+import HeroPhoto from '../components/sections/HeroPhoto.astro';
+import ImageFan from '../components/sections/ImageFan.astro';
+import TextBlock from '../components/sections/TextBlock.astro';
+import StatsPanel from '../components/sections/StatsPanel.astro';
+import TeamSection from '../components/sections/TeamSection.astro';
+import ClientLogoGrid from '../components/sections/ClientLogoGrid.astro';
+import BehindTheScenes from '../components/sections/BehindTheScenes.astro';
+import ReviewsCarousel from '../components/sections/ReviewsCarousel.astro';
+import heroTeam from '../assets/images/about/hero-team.jpg';
+import fanLeft from '../assets/images/fan/truck-left.jpg';
+import fanCenter from '../assets/images/fan/kaasloods.jpg';
+import fanRight from '../assets/images/fan/truck-right.jpg';
+
+// Over ons (Figma 1:1637) in design order.
+const team = await getFounders();
+const [jordi, joery] = team;
+const founders = avatarsOf(team);
+const logos = await getCollection('logowall');
+const reviews = await getCollection('reviews');
+const moments = (await getCollection('behindTheScenes')).map((m) => m.data);
+const lorem = 'Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.';
+---
+
+<PageLayout
+  title="Over ons — Flits"
+  description="Wij zijn Joery en Jordi: het marketingbureau uit Emmen dat filmt, ontwerpt en bouwt, zonder accountmanager ertussen."
+>
+  <HeroPhoto image={heroTeam} title="Wij zijn Flits" names={['Jordi', 'Joery']}>
+    <ImageFan slot="media" images={[fanCenter, fanRight, fanLeft]} />
+  </HeroPhoto>
+  <TextBlock
+    title="De meeste bedrijven snappen niet hoe aandacht online werkt."
+    paragraphs={[lorem, 'Daarom maken wij websites, video’s en campagnes die mensen wél willen zien. Snel gemaakt, scherp bedacht en met oog voor detail. Zodat jouw bedrijf niet wordt weggescrold.']}
+  />
+  <StatsPanel
+    avatars={founders}
+    eyebrow="Wij zijn Joery en Jordi"
+    title="Hét marketing bureau in emmen"
+    lead={lorem}
+    stats={[
+      { label: 'Tevreden opdrachtgevers', value: '50+' },
+      { label: 'Tevreden opdrachtgevers', value: '50+' },
+      { label: 'Tevreden opdrachtgevers', value: '50+' },
+    ]}
+  />
+  <TeamSection title="Wie zijn wij?" lead={lorem} members={[joery, jordi]} theme="light" />
+  <ClientLogoGrid
+    title="Wij werken samen met te gekke bedrijven"
+    logos={logos}
+    cta={{ text: 'Jouw logo ook hier?', row: 3, column: 3 }}
+  />
+  <BehindTheScenes title="Een kijkje achter de schermen" items={moments} />
+  <ReviewsCarousel title="Waarom klanten met ons samenwerken" reviews={reviews} ticker={['Vertrouwd door meer dan 50+ bedrijven']} />
+</PageLayout>

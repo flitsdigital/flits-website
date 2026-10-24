@@ -1,0 +1,66 @@
+# Website laten maken (Figma 1:2884). Copy is still the Figma placeholder copy.
+order: 1
+label: Website laten maken
+teaserLabel: Websites & shops
+teaserImage: ../../assets/images/services/websites-shops.jpg
+teaserOrder: 2
+page:
+  breadcrumb: Websites
+  title: Website laten maken?
+  description: Een website of webshop op maat, gebouwd om gevonden te worden en klanten op te leveren. Zonder templates, met een systeem dat je zelf beheert.
+  intro:
+    - Wij creëren op maat gemaakte websites die precies passen bij jouw bedrijf. Geen kant-en-klare templates, maar een uniek ontwerp en functies die werken voor jou.
+  heroMedia:
+    type: photoPhone
+    photo: ../../assets/website/photo.jpg
+    screen: ../../assets/website/screen-1.png
+  blocks:
+    - type: split
+      eyebrow: Website laten maken?
+      title: Waarom is een website zo belangrijk?
+      body:
+        - Bij Flits begrijpen we dat jouw website meer is dan een verzameling pagina’s; het is een krachtig hulpmiddel om jouw verhaal te vertellen, informatie te delen en klanten te overtuigen.
+        - Een website of webshop vormt de basis van jouw online zichtbaarheid en is vaak het eerste wat potentiële klanten van jouw bedrijf zien. Een goede website zorgt ervoor dat je vertrouwen opbouwt bij je doelgroep.
+      actions:
+        - { label: Ik heb interesse!, href: '/contact' }
+      phones:
+        - { screen: ../../assets/website/screen-1.png, x: 130, y: 136, width: 435 }
+    - type: projects
+      title: Websites die wij hebben gemaakt
+      ticker: [Website laten maken?]
+      projectType: Websites
+    - type: split
+      badge: { image: ../../assets/website/shopify-badge.svg, alt: Shopify }
+      title: Een webshop die converteert
+      body:
+        - Wil je een professionele webshop laten maken die scoort in Google en klanten oplevert? Wij bieden maatwerkoplossingen voor jouw ideale webshop!
+        - Een webshop laten maken is dé manier om jouw bedrijf online te laten groeien. Of je nu een startende ondernemer bent of je fysieke winkel wilt uitbreiden naar een digitale omgeving, een goed ontworpen en webshop is cruciaal.
+      actions:
+        - { label: Meer lezen over webshops, href: '/contact' }
+        - { label: Bekijk onze webshops, href: '/projecten', variant: secondary }
+      mediaSide: left
+      phones:
+        - { screen: ../../assets/website/screen-3.png, device: left, x: 71, y: 47, width: 325 }
+        - { screen: ../../assets/website/screen-4.png, x: 256, y: 310, width: 370 }
+    - type: features
+      title: Wat houd een samenwerking met ons in?
+      lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.
+      variant: services
+      items:
+        - { icon: brush, title: Maatwerk ontwerp, text: 'Een website die volledig past bij jouw merk, zonder gebruik van templates.' }
+        - { icon: quote, title: Website beheer, text: 'Zelf je website beheren? Geen probleem! Wij zorgen voor een eenvoudig systeem, zodat je geen technische kennis nodig hebt.' }
+        - { icon: checklist-search, title: SEO-optimalisatie, text: Zodat jouw website goed gevonden wordt en je meer bezoekers trekt. }
+        - { icon: brush, title: Maatwerk ontwerp, text: 'Een website die volledig past bij jouw merk, zonder gebruik van templates.' }
+        - { icon: quote, title: Website beheer, text: 'Zelf je website beheren? Geen probleem! Wij zorgen voor een eenvoudig systeem, zodat je geen technische kennis nodig hebt.' }
+        - { icon: checklist-search, title: SEO-optimalisatie, text: Zodat jouw website goed gevonden wordt en je meer bezoekers trekt. }
+    - type: steps
+      title: Hoe gaan we te werk?
+      lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.
+      items:
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je doet met je bedrijf }
+        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: Waar staat je bedrijf in de markt, wat doet de concurrentie en hoe kunnen we hier van leren? }
+        - { image: ../../assets/steps/step-3.jpg, title: Ontwerp, text: We beginnen met een ontwerp voor jouw website. }
+        - { image: ../../assets/steps/step-1.jpg, title: Bouwen, text: We bouwen je website en testen alles op mobiel en desktop. }
+    - type: faq
+      title: Vragen die we vaak krijgen
+      lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.

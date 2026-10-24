@@ -1,0 +1,4 @@
+[
+  {"id": "joery", "name": "Joery Jonkeren", "order": 2, "role": "Socials & Content", "photo": "../assets/images/team/joery.jpg", "avatar": "../assets/images/avatars/joery.png"},
+  {"id": "jordi", "name": "Jordi Klavers", "order": 1, "role": "Technisch & Websites", "photo": "../assets/images/team/jordi.jpg", "avatar": "../assets/images/avatars/jordi.png"}
+]

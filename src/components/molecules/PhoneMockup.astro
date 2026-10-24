@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import tiltRight from '../../assets/website/iphone-16.png';
+import tiltLeft from '../../assets/website/iphone-16-b.png';
+
+interface Props {
+  /** What's on the screen (pre-skewed to the device angle, as exported from Figma). */
+  screen: ImageMetadata;
+  /** right: leans right (most mockups) · left: the second webshop phone */
+  device?: 'right' | 'left';
+  /** Frame box inside the positioned parent, in Figma px. */
+  x: number;
+  y: number;
+  width: number;
+}
+
+const { screen, device = 'right', x, y, width } = Astro.props;
+// Screen box inside each device frame (% of the frame box: top, left, width, height), measured in Figma.
+const devices = {
+  right: { frame: tiltRight, screen: ['1.23%', '0.16%', '97.13%', '94.39%'] },
+  left: { frame: tiltLeft, screen: ['-0.46%', '4.18%', '96.28%', '99.92%'] },
+};
+const { frame, screen: box } = devices[device];
+---
+
+<!-- Figma "iPhone-16" + "Mockup" layers: the screen image sits on top of the device frame -->
+<div class="phone" style={`--x:${x}px;--y:${y}px;--w:${width}px;--s-top:${box[0]};--s-left:${box[1]};--s-w:${box[2]};--s-h:${box[3]};aspect-ratio:${frame.width}/${frame.height}`}>
+  <Image class="phone__frame" src={frame} alt="" width={Math.round(width * 2)} />
+  <Image class="phone__screen" src={screen} alt="" width={Math.round(width * 2)} />
+</div>
+
+<style>
+  .phone {
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: var(--w);
+  }
+  .phone :global(img) {
+    position: absolute;
+    max-width: none;
+  }
+  .phone :global(.phone__frame) {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .phone :global(.phone__screen) {
+    top: var(--s-top);
+    left: var(--s-left);
+    width: var(--s-w);
+    height: var(--s-h);
+  }
+</style>

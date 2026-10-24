@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import RadialSlider from '../molecules/RadialSlider.astro';
+import controls from '../../assets/social/play-controls.svg';
+
+interface Props {
+  /** Video posters (400×500), the first one in the centre. shortcut: stills for now; swap for <video> sources when the clips exist. */
+  posters: ImageMetadata[];
+}
+
+const { posters } = Astro.props;
+---
+
+<!-- Figma 1:2564–1:2573 / 1:3172: 400×500 cards on a ∪ arc tilted 18°, sides dimmed 40%,
+     play controls on the centre card, hands either side. -->
+<div class="video-fan">
+  <RadialSlider label="Video's" shape="valley" angle={18} hands={{ item: 'video' }} class="video-fan__slider">
+    {
+      posters.map((poster) => (
+        <div class="video-fan__card">
+          <Image src={poster} alt="" width={800} />
+          <img class="video-fan__controls" src={controls.src} width={controls.width} height={controls.height} alt="" />
+        </div>
+      ))
+    }
+  </RadialSlider>
+</div>
+
+<style>
+  /* On service pages it sits in the hero's "media" slot (24px overlap); on cases it stands alone */
+  .video-fan {
+    padding-bottom: 8.6875rem; /* 139px to the next header */
+    overflow-x: clip;
+  }
+  .video-fan :global(.video-fan__slider) {
+    height: 31.25rem; /* 500px: one card */
+  }
+  /* No position here: the slider makes each card absolute (also the containing block for the veil) */
+  .video-fan__card {
+    width: 25rem; /* 400px */
+    height: 31.25rem;
+    border-radius: var(--radius-ml);
+    overflow: hidden;
+  }
+  .video-fan__card :global(img:first-child) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Sides: 40% black veil; centre: clear with play controls */
+  .video-fan__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-overlay-dark-40);
+    transition: opacity 0.3s ease;
+  }
+  .video-fan__controls {
+    position: absolute;
+    right: var(--space-10);
+    bottom: var(--space-10);
+    left: var(--space-10);
+    width: calc(100% - 2 * var(--space-10));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .video-fan__card[data-radial-slider-active]::after {
+    opacity: 0;
+  }
+  .video-fan__card[data-radial-slider-active] .video-fan__controls {
+    opacity: 1;
+  }
+</style>

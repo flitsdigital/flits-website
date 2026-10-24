@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Pill from '../atoms/Pill.astro';
+
+interface Props {
+  image: ImageMetadata;
+  year: string;
+  caption: string;
+  /** Own tilt in degrees (Figma: each polaroid is rotated differently). */
+  tilt?: number;
+}
+
+const { image, year, caption, tilt = 0 } = Astro.props;
+---
+
+<!-- Figma 1:1641: 384px white card, 342×445 photo, "2026" pill, caption below. The tilt sits on the
+     inner figure: a slider owns the outer element's transform. -->
+<div class="polaroid" style={`--tilt:${tilt}deg`}>
+  <figure class="polaroid__card">
+    <div class="polaroid__media">
+      <Image src={image} alt="" width={684} />
+      <Pill variant="solid" class="polaroid__year">{year}</Pill>
+    </div>
+    <figcaption>{caption}</figcaption>
+  </figure>
+</div>
+
+<style>
+  .polaroid__card {
+    display: grid;
+    gap: 18px;
+    width: 24rem; /* 384px */
+    padding: 20px 21px 25px;
+    border-radius: var(--radius-md);
+    background: var(--color-light-0);
+    rotate: var(--tilt);
+  }
+  .polaroid__media {
+    position: relative;
+  }
+  .polaroid__media :global(img) {
+    width: 100%;
+    height: 27.8125rem; /* 445px */
+    object-fit: cover;
+    border-radius: var(--radius-xs);
+  }
+  .polaroid__media :global(.polaroid__year) {
+    position: absolute;
+    top: var(--space-10);
+    left: var(--space-10);
+  }
+  figcaption {
+    font: var(--text-body);
+    color: var(--color-dark-900);
+  }
+</style>

@@ -1,0 +1,20 @@
+---
+interface Props {
+  /** How far the media reaches up into the hero, in px (Figma). */
+  overlap: number;
+}
+
+const { overlap } = Astro.props;
+---
+
+<!-- Media that straddles the bottom edge of a hero (photo fan, video fan, photo + phone).
+     Heroes render this for their "media" slot, so the overlap lives with the hero, not its neighbour. -->
+<div class="hero-media" style={`--hero-overlap:${overlap}px`}><slot /></div>
+
+<style>
+  .hero-media {
+    position: relative;
+    z-index: 1;
+    margin-top: calc(-1 * var(--hero-overlap));
+  }
+</style>

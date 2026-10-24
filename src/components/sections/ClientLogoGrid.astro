@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Heading from '../atoms/Heading.astro';
+import LogoTile from '../molecules/LogoTile.astro';
+
+interface Props {
+  title: string;
+  logos: CollectionEntry<'logowall'>[];
+  /** Yellow call-to-action tile and the grid cell it takes. */
+  cta: { text: string; row: number; column: number };
+}
+
+const { title, logos, cta } = Astro.props;
+---
+
+<!-- Figma 1:1737–1:2083: 4-column wall of 276×216 tiles with deliberate gaps -->
+<section class="logo-grid">
+  <Heading class="logo-grid__title">{title}</Heading>
+  <ul class="logo-grid__tiles">
+    {
+      logos.map((l) => (
+        <li style={`grid-area:${l.data.row}/${l.data.column}`}>
+          <LogoTile logo={l.data.logo} name={l.data.name} />
+        </li>
+      ))
+    }
+    <li style={`grid-area:${cta.row}/${cta.column}`}>
+      <LogoTile>{cta.text}</LogoTile>
+    </li>
+  </ul>
+</section>
+
+<style>
+  .logo-grid {
+    display: grid;
+    gap: 6.5625rem; /* 105px */
+    padding-block: 10.625rem 8.4375rem; /* 170px / 135px */
+  }
+  .logo-grid :global(.logo-grid__title) {
+    width: var(--width-narrow);
+    margin-inline: auto;
+    text-align: center;
+  }
+  .logo-grid__tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-48);
+    width: var(--width-content);
+    margin-inline: auto;
+  }
+</style>

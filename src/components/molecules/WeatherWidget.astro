@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../../assets/images/widgets/weather.jpg';
+import dot from '../../assets/images/widgets/live-dot.svg';
+import { contact } from '../../data/site';
+
+interface Props {
+  temperature?: string;
+  condition?: string;
+  date?: string;
+  class?: string;
+}
+
+// shortcut: static weather from the design; wire a weather API in fase 5 if wanted.
+const { temperature = '24 °', condition = 'Lekker zonnetje', date = '10 sep', class: className } = Astro.props;
+---
+
+<div class:list={['weather', className]}>
+  <Image src={photo} alt="" width={400} />
+  <div class="weather__top">
+    <p class="weather__row"><span class="weather__title">Flits Digital</span><img src={dot.src} width={dot.width} height={dot.height} alt="" /></p>
+    <p class="weather__row weather__meta"><span>{contact.city}, Nederland</span>{' '}<span>{date}</span></p>
+  </div>
+  <div class="weather__bottom">
+    <p class="weather__temp">{temperature}</p>
+    <p class="weather__meta">{condition}</p>
+  </div>
+</div>
+
+<style>
+  .weather {
+    position: relative;
+    width: 10.5rem; /* 168px */
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    color: var(--color-light-0);
+  }
+  .weather > :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .weather::before,
+  .weather::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    height: 50%;
+  }
+  .weather::before {
+    top: 0;
+    background: var(--gradient-shade-top);
+  }
+  .weather::after {
+    bottom: 0;
+    background: var(--gradient-shade-bottom);
+  }
+  .weather__top,
+  .weather__bottom {
+    position: absolute;
+    inset-inline: 0;
+    z-index: 1;
+    display: grid;
+    padding: var(--space-12);
+  }
+  .weather__top {
+    top: 0;
+    gap: var(--space-6);
+  }
+  .weather__bottom {
+    bottom: 0;
+    gap: var(--space-4);
+  }
+  .weather__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .weather__title {
+    font: var(--text-widget-title);
+  }
+  .weather__meta {
+    font: var(--text-widget-meta);
+    opacity: 0.8;
+  }
+  .weather__temp {
+    font: var(--text-widget-value);
+  }
+</style>

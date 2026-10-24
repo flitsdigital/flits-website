@@ -1,0 +1,87 @@
+---
+import Heading from '../atoms/Heading.astro';
+import Text from '../atoms/Text.astro';
+import Ticker from './Ticker.astro';
+
+interface Props {
+  title: string;
+  ticker?: string[];
+  lead?: string;
+  /** Lead at 80% (Figma uses it on some intros: team, contact). */
+  softLead?: boolean;
+  /** Figma text-box width in px; the title wraps exactly where the design does. */
+  width?: number;
+  /** Space between ticker/eyebrow and the title: 16px (projects), 24px (stats) or 28px (reviews, services). */
+  gap?: 16 | 24 | 28;
+  align?: 'center' | 'start';
+  /** Own 84px padding above and below (standalone section headers). Off inside a section that spaces itself. */
+  spaced?: boolean;
+  as?: 'h1' | 'h2';
+  class?: string;
+}
+
+const {
+  title,
+  ticker,
+  lead,
+  softLead = false,
+  width = 757,
+  gap = 16,
+  align = 'center',
+  spaced = true,
+  as = 'h2',
+  class: className,
+} = Astro.props;
+---
+
+<!-- Ticker or eyebrow, then title + lead (16px apart), then optional actions -->
+<header
+  class:list={['section-header', `section-header--${align}`, { 'section-header--spaced': spaced }, className]}
+  style={`--header-width:${width}px;--header-gap:${gap}px`}
+>
+  <div class="section-header__text">
+    {ticker && <Ticker items={ticker} class="section-header__ticker" />}
+    <slot name="eyebrow" />
+    <div class="section-header__copy">
+      <Heading as={as} size="64">{title}</Heading>
+      {lead && <Text size="l" tone="secondary" class:list={{ 'section-header__lead--soft': softLead }}>{lead}</Text>}
+    </div>
+  </div>
+  {Astro.slots.has('actions') && <div class="section-header__actions"><slot name="actions" /></div>}
+</header>
+
+<style>
+  .section-header {
+    display: grid;
+    gap: var(--space-28);
+    width: min(100%, var(--header-width));
+    margin-inline: auto;
+  }
+  .section-header--spaced {
+    padding-block: var(--space-84);
+  }
+  .section-header--center {
+    justify-items: center;
+    text-align: center;
+  }
+  .section-header__text {
+    display: grid;
+    justify-items: inherit;
+    gap: var(--header-gap);
+    width: 100%;
+  }
+  .section-header__copy {
+    display: grid;
+    gap: var(--space-16);
+  }
+  .section-header :global(.section-header__lead--soft) {
+    opacity: 0.8;
+  }
+  .section-header :global(.section-header__ticker) {
+    width: min(100%, 33.75rem); /* 540px */
+  }
+  .section-header__actions {
+    display: flex;
+    gap: var(--space-16);
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={['arrow-tile', className]}><Icon name="arrow-up-right" size={18} /></span>
+
+<style>
+  .arrow-tile {
+    display: inline-grid;
+    place-items: center;
+    padding: var(--space-4);
+    border-radius: var(--radius-xs);
+    background: var(--color-dark-800);
+  }
+</style>

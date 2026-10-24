@@ -1,0 +1,20 @@
+{
+  "name": "flits-website-v2",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test 'src/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@swup/a11y-plugin": "^5.2.1",
+    "@swup/head-plugin": "^2.3.1",
+    "@swup/preload-plugin": "^3.2.12",
+    "astro": "^7.4.2",
+    "gsap": "^3.15.0",
+    "swup": "^4.10.0"
+  }
+}

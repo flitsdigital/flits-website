@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props extends HTMLAttributes<'ul'> {
+  projects: CollectionEntry<'projects'>[];
+  /** How far every second card drops, in px: 48 (home panel) or 100 (archive). */
+  offset?: number;
+  /** Space between rows in px: 48 (home) or 71 (archive). */
+  rowGap?: number;
+  showYear?: boolean;
+  titleAs?: 'h2' | 'h3';
+}
+
+// ...rest lets the archive hook its filter script onto the list (data-archive-grid).
+const { projects, offset = 48, rowGap = 48, showYear, titleAs, class: className, ...rest } = Astro.props;
+---
+
+<!-- Two columns of project cards; every second card drops by `offset`. The drop is the
+     `is-offset` class (set here, and re-set by the archive filter when cards hide). -->
+<ul class:list={['project-grid', className]} style={`--grid-offset:${offset}px;--grid-row-gap:${rowGap}px`} {...rest}>
+  {
+    projects.map((p, i) => (
+      <li class:list={{ 'is-offset': i % 2 === 1 }} data-types={p.data.types.join(',')} data-sector={p.data.sector} data-date={p.data.date.valueOf()}>
+        <ProjectCard project={p} showYear={showYear} titleAs={titleAs} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--grid-row-gap) var(--space-48);
+    padding-bottom: var(--grid-offset); /* room for the dropped column */
+  }
+  .project-grid > :global(.is-offset) {
+    translate: 0 var(--grid-offset);
+  }
+</style>

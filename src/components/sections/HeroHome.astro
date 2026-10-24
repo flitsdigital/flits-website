@@ -1,0 +1,73 @@
+---
+import type { ImageMetadata } from 'astro';
+import BgShapes from '../atoms/BgShapes.astro';
+import Heading from '../atoms/Heading.astro';
+import Highlight from '../atoms/Highlight.astro';
+import Text from '../atoms/Text.astro';
+import Eyebrow from '../molecules/Eyebrow.astro';
+import HeroMedia from '../atoms/HeroMedia.astro';
+
+interface Props {
+  eyebrow: string;
+  avatars: { src: ImageMetadata; alt?: string }[];
+  title: string;
+  highlight: string;
+  intro: string[];
+  /** px the "media" slot (fan, phone…) reaches up into the hero. */
+  mediaOverlap?: number;
+}
+
+const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.props;
+---
+
+<section class="hero" data-theme="dark">
+  <BgShapes />
+  <div class="hero__content">
+    <div class="hero__heading">
+      <Eyebrow size="l" avatars={avatars} loading="eager">{eyebrow}</Eyebrow>
+      <!-- {' '}: flex hides it visually, but keeps "Wij maken Impact" readable for search and screen readers -->
+      <Heading as="h1" size="116" class="hero__title">
+        <span>{title}</span>{' '}<Highlight class="hero__highlight">{highlight}</Highlight>
+      </Heading>
+    </div>
+    <Text size="xl" class="hero__intro">{intro.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</Text>
+  </div>
+</section>
+{Astro.slots.has('media') && <HeroMedia overlap={mediaOverlap}><slot name="media" /></HeroMedia>}
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 51.3125rem; /* 821px */
+    padding-top: var(--page-top);
+  }
+  .hero__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-36);
+    width: min(var(--width-content), 62.8125rem); /* 1005px */
+    margin-inline: auto;
+    text-align: center;
+  }
+  .hero__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .hero :global(.hero__title) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* rotation doesn't affect layout: reserve the rotated box height Figma uses (144.3 vs 128.8px) */
+  .hero :global(.hero__highlight) {
+    margin-block: 0.0665em;
+  }
+  .hero :global(.hero__intro) {
+    display: grid;
+    width: min(100%, 48.6875rem); /* 779px */
+  }
+</style>

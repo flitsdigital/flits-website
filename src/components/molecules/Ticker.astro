@@ -1,0 +1,79 @@
+---
+import Icon from '../atoms/Icon.astro';
+
+interface Props {
+  items: string[];
+  /** brand: yellow strip · light: white rounded strip · pill: yellow rounded strip */
+  variant?: 'brand' | 'light' | 'pill';
+  /** Purely visual (e.g. inside a heading): hidden from assistive tech. */
+  decorative?: boolean;
+  /** s: 14px (default) · m: 18px (case intro) */
+  size?: 's' | 'm';
+  class?: string;
+}
+
+const { items, variant = 'brand', decorative = false, size = 's', class: className } = Astro.props;
+// Repeated twice so the CSS loop can translate exactly one copy without a gap.
+const loop = [...items, ...items];
+---
+
+<!-- spans, not divs: a ticker may sit inside a heading -->
+<span
+  class:list={['ticker', `ticker--${variant}`, `ticker--${size}`, className]}
+  role={decorative ? undefined : 'marquee'}
+  aria-label={decorative ? undefined : items.join(', ')}
+  aria-hidden={decorative ? 'true' : undefined}
+>
+  <span class="ticker__track" aria-hidden="true">
+    {
+      loop.map((item) => (
+        <>
+          <Icon name="bolt" size={8} />
+          <span>{item}</span>
+        </>
+      ))
+    }
+  </span>
+</span>
+
+<style>
+  .ticker {
+    display: flex;
+    overflow: hidden;
+    padding: var(--space-4);
+    font: var(--text-body-s);
+    color: var(--color-dark-900);
+  }
+  .ticker--m {
+    font: var(--text-label);
+  }
+  .ticker--brand,
+  .ticker--pill {
+    background: var(--color-brand-500);
+  }
+  .ticker--pill {
+    border-radius: var(--radius-pill);
+  }
+  .ticker--light {
+    background: var(--color-light-0);
+    border-radius: var(--radius-pill);
+  }
+  .ticker__track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--space-8);
+    padding-inline-end: var(--space-8);
+    white-space: nowrap;
+    animation: ticker 24s linear infinite;
+  }
+  /* WCAG 2.2.2: moving content can be paused */
+  .ticker:hover .ticker__track {
+    animation-play-state: paused;
+  }
+  @keyframes ticker {
+    to {
+      translate: -50% 0;
+    }
+  }
+</style>

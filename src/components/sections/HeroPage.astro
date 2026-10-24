@@ -1,0 +1,72 @@
+---
+import BgShapes from '../atoms/BgShapes.astro';
+import Heading from '../atoms/Heading.astro';
+import Breadcrumb from '../molecules/Breadcrumb.astro';
+import HeroMedia from '../atoms/HeroMedia.astro';
+
+interface Props {
+  /** Trail after "Home"; the last item is this page. */
+  breadcrumb: { label: string; href?: string }[];
+  title: string;
+  intro: string[];
+  /** l: overview pages (116px title, 32px intro) · m: service pages (76px, 24px) */
+  size?: 'l' | 'm';
+  /** px the "media" slot (fan, phone…) reaches up into the hero. */
+  mediaOverlap?: number;
+}
+
+const { breadcrumb, title, intro, size = 'l', mediaOverlap = 106 } = Astro.props;
+const hasMedia = Astro.slots.has('media');
+---
+
+<!-- Figma 1:2220 / 1:2885: dark 571px hero, breadcrumb + title + intro centred -->
+<section class:list={['hero-page', `hero-page--${size}`, { 'hero-page--with-media': hasMedia }]} data-theme="dark">
+  <BgShapes leftTop={81} />
+  <div class="hero-page__content">
+    <Breadcrumb items={[{ label: 'Home', href: '/' }, ...breadcrumb]} />
+    <div class="hero-page__text">
+      <Heading as="h1" size={size === 'l' ? '116' : '76'}>{title}</Heading>
+      {intro.length > 0 && <div class="hero-page__intro">{intro.map((line) => <p>{line}</p>)}</div>}
+    </div>
+  </div>
+</section>
+{hasMedia && <HeroMedia overlap={mediaOverlap}><slot name="media" /></HeroMedia>}
+
+<style>
+  .hero-page {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 35.6875rem; /* 571px */
+    padding: var(--space-96) var(--gutter); /* content is centred in the full 571px, under the nav */
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero-page__content {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-24);
+    width: min(100%, 62.8125rem); /* 1005px */
+  }
+  .hero-page__text {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-16);
+  }
+  .hero-page__intro {
+    max-width: 48.6875rem; /* 779px */
+    color: var(--color-light-100);
+  }
+  .hero-page--l .hero-page__intro {
+    font: var(--text-body-xl-medium);
+  }
+  /* With media below: content sits a bit higher so the straddling media has room */
+  .hero-page--with-media {
+    padding-bottom: var(--space-128);
+  }
+  .hero-page--m .hero-page__intro {
+    font: var(--text-body-l-medium);
+    letter-spacing: var(--tracking-desc);
+  }
+</style>

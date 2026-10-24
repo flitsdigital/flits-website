@@ -1,0 +1,63 @@
+---
+import Text from '../atoms/Text.astro';
+import Pill from '../atoms/Pill.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  step: number;
+  image: ImageMetadata;
+  title: string;
+  text: string;
+}
+
+const { step, image, title, text } = Astro.props;
+---
+
+<!-- Figma 1:2539: 296px photo with a top shade, "Stap n" pill, title + text below -->
+<article class="step-card">
+  <div class="step-card__media">
+    <Image src={image} alt="" width={768} />
+    <Pill variant="solid" size="m" class="step-card__pill">Stap {step}</Pill>
+  </div>
+  <div class="step-card__text">
+    <Text as="h3" size="l">{title}</Text>
+    <Text size="desc">{text}</Text>
+  </div>
+</article>
+
+<style>
+  .step-card {
+    display: grid;
+    gap: 17px;
+    color: var(--color-dark-800);
+  }
+  .step-card__media {
+    position: relative;
+    height: 18.5rem; /* 296px */
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .step-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(0 0 0 / 0.2), rgb(0 0 0 / 0));
+  }
+  .step-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .step-card__media :global(.step-card__pill) {
+    position: absolute;
+    z-index: 1;
+    top: var(--space-10);
+    left: var(--space-10);
+  }
+  .step-card__text {
+    display: grid;
+    gap: var(--space-6);
+    padding-right: var(--space-32); /* text box is 350 of 384 */
+  }
+</style>

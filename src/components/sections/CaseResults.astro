@@ -1,0 +1,67 @@
+---
+import Prose from '../atoms/Prose.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BgShapes from '../atoms/BgShapes.astro';
+import Heading from '../atoms/Heading.astro';
+import Eyebrow from '../molecules/Eyebrow.astro';
+
+interface Props {
+  avatars: { src: ImageMetadata; alt?: string }[];
+  eyebrow: string;
+  title: string;
+  body: string[];
+  image: ImageMetadata;
+}
+
+const { avatars, eyebrow, title, body, image } = Astro.props;
+---
+
+<!-- Figma 1:3221: dark full-width band, text left (541px), 616×786 photo right -->
+<section class="case-results" data-theme="dark">
+  <BgShapes leftTop={445} rightTop={-162} />
+  <div class="case-results__inner">
+    <div class="case-results__text">
+      <div class="case-results__head">
+        <Eyebrow avatars={avatars} size="l">{eyebrow}</Eyebrow>
+        <Heading size="48">{title}</Heading>
+      </div>
+      <Prose paragraphs={body} medium opacity={0.8} />
+    </div>
+    <Image class="case-results__img" src={image} alt="" widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" />
+  </div>
+</section>
+
+<style>
+  .case-results {
+    position: relative;
+    margin-bottom: 2.875rem; /* 46px to the stats panel */
+    padding-block: var(--space-128) 7.9375rem; /* 128px / 127px */
+    overflow: hidden;
+  }
+  .case-results__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 33.8125rem) minmax(0, 38.5rem); /* 541 · 616 */
+    justify-content: space-between;
+    align-items: center;
+    width: min(100% - 2 * var(--gutter), 78.0625rem); /* x=111 to 1359 */
+    margin-inline: auto;
+  }
+  .case-results__text {
+    display: grid;
+    gap: var(--space-24);
+  }
+  .case-results__head {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-16);
+  }
+  .case-results :global(.case-results__img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 616 / 786;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+</style>

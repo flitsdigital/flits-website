@@ -1,0 +1,21 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import HeroPage from '../components/sections/HeroPage.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+
+// Contact: no Figma page. Inferred from the service pages: the dark page hero + the contact
+// section (form, clock, weather) that closes them. Every "Start een project" button lands here.
+---
+
+<PageLayout title="Contact — Flits" description="Vertel wat je wilt maken. Joery en Jordi reageren binnen een werkdag, per mail, telefoon of WhatsApp.">
+  <HeroPage
+    size="m"
+    breadcrumb={[{ label: 'Contact' }]}
+    title="Start een project"
+    intro={['Vertel kort wat je zoekt. We nemen binnen een werkdag contact met je op, met een eerlijk advies en een duidelijke offerte.']}
+  />
+  <ContactSection
+    title="Neem contact met ons op"
+    lead="Liever direct even bellen of appen? Dat kan ook: je krijgt altijd Joery of Jordi aan de lijn."
+  />
+</PageLayout>

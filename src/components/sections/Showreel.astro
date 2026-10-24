@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BgShapes from '../atoms/BgShapes.astro';
+import Heading from '../atoms/Heading.astro';
+import phone from '../../assets/images/behind-the-scenes/iphone-17-pro-silver.png';
+import badge from '../../assets/images/behind-the-scenes/bolt-badge.svg';
+
+interface Props {
+  title: string;
+  /** What plays on the phone screen (photo now; a video can replace it later). */
+  screen: ImageMetadata;
+}
+
+const { title, screen } = Astro.props;
+---
+
+<section class="showreel" data-theme="dark">
+  <BgShapes />
+  <img class="showreel__badge showreel__badge--left" src={badge.src} width={badge.width} height={badge.height} alt="" />
+  <img class="showreel__badge showreel__badge--right" src={badge.src} width={badge.width} height={badge.height} alt="" />
+  <Heading size="96" class="showreel__title">{title}</Heading>
+  <div class="showreel__phone">
+    <div class="showreel__screen"><Image src={screen} alt="" width={1080} /></div>
+    <Image class="showreel__frame" src={phone} alt="" width={680} />
+  </div>
+</section>
+
+<style>
+  .showreel {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(100% - 2 * 14px, 88.25rem); /* 1412px, 14px page margin */
+    height: 64rem; /* 1024px */
+    margin: 2.9375rem auto; /* 47px above and below (Figma) */
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .showreel :global(.showreel__title) {
+    position: relative;
+    width: min(100%, 47.9375rem); /* 767px */
+    text-align: center;
+  }
+  .showreel__badge {
+    position: absolute;
+    top: 496.69px;
+  }
+  .showreel__badge--left {
+    left: 64px;
+  }
+  .showreel__badge--right {
+    right: 36px;
+  }
+  /* Phone sits on top of the title (Figma "Home Screen" 300.81 × 654) */
+  .showreel__phone {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 300.81px;
+    height: 654px;
+    translate: -50% -50%;
+  }
+  .showreel__screen {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 4.49px);
+    width: 315.776px;
+    height: 662.979px;
+    translate: -50% -50%;
+    border-radius: 45.645px;
+    overflow: hidden;
+  }
+  /* Figma crops the source photo (zoomed 162%) inside the screen */
+  .showreel__screen :global(img) {
+    position: absolute;
+    left: -31.28%;
+    top: -33.97%;
+    width: 162.56%;
+    height: 167.94%;
+    max-width: none;
+  }
+  .showreel__phone :global(.showreel__frame) {
+    position: absolute;
+    left: -17.96px;
+    top: -17.21px;
+    width: 336.728px;
+    height: 688.421px;
+    max-width: none;
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/themes.css';
+import '../styles/base.css';
+import '../styles/motion.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  theme?: 'light' | 'surface' | 'dark';
+  noindex?: boolean;
+  /** Absolute or root-relative URL of a share image (Open Graph), e.g. a case hero. */
+  image?: string;
+}
+
+const { title, description, theme = 'light', noindex = false, image } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site) : undefined;
+---
+
+<!doctype html>
+<html lang="nl" data-landing>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Flits" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <link rel="preload" href="/fonts/pp-right-grotesk-wide-black.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/gt-standard-l-semibold.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body data-theme={theme}>
+    <slot />
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>

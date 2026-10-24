@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import HeroPage from '../components/sections/HeroPage.astro';
+import Prose from '../components/atoms/Prose.astro';
+
+// Legal pages (footer): one Markdown file each in src/content/legal; the file name is the URL.
+export async function getStaticPaths() {
+  return (await getCollection('legal')).map((page) => ({ params: { legal: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<PageLayout title={`${page.data.title} — Flits`} noindex={page.data.draft}>
+  <HeroPage size="m" breadcrumb={[{ label: page.data.title }]} title={page.data.title} intro={[]} />
+  <section class="legal">
+    <Prose size="m" medium tone="secondary"><Content /></Prose>
+  </section>
+</PageLayout>
+
+<style>
+  .legal {
+    width: var(--width-narrow);
+    margin-inline: auto;
+    padding-block: var(--space-96) var(--space-128);
+  }
+</style>

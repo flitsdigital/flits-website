@@ -1,0 +1,409 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import tokensCss from '../styles/tokens.css?raw';
+import { parseTokens } from '../design-system/tokens';
+
+const groups = parseTokens(tokensCss);
+const byPrefix = (prefix: string) =>
+  groups.filter((g) => g.tokens.some((t) => t.name.startsWith(prefix)));
+
+const colorGroups = byPrefix('--color-');
+const typeGroups = byPrefix('--text-');
+const spacing = groups.find((g) => g.group.startsWith('Spacing'))!.tokens;
+const radii = groups.find((g) => g.group === 'Radii')!.tokens;
+const gradients = groups.find((g) => g.group === 'Gradients')!.tokens;
+
+const themes = [
+  { id: 'light', note: 'Pagina-achtergrond (light/100)' },
+  { id: 'surface', note: 'Witte panels (light/0, radius 48)' },
+  { id: 'dark', note: "Hero's, FAQ, footer (dark/900)" },
+] as const;
+const semantic = [
+  '--color-bg',
+  '--color-surface',
+  '--color-text',
+  '--color-text-secondary',
+  '--color-text-muted',
+  '--color-border',
+  '--color-accent',
+  '--color-focus',
+];
+---
+
+<BaseLayout title="Styleguide — Flits" noindex>
+  <main class="sg">
+    <header class="sg-header">
+      <p class="sg-eyebrow">Flits design system · fase 1</p>
+      <h1 class="sg-title">Styleguide</h1>
+      <p class="sg-lead">
+        Live uit <code>src/styles/tokens.css</code> en <code>themes.css</code>. Kleuren komen uit de Figma
+        Variables; typografie, spacing en radii zijn afgeleid uit het design.
+      </p>
+    </header>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Kleuren</h2>
+      {
+        colorGroups.map((g) => (
+          <div class="sg-group">
+            <h3 class="sg-h3">{g.group}</h3>
+            <div class="swatches">
+              {g.tokens.map((t) => (
+                <figure class="swatch">
+                  <div class="swatch-chip" style={`background:var(${t.name})`} />
+                  <figcaption>
+                    <code>{t.name}</code>
+                    <span>{t.value}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Thema's</h2>
+      <p class="sg-note">Figma heeft geen modes. Het design wisselt drie ondergronden af, die je per sectie zet met <code>data-theme</code>.</p>
+      <div class="themes">
+        {
+          themes.map((th) => (
+            <div class="theme" data-theme={th.id}>
+              <p class="theme-name">{th.id}</p>
+              <p class="theme-display">Wij maken impact</p>
+              <p class="theme-body">Je concurreert niet met die ene zaak verderop.</p>
+              <p class="theme-muted">{th.note}</p>
+              <span class="theme-accent">Start een project</span>
+              <dl class="theme-tokens">
+                {semantic.map((s) => (
+                  <div>
+                    <dt>
+                      <span class="theme-dot" style={`background:var(${s})`} />
+                      <code>{s}</code>
+                    </dt>
+                    <dd data-resolve={s} />
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Typografie</h2>
+      {
+        typeGroups.map((g) => (
+          <div class="sg-group">
+            <h3 class="sg-h3">{g.group}</h3>
+            {g.tokens.map((t) => (
+              <div class="type-row">
+                <div class="type-meta">
+                  <code>{t.name}</code>
+                  <span>{t.value}</span>
+                </div>
+                <p
+                  class:list={['type-sample', { 'is-display': t.name.includes('display') }]}
+                  style={`font:var(${t.name})${t.name === '--text-body-desc' ? ';letter-spacing:var(--tracking-desc)' : ''}`}
+                >
+                  {t.name.includes('display') ? 'Wij maken impact' : 'Je concurreert niet met die ene zaak verderop.'}
+                </p>
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Spacing</h2>
+      <div class="spacing">
+        {
+          spacing.map((t) => (
+            <div class="spacing-row">
+              <code>{t.name}</code>
+              <span class="spacing-bar" style={`width:var(${t.name})`} />
+              <span class="sg-value">{t.value}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Radii &amp; gradients</h2>
+      <div class="boxes">
+        {
+          radii.map((t) => (
+            <figure class="box-item">
+              <div class="box" style={`border-radius:var(${t.name})`} />
+              <figcaption>
+                <code>{t.name}</code>
+                <span>{t.value}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+        {
+          gradients.map((t) => (
+            <figure class="box-item">
+              <div class="box box-gradient" style={`background:var(${t.name})`} />
+              <figcaption>
+                <code>{t.name}</code>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Alle tokens</h2>
+      <table class="table">
+        <thead>
+          <tr><th>Token</th><th>Waarde</th><th>Resolved</th></tr>
+        </thead>
+        <tbody>
+          {
+            groups.map((g) => (
+              <>
+                <tr class="table-group"><td colspan="3">{g.group}</td></tr>
+                {g.tokens.map((t) => (
+                  <tr>
+                    <td><code>{t.name}</code></td>
+                    <td>{t.value}</td>
+                    <td data-resolve={t.name} />
+                  </tr>
+                ))}
+              </>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  // Styleguide-only: show each token's computed value in its own theme context.
+  document.querySelectorAll<HTMLElement>('[data-resolve]').forEach((el) => {
+    el.textContent = getComputedStyle(el).getPropertyValue(el.dataset.resolve!).trim();
+  });
+</script>
+
+<style>
+  .sg {
+    width: min(100% - 2 * var(--space-48), var(--container-max));
+    margin-inline: auto;
+    padding-block: var(--space-96);
+    display: grid;
+    gap: var(--space-96);
+  }
+  code {
+    font: var(--text-caption);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .sg-eyebrow {
+    font: var(--text-body-s);
+    background: var(--color-brand-500);
+    color: var(--color-dark-900);
+    display: inline-block;
+    padding: var(--space-4) var(--space-8);
+  }
+  .sg-title {
+    font: var(--text-display-116);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+    margin-block: var(--space-16);
+  }
+  .sg-lead {
+    font: var(--text-body-l);
+    color: var(--color-text-secondary);
+    max-width: var(--container-narrow);
+  }
+  .sg-section {
+    display: grid;
+    gap: var(--space-32);
+  }
+  .sg-h2 {
+    font: var(--text-display-64);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+  .sg-h3 {
+    font: var(--text-body-m);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-16);
+  }
+  .sg-note,
+  .sg-value {
+    color: var(--color-text-muted);
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--space-16);
+  }
+  .swatch {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .swatch-chip {
+    height: 6rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .swatch figcaption,
+  .box-item figcaption,
+  .type-meta {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-12);
+    color: var(--color-text-muted);
+    font: var(--text-caption);
+  }
+  .swatch code,
+  .box-item code,
+  .type-meta code {
+    color: var(--color-text);
+  }
+
+  .themes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+  }
+  .theme {
+    border-radius: var(--radius-lg);
+    padding: var(--space-48);
+    display: grid;
+    gap: var(--space-12);
+    align-content: start;
+    border: 1px solid var(--color-border);
+  }
+  .theme-name {
+    font: var(--text-caption);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .theme-display {
+    font: var(--text-display-36);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+  .theme-body {
+    font: var(--text-body-l);
+    color: var(--color-text-secondary);
+  }
+  .theme-muted {
+    color: var(--color-text-muted);
+  }
+  .theme-accent {
+    justify-self: start;
+    font: var(--text-ui);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    padding: var(--space-10) var(--space-12);
+    border-radius: var(--radius-pill);
+  }
+  .theme-tokens {
+    display: grid;
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+    font: var(--text-caption);
+  }
+  .theme-tokens div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+  .theme-tokens dt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .theme-tokens dd {
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+  .theme-dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+  }
+
+  .type-row {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+    align-items: center;
+    gap: var(--space-24);
+    padding-block: var(--space-24);
+    border-top: 1px solid var(--color-border);
+  }
+  .type-meta {
+    padding: 0;
+  }
+  .type-sample.is-display {
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+
+  .spacing {
+    display: grid;
+    gap: var(--space-8);
+  }
+  .spacing-row {
+    display: grid;
+    grid-template-columns: 8rem 1fr 6rem;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .spacing-bar {
+    height: var(--space-16);
+    background: var(--color-brand-500);
+    border-radius: var(--radius-xs);
+  }
+
+  .boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+  }
+  .box-item {
+    width: 10rem;
+  }
+  .box {
+    height: 8rem;
+    background: var(--color-dark-900);
+  }
+  .box-gradient {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font: var(--text-body-s);
+  }
+  .table th,
+  .table td {
+    text-align: left;
+    padding: var(--space-8) var(--space-12);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+  .table td:not(:first-child) {
+    color: var(--color-text-muted);
+    word-break: break-all;
+  }
+  .table .table-group td {
+    font: var(--text-body-m);
+    color: var(--color-text);
+    padding-top: var(--space-32);
+  }
+</style>

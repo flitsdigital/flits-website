@@ -1,0 +1,20 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={['highlight', className]}><slot /></span>
+
+<style>
+  /* Padding in em so it scales with the surrounding heading (Figma: 12.1/29.1px at 116px). */
+  .highlight {
+    display: inline-block;
+    padding: 0.104em 0.25em;
+    background: var(--color-brand-500);
+    color: var(--color-dark-900);
+    rotate: -1.64deg; /* Figma "IMPACT" */
+  }
+</style>

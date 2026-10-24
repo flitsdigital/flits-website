@@ -1,0 +1,47 @@
+---
+interface Props {
+  /** h3: card titles in GT Standard (display titles use Heading) */
+  as?: 'p' | 'span' | 'div' | 'li' | 'h3';
+  size?: 'xl' | 'l' | 'm' | 'base' | 'ui' | 's' | 'caption' | 'desc';
+  tone?: 'default' | 'secondary' | 'muted';
+  class?: string;
+}
+
+const { as: Tag = 'p', size = 'base', tone = 'default', class: className } = Astro.props;
+---
+
+<Tag class:list={['text', `text--${size}`, `text--${tone}`, className]}><slot /></Tag>
+
+<style>
+  .text--xl {
+    font: var(--text-body-xl);
+  }
+  .text--l {
+    font: var(--text-body-l);
+  }
+  .text--m {
+    font: var(--text-body-m);
+  }
+  .text--base {
+    font: var(--text-body);
+  }
+  .text--ui {
+    font: var(--text-ui);
+  }
+  .text--s {
+    font: var(--text-body-s);
+  }
+  .text--caption {
+    font: var(--text-caption);
+  }
+  .text--desc {
+    font: var(--text-body-desc);
+    letter-spacing: var(--tracking-desc);
+  }
+  .text--secondary {
+    color: var(--color-text-secondary);
+  }
+  .text--muted {
+    color: var(--color-text-muted);
+  }
+</style>

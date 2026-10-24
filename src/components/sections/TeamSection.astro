@@ -1,0 +1,92 @@
+---
+import SectionHeader from '../molecules/SectionHeader.astro';
+import type { CollectionEntry } from 'astro:content';
+import TeamCard from '../molecules/TeamCard.astro';
+import WeatherWidget from '../molecules/WeatherWidget.astro';
+import ClockWidget from '../molecules/ClockWidget.astro';
+import MapWidget from '../molecules/MapWidget.astro';
+import BgShapes from '../atoms/BgShapes.astro';
+
+type Member = CollectionEntry<'team'>;
+
+interface Props {
+  title: string;
+  lead: string;
+  /** [left-column member, right-column member] */
+  members: [Member, Member];
+  /** surface: home (grey block, rounded top) · light: over ons (page background, 2% bolts) */
+  theme?: 'surface' | 'light';
+}
+
+const { title, lead, members, theme = 'surface' } = Astro.props;
+---
+
+<section class:list={['team', `team--${theme}`]} data-theme={theme}>
+  {theme === 'light' && <BgShapes tone="light" leftTop={343} rightTop={-461} leftX={-885} rightX={195.5} />}
+  <div class="team__grid">
+    <div class="team__col">
+      <SectionHeader title={title} lead={lead} softLead width={708} align="start" spaced={false} />
+      <div class="team__row team__row--top">
+        <WeatherWidget />
+        <TeamCard image={members[0].data.photo} name={members[0].data.name} role={members[0].data.role} tagSide="right" />
+      </div>
+    </div>
+    <div class="team__col">
+      <TeamCard image={members[1].data.photo} name={members[1].data.name} role={members[1].data.role} tagSide="left" />
+      <div class="team__row team__row--bottom">
+        <ClockWidget />
+        <MapWidget />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .team {
+    position: relative;
+    padding-block: 8.25rem 6.9375rem; /* 132px / 111px */
+  }
+  .team--surface {
+    border-radius: var(--radius-section) var(--radius-section) 0 0;
+  }
+  /* Figma collage (node 1:1177): columns 708 : 492 with a 48px gap, scaled with the container */
+  .team__grid {
+    position: relative; /* above the bolts */
+    display: grid;
+    grid-template-columns: minmax(0, 708fr) minmax(0, 492fr);
+    column-gap: var(--space-48);
+    width: var(--width-content);
+    margin-inline: auto;
+  }
+  .team__col {
+    display: flex;
+    flex-direction: column;
+  }
+  .team__row {
+    display: flex;
+  }
+  .team__row--top {
+    gap: 47px;
+    align-items: flex-start;
+    margin-top: auto; /* card aligns to its 441px partner in the right column */
+  }
+  .team__row--top > :global(.team-card) {
+    flex: 1;
+    min-width: 0;
+  }
+  .team__row--top > :global(.weather) {
+    flex-shrink: 0;
+  }
+  /* clock 168px + map up to 276px, pushed apart like Figma (48px at 1440) */
+  .team__row--bottom {
+    display: grid;
+    grid-template-columns: auto minmax(0, 17.25rem);
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--space-24);
+    margin-top: var(--space-48);
+  }
+  .team__row--bottom > :global(.map) {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,423 @@
+---
+import Logo from '../atoms/Logo.astro';
+import Button from '../atoms/Button.astro';
+import { nav, contact } from '../../data/site';
+import Icon from '../atoms/Icon.astro';
+import { getServices, serviceHref } from '../../lib/content';
+
+interface Props {
+  /** Centred "back" link in the bar (case pages: "Terug naar Projecten", Figma 1:3153). */
+  backLink?: { label: string; href: string };
+}
+
+const { backLink } = Astro.props;
+const services = await getServices();
+---
+
+<!-- Structure + data-attributes from the Osmo responsive navigation (Webflow export);
+     visuals from Figma (frames 1:1334, 6:852). Desktop ≥992px: inline bar with hover dropdown.
+     Below: hamburger, collapsible panel and accordion dropdown. -->
+<header class="nav" data-nav-status="not-active">
+  <button type="button" class="nav__dark-overlay" data-nav-control="close" aria-hidden="true" tabindex="-1"></button>
+  <nav class="nav__main" aria-label="Hoofdmenu">
+    <div class="nav__bar" data-theme="dark">
+      <div class="nav__bar-inner">
+        <!-- Swup container: swapped per page, so the back link follows the page (case pages) -->
+        <div id="nav-back" class="nav__back-slot">
+          {
+            backLink && (
+              <a class="nav__back" href={backLink.href}>
+                <Icon name="chevron-small" size={9} class="nav__back-icon" />
+                {backLink.label}
+              </a>
+            )
+          }
+        </div>
+        <div class="nav__start">
+          <a href="/" class="nav__logo" aria-label="Flits — home"><Logo /></a>
+          <button
+            type="button"
+            class="nav__hamburger"
+            aria-expanded="false"
+            aria-controls="nav-list"
+            aria-label="Open navigatie"
+            data-nav-control="toggle"
+          >
+            <span class="nav__hamburger-icon" aria-hidden="true">
+              <span class="nav__hamburger-bar"></span>
+              <span class="nav__hamburger-bar"></span>
+              <span class="nav__hamburger-bar"></span>
+            </span>
+          </button>
+        </div>
+        <div class="nav__end">
+          <div class="nav__end-inner">
+            <ul class="nav__list" id="nav-list" data-nav-list role="list">
+              {nav.map((item) => <li class="nav__item"><a class="nav__link" href={item.href}>{item.label}</a></li>)}
+              <li class="nav__item" data-nav-sub-status="not-active">
+                <button
+                  type="button"
+                  class="nav__link"
+                  data-nav-sub-control="toggle"
+                  aria-controls="nav-dropdown-diensten"
+                  aria-expanded="false"
+                >
+                  <span>Diensten</span>
+                  <span class="nav__link-chevron" aria-hidden="true">+</span>
+                </button>
+                <div class="nav__dropdown">
+                  <div class="nav__dropdown-inner">
+                    <ul class="nav__dropdown-list" id="nav-dropdown-diensten" role="list">
+                      {services.map((s) => <li><a class="nav__dropdown-link" href={serviceHref(s.id)}>{s.data.label}</a></li>)}
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div class="nav__btn-wrap">
+              <Button variant="outline" icon="whatsapp" href={contact.whatsapp}>Stuur een appje</Button>
+              <Button href="/contact">Start een project</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav-status]');
+  if (header) {
+    const mobile = window.matchMedia('(max-width: 991px)');
+    const toggle = header.querySelector<HTMLButtonElement>('[data-nav-control="toggle"]')!;
+
+    const setNav = (open: boolean) => {
+      header.dataset.navStatus = open ? 'active' : 'not-active';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Sluit navigatie' : 'Open navigatie');
+    };
+    toggle.addEventListener('click', () => setNav(header.dataset.navStatus !== 'active'));
+    header.querySelectorAll('[data-nav-control="close"]').forEach((el) => el.addEventListener('click', () => setNav(false)));
+
+    // Sub-dropdowns: hover opens on desktop (mouse); click/tap/Enter toggles; Escape closes.
+    header.querySelectorAll<HTMLElement>('[data-nav-sub-status]').forEach((item) => {
+      const control = item.querySelector<HTMLButtonElement>('[data-nav-sub-control="toggle"]')!;
+      const setSub = (open: boolean) => {
+        item.dataset.navSubStatus = open ? 'active' : 'not-active';
+        control.setAttribute('aria-expanded', String(open));
+      };
+      item.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && !mobile.matches && setSub(true));
+      item.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && !mobile.matches && setSub(false));
+      control.addEventListener('click', (e) => {
+        // On desktop a mouse click lands on a menu that hover already opened.
+        if (!mobile.matches && (e as PointerEvent).pointerType === 'mouse') return;
+        setSub(item.dataset.navSubStatus !== 'active');
+      });
+      item.addEventListener('focusout', (e) => {
+        if (!mobile.matches && !item.contains(e.relatedTarget as Node)) setSub(false);
+      });
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && item.dataset.navSubStatus === 'active') {
+          e.stopPropagation();
+          setSub(false);
+          control.focus();
+        }
+      });
+      // An accordion opened on mobile must not stay open as a desktop dropdown (and vice versa)
+      mobile.addEventListener('change', () => setSub(false));
+    });
+
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.dataset.navStatus === 'active') {
+        setNav(false);
+        toggle.focus();
+      }
+    });
+    // Crossing the breakpoint closes the panel so desktop never shows a stale state.
+    mobile.addEventListener('change', () => setNav(false));
+    // Page transition (src/scripts/app.ts): close the mobile panel and any dropdown.
+    document.addEventListener('flits:navigate', () => {
+      setNav(false);
+      header.querySelectorAll<HTMLElement>('[data-nav-sub-status]').forEach((item) => {
+        item.dataset.navSubStatus = 'not-active';
+        item.querySelector('[data-nav-sub-control]')?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Bar gets a background once the page scrolls away from the dark hero.
+    const onScroll = () => header.toggleAttribute('data-nav-scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>
+
+<style>
+  /* Fixed overlay layer (Osmo): only the bar itself catches pointer events. */
+  .nav {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .nav__dark-overlay {
+    display: none;
+  }
+  /* 15px + the bar's 8px padding puts the content at y=23, like Figma */
+  .nav__main {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+  }
+  .nav__bar {
+    width: calc(var(--width-content) + 2 * var(--space-12));
+    padding: var(--space-8) var(--space-12);
+    border-radius: var(--radius-md);
+    background: transparent;
+    pointer-events: auto;
+    transition: background-color 0.25s ease;
+  }
+  .nav[data-nav-scrolled] .nav__bar {
+    /* shortcut: one scrolled style for every background; per-section variants come later */
+    background: var(--color-dark-900);
+  }
+  .nav__bar-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 2.125rem; /* 34px */
+  }
+  .nav__start,
+  .nav__end,
+  .nav__end-inner {
+    display: contents;
+  }
+  .nav__logo {
+    display: flex;
+  }
+  .nav__back-slot {
+    display: contents;
+  }
+  .nav__back {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    font: var(--text-ui-medium);
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .nav__back :global(.nav__back-icon) {
+    rotate: 90deg;
+    filter: invert(1); /* the dark chevron icon, shown light on the bar */
+  }
+  .nav__hamburger {
+    display: none;
+  }
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    margin: 0 0 0 var(--space-24);
+    font: var(--text-ui);
+  }
+  .nav__item {
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav__link {
+    display: flex;
+    gap: var(--space-4);
+    opacity: 0.6;
+    font: inherit;
+    line-height: inherit;
+    transition: opacity 0.15s ease;
+  }
+  .nav__link:hover,
+  [data-nav-sub-status='active'] > .nav__link {
+    opacity: 1;
+  }
+  /* Figma 6:886: panel sits 25px below the trigger's top, 16px left of it.
+     The padding bridges the gap so hover survives the move down. */
+  .nav__dropdown {
+    position: absolute;
+    top: 100%;
+    left: calc(-1 * var(--space-16));
+    padding-top: calc(25px - 0.9em);
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 -4px;
+    transition: opacity 0.15s ease, translate 0.15s ease, visibility 0.15s;
+  }
+  [data-nav-sub-status='active'] > .nav__dropdown {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+  }
+  .nav__dropdown-list {
+    display: grid;
+    gap: var(--space-16);
+    margin: 0;
+    padding: var(--space-16);
+    border-radius: var(--radius-sm);
+    background: var(--color-light-0);
+    color: var(--color-dark-800);
+  }
+  .nav__dropdown-link:hover {
+    text-decoration: underline;
+  }
+  .nav__btn-wrap {
+    display: flex;
+    gap: var(--space-16);
+    margin-left: auto;
+  }
+
+  /* ---------- Mobile (Osmo "medium" breakpoint) ---------- */
+  @media (max-width: 991px) {
+    /* shortcut: no room in the mobile bar; the back link returns in the mobile pass (fase 5) */
+    .nav__back {
+      display: none;
+    }
+    .nav__dark-overlay {
+      position: absolute;
+      inset: 0;
+      display: block;
+      background: rgb(0 0 0 / 0.2);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: opacity 0.25s ease, visibility 0.25s;
+    }
+    [data-nav-status='active'] .nav__dark-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    .nav__main {
+      z-index: 2;
+      padding: var(--space-12);
+    }
+    .nav__bar {
+      width: 100%;
+      max-height: 100%;
+      overflow: auto;
+      padding: 0;
+      background: var(--color-dark-900);
+    }
+    .nav__bar-inner {
+      flex-direction: column;
+      align-items: stretch;
+      height: auto;
+    }
+    .nav__start {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-8) var(--space-8) var(--space-8) var(--space-16);
+      background: var(--color-dark-900);
+    }
+    .nav__hamburger {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: var(--space-48);
+      height: var(--space-48);
+      border-radius: var(--radius-sm);
+    }
+    .nav__hamburger-icon {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: var(--space-32);
+      height: var(--space-32);
+    }
+    .nav__hamburger-bar {
+      position: absolute;
+      width: var(--space-16);
+      height: 2px;
+      background: currentColor;
+      transition: translate 0.25s ease, rotate 0.25s ease, opacity 0.25s ease;
+    }
+    .nav__hamburger-bar:nth-child(1) { translate: 0 -5px; }
+    .nav__hamburger-bar:nth-child(3) { translate: 0 5px; }
+    [data-nav-status='active'] .nav__hamburger-bar:nth-child(1) { translate: 0 0; rotate: 45deg; }
+    [data-nav-status='active'] .nav__hamburger-bar:nth-child(2) { opacity: 0; }
+    [data-nav-status='active'] .nav__hamburger-bar:nth-child(3) { translate: 0 0; rotate: -45deg; }
+
+    /* Collapsible panel: 0fr → 1fr */
+    .nav__end {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s ease;
+    }
+    [data-nav-status='active'] .nav__end {
+      grid-template-rows: 1fr;
+    }
+    /* visibility keeps collapsed links out of the tab order */
+    .nav__end-inner {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      transition: visibility 0.35s;
+    }
+    [data-nav-status='active'] .nav__end-inner {
+      visibility: visible;
+    }
+    .nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      margin: 0;
+      padding: var(--space-16) var(--space-16) var(--space-32);
+      font: var(--text-body-l);
+    }
+    .nav__link {
+      justify-content: space-between;
+      width: 100%;
+      padding-block: var(--space-8);
+    }
+    /* Accordion dropdown */
+    .nav__dropdown {
+      position: static;
+      display: grid;
+      grid-template-rows: 0fr;
+      padding: 0;
+      visibility: visible;
+      opacity: 1;
+      translate: none;
+      transition: grid-template-rows 0.3s ease;
+    }
+    [data-nav-sub-status='active'] > .nav__dropdown {
+      grid-template-rows: 1fr;
+    }
+    .nav__dropdown-inner {
+      min-height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      transition: visibility 0.3s;
+    }
+    [data-nav-sub-status='active'] .nav__dropdown-inner {
+      visibility: visible;
+    }
+    .nav__dropdown-list {
+      margin-block: var(--space-4) var(--space-12);
+      font: var(--text-body-m);
+    }
+    .nav__btn-wrap {
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0 var(--space-16) var(--space-16);
+    }
+  }
+</style>

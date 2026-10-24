@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionHeader from '../molecules/SectionHeader.astro';
+import ServiceCard from '../molecules/ServiceCard.astro';
+import { serviceHref } from '../../lib/content';
+
+interface Props {
+  title: string;
+  ticker?: string[];
+  /** Services that have a teaser image (see getTeaserServices). */
+  services: CollectionEntry<'services'>[];
+}
+
+const { title, ticker, services } = Astro.props;
+---
+
+<section class="services">
+  <SectionHeader title={title} ticker={ticker} width={813} gap={28} />
+  <div class="services__grid">
+    {
+      services.map((s) => (
+        <ServiceCard href={serviceHref(s.id)} image={s.data.teaserImage!} label={s.data.teaserLabel ?? s.data.label} />
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .services {
+    padding-bottom: 7.0625rem; /* 113px to the next section */
+  }
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-48);
+    width: var(--width-content);
+    margin: calc(-1 * var(--space-16)) auto 0; /* Figma: cards start 16px into the header's bottom padding */
+  }
+</style>

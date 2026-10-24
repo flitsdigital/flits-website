@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Button from '../atoms/Button.astro';
+import RadialSlider from '../molecules/RadialSlider.astro';
+import LogoTile from '../molecules/LogoTile.astro';
+
+interface Props {
+  /** Social proof line above the button. */
+  proof: string;
+  cta: { label: string; href: string };
+  logos: CollectionEntry<'logowall'>[];
+}
+
+const { proof, cta, logos } = Astro.props;
+---
+
+<!-- Figma 1:2576–1:2697: proof line + button, then logo tiles drifting on a ∪ arc (18° per tile) -->
+<section class="logo-fan">
+  <div class="logo-fan__cta">
+    <p>{proof}</p>
+    <Button href={cta.href}>{cta.label}</Button>
+  </div>
+  <RadialSlider label="Klanten die je voorgingen" speed={40} shape="valley" angle={18} class="logo-fan__slider">
+    {logos.map((l) => <LogoTile logo={l.data.logo} name={l.data.name} class="logo-fan__tile" />)}
+  </RadialSlider>
+</section>
+
+<style>
+  .logo-fan {
+    padding-block: 0 5.1875rem; /* 83px; the feature grid above brings 115px */
+    overflow-x: clip;
+  }
+  .logo-fan__cta {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    width: max-content;
+    margin-inline: auto;
+    font: var(--text-body-desc);
+    letter-spacing: var(--tracking-desc);
+    text-align: center;
+  }
+  .logo-fan__cta > :global(.btn) {
+    width: 100%;
+  }
+  /* Slider box = one tile. Figma: 94px under the button; +40px so the rising outer tiles
+     stay clear of the CTA (feedback 2026-10-24). */
+  .logo-fan :global(.logo-fan__slider) {
+    height: 13.5rem; /* 216px */
+    margin-top: 8.375rem; /* 134px */
+  }
+  .logo-fan :global(.logo-fan__tile) {
+    width: 17.25rem; /* 276px */
+  }
+</style>

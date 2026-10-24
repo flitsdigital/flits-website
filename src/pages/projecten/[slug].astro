@@ -1,0 +1,39 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import CaseHero from '../../components/sections/CaseHero.astro';
+import CaseIntro from '../../components/sections/CaseIntro.astro';
+import VideoFan from '../../components/sections/VideoFan.astro';
+import CaseGallery from '../../components/sections/CaseGallery.astro';
+import CaseResults from '../../components/sections/CaseResults.astro';
+import StatsPanel from '../../components/sections/StatsPanel.astro';
+import CaseTestimonial from '../../components/sections/CaseTestimonial.astro';
+import ProjectsGrid from '../../components/sections/ProjectsGrid.astro';
+import { serviceTicker } from '../../data/site';
+import { getImage } from 'astro:assets';
+import { getCase, getCaseSlugs, getFounders, avatarsOf } from '../../lib/content';
+
+// Case detail (Figma 1:3140): one page per project whose Markdown has a `caseStudy` block.
+export async function getStaticPaths() {
+  return (await getCaseSlugs()).map((slug) => ({ params: { slug } }));
+}
+
+const { project, caseStudy: cs, review, Content, related, year } = await getCase(Astro.params.slug);
+const founders = avatarsOf(await getFounders());
+const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
+---
+
+<PageLayout
+  title={`${cs.heroTitle} — Flits`}
+  description={`${project.data.client}: ${cs.intro.title}.`}
+  image={share.src}
+  backLink={{ label: 'Terug naar Projecten', href: '/projecten' }}
+>
+  <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />
+  <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
+  {cs.videos.length > 0 && <VideoFan posters={cs.videos} straddle={false} />}
+  <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />
+  <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />
+  <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />
+  <CaseTestimonial {...cs.testimonial} review={review} />
+  <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
+</PageLayout>

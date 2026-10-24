@@ -1,0 +1,27 @@
+---
+import type { ImageMetadata } from 'astro';
+import Avatar from './Avatar.astro';
+
+interface Props {
+  avatars: { src: ImageMetadata; alt?: string }[];
+  size?: number;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const { avatars, size = 32, loading, class: className } = Astro.props;
+---
+
+<span class:list={['avatar-stack', className]}>
+  {avatars.map((a, i) => <Avatar src={a.src} alt={a.alt} size={size} ring={i > 0} loading={loading} />)}
+</span>
+
+<style>
+  .avatar-stack {
+    display: inline-flex;
+  }
+  /* Figma: second avatar sits at x=30 on a 32px avatar → 2px overlap */
+  .avatar-stack > :global(* + *) {
+    margin-inline-start: calc(var(--space-4) * -0.5);
+  }
+</style>

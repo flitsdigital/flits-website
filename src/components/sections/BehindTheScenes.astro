@@ -1,0 +1,56 @@
+---
+import type { ImageMetadata } from 'astro';
+import Heading from '../atoms/Heading.astro';
+import RadialSlider from '../molecules/RadialSlider.astro';
+import PolaroidCard from '../molecules/PolaroidCard.astro';
+import shape from '../../assets/images/behind-the-scenes/yellow-shape.svg';
+
+interface Props {
+  title: string;
+  /** The second polaroid starts in the centre (as in Figma). */
+  items: { image: ImageMetadata; year: string; caption: string; tilt: number }[];
+}
+
+const { title, items } = Astro.props;
+// The slider centres its first item; Figma centres the second polaroid, and the order is circular.
+const centred = [...items.slice(1), ...items.slice(0, 1)];
+---
+
+<!-- Figma 1:1638: dark-800 block with a yellow bolt, a straight row of tilted polaroids and light hands -->
+<section class="bts" data-theme="dark">
+  <img class="bts__shape" src={shape.src} width={shape.width} height={shape.height} alt="" />
+  <Heading class="bts__title">{title}</Heading>
+  <RadialSlider label="Foto's achter de schermen" speed={30} angle={0} hands={{ item: 'foto', tone: 'light' }} class="bts__slider">
+    {centred.map((item) => <PolaroidCard {...item} />)}
+  </RadialSlider>
+</section>
+
+<style>
+  .bts {
+    position: relative;
+    padding-block: 7.75rem 6.8125rem; /* 124px / 109px */
+    background: var(--color-dark-800);
+    overflow: clip;
+  }
+  /* The hero's left bolt, mirrored, rising from the bottom-left */
+  .bts__shape {
+    position: absolute;
+    top: 269px;
+    left: calc(50% - 736px);
+    max-width: none;
+    scale: -1 1;
+    pointer-events: none;
+  }
+  .bts :global(.bts__title) {
+    position: relative;
+    width: var(--width-narrow);
+    margin-inline: auto;
+    text-align: center;
+    color: var(--color-light-100);
+  }
+  /* Slider box = one polaroid (528px); centres line up on y=598 like Figma */
+  .bts :global(.bts__slider) {
+    height: 33rem;
+    margin-top: 5.875rem; /* 94px */
+  }
+</style>

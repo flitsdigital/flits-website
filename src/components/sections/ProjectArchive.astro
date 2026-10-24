@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Pill from '../atoms/Pill.astro';
+import Icon from '../atoms/Icon.astro';
+import ProjectGrid from '../molecules/ProjectGrid.astro';
+import { PROJECT_TYPES, SECTORS } from '../../lib/taxonomy';
+
+interface Props {
+  /** Newest first (getProjects()); the sort control can flip it client-side. */
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+const typeCount = (type: (typeof PROJECT_TYPES)[number]) => projects.filter((p) => p.data.types.includes(type)).length;
+---
+
+<!-- Figma 1:2219: two filter rows (type with counts, sector) + sort, then a staggered 2-column grid -->
+<section class="archive" data-project-archive>
+  <div class="archive__bar">
+    <div class="archive__filters">
+      <div class="archive__row" role="group" aria-label="Filter op type">
+        <Pill variant="filter" active data-filter-all>Alles ({projects.length})</Pill>
+        {PROJECT_TYPES.map((t) => <Pill variant="filter" data-filter-type={t}>{t} ({typeCount(t)})</Pill>)}
+      </div>
+      <div class="archive__row" role="group" aria-label="Filter op branche">
+        {SECTORS.map((s) => <Pill variant="filter" data-filter-sector={s}>{s}</Pill>)}
+      </div>
+    </div>
+    <label class="archive__sort">
+      <span>Sorteren op</span>
+      <span class="archive__select">
+        <select data-sort>
+          <option value="new">Nieuwste eerst</option>
+          <option value="old">Oudste eerst</option>
+        </select>
+        <Icon name="chevron-small" size={12} />
+      </span>
+    </label>
+  </div>
+
+  <ProjectGrid projects={projects} offset={100} rowGap={71} showYear={false} titleAs="h2" class="archive__grid" data-archive-grid />
+  <p class="archive__empty" data-archive-empty hidden>Geen projecten voor deze combinatie. Probeer een ander filter.</p>
+</section>
+
+<!-- Behaviour: src/scripts/project-archive.ts (started per page by src/scripts/app.ts) -->
+
+<style>
+  .archive {
+    width: var(--width-content);
+    margin-inline: auto;
+    padding-block: 3.5rem 8.25rem; /* 56px below the hero */
+  }
+  .archive__bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-24);
+  }
+  .archive__filters {
+    display: grid;
+    gap: var(--space-16);
+  }
+  .archive__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+  .archive__sort {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    font: var(--text-ui-medium);
+  }
+  .archive__sort > span:first-child {
+    opacity: 0.6;
+  }
+  .archive__select {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  select {
+    appearance: none;
+    padding: var(--space-10) var(--space-32) var(--space-10) var(--space-12);
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    font: var(--text-ui-medium);
+    cursor: pointer;
+  }
+  .archive__select :global(.icon) {
+    position: absolute;
+    right: var(--space-12);
+    pointer-events: none;
+  }
+  /* Figma: cards start 83px under the filters */
+  .archive :global(.archive__grid) {
+    margin-top: 5.1875rem;
+  }
+  .archive__empty {
+    font: var(--text-body-l);
+    text-align: center;
+  }
+</style>

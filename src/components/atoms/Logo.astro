@@ -1,0 +1,20 @@
+---
+import logo from '../../assets/brand/logo.svg';
+import logoFooter from '../../assets/brand/logo-footer.svg';
+
+interface Props {
+  variant?: 'nav' | 'footer';
+  class?: string;
+}
+
+const { variant = 'nav', class: className } = Astro.props;
+const src = variant === 'footer' ? logoFooter : logo;
+---
+
+<img class:list={['logo', className]} src={src.src} width={src.width} height={src.height} alt="Flits" />
+
+<style>
+  .logo {
+    height: auto;
+  }
+</style>

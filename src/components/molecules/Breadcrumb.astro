@@ -1,0 +1,47 @@
+---
+import Icon from '../atoms/Icon.astro';
+
+interface Props {
+  /** The last item is the current page (no href); a middle item without href is plain text. */
+  items: { label: string; href?: string }[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<nav class:list={['breadcrumb', className]} aria-label="Kruimelpad">
+  <Icon name="home" size={24} />
+  <ol>
+    {
+      items.map((item, i) => (
+        <li>
+          {i > 0 && <span aria-hidden="true">/</span>}
+          {item.href ? <a href={item.href}>{item.label}</a> : <span aria-current={i === items.length - 1 ? 'page' : undefined}>{item.label}</span>}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    font: var(--text-body-l-medium);
+    line-height: 0.9;
+    color: var(--color-light-100-80);
+  }
+  ol {
+    display: flex;
+    gap: var(--space-16);
+  }
+  li {
+    display: flex;
+    gap: var(--space-16);
+  }
+  a:hover {
+    color: var(--color-light-0);
+  }
+</style>

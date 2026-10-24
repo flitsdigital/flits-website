@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from '../atoms/Icon.astro';
+
+interface Props {
+  image: ImageMetadata;
+  name: string;
+  role: string;
+  /** Which top corner carries the role tag (Figma alternates per card). */
+  tagSide?: 'left' | 'right';
+  class?: string;
+}
+
+const { image, name, role, tagSide = 'left', class: className } = Astro.props;
+---
+
+<figure class:list={['team-card', `team-card--tag-${tagSide}`, className]}>
+  <!-- alt="" — the figcaption already names the person -->
+  <Image src={image} alt="" width={1000} widths={[500, 1000]} sizes="492px" />
+  <span class="team-card__role"><Icon name="bolt-white" size={8} />{role}</span>
+  <figcaption class="team-card__name">{name}</figcaption>
+</figure>
+
+<style>
+  .team-card {
+    position: relative;
+    aspect-ratio: 492 / 441;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .team-card > :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .team-card__role {
+    position: absolute;
+    top: var(--space-10);
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-8);
+    background: var(--color-overlay-light-20);
+    color: var(--color-light-0);
+    font: var(--text-caption);
+  }
+  .team-card--tag-left .team-card__role {
+    left: var(--space-10);
+    border-top-left-radius: var(--radius-sm);
+  }
+  .team-card--tag-right .team-card__role {
+    right: var(--space-10);
+    border-top-right-radius: var(--radius-sm);
+  }
+  .team-card__name {
+    position: absolute;
+    left: var(--space-20);
+    bottom: var(--space-20);
+    font: var(--text-body-l);
+    color: var(--color-light-0);
+  }
+</style>

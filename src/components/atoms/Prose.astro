@@ -1,0 +1,46 @@
+---
+interface Props {
+  /** Plain paragraphs; or put rendered Markdown (<Content />) in the slot instead. */
+  paragraphs?: string[];
+  /** l: 24px · m: 20px */
+  size?: 'l' | 'm';
+  /** GT Standard Medium instead of Semibold (case copy). */
+  medium?: boolean;
+  tone?: 'default' | 'secondary';
+  /** Figma dims some body copy: 0.8 (results), 0.9 (split media). */
+  opacity?: number;
+  class?: string;
+}
+
+const { paragraphs, size = 'l', medium = false, tone = 'default', opacity, class: className } = Astro.props;
+---
+
+<!-- Body copy: paragraphs separated by one empty line (Figma), in the section's text colour -->
+<div
+  class:list={['prose', `prose--${size}`, { 'prose--medium': medium, 'prose--secondary': tone === 'secondary' }, className]}
+  style={opacity === undefined ? undefined : `opacity:${opacity}`}
+>
+  {paragraphs ? paragraphs.map((p) => <p>{p}</p>) : <slot />}
+</div>
+
+<style>
+  .prose {
+    display: grid;
+    gap: 1.3em;
+  }
+  .prose--l {
+    font: var(--text-body-l);
+  }
+  .prose--l.prose--medium {
+    font: var(--text-body-l-medium);
+  }
+  .prose--m {
+    font: var(--text-body-m);
+  }
+  .prose--m.prose--medium {
+    font: var(--text-body-m-medium);
+  }
+  .prose--secondary {
+    color: var(--color-text-secondary);
+  }
+</style>

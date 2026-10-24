@@ -1,0 +1,8 @@
+[
+  { "id": "zelf-beheren", "question": "Kan ik mijn website zelf beheren?", "answer": "Ja. Je krijgt een eenvoudig systeem waarin je teksten, foto’s en projecten zelf aanpast.", "services": ["website-laten-maken"] },
+  { "id": "hoe-lang", "question": "Hoe lang duurt een project?", "answer": "Dat hangt af van de omvang. Na het eerste gesprek krijg je een planning met vaste momenten.", "services": [] },
+  { "id": "kosten", "question": "Wat kost het?", "answer": "Je krijgt vooraf een duidelijke offerte, zonder verrassingen achteraf.", "services": [] },
+  { "id": "wie", "question": "Met wie heb ik contact?", "answer": "Altijd met degene die het maakt: Joery of Jordi. Geen accountmanager ertussen.", "services": [] },
+  { "id": "regio", "question": "Werken jullie alleen in Drenthe?", "answer": "We zitten in Emmen en werken het meest in Drenthe, maar komen ook graag verder.", "services": [] },
+  { "id": "opname", "question": "Moet ik zelf voor de camera?", "answer": "Dat hoeft niet. We zoeken samen wat bij je past, en helpen je als je het wel wilt.", "services": ["social-media", "foto-en-video"] }
+]

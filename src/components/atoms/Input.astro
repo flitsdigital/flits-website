@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'input'>;
+
+const { class: className, type = 'text', ...rest } = Astro.props;
+---
+
+<input class:list={['input', className]} type={type} {...rest} />
+
+<style>
+  .input {
+    width: 100%;
+    /* Chrome clamps input line-height to "normal"; pin Figma's 0.9 line box (46.4px) */
+    height: calc(0.9em + 2 * var(--space-16));
+    padding: var(--space-16);
+    border: 0;
+    border-radius: var(--radius-sm);
+    /* Figma #f4f4f4 field on the white form card (was surface = white there, so invisible) */
+    background: var(--color-light-100);
+    color: var(--color-text-secondary);
+    font: var(--text-ui);
+  }
+  .input::placeholder {
+    color: inherit;
+    opacity: 0.65; /* Figma 40% is ~2.6:1; 65% reaches 4.5:1 on the grey field */
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+import Prose from '../atoms/Prose.astro';
+import Heading from '../atoms/Heading.astro';
+import Ticker from '../molecules/Ticker.astro';
+
+interface Props {
+  title: string;
+  /** What we did, shown in one white pill under the text. */
+  services: string[];
+  /** Live site: the yellow strip becomes a link. */
+  website?: string;
+}
+
+const { title, services, website } = Astro.props;
+---
+
+<!-- Figma 1:3185: "Website bekijken" strip, big result title, body (slot = the case's Markdown), services pill -->
+<section class="case-intro">
+  {
+    website && (
+      <a class="case-intro__site" href={website} target="_blank" rel="noopener">
+        <Ticker items={['Website bekijken']} variant="pill" size="m" decorative />
+        <span class="visually-hidden">Website bekijken (opent in nieuw tabblad)</span>
+      </a>
+    )
+  }
+  <Heading>{title}</Heading>
+  <Prose medium><slot /></Prose>
+  {services.length > 0 && <ul class="case-intro__services">{services.map((s) => <li>{s}</li>)}</ul>}
+</section>
+
+<style>
+  .case-intro {
+    display: grid;
+    justify-items: start;
+    gap: 1.875rem; /* 30px */
+    width: min(100% - 2 * var(--gutter), 50.6875rem); /* 811px */
+    margin-inline: auto;
+    padding-block: 10.8125rem 16.8125rem; /* 173px under the hero; 269px to the video fan's centre card */
+  }
+  .case-intro__site {
+    width: min(100%, 21rem); /* 336px */
+  }
+  .case-intro__services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+    padding: var(--space-10) var(--space-16);
+    border-radius: var(--radius-pill);
+    background: var(--color-light-0);
+    font: var(--text-label);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

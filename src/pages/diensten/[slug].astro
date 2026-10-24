@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import Button from '../../components/atoms/Button.astro';
+import Eyebrow from '../../components/molecules/Eyebrow.astro';
+import PhoneMockup from '../../components/molecules/PhoneMockup.astro';
+import HeroPage from '../../components/sections/HeroPage.astro';
+import VideoFan from '../../components/sections/VideoFan.astro';
+import PhotoPhone from '../../components/sections/PhotoPhone.astro';
+import FeatureGrid from '../../components/sections/FeatureGrid.astro';
+import LogoFan from '../../components/sections/LogoFan.astro';
+import BehindTheScenes from '../../components/sections/BehindTheScenes.astro';
+import SplitMedia from '../../components/sections/SplitMedia.astro';
+import ProcessSteps from '../../components/sections/ProcessSteps.astro';
+import ProjectsGrid from '../../components/sections/ProjectsGrid.astro';
+import FaqSection from '../../components/sections/FaqSection.astro';
+import ContactSection from '../../components/sections/ContactSection.astro';
+import { getServices, getProjects, getFounders, avatarsOf } from '../../lib/content';
+
+// Service pages (Figma 1:2397, 1:2884): one YAML file per service in src/content/services.
+// The file's `page.blocks` list is rendered top to bottom, one section per block.
+export async function getStaticPaths() {
+  return (await getServices()).map((service) => ({ params: { slug: service.id }, props: { service } }));
+}
+
+const { service } = Astro.props;
+const { page } = service.data;
+const founders = avatarsOf(await getFounders());
+const logos = await getCollection('logowall');
+const moments = (await getCollection('behindTheScenes')).map((m) => m.data);
+const projects = await getProjects();
+const faqs = (await getCollection('faqs'))
+  .filter((f) => !f.data.services?.length || f.data.services.includes(service.id))
+  .map((f) => f.data);
+/** Projects of the block's type first, then the newest others: always 4 cards. */
+const matches = (p: (typeof projects)[number], type?: string) => (p.data.types as string[]).includes(type ?? '');
+const projectsFor = (type?: string) => [...projects].sort((a, b) => Number(matches(b, type)) - Number(matches(a, type))).slice(0, 4);
+const media = page.heroMedia;
+---
+
+<PageLayout title={`${service.data.label} — Flits`} description={page.description}>
+  <HeroPage size="m" breadcrumb={[{ label: 'Diensten' }, { label: page.breadcrumb }]} title={page.title} intro={page.intro} mediaOverlap={media?.overlap}>
+    {media?.type === 'videoFan' && <VideoFan slot="media" posters={media.posters} />}
+    {media?.type === 'photoPhone' && <PhotoPhone slot="media" photo={media.photo} screen={media.screen} />}
+  </HeroPage>
+  {
+    page.blocks.map((block) => {
+      switch (block.type) {
+        case 'features':
+          return <FeatureGrid title={block.title} lead={block.lead} features={block.items} variant={block.variant} />;
+        case 'logoFan':
+          return <LogoFan proof={block.proof} cta={block.cta} logos={logos} />;
+        case 'behindTheScenes':
+          return <BehindTheScenes title={block.title} items={moments} />;
+        case 'split':
+          return (
+            <SplitMedia title={block.title} body={block.body} mediaSide={block.mediaSide}>
+              {block.eyebrow && <Eyebrow slot="eyebrow" avatars={founders} size="s">{block.eyebrow}</Eyebrow>}
+              {block.badge && <img slot="eyebrow" src={block.badge.image.src} width={block.badge.image.width} height={block.badge.image.height} alt={block.badge.alt} />}
+              {block.actions.length > 0 && (
+                <Fragment slot="actions">
+                  {block.actions.map((a) => <Button href={a.href} variant={a.variant}>{a.label}</Button>)}
+                </Fragment>
+              )}
+              <Fragment slot="media">
+                {block.phones.map((p) => <PhoneMockup {...p} />)}
+              </Fragment>
+            </SplitMedia>
+          );
+        case 'steps':
+          return <ProcessSteps title={block.title} lead={block.lead} steps={block.items} />;
+        case 'projects':
+          return <ProjectsGrid title={block.title} ticker={block.ticker} projects={projectsFor(block.projectType)} />;
+        case 'faq':
+          return <FaqSection title={block.title} lead={block.lead} faqs={faqs} />;
+        case 'contact':
+          return <ContactSection title={block.title} lead={block.lead} />;
+      }
+    })
+  }
+</PageLayout>

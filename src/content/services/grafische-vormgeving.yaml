@@ -1,0 +1,27 @@
+# Grafische vormgeving: no Figma page yet. Inferred layout from the designed service pages
+# (hero, projects, way of working, FAQ, contact) with placeholder copy — replace when designed.
+order: 3
+label: Grafische vormgeving
+page:
+  breadcrumb: Grafische vormgeving
+  title: Grafische vormgeving
+  description: Logo, huisstijl en drukwerk die bij je bedrijf passen, ontworpen door Flits in Emmen.
+  intro:
+    - Een logo, huisstijl of drukwerk dat meteen laat zien wie je bent. Ontworpen door dezelfde mensen die je website en content maken.
+  blocks:
+    - type: projects
+      title: Huisstijlen die wij maakten
+      ticker: [Grafische vormgeving]
+    - type: steps
+      title: Hoe gaan we te werk?
+      lead: Van eerste schets tot bestanden die je overal kunt gebruiken, met een persoonlijke en duidelijke aanpak.
+      items:
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je doet met je bedrijf }
+        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: Waar staat je bedrijf in de markt en hoe onderscheid je je? }
+        - { image: ../../assets/steps/step-3.jpg, title: Ontwerp, text: We werken een paar richtingen uit en kiezen samen. }
+    - type: faq
+      title: Vragen die we vaak krijgen
+      lead: Staat je vraag er niet bij? Stuur ons gerust een appje.
+    - type: contact
+      title: Neem contact met ons op
+      lead: Vertel kort wat je zoekt, dan nemen we binnen een werkdag contact met je op.

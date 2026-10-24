@@ -1,0 +1,67 @@
+---
+import SectionHeader from '../molecules/SectionHeader.astro';
+import Panel from '../atoms/Panel.astro';
+import BgShapes from '../atoms/BgShapes.astro';
+import Button from '../atoms/Button.astro';
+import FaqItem from '../molecules/FaqItem.astro';
+
+interface Props {
+  title: string;
+  lead: string;
+  faqs: { question: string; answer: string }[];
+}
+
+const { title, lead, faqs } = Astro.props;
+---
+
+<!-- Figma 1:2452: dark 1344×788 panel, header left, accordion right, "Nog vragen?" under the list -->
+<section class="faq-section">
+  <Panel theme="dark">
+    <BgShapes leftTop={254} rightTop={-237} leftX={-672 - 169.5} rightX={-672 + 718} />
+    <div class="faq">
+      <SectionHeader title={title} lead={lead} width={601} align="start" spaced={false} />
+      <div class="faq__list">
+        {
+          faqs.map((f) => (
+            <FaqItem question={f.question} name="faq">
+              <p>{f.answer}</p>
+            </FaqItem>
+          ))
+        }
+        <p class="faq__more">
+          <span>Nog vragen?</span>
+          <Button href="/contact">Neem contact op</Button>
+        </p>
+      </div>
+    </div>
+  </Panel>
+</section>
+
+<style>
+  /* 72px under a steps panel (48px margin there + 24px here); 64px to the footer */
+  .faq-section {
+    margin-block: var(--space-24) var(--space-64);
+  }
+  .faq {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 37.5625rem) minmax(0, 37.5rem); /* 601 · 600 */
+    justify-content: space-between;
+    align-items: start;
+    gap: var(--space-48);
+    padding: 6.0625rem 3rem 4.75rem 2.9375rem; /* 97px top, 47px left, 76px under the CTA */
+  }
+  .faq__list {
+    display: grid;
+    gap: var(--space-20);
+  }
+  .faq__more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-16);
+    margin-top: 1.8125rem; /* 49px under the last question (incl. the 20px gap) */
+    font: var(--text-ui);
+    color: var(--color-light-100-80);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  image: ImageMetadata;
+  /** dark: black 40% (case hero) · brand: dark-800 50% (over ons) */
+  veil: 'dark' | 'brand';
+  /** Photo runs 108px past both sides and 55px above the frame (over ons, Figma 1:1739). */
+  bleed?: boolean;
+}
+
+const { image, veil, bleed = false } = Astro.props;
+---
+
+<!-- Full-bleed photo + veil behind a hero. Put it first in a position:relative hero: everything
+     after it (BgShapes, content) paints on top through DOM order, no z-index needed. -->
+<div class:list={['photo-backdrop', `photo-backdrop--${veil}`, { 'photo-backdrop--bleed': bleed }]} aria-hidden="true">
+  <Image src={image} alt="" widths={[960, 1600, 2400]} sizes={bleed ? 'calc(100vw + 216px)' : '100vw'} loading="eager" fetchpriority="high" />
+</div>
+
+<style>
+  .photo-backdrop {
+    position: absolute;
+    inset: 0;
+  }
+  .photo-backdrop--bleed {
+    inset: -55px -108px 0;
+  }
+  .photo-backdrop :global(img) {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .photo-backdrop--dark::after {
+    background: var(--color-overlay-dark-40);
+  }
+  .photo-backdrop--brand::after {
+    background: var(--color-overlay-brand-50);
+  }
+</style>
