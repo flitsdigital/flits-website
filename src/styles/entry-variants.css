@@ -538,12 +538,12 @@ html[data-landing][data-entry='12'] .hero + .hero-media [data-radial-slider-trac
    Every timing is a --t13-* variable so /tune can drive it live (it writes them inline on <html>). ===== */
 html[data-entry='13'] {
   /* dark hero, uncovered top → bottom; the body behind it never changes */
-  --t13-wipe-delay: 0s;
+  --t13-wipe-delay: 0.11s;
   --t13-wipe-dur: 1s;
   --t13-wipe-ease: var(--ease-osmo);
   /* hero content comes into focus */
-  --t13-focus-delay: 0s;
-  --t13-focus-dur: 1.3s;
+  --t13-focus-delay: 0.21s;
+  --t13-focus-dur: 1s;
   --t13-focus-ease: var(--ease-osmo);
   --t13-focus-blur: 18px;
   --t13-focus-scale: 1.05;
@@ -553,30 +553,30 @@ html[data-entry='13'] {
   --t13-left-ease: var(--ease-osmo);
   --t13-left-dist: 10vw;
   /* yellow bar draws left → right */
-  --t13-bar-delay: 0.18s;
-  --t13-bar-dur: 0.8s;
+  --t13-bar-delay: 0.01s;
+  --t13-bar-dur: 0.75s;
   --t13-bar-ease: var(--ease-osmo);
   /* IMPACT letters rise in behind the bar's edge */
-  --t13-letters-delay: 0.3s;
+  --t13-letters-delay: 0.32s;
   --t13-letters-dur: 0.6s;
   --t13-letters-ease: var(--ease-osmo);
   --t13-letters-stagger: 0.03s;
   --t13-letters-rise: 40%;
   /* bolts slide in from the sides */
-  --t13-bolts-delay: 0s;
-  --t13-bolts-dur: 1.5s;
+  --t13-bolts-delay: 0.31s;
+  --t13-bolts-dur: 1.19s;
   --t13-bolts-ease: var(--ease-osmo);
   --t13-bolts-dist: 12vw;
-  --t13-nav-delay: 0.2s;
+  --t13-nav-delay: 0.7s;
   --t13-nav-dur: 0.8s;
   --t13-nav-ease: var(--ease-osmo);
   /* the fan comes last: hidden until the hero has settled, then it fades in while it turns */
-  --t13-fanfade-delay: 0.9s;
-  --t13-fanfade-dur: 0.6s;
+  --t13-fanfade-delay: 0.84s;
+  --t13-fanfade-dur: 0.56s;
   --t13-fanfade-ease: var(--ease-osmo);
   /* GSAP arc intro (radial-slider.ts): unitless seconds, steps = places along the circle */
-  --t13-turn-delay: 0.7;
-  --t13-turn-dur: 1.2;
+  --t13-turn-delay: 0.32;
+  --t13-turn-dur: 1.35;
   --t13-turn-ease: var(--ease-osmo);
   --t13-turn-steps: 2;
 }

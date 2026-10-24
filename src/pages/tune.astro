@@ -74,13 +74,13 @@ import '../styles/fonts.css';
       const OSMO = EASES.osmo;
       // Defaults = the --t13-* block in entry-variants.css
       const DEFAULTS: Track[] = [
-        { id: 'wipe', label: 'Donkere achtergrond', hint: 'clip-path van boven naar beneden', delay: 0, dur: 1, ease: OSMO },
+        { id: 'wipe', label: 'Donkere achtergrond', hint: 'clip-path van boven naar beneden', delay: 0.11, dur: 1, ease: OSMO },
         {
           id: 'focus',
           label: 'Hero-content (lens)',
           hint: 'vervaagd en iets groter → scherp',
-          delay: 0,
-          dur: 1.3,
+          delay: 0.21,
+          dur: 1,
           ease: OSMO,
           extras: [
             { id: 'blur', label: 'Blur', unit: 'px', min: 0, max: 40, step: 1, value: 18 },
@@ -96,12 +96,12 @@ import '../styles/fonts.css';
           ease: OSMO,
           extras: [{ id: 'dist', label: 'Afstand', unit: 'vw', min: 0, max: 40, step: 0.5, value: 10 }],
         },
-        { id: 'bar', label: 'Gele balk', hint: 'clip-path van links naar rechts', delay: 0.18, dur: 0.8, ease: OSMO },
+        { id: 'bar', label: 'Gele balk', hint: 'clip-path van links naar rechts', delay: 0.01, dur: 0.75, ease: OSMO },
         {
           id: 'letters',
           label: 'Letters IMPACT',
           hint: 'per letter omhoog, na elkaar',
-          delay: 0.3,
+          delay: 0.32,
           dur: 0.6,
           ease: OSMO,
           extras: [
@@ -113,20 +113,20 @@ import '../styles/fonts.css';
           id: 'bolts',
           label: 'Bliksems',
           hint: 'schuiven in vanaf de zijkanten',
-          delay: 0,
-          dur: 1.5,
+          delay: 0.31,
+          dur: 1.19,
           ease: OSMO,
           extras: [{ id: 'dist', label: 'Afstand', unit: 'vw', min: 0, max: 40, step: 0.5, value: 12 }],
         },
-        { id: 'nav', label: 'Navbar', hint: 'fade', delay: 0.2, dur: 0.8, ease: OSMO },
-        { id: 'fanfade', label: "Foto's · opacity", hint: 'fade van de hele cirkel', delay: 0.9, dur: 0.6, ease: OSMO },
+        { id: 'nav', label: 'Navbar', hint: 'fade', delay: 0.7, dur: 0.8, ease: OSMO },
+        { id: 'fanfade', label: "Foto's · opacity", hint: 'fade van de hele cirkel', delay: 0.84, dur: 0.56, ease: OSMO },
         {
           id: 'turn',
           label: "Foto's · draai",
           hint: 'GSAP: start live iets later dan de CSS (bij het laden van het script); wijzigen herlaadt de pagina',
           gsap: true,
-          delay: 0.7,
-          dur: 1.2,
+          delay: 0.32,
+          dur: 1.35,
           ease: OSMO,
           extras: [{ id: 'steps', label: "Afstand (aantal foto's)", unit: '', min: 0, max: 6, step: 0.5, value: 2 }],
         },
