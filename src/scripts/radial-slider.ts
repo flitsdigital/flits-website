@@ -160,8 +160,6 @@ export function initRadialSliders(): () => void {
         onUpdate: render,
         onComplete: () => (stepping = null),
       });
-      // entry-animations branch: /tune scrubs this tween next to the CSS animations
-      if (document.documentElement.hasAttribute('data-tune')) Object.assign(wrap, { radialIntro: stepping });
     }
     const resize = new ResizeObserver(() => requestAnimationFrame(layout));
     resize.observe(wrap);

@@ -32,40 +32,26 @@ const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.
     </div>
     <Text size="xl" class="hero__intro">{intro.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</Text>
   </div>
-  <!-- entry-animations branch: split the title into words (.sw > .si) and letters (.sc) with --i/--c
-       indexes for stagger, before first paint. The heading keeps an aria-label with the plain text. -->
+  <!-- Home entry (motion.css): the yellow bar's letters rise in one by one, so split it into .hero__char
+       spans with an index --c before first paint. The heading keeps the plain text as its aria-label. -->
   <script is:inline>
     (() => {
       const h1 = document.querySelector('.hero__title');
-      if (!h1 || h1.dataset.split) return;
+      const bar = h1?.querySelector('.hero__highlight');
+      if (!bar || h1.dataset.split) return;
       h1.dataset.split = '1';
       h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
-      let w = 0;
-      let c = 0;
-      for (const part of [h1.querySelector(':scope > span:first-child'), h1.querySelector('.hero__highlight')]) {
-        if (!part) continue;
-        const words = part.textContent.trim().split(/\s+/);
-        part.textContent = '';
-        part.setAttribute('aria-hidden', 'true');
-        words.forEach((word, i) => {
-          if (i) part.append(' ');
-          const sw = document.createElement('span');
-          sw.className = 'sw';
-          const si = document.createElement('span');
-          si.className = 'si';
-          si.style.setProperty('--i', String(w++));
-          for (const ch of word) {
-            const sc = document.createElement('span');
-            sc.className = 'sc';
-            sc.style.setProperty('--c', String(c++));
-            sc.textContent = ch;
-            si.append(sc);
-          }
-          sw.append(si);
-          part.append(sw);
-        });
-      }
-      document.querySelectorAll('.hero__intro > span').forEach((line, i) => line.style.setProperty('--i', String(i)));
+      bar.setAttribute('aria-hidden', 'true');
+      const text = bar.textContent.trim();
+      bar.textContent = '';
+      [...text].forEach((ch, c) => {
+        if (ch === ' ') return bar.append(' ');
+        const span = document.createElement('span');
+        span.className = 'hero__char';
+        span.style.setProperty('--c', String(c));
+        span.textContent = ch;
+        bar.append(span);
+      });
     })();
   </script>
 </section>
@@ -99,6 +85,9 @@ const { eyebrow, avatars, title, highlight, intro, mediaOverlap = 106 } = Astro.
     align-items: center;
   }
   /* rotation doesn't affect layout: reserve the rotated box height Figma uses (144.3 vs 128.8px) */
+  .hero :global(.hero__char) {
+    display: inline-block;
+  }
   .hero :global(.hero__highlight) {
     margin-block: 0.0665em;
   }
