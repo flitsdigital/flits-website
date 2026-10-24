@@ -536,6 +536,18 @@ html[data-landing][data-entry='12'] .hero + .hero-media [data-radial-slider-trac
 
 /* ===== 13 · Lens × Converge with the Osmo curve — 11, with every animation on cubic-bezier(0.625, 0.05, 0, 1)
    (the same curve as GSAP CustomEase "osmo", which the slider's arc intro uses) ===== */
+/* The dark hero itself is uncovered top → bottom; the body behind it never changes */
+@keyframes ev13-hero {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+html[data-landing][data-entry='13'] .hero {
+  animation: ev13-hero 1s var(--ease-osmo) both;
+}
 html[data-landing][data-entry='13'] .hero__content {
   animation: ev4-focus 1.3s var(--ease-osmo) both;
 }
