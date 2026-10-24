@@ -567,15 +567,16 @@ html[data-landing][data-entry='13'] .bg-shapes__left {
 html[data-landing][data-entry='13'] .bg-shapes__right {
   animation: ev4-right 1.5s var(--ease-osmo) both;
 }
-/* The fan turns right away, in step with the wipe: the Osmo curve's slow start is its own delay */
+/* The fan comes last: hidden until the hero has settled, then it fades in and turns in one go,
+   so it is never visible standing still */
 html[data-landing][data-entry='13'] .hero + .hero-media .radial-slider {
   --radial-intro: 2;
   --radial-intro-duration: 1.2;
-  --radial-intro-delay: 0;
+  --radial-intro-delay: 0.7;
   --radial-intro-ease: osmo;
 }
 html[data-landing][data-entry='13'] .hero + .hero-media {
-  animation: ev-fade 0.6s var(--ease-osmo) both;
+  animation: ev-fade 0.6s var(--ease-osmo) 0.7s both;
 }
 html[data-landing][data-entry='13'] .nav__bar {
   animation-timing-function: var(--ease-osmo);
