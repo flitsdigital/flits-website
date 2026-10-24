@@ -389,3 +389,127 @@ html[data-landing][data-entry='10'] .hero + .hero-media {
 html[data-landing][data-entry='10'] .hero > .bg-shapes {
   animation: ev-fade 1.4s var(--ease-out) 0.3s both;
 }
+
+/* ===== 11 · Lens × Converge (no skills) — the hero comes into focus while "Wij maken" and "Impact"
+   glide together; the bolts slide in from the sides; the photos roll into the circle along their arc ===== */
+html[data-landing][data-entry='11'] .hero__content {
+  animation: ev4-focus 1.3s var(--ease-expo) both;
+}
+html[data-landing][data-entry='11'] .hero__title > span:first-child {
+  animation: ev7-left 1.3s var(--ease-expo) both;
+}
+html[data-landing][data-entry='11'] .hero__title .hero__highlight .sw {
+  animation: ev7-right 1.3s var(--ease-expo) 0.08s both;
+}
+html[data-landing][data-entry='11'] .hero__highlight {
+  animation: ev2-bar 0.9s var(--ease-expo) 0.12s both;
+}
+html[data-landing][data-entry='11'] .bg-shapes__left {
+  animation: ev4-left 1.5s var(--ease-expo) both;
+}
+html[data-landing][data-entry='11'] .bg-shapes__right {
+  animation: ev4-right 1.5s var(--ease-expo) both;
+}
+/* Photos: the slider plays its arc intro (2 places along the circle, see radial-slider.ts) while they fade in */
+html[data-landing][data-entry='11'] .hero + .hero-media .radial-slider {
+  --radial-intro: 2;
+  --radial-intro-duration: 1.6;
+  --radial-intro-delay: 0.25;
+}
+html[data-landing][data-entry='11'] .hero + .hero-media {
+  animation: ev-fade 0.9s var(--ease-out) 0.3s both;
+}
+
+/* ===== 12 · Lens × Converge, built with /animate + /improve-animations =====
+   Gate: rare (first load only) → delight budget allowed. Purpose: explanation/brand moment.
+   Tool: CSS animations only — predetermined motion during a busy page load runs off the main thread
+   (v11 drives the photos from GSAP/rAF). Properties: opacity, transform, light blur (≤6px, per block),
+   clip-path for the bar, `rotate` for the fan. Curve: the existing --ease-out token (strong ease-out,
+   entrances). Per-block 60ms stagger instead of one block entering at once. Offsets are % of the
+   element itself, not vw. Reduced motion keeps a 200ms fade instead of nothing. */
+@keyframes ev12-lens {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+    filter: blur(6px);
+  }
+}
+@keyframes ev12-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12%) scale(0.97);
+    filter: blur(6px);
+  }
+}
+@keyframes ev12-right {
+  from {
+    opacity: 0;
+    transform: translateX(12%) scale(0.97);
+    filter: blur(6px);
+  }
+}
+@keyframes ev12-bar {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+@keyframes ev12-bolt-left {
+  from {
+    opacity: 0;
+    transform: translateX(-8%);
+  }
+}
+@keyframes ev12-bolt-right {
+  from {
+    opacity: 0;
+    transform: translateX(8%);
+  }
+}
+/* The whole fan turns 15° (1.5 photos) around the centre of its own circle and settles: every photo
+   travels along the arc at once. Fade first so the photos never pop in at the edge. */
+@keyframes ev12-arc {
+  from {
+    rotate: 15deg;
+  }
+}
+@keyframes ev12-fade {
+  from {
+    opacity: 0;
+  }
+}
+html[data-landing][data-entry='12'] .hero .eyebrow {
+  animation: ev12-lens 0.9s var(--ease-out) both;
+}
+html[data-landing][data-entry='12'] .hero__title > span:first-child {
+  animation: ev12-left 0.9s var(--ease-out) 0.06s both;
+}
+html[data-landing][data-entry='12'] .hero__highlight {
+  animation:
+    ev12-right 0.9s var(--ease-out) 0.12s both,
+    ev12-bar 0.9s var(--ease-out) 0.12s both;
+}
+html[data-landing][data-entry='12'] .hero__intro {
+  animation: ev12-lens 0.9s var(--ease-out) 0.18s both;
+}
+html[data-landing][data-entry='12'] .bg-shapes__left {
+  animation: ev12-bolt-left 1.1s var(--ease-out) both;
+}
+html[data-landing][data-entry='12'] .bg-shapes__right {
+  animation: ev12-bolt-right 1.1s var(--ease-out) both;
+}
+html[data-landing][data-entry='12'] .hero + .hero-media {
+  animation: ev12-fade 0.6s var(--ease-out) 0.24s both;
+}
+html[data-landing][data-entry='12'] .hero + .hero-media [data-radial-slider-track] {
+  transform-origin: 50% calc(50% + var(--radial-arc-origin, 0px));
+  animation: ev12-arc 1.1s var(--ease-out) 0.24s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* fewer and gentler, not zero: keep a short fade, drop movement and blur */
+  html[data-landing][data-entry='12'] :is(.hero .eyebrow, .hero__title > span:first-child, .hero__highlight, .hero__intro, .hero + .hero-media) {
+    animation: ev12-fade 0.2s var(--ease-out) both !important;
+  }
+  html[data-landing][data-entry='12'] :is(.bg-shapes__left, .bg-shapes__right, .hero + .hero-media [data-radial-slider-track]) {
+    animation: none !important;
+  }
+}

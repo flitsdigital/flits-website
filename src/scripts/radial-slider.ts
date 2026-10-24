@@ -55,13 +55,20 @@ export function initRadialSliders(): () => void {
       }
       const first = originals[0];
       const prevStep = step;
-      stepping?.progress(1); // finish a running step so it doesn't aim at the old spacing
-      step = stepFor(first.offsetWidth, first.offsetHeight, GAP, angle);
-      // Keep the same item centred when the step changes size
-      if (prevStep) state.offset = (state.offset / prevStep) * step;
-      target = Math.round(state.offset / step) * step;
+      const nextStep = stepFor(first.offsetWidth, first.offsetHeight, GAP, angle);
+      if (prevStep && Math.abs(nextStep - prevStep) > 0.5) {
+        // The spacing really changed: finish a running step (it aims at the old spacing) and
+        // keep the same item centred. Same spacing (e.g. the observer's first call): leave tweens alone.
+        stepping?.progress(1);
+        state.offset = (state.offset / prevStep) * nextStep;
+        target = Math.round(state.offset / nextStep) * nextStep;
+      }
+      step = nextStep;
       radius = radiusFor(step, angle);
       wrap.style.setProperty('--radial-slider-hand-x', `${first.offsetWidth / 2 + GAP / 2}px`);
+      // Centre of the circle, relative to the track's middle, so CSS can rotate the whole fan along
+      // its own arc (entry variant 12): below for arch (∩), above for valley (∪).
+      if (Number.isFinite(radius)) track.style.setProperty('--radial-arc-origin', `${shape === 'arch' ? radius : -radius}px`);
       while (items.length * step < wrap.clientWidth + 4 * step) {
         originals.forEach((el) => {
           const clone = el.cloneNode(true) as HTMLElement;
@@ -127,6 +134,22 @@ export function initRadialSliders(): () => void {
     wrap.querySelector('[data-radial-slider-next]')?.addEventListener('click', () => go(1));
 
     layout();
+    // Entry intro, switched on from CSS (--radial-intro: <steps>): the items glide in along their own
+    // arc from `steps` places further on, so they "roll" into the circle instead of popping in.
+    const introSteps = parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro')) || 0;
+    if (introSteps && !reduceMotion) {
+      const to = state.offset;
+      state.offset = to + introSteps * step;
+      render();
+      stepping = gsap.to(state, {
+        offset: to,
+        duration: parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro-duration')) || 1.6,
+        delay: parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro-delay')) || 0,
+        ease: 'expo.out',
+        onUpdate: render,
+        onComplete: () => (stepping = null),
+      });
+    }
     const resize = new ResizeObserver(() => requestAnimationFrame(layout));
     resize.observe(wrap);
     document.fonts?.ready.then(layout); // card heights change once the web fonts arrive
