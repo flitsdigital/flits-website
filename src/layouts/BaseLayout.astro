@@ -40,7 +40,19 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
     <!-- entry-animations branch: pick the home entry variant with ?entry=0…10 (0 = current) -->
     <script is:inline>
-      document.documentElement.dataset.entry = new URLSearchParams(location.search).get('entry') || '0';
+      {
+        const params = new URLSearchParams(location.search);
+        const html = document.documentElement;
+        html.dataset.entry = params.get('entry') || '0';
+        // /tune: apply the tuner's --t13-* values before anything paints or the slider reads them
+        if (params.has('tune')) {
+          html.dataset.tune = '';
+          try {
+            const tuned = JSON.parse(localStorage.getItem('flits-tune-13') || '{}');
+            Object.entries(tuned).forEach(([name, value]) => html.style.setProperty(name, value));
+          } catch {}
+        }
+      }
     </script>
     <link rel="preload" href="/fonts/pp-right-grotesk-wide-black.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/gt-standard-l-semibold.woff2" as="font" type="font/woff2" crossorigin />

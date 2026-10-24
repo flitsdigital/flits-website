@@ -22,7 +22,14 @@ import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry
 const GAP = 96;
 
 gsap.registerPlugin(CustomEase);
-CustomEase.create('osmo', 'M0,0 C0.625,0.05 0,1 1,1'); // same curve as --ease-osmo in CSS
+
+/** A GSAP ease from CSS: `cubic-bezier(a, b, c, d)` becomes a CustomEase, anything else is a GSAP ease name. */
+function easeFromCss(value: string) {
+  const bezier = value.match(/cubic-bezier\(([^)]+)\)/);
+  if (!bezier) return value || 'expo.out';
+  const [a, b, c, d] = bezier[1].split(',').map(parseFloat);
+  return CustomEase.create('radial-intro', `M0,0 C${a},${b} ${c},${d} 1,1`);
+}
 
 /** Starts every slider on the page; returns a cleanup for page transitions (ticker, observers, tweens). */
 export function initRadialSliders(): () => void {
@@ -149,10 +156,12 @@ export function initRadialSliders(): () => void {
         offset: to,
         duration: parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro-duration')) || 1.6,
         delay: parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-intro-delay')) || 0,
-        ease: getComputedStyle(wrap).getPropertyValue('--radial-intro-ease').trim() || 'expo.out',
+        ease: easeFromCss(getComputedStyle(wrap).getPropertyValue('--radial-intro-ease').trim()),
         onUpdate: render,
         onComplete: () => (stepping = null),
       });
+      // entry-animations branch: /tune scrubs this tween next to the CSS animations
+      if (document.documentElement.hasAttribute('data-tune')) Object.assign(wrap, { radialIntro: stepping });
     }
     const resize = new ResizeObserver(() => requestAnimationFrame(layout));
     resize.observe(wrap);

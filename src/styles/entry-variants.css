@@ -534,9 +534,52 @@ html[data-landing][data-entry='12'] .hero + .hero-media [data-radial-slider-trac
   }
 }
 
-/* ===== 13 · Lens × Converge with the Osmo curve — 11, with every animation on cubic-bezier(0.625, 0.05, 0, 1)
-   (the same curve as GSAP CustomEase "osmo", which the slider's arc intro uses) ===== */
-/* The dark hero itself is uncovered top → bottom; the body behind it never changes */
+/* ===== 13 · Lens × Converge with the Osmo curve — 11, with every animation on cubic-bezier(0.625, 0.05, 0, 1).
+   Every timing is a --t13-* variable so /tune can drive it live (it writes them inline on <html>). ===== */
+html[data-entry='13'] {
+  /* dark hero, uncovered top → bottom; the body behind it never changes */
+  --t13-wipe-delay: 0s;
+  --t13-wipe-dur: 1s;
+  --t13-wipe-ease: var(--ease-osmo);
+  /* hero content comes into focus */
+  --t13-focus-delay: 0s;
+  --t13-focus-dur: 1.3s;
+  --t13-focus-ease: var(--ease-osmo);
+  --t13-focus-blur: 18px;
+  --t13-focus-scale: 1.05;
+  /* "Wij maken" from the left */
+  --t13-left-delay: 0s;
+  --t13-left-dur: 1.3s;
+  --t13-left-ease: var(--ease-osmo);
+  --t13-left-dist: 10vw;
+  /* yellow bar draws left → right */
+  --t13-bar-delay: 0.18s;
+  --t13-bar-dur: 0.8s;
+  --t13-bar-ease: var(--ease-osmo);
+  /* IMPACT letters rise in behind the bar's edge */
+  --t13-letters-delay: 0.3s;
+  --t13-letters-dur: 0.6s;
+  --t13-letters-ease: var(--ease-osmo);
+  --t13-letters-stagger: 0.03s;
+  --t13-letters-rise: 40%;
+  /* bolts slide in from the sides */
+  --t13-bolts-delay: 0s;
+  --t13-bolts-dur: 1.5s;
+  --t13-bolts-ease: var(--ease-osmo);
+  --t13-bolts-dist: 12vw;
+  --t13-nav-delay: 0.2s;
+  --t13-nav-dur: 0.8s;
+  --t13-nav-ease: var(--ease-osmo);
+  /* the fan comes last: hidden until the hero has settled, then it fades in while it turns */
+  --t13-fanfade-delay: 0.9s;
+  --t13-fanfade-dur: 0.6s;
+  --t13-fanfade-ease: var(--ease-osmo);
+  /* GSAP arc intro (radial-slider.ts): unitless seconds, steps = places along the circle */
+  --t13-turn-delay: 0.7;
+  --t13-turn-dur: 1.2;
+  --t13-turn-ease: var(--ease-osmo);
+  --t13-turn-steps: 2;
+}
 @keyframes ev13-hero {
   from {
     clip-path: inset(0 0 100% 0);
@@ -545,39 +588,70 @@ html[data-landing][data-entry='12'] .hero + .hero-media [data-radial-slider-trac
     clip-path: inset(0);
   }
 }
+@keyframes ev13-focus {
+  from {
+    opacity: 0;
+    filter: blur(var(--t13-focus-blur));
+    transform: scale(var(--t13-focus-scale));
+  }
+}
+@keyframes ev13-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--t13-left-dist)));
+  }
+}
+@keyframes ev13-bolt-left {
+  from {
+    opacity: 0;
+    translate: calc(-1 * var(--t13-bolts-dist)) 0;
+  }
+}
+@keyframes ev13-bolt-right {
+  from {
+    opacity: 0;
+    translate: var(--t13-bolts-dist) 0;
+  }
+}
 html[data-landing][data-entry='13'] .hero {
-  animation: ev13-hero 1s var(--ease-osmo) both;
+  animation: ev13-hero var(--t13-wipe-dur) var(--t13-wipe-ease) var(--t13-wipe-delay) both;
 }
 html[data-landing][data-entry='13'] .hero__content {
-  animation: ev4-focus 1.3s var(--ease-osmo) both;
+  animation: ev13-focus var(--t13-focus-dur) var(--t13-focus-ease) var(--t13-focus-delay) both;
 }
 html[data-landing][data-entry='13'] .hero__title > span:first-child {
-  animation: ev7-left 1.3s var(--ease-osmo) both;
+  animation: ev13-left var(--t13-left-dur) var(--t13-left-ease) var(--t13-left-delay) both;
 }
 html[data-landing][data-entry='13'] .hero__highlight {
-  animation: ev2-bar 0.8s var(--ease-osmo) 0.18s both;
+  animation: ev2-bar var(--t13-bar-dur) var(--t13-bar-ease) var(--t13-bar-delay) both;
 }
 html[data-landing][data-entry='13'] .hero__highlight .sc {
-  --rise: 40%;
-  animation: ev-rise 0.6s var(--ease-osmo) calc(0.3s + (var(--c) - 8) * 0.03s) both;
+  --rise: var(--t13-letters-rise);
+  animation: ev-rise var(--t13-letters-dur) var(--t13-letters-ease)
+    calc(var(--t13-letters-delay) + (var(--c) - 8) * var(--t13-letters-stagger)) both;
 }
 html[data-landing][data-entry='13'] .bg-shapes__left {
-  animation: ev4-left 1.5s var(--ease-osmo) both;
+  animation: ev13-bolt-left var(--t13-bolts-dur) var(--t13-bolts-ease) var(--t13-bolts-delay) both;
 }
 html[data-landing][data-entry='13'] .bg-shapes__right {
-  animation: ev4-right 1.5s var(--ease-osmo) both;
-}
-/* The fan comes last: hidden until the hero has settled, then it fades in and turns in one go,
-   so it is never visible standing still */
-html[data-landing][data-entry='13'] .hero + .hero-media .radial-slider {
-  --radial-intro: 2;
-  --radial-intro-duration: 1.2;
-  --radial-intro-delay: 0.7;
-  --radial-intro-ease: osmo;
-}
-html[data-landing][data-entry='13'] .hero + .hero-media {
-  animation: ev-fade 0.6s var(--ease-osmo) 0.7s both;
+  animation: ev13-bolt-right var(--t13-bolts-dur) var(--t13-bolts-ease) var(--t13-bolts-delay) both;
 }
 html[data-landing][data-entry='13'] .nav__bar {
-  animation-timing-function: var(--ease-osmo);
+  animation: ev-fade var(--t13-nav-dur) var(--t13-nav-ease) var(--t13-nav-delay) both;
+}
+html[data-landing][data-entry='13'] .hero + .hero-media {
+  animation: ev-fade var(--t13-fanfade-dur) var(--t13-fanfade-ease) var(--t13-fanfade-delay) both;
+}
+html[data-landing][data-entry='13'] .hero + .hero-media .radial-slider {
+  --radial-intro: var(--t13-turn-steps);
+  --radial-intro-duration: var(--t13-turn-dur);
+  --radial-intro-delay: var(--t13-turn-delay);
+  --radial-intro-ease: var(--t13-turn-ease);
+}
+/* /tune: every entry animation starts paused at 0 and the tuner drives its currentTime */
+html[data-tune][data-landing] :is(.hero, .hero *, .hero-media, .nav__bar) {
+  animation-play-state: paused !important;
+}
+html[data-tune] .entry-switcher {
+  display: none;
 }
