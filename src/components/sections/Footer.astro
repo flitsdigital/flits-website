@@ -52,7 +52,7 @@ const pages = [
     document.querySelectorAll<HTMLElement>('[data-local-time]').forEach((el) => {
       el.textContent = `${hh}:${mm} in ${el.dataset.region}`;
     });
-  }, 30_000);
+  }, 1000);
 </script>
 
 <style>

@@ -17,8 +17,16 @@ import { initLogoWallCycle } from './logo-wall';
 const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle];
 
 let cleanups: (() => void)[] = [];
+// One init at a time: a section that throws must not stop the others or lose their cleanups.
 const mount = () => {
-  cleanups = pageInits.map((init) => init()).filter((fn): fn is () => void => typeof fn === 'function');
+  for (const init of pageInits) {
+    try {
+      const cleanup = init();
+      if (cleanup) cleanups.push(cleanup);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 };
 const unmount = () => {
   cleanups.forEach((fn) => fn());
@@ -32,7 +40,9 @@ const swup = new Swup({
   // No out/in animation on the page itself (it would expose the body background); see motion.css.
   animationSelector: false,
   // Review pages keep their own scripts: plain full page loads (as do links marked data-no-swup).
+  // They have no #swup themselves, so links on them load normally too.
   ignoreVisit: (url, { el } = {}) =>
+    !document.getElementById('swup') ||
     !!el?.closest('[data-no-swup]') ||
     ['/styleguide', '/components', '/sections'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
   plugins: [new SwupHeadPlugin({ awaitAssets: true }), new SwupA11yPlugin(), new SwupPreloadPlugin()],

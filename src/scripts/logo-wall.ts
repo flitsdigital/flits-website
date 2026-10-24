@@ -2,8 +2,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 /**
- * Osmo "Logo Wall Cycle", unchanged except: GSAP from npm, and started per page view from app.ts
- * (Swup) with a cleanup that kills the timelines, ScrollTriggers and the visibility listener.
+ * Osmo "Logo Wall Cycle", unchanged except: GSAP from npm, started per page view from app.ts (Swup)
+ * with a cleanup, and the cycle only plays while the wall is on screen and the tab is visible
+ * (Osmo starts it at once, so a wall below the fold kept swapping until it was scrolled past).
  */
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,6 +28,8 @@ export function initLogoWallCycle(): () => void {
     let pattern: number[] = [];
     let patternIndex = 0;
     let tl: gsap.core.Timeline | undefined;
+    let inView = false;
+    const playIfSeen = () => (inView && !document.hidden ? tl!.play() : tl!.pause());
 
     function isVisible(el: Element) {
       return window.getComputedStyle(el).display !== 'none';
@@ -74,9 +77,9 @@ export function initLogoWallCycle(): () => void {
         parent.appendChild(pool.shift()!);
       }
 
-      tl = gsap.timeline({ repeat: -1, repeatDelay: loopDelay });
+      tl = gsap.timeline({ repeat: -1, repeatDelay: loopDelay, paused: true });
       tl.call(swapNext);
-      tl.play();
+      playIfSeen();
     }
 
     function swapNext() {
@@ -132,19 +135,18 @@ export function initLogoWallCycle(): () => void {
       trigger: root,
       start: 'top bottom',
       end: 'bottom top',
-      onEnter: () => tl!.play(),
-      onLeave: () => tl!.pause(),
-      onEnterBack: () => tl!.play(),
-      onLeaveBack: () => tl!.pause(),
+      onToggle: (self) => {
+        inView = self.isActive;
+        playIfSeen();
+      },
     });
 
-    const onVisibility = () => (document.hidden ? tl!.pause() : tl!.play());
-    document.addEventListener('visibilitychange', onVisibility);
+    document.addEventListener('visibilitychange', playIfSeen);
 
     cleanups.push(() => {
       tl?.kill();
       trigger.kill();
-      document.removeEventListener('visibilitychange', onVisibility);
+      document.removeEventListener('visibilitychange', playIfSeen);
     });
   });
 

@@ -23,11 +23,18 @@ export function studioTime(date = new Date()) {
   };
 }
 
-/** Calls `fn` now and then every `ms` milliseconds; returns a stop function. */
+/**
+ * Calls `fn` now and then on every whole multiple of `ms` (whole seconds for 1000), so every clock on
+ * the page changes at the same moment and a tick never lands twice in one second. Returns a stop function.
+ */
 export function everyTick(fn: () => void, ms: number) {
-  fn();
-  const id = setInterval(fn, ms);
-  return () => clearInterval(id);
+  let id: ReturnType<typeof setTimeout>;
+  const tick = () => {
+    fn();
+    id = setTimeout(tick, ms - (Date.now() % ms));
+  };
+  tick();
+  return () => clearTimeout(id);
 }
 
 /** Rotation in degrees for each hand of an analog clock. */

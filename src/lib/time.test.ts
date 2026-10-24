@@ -1,6 +1,6 @@
-import { test } from 'node:test';
+import { test, mock } from 'node:test';
 import assert from 'node:assert/strict';
-import { studioTime, clockAngles, secondsSince } from './time.ts';
+import { studioTime, clockAngles, secondsSince, everyTick } from './time.ts';
 
 test('formats in Europe/Amsterdam with DST zone names', () => {
   // 2026-07-01 10:05:30 UTC = 12:05:30 CEST
@@ -17,4 +17,21 @@ test('secondsSince counts across the minute and after a long pause', () => {
   assert.equal(secondsSince(59, 0), 1);
   assert.equal(secondsSince(10, 40), 30); // tab hidden for 30 s
   assert.equal(secondsSince(20, 20), 0);
+});
+
+test('everyTick ticks now, then on whole seconds, and stops', () => {
+  mock.timers.enable({ apis: ['setTimeout', 'Date'], now: 997 }); // loaded 3ms before a whole second
+  let calls = 0;
+  const stop = everyTick(() => calls++, 1000);
+  assert.equal(calls, 1);
+  mock.timers.tick(3); // 1000: the next whole second, not 1997
+  assert.equal(calls, 2);
+  mock.timers.tick(999);
+  assert.equal(calls, 2);
+  mock.timers.tick(1); // 2000
+  assert.equal(calls, 3);
+  stop();
+  mock.timers.tick(5000);
+  assert.equal(calls, 3);
+  mock.timers.reset();
 });
