@@ -41,7 +41,12 @@ const iconSize = variant === 'step' ? 20 : 18;
 </Tag>
 
 <style>
+  /* Hover: Osmo "Button 016" — the colours swap and the label rolls up into its own copy
+     (a text-shadow one 2lh below), on the Osmo button curve. [data-hover] on a parent triggers it too. */
   .btn {
+    --btn-hover-color: var(--color-bg);
+    --btn-hover-bg: var(--color-text);
+    --btn-ease-hover: cubic-bezier(0.785, 0.135, 0.15, 0.86);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -50,23 +55,42 @@ const iconSize = variant === 'step' ? 20 : 18;
     border-radius: var(--radius-pill);
     font: var(--text-ui);
     white-space: nowrap;
-    transition: filter 0.15s ease;
+    overflow: clip; /* hides the label copy below; the focus outline is drawn outside and stays visible */
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color 0.325s var(--btn-ease-hover),
+      background-color 0.325s var(--btn-ease-hover);
   }
-  /* shortcut: hover/disabled states are not in Figma — inferred (ANALYSE.md F8), designed in fase 5 */
-  .btn:hover {
-    filter: brightness(0.94);
+  .btn__label {
+    text-shadow: 0 2lh 0 currentColor;
+    transition: translate 0.3s var(--btn-ease-hover);
   }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .btn:is(:hover, :focus-visible),
+    :global([data-hover]):is(:hover, :focus-visible) .btn {
+      color: var(--btn-hover-color);
+      background-color: var(--btn-hover-bg);
+    }
+    .btn:is(:hover, :focus-visible) .btn__label,
+    :global([data-hover]):is(:hover, :focus-visible) .btn .btn__label {
+      translate: 0 -2lh;
+    }
+  }
+  /* shortcut: disabled state is not in Figma — inferred (ANALYSE.md F8), designed in fase 5 */
   .btn:disabled,
   .btn[aria-disabled='true'] {
     opacity: 0.4;
     pointer-events: none;
   }
 
+  /* Hover colours per variant (not in Figma): yellow → ink, grey/white → yellow; ink flips per theme */
   .btn--primary {
     background: var(--color-accent);
     color: var(--color-on-accent);
   }
   .btn--secondary {
+    --btn-hover-color: var(--color-on-accent);
+    --btn-hover-bg: var(--color-accent);
     background: var(--color-surface);
     color: var(--color-text);
   }
@@ -76,10 +100,28 @@ const iconSize = variant === 'step' ? 20 : 18;
     border: 1px solid var(--color-border);
     color: var(--color-text);
   }
+  .btn--outline .btn__label,
+  .btn--outline :global(.icon) {
+    transition:
+      translate 0.3s var(--btn-ease-hover),
+      opacity 0.325s var(--btn-ease-hover),
+      filter 0.325s var(--btn-ease-hover);
+  }
   .btn--outline .btn__label {
     opacity: 0.6;
   }
+  /* On the white hover fill the label goes full strength and the white icon turns ink */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .btn--outline:is(:hover, :focus-visible) .btn__label {
+      opacity: 1;
+    }
+    .btn--outline:is(:hover, :focus-visible) :global(.icon) {
+      filter: brightness(0);
+    }
+  }
   .btn--step {
+    --btn-hover-color: var(--color-on-accent);
+    --btn-hover-bg: var(--color-accent);
     height: 2.75rem;
     padding: var(--space-4) var(--space-16);
     background: var(--color-light-200);
