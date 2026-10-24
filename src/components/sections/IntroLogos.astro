@@ -1,4 +1,5 @@
 ---
+import type { ImageMetadata } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import Avatar from '../atoms/Avatar.astro';
 import Heading from '../atoms/Heading.astro';
@@ -11,10 +12,11 @@ interface Props {
   lead: string;
   joery: CollectionEntry<'team'>;
   jordi: CollectionEntry<'team'>;
-  clients: CollectionEntry<'clients'>[];
+  /** Client logos for the wall (dark, for a light background) */
+  logos: { name: string; logo: ImageMetadata }[];
 }
 
-const { ticker, lead, joery, jordi, clients } = Astro.props;
+const { ticker, lead, joery, jordi, logos } = Astro.props;
 ---
 
 <section class="intro">
@@ -28,7 +30,7 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
     </Heading>
     <Text size="l" tone="secondary">{lead}</Text>
   </div>
-  <div class="intro__strip"><LogoWall clients={clients} /></div>
+  <LogoWall logos={logos} class="intro__logos" />
 </section>
 
 <style>
@@ -73,11 +75,8 @@ const { ticker, lead, joery, jordi, clients } = Astro.props;
       rotate: 1turn;
     }
   }
-  .intro__strip {
+  .intro :global(.intro__logos) {
     width: min(100%, 64.4375rem); /* 1031px */
-    padding: 3px; /* + the wall's 5px per tile = the strip's 8px */
-    border-radius: var(--radius-sm);
-    background: var(--color-light-0);
   }
   @media (max-width: 767px) {
     .intro {

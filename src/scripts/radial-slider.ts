@@ -8,7 +8,7 @@ import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry
  * adapted from text on a path to elements on an arc.
  *
  * [data-radial-slider-init]       wrapper
- *   -speed      px per second of drift while the mouse is over it (0 = none) default 0
+ *   -speed      px per second of drift: on hover with a mouse, always on touch    default 0
  *   -angle      tilt in degrees between neighbours (0 = straight row)     default 10
  *   -shape      arch (∩, sides drop) | valley (∪, sides rise)             default arch
  *   -equal      present: every item gets the height of the tallest one
@@ -102,21 +102,35 @@ export function initRadialSliders(): () => void {
       });
     };
 
-    // Drift on the GSAP ticker only while the mouse is over the slider (nothing moves by itself, so
-    // WCAG 2.2.2 needs no pause control); the speed eases up and down over ~0.3s instead of jumping.
+    // Drift on the GSAP ticker. With a mouse: only while hovering. Touch screens have no hover, so there
+    // it drifts by itself while on screen, and a tap toggles a lasting pause (WCAG 2.2.2).
+    // The speed eases up and down over ~0.3s instead of jumping.
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     let hovered = false;
+    let paused = false;
+    let inView = true;
     let velocity = 0;
     if (speed > 0) {
       const drift = (_t: number, deltaMs: number) => {
-        velocity += ((hovered && !stepping ? speed : 0) - velocity) * Math.min(1, deltaMs / 300);
+        const moving = (canHover ? hovered : inView && !paused) && !stepping;
+        velocity += ((moving ? speed : 0) - velocity) * Math.min(1, deltaMs / 300);
         if (velocity < 0.5) return;
         state.offset -= (velocity * deltaMs) / 1000;
         render();
       };
       gsap.ticker.add(drift);
       cleanups.push(() => gsap.ticker.remove(drift));
-      wrap.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && (hovered = true));
-      wrap.addEventListener('pointerleave', () => (hovered = false));
+      if (canHover) {
+        wrap.addEventListener('pointerenter', () => (hovered = true));
+        wrap.addEventListener('pointerleave', () => (hovered = false));
+      } else {
+        wrap.addEventListener('click', (e) => {
+          if (!(e.target as Element).closest('button')) paused = !paused;
+        });
+        const visibility = new IntersectionObserver((e) => (inView = !!e[0]?.isIntersecting));
+        visibility.observe(wrap);
+        cleanups.push(() => visibility.disconnect());
+      }
     }
 
     // Steps chain from the previous target, so two quick clicks move two items.
