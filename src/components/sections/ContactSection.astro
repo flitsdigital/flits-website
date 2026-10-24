@@ -61,16 +61,25 @@ const { title, lead } = Astro.props;
       width: 100%;
     }
   }
-  /* Phone: text and widgets above the form; the clock across, the weather on 2 columns */
+  /* Phone: the form is what matters, so it comes straight after the title and lead; clock and
+     weather follow (the clock across, the weather on 2 columns) */
   @media (max-width: 767px) {
     .contact {
       grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-32);
     }
     .contact__side {
-      grid-column: auto;
-      grid-row: auto;
+      display: contents;
+    }
+    .contact__side > :global(.section-header) {
+      order: 1;
+    }
+    .contact > :global(.contact-form) {
+      order: 2;
     }
     .contact__widgets {
+      order: 3;
+      margin-top: 0;
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .contact__widgets > :global(.clock) {

@@ -45,6 +45,7 @@
   --text-display-36: 900 clamp(1.75rem, 1.574rem + 0.7512vw, 2.25rem)/1.1 var(--font-display);
   --text-display-30: 900 1.8619rem/0.9 var(--font-display); /* 29.79px logowall CTA */
   --text-display-24: 900 1.5rem/0.9 var(--font-display);
+  --text-display-20: 900 1.25rem/1.1 var(--font-display); /* contact modal tiles */
   --text-display-16: 900 1rem/0.9 var(--font-display);
 
   /* @group Typografie — body (GT Standard L) */

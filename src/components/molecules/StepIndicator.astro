@@ -1,0 +1,43 @@
+---
+interface Props {
+  steps: string[];
+  /** Index of the current step. */
+  current?: number;
+  class?: string;
+}
+
+const { steps, current = 0, class: className } = Astro.props;
+---
+
+<!-- Figma 15:1324: grey pill, the current step on a white chip, the others at 40% -->
+<ol class:list={['steps', className]} aria-label="Stappen" data-step-indicator>
+  {steps.map((s, i) => <li aria-current={i === current ? 'step' : undefined}>{s}</li>)}
+</ol>
+
+<style>
+  .steps {
+    display: flex;
+    gap: 2px;
+    padding: var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--color-light-200);
+    font: var(--text-ui);
+    color: var(--color-dark-900);
+  }
+  .steps li {
+    display: grid;
+    place-items: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: var(--space-10);
+    border-radius: var(--radius-pill);
+    opacity: 0.4;
+    transition:
+      background-color 0.3s var(--ease-osmo),
+      opacity 0.3s var(--ease-osmo);
+  }
+  .steps li[aria-current] {
+    background: var(--color-light-0);
+    opacity: 1;
+  }
+</style>

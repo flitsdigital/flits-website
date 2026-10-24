@@ -20,6 +20,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
 import CursorMarquee from '../components/molecules/CursorMarquee.astro';
 import ProgressiveBlur from '../components/atoms/ProgressiveBlur.astro';
 import GridOverlay from '../components/atoms/GridOverlay.astro';
+import ContactModal from '../components/sections/ContactModal.astro';
 ---
 
 <!doctype html>
@@ -54,6 +55,7 @@ import GridOverlay from '../components/atoms/GridOverlay.astro';
     <CursorMarquee />
     <ProgressiveBlur />
     <GridOverlay />
+    <ContactModal />
     <script>
       import '../scripts/app';
     </script>

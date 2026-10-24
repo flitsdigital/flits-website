@@ -1,12 +1,21 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type Props = HTMLAttributes<'input'>;
+type Props = HTMLAttributes<'input'> & {
+  /** A textarea with the same look (contact modal, step 02). */
+  multiline?: boolean;
+};
 
-const { class: className, type = 'text', ...rest } = Astro.props;
+const { class: className, type = 'text', multiline = false, ...rest } = Astro.props;
 ---
 
-<input class:list={['input', className]} type={type} {...rest} />
+{
+  multiline ? (
+    <textarea class:list={['input', 'input--multiline', className]} {...(rest as HTMLAttributes<'textarea'>)} />
+  ) : (
+    <input class:list={['input', className]} type={type} {...rest} />
+  )
+}
 
 <style>
   .input {
@@ -20,6 +29,12 @@ const { class: className, type = 'text', ...rest } = Astro.props;
     background: var(--color-light-100);
     color: var(--color-text-secondary);
     font: var(--text-ui);
+  }
+  .input--multiline {
+    height: auto;
+    min-height: 8.5rem;
+    font: var(--text-body-desc);
+    resize: vertical;
   }
   .input::placeholder {
     color: inherit;

@@ -1,0 +1,262 @@
+---
+import Heading from '../atoms/Heading.astro';
+import Button from '../atoms/Button.astro';
+import Input from '../atoms/Input.astro';
+import Label from '../atoms/Label.astro';
+import StepIndicator from '../molecules/StepIndicator.astro';
+import ContactFields from '../molecules/ContactFields.astro';
+import { contact } from '../../data/site';
+import bolt from '../../assets/images/contact/bolt.svg';
+import close from '../../assets/images/contact/close.svg';
+
+const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
+---
+
+<!-- Figma 15:1323 (Start) and 15:1767 / 15:2222 (01, empty and with a choice): the "Start een project"
+     modal. Every link to /contact opens it (scripts/contact-modal.ts); "Klik dan hier" goes to the page.
+     shortcut: steps 02 (the project) and 03 (contact details) are not designed yet — 03 reuses the
+     contact page's fields (Figma 1:2828). One instance, in BaseLayout, outside the Swup container. -->
+<dialog class="contact-modal" data-contact-modal data-email={contact.email} aria-labelledby="cm-title-0">
+  <form class="contact-modal__card" novalidate>
+    <StepIndicator steps={['Start', '01', '02', '03']} class="contact-modal__steps" />
+    <button type="button" class="contact-modal__close" data-contact-modal-close aria-label="Sluiten">
+      <img src={close.src} width={close.width} height={close.height} alt="" />
+    </button>
+
+    <div class="contact-modal__body">
+      <section class="contact-modal__step contact-modal__step--intro" data-step="0">
+        <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
+        <Heading as="h2" size="36" id="cm-title-0">Nieuw project?<br />Wij denken graag<br />met je mee</Heading>
+        <p class="contact-modal__lead">
+          Druk op de “Volgende” knop om je project te starten. Liever een “normaal” contact formulier invullen?
+          <a href="/contact" data-no-modal>Klik dan hier</a>
+        </p>
+      </section>
+
+      <section class="contact-modal__step" data-step="1" hidden>
+        <div class="contact-modal__head">
+          <Heading as="h2" size="36" id="cm-title-1">Ik ben op<br />zoek naar...</Heading>
+          <p class="contact-modal__lead">Klik op een dienst om een te selecteren. Je kan meerdere antwoorden selecteren.</p>
+        </div>
+        <div class="contact-modal__tiles" role="group" aria-labelledby="cm-title-1">
+          {
+            services.map((s) => (
+              <label class="contact-modal__tile">
+                <input type="checkbox" name="services" value={s} />
+                <span>{s}</span>
+              </label>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="contact-modal__step" data-step="2" hidden>
+        <div class="contact-modal__head">
+          <Heading as="h2" size="36" id="cm-title-2">Vertel ons<br />wat meer</Heading>
+          <p class="contact-modal__lead">Waar gaat je project over? Een paar zinnen is genoeg.</p>
+        </div>
+        <div class="contact-modal__field">
+          <Label for="cm-message">Je project</Label>
+          <Input multiline id="cm-message" name="message" placeholder="Ik wil graag..." rows={4} />
+        </div>
+      </section>
+
+      <section class="contact-modal__step" data-step="3" hidden>
+        <div class="contact-modal__head">
+          <Heading as="h2" size="36" id="cm-title-3">Hoe bereiken<br />we je?</Heading>
+          <p class="contact-modal__lead">Laat je gegevens achter, dan nemen we contact met je op.</p>
+        </div>
+        <ContactFields idPrefix="cm" class="contact-modal__fields" />
+      </section>
+
+      <section class="contact-modal__step contact-modal__step--intro" data-step="done" hidden>
+        <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
+        <Heading as="h2" size="36" id="cm-title-done">Bijna klaar!</Heading>
+        <p class="contact-modal__lead">
+          Je mailprogramma opent met je aanvraag. Verstuur die mail, dan hoor je snel van ons. Lukt dat niet? Mail
+          naar <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+        </p>
+      </section>
+    </div>
+
+    <div class="contact-modal__nav">
+      <Button variant="step" icon="hand-left" data-contact-prev disabled>Vorige</Button>
+      <Button variant="step" icon="hand-right" iconPosition="end" class="contact-modal__next" data-contact-next>Volgende</Button>
+    </div>
+  </form>
+</dialog>
+
+<style>
+  .contact-modal {
+    width: min(36rem, 100% - 2 * var(--space-16)); /* 576px */
+    max-width: none;
+    max-height: calc(100dvh - 2 * var(--space-16));
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+    overflow: auto;
+  }
+  .contact-modal::backdrop {
+    background: rgb(0 0 0 / 0.6);
+  }
+  .contact-modal[open] {
+    animation: contact-modal-in 0.5s var(--ease-osmo) both;
+  }
+  .contact-modal[open]::backdrop {
+    animation: contact-modal-fade 0.3s ease-out both;
+  }
+  @keyframes contact-modal-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem) scale(0.96);
+    }
+  }
+  @keyframes contact-modal-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  /* The page behind stays put while the modal is open */
+  :global(html:has(.contact-modal[open])) {
+    overflow: hidden;
+  }
+
+  .contact-modal__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--space-16);
+  }
+  .contact-modal__close {
+    position: absolute;
+    top: var(--space-16);
+    right: var(--space-16);
+    display: block;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .contact-modal__close img {
+    display: block;
+  }
+
+  /* Figma: a 453px body between the step pill and the button bar */
+  .contact-modal__body {
+    display: grid;
+    width: 100%;
+    min-height: 28.3125rem;
+  }
+  .contact-modal__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding: 2.375rem 2.0625rem var(--space-32); /* 38px top; tiles 511px wide in 576 */
+    text-align: center;
+    animation: contact-modal-step 0.4s var(--ease-osmo) both;
+  }
+  .contact-modal__step[hidden] {
+    display: none;
+  }
+  @keyframes contact-modal-step {
+    from {
+      opacity: 0;
+      filter: blur(6px);
+    }
+  }
+  /* Start and the closing step sit in the middle of the body, the bolt 17px above the title */
+  .contact-modal__step--intro {
+    justify-content: center;
+    gap: 1.0625rem;
+    padding-inline: var(--space-48);
+  }
+  .contact-modal__head {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-8);
+  }
+  .contact-modal__lead {
+    width: min(100%, 21.5rem); /* 344px */
+    font: var(--text-body-desc);
+    opacity: 0.8;
+  }
+  .contact-modal__lead a {
+    text-decoration: underline;
+  }
+
+  /* 2 × 2 choices, 13px apart side by side, 20px between the rows; yellow when chosen */
+  .contact-modal__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 0.8125rem;
+    width: 100%;
+    margin-top: 1.625rem; /* tiles at y=200 in the body */
+  }
+  .contact-modal__tile {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 5.3125rem; /* 85px */
+    padding: var(--space-16) var(--space-24);
+    border-radius: var(--radius-sm);
+    background: var(--color-light-200);
+    font: var(--text-display-20);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+    color: var(--color-dark-900);
+    cursor: pointer;
+    transition: background-color 0.3s var(--ease-osmo);
+  }
+  .contact-modal__tile input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .contact-modal__tile:has(input:checked) {
+    background: var(--color-brand-500);
+  }
+  .contact-modal__tile:has(input:focus-visible) {
+    outline: 2px solid var(--color-dark-800-60);
+    outline-offset: 2px;
+  }
+
+  .contact-modal__field,
+  .contact-modal :global(.contact-modal__fields) {
+    display: grid;
+    gap: 13px;
+    width: 100%;
+    margin-top: var(--space-24);
+    text-align: start;
+  }
+  .contact-modal :global(.contact-modal__fields) {
+    gap: var(--space-24);
+  }
+
+  .contact-modal__nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-16);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+  /* Figma: VOLGENDE turns yellow once it can be pressed */
+  .contact-modal :global(.contact-modal__next:not(:disabled)) {
+    background: var(--color-accent);
+  }
+
+  @media (max-width: 767px) {
+    .contact-modal__step {
+      padding-inline: var(--space-16);
+    }
+    .contact-modal__step--intro {
+      padding-inline: var(--space-24);
+    }
+    .contact-modal__tile {
+      height: 4.5rem;
+      font-size: 1rem;
+    }
+  }
+</style>

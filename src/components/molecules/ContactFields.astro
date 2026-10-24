@@ -1,0 +1,57 @@
+---
+import Label from '../atoms/Label.astro';
+import Input from '../atoms/Input.astro';
+
+interface Props {
+  /** Prefix for the field ids, so two forms can sit on one page (contact page + modal). */
+  idPrefix: string;
+  class?: string;
+}
+
+const { idPrefix: p, class: className } = Astro.props;
+---
+
+<!-- Figma 1:2828: first + last name side by side, then e-mail and phone -->
+<div class:list={['fields', className]}>
+  <div class="fields__row">
+    <div class="fields__field">
+      <Label for={`${p}-first`} required>Voornaam</Label>
+      <Input id={`${p}-first`} name="firstName" autocomplete="given-name" placeholder="Vul hier je naam in" required />
+    </div>
+    <div class="fields__field">
+      <Label for={`${p}-last`}>Achternaam</Label>
+      <Input id={`${p}-last`} name="lastName" autocomplete="family-name" placeholder="Vul hier je naam in" />
+    </div>
+  </div>
+  <div class="fields__field">
+    <Label for={`${p}-email`} required>E-mailadres</Label>
+    <Input id={`${p}-email`} name="email" type="email" autocomplete="email" placeholder="naam@mail.nl" required />
+  </div>
+  <div class="fields__field">
+    <Label for={`${p}-phone`} required>Telefoonnummer</Label>
+    <Input id={`${p}-phone`} name="phone" type="tel" autocomplete="tel" placeholder="06 12345678" required />
+  </div>
+</div>
+
+<style>
+  .fields {
+    display: grid;
+    gap: var(--space-24);
+  }
+  .fields__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
+  .fields__field {
+    display: grid;
+    gap: 13px;
+  }
+  /* Phone: first and last name under each other too */
+  @media (max-width: 767px) {
+    .fields__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-24);
+    }
+  }
+</style>

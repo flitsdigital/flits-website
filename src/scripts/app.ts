@@ -13,6 +13,7 @@ import { initNumberOdometer } from './odometer';
 import { initAnimatedGrid } from './grid-overlay';
 import { initRotatingImageTrail } from './image-trail';
 import { initRotatingText } from './rotating-text';
+import { initContactModal } from './contact-modal';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -41,6 +42,7 @@ const unmount = () => {
 
 mount();
 initAnimatedGrid(); // once: the overlay sits outside #swup
+initContactModal(); // once: the modal sits outside #swup too
 
 const swup = new Swup({
   containers: ['#swup', '#nav-back'],
