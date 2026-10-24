@@ -5,30 +5,21 @@ import PhotoBackdrop from '../atoms/PhotoBackdrop.astro';
 import Heading from '../atoms/Heading.astro';
 import HeroMedia from '../atoms/HeroMedia.astro';
 import bolt from '../../assets/images/about/bolt.svg';
-import scribble from '../../assets/images/about/scribble.svg';
 
 interface Props {
   image: ImageMetadata;
   title: string;
-  /** Handwritten name tags pointing at the people in the photo: [left, right]. */
-  names: [string, string];
   /** px the "media" slot (fan, phone…) reaches up into the hero. */
   mediaOverlap?: number;
 }
 
-const { image, title, names, mediaOverlap = 80 } = Astro.props;
+const { image, title, mediaOverlap = 80 } = Astro.props;
 ---
 
-<!-- Figma 1:1738 + 1:1770: team photo under a 50% dark-800 veil, bolts, name tags, title at the bottom -->
+<!-- Figma 1:1738 + 1:1770: team photo under a 50% dark-800 veil, bolts, title at the bottom -->
 <section class="hero-photo" data-theme="dark">
   <PhotoBackdrop image={image} veil="brand" bleed />
   <BgShapes />
-  <div class="hero-photo__tags" aria-hidden="true">
-    <span class="hero-photo__tag hero-photo__tag--left">{names[0]}</span>
-    <img class="hero-photo__scribble hero-photo__scribble--left" src={scribble.src} width={scribble.width} height={scribble.height} alt="" />
-    <span class="hero-photo__tag hero-photo__tag--right">{names[1]}</span>
-    <img class="hero-photo__scribble hero-photo__scribble--right" src={scribble.src} width={scribble.width} height={scribble.height} alt="" />
-  </div>
   <div class="hero-photo__title">
     <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
     <Heading as="h1" size="116">{title}</Heading>
@@ -42,42 +33,6 @@ const { image, title, names, mediaOverlap = 80 } = Astro.props;
     isolation: isolate; /* own stacking context, so hero media can overlap it */
     height: 59rem; /* 944px */
     overflow: hidden;
-  }
-  /* Tags and scribbles sit at Figma coordinates relative to the frame centre (720) */
-  .hero-photo__tags {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .hero-photo__tag {
-    position: absolute;
-    translate: -50% 0;
-    font: var(--text-body-l);
-    line-height: 0.9;
-    color: var(--color-light-0);
-  }
-  .hero-photo__tag--left {
-    top: 232px;
-    left: calc(50% - 448.78px);
-    rotate: -11.89deg;
-  }
-  .hero-photo__tag--right {
-    top: 176px;
-    left: calc(50% + 405.61px);
-    rotate: 30.04deg;
-  }
-  .hero-photo__scribble {
-    position: absolute;
-    max-width: none;
-  }
-  .hero-photo__scribble--left {
-    top: 227.66px;
-    left: calc(50% - 404px);
-  }
-  .hero-photo__scribble--right {
-    top: 200px;
-    left: calc(50% + 326px);
-    scale: 1 -1;
   }
   .hero-photo__title {
     position: absolute;

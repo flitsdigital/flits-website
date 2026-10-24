@@ -21,13 +21,15 @@ const { title, lead, faqs } = Astro.props;
     <div class="faq">
       <SectionHeader title={title} lead={lead} width={601} align="start" spaced={false} />
       <div class="faq__list">
-        {
-          faqs.map((f) => (
-            <FaqItem question={f.question} name="faq">
-              <p>{f.answer}</p>
-            </FaqItem>
-          ))
-        }
+        <ul class="faq__items" data-accordion-css-init data-accordion-close-siblings="true">
+          {
+            faqs.map((f) => (
+              <FaqItem question={f.question}>
+                <p>{f.answer}</p>
+              </FaqItem>
+            ))
+          }
+        </ul>
         <p class="faq__more">
           <span>Nog vragen?</span>
           <Button href="/contact">Neem contact op</Button>
@@ -51,9 +53,14 @@ const { title, lead, faqs } = Astro.props;
     gap: var(--space-48);
     padding: 6.0625rem 3rem 4.75rem 2.9375rem; /* 97px top, 47px left, 76px under the CTA */
   }
-  .faq__list {
+  .faq__list,
+  .faq__items {
     display: grid;
     gap: var(--space-20);
+  }
+  .faq__items {
+    margin: 0;
+    padding: 0;
   }
   .faq__more {
     display: flex;

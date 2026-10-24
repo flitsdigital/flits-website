@@ -24,15 +24,16 @@ const [l, r] = tone === 'light' ? [leftLight, rightLight] : [left, right];
 <div
   class="bg-shapes"
   aria-hidden="true"
-  style={`--left-top:${leftTop}px;--right-top:${rightTop}px;--left-x:${leftX}px;--right-x:${rightX}px`}
+  style={`--left-top:${leftTop};--right-top:${rightTop};--left-x:${leftX};--right-x:${rightX}`}
 >
-  {!rightOnly && <img class="bg-shapes__left" src={l.src} width={l.width} height={l.height} alt="" />}
-  <img class="bg-shapes__right" src={r.src} width={r.width} height={r.height} alt="" />
+  {!rightOnly && <img class="bg-shapes__left" src={l.src} width={l.width} height={l.height} style={`--w:${l.width}`} alt="" />}
+  <img class="bg-shapes__right" src={r.src} width={r.width} height={r.height} style={`--w:${r.width}`} alt="" />
 </div>
 
 <style>
   /* Parent must be position: relative. Positions are relative to the 1440 frame center. */
   .bg-shapes {
+    --u: max(1px, 100vw / 1440); /* 1 Figma px, growing past 1440 so the bolts still reach the edges on wide screens */
     position: absolute;
     inset: 0;
     overflow: hidden;
@@ -40,14 +41,16 @@ const [l, r] = tone === 'light' ? [leftLight, rightLight] : [left, right];
   }
   .bg-shapes img {
     position: absolute;
+    width: calc(var(--w) * var(--u));
     max-width: none;
+    height: auto;
   }
   .bg-shapes__left {
-    top: var(--left-top);
-    left: calc(50% + var(--left-x));
+    top: calc(var(--left-top) * var(--u));
+    left: calc(50% + var(--left-x) * var(--u));
   }
   .bg-shapes__right {
-    top: var(--right-top);
-    left: calc(50% + var(--right-x));
+    top: calc(var(--right-top) * var(--u));
+    left: calc(50% + var(--right-x) * var(--u));
   }
 </style>

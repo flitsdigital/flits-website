@@ -39,6 +39,8 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
     justify-content: space-between;
     align-items: center;
     column-gap: var(--space-48);
+    max-width: 90rem; /* the 1440 Figma frame: past it the section stays in one centred block */
+    margin-inline: auto;
     padding-block: 6.875rem; /* 110px */
   }
   .split__text {
@@ -85,5 +87,11 @@ const { title, body, mediaSide = 'right', class: className } = Astro.props;
     order: -1;
     width: 100%;
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+  /* Wider than the frame the block no longer reaches the screen edge, so it's rounded all round */
+  @media (min-width: 90.0625rem) {
+    .split .split__media {
+      border-radius: var(--radius-md);
+    }
   }
 </style>

@@ -130,7 +130,9 @@ html[data-landing] .bg-shapes__right {
 html[data-landing] .nav__bar {
   animation: flits-fade 0.8s var(--ease-osmo) 0.7s both;
 }
-html[data-landing] .hero + .hero-media {
+html[data-landing] .hero + .hero-media,
+html[data-landing] .intro {
+  /* .intro: on tall screens it's above the fold, so it waits for the hero instead of showing first */
   animation: flits-fade 0.56s var(--ease-osmo) 0.84s both;
 }
 html[data-landing] .hero + .hero-media .radial-slider {

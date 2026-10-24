@@ -31,7 +31,7 @@ const { title, screen } = Astro.props;
     position: relative;
     display: grid;
     place-items: center;
-    width: min(100% - 2 * 14px, 88.25rem); /* 1412px, 14px page margin */
+    width: calc(100% - 2 * 14px); /* runs full width with a 14px page margin; the content keeps to the 1412px frame */
     height: 64rem; /* 1024px */
     margin: 2.9375rem auto; /* 47px above and below (Figma) */
     border-radius: var(--radius-md);
@@ -47,10 +47,10 @@ const { title, screen } = Astro.props;
     top: 496.69px;
   }
   .showreel__badge--left {
-    left: 64px;
+    left: calc(max(0px, 50% - 44.125rem) + 64px);
   }
   .showreel__badge--right {
-    right: 36px;
+    right: calc(max(0px, 50% - 44.125rem) + 36px);
   }
   /* Phone sits on top of the title (Figma "Home Screen" 300.81 × 654) */
   .showreel__phone {

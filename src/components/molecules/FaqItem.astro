@@ -3,41 +3,45 @@ import Icon from '../atoms/Icon.astro';
 
 interface Props {
   question: string;
-  /** Group name: opening one item closes the others (native exclusive accordion). */
-  name?: string;
 }
 
-const { question, name } = Astro.props;
+const { question } = Astro.props;
+const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<!-- Figma 1:2462: white 72px row, question 24px, yellow 58px chevron tile on the right -->
-<details class="faq-item" name={name}>
-  <summary>
+<!-- Figma 1:2462: white 72px row, question 24px, yellow 58px chevron tile on the right.
+     Osmo "Accordion CSS Animation": sits in a [data-accordion-css-init] list (scripts/accordion.ts). -->
+<li class="faq-item" data-accordion-status="not-active">
+  <button type="button" class="faq-item__top" data-accordion-toggle aria-expanded="false" aria-controls={id}>
     <span>{question}</span>
     <span class="faq-item__icon" aria-hidden="true"><Icon name="chevron-bottom" size={24} /></span>
-  </summary>
-  <div class="faq-item__answer"><slot /></div>
-</details>
+  </button>
+  <div class="faq-item__bottom" id={id}>
+    <div class="faq-item__bottom-wrap">
+      <div class="faq-item__answer"><slot /></div>
+    </div>
+  </div>
+</li>
 
 <style>
   .faq-item {
+    list-style: none;
     border-radius: var(--radius-sm);
     background: var(--color-light-0);
     color: var(--color-dark-800);
   }
-  summary {
+  .faq-item__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-16);
+    width: 100%;
     min-height: 4.5rem; /* 72px */
     padding: var(--space-6) var(--space-6) var(--space-6) 27px;
     font: var(--text-body-l);
-    list-style: none;
+    text-align: start;
+    color: inherit;
     cursor: pointer;
-  }
-  summary::-webkit-details-marker {
-    display: none;
   }
   .faq-item__icon {
     display: grid;
@@ -50,10 +54,33 @@ const { question, name } = Astro.props;
   }
   /* Only the chevron turns; the yellow tile stays put */
   .faq-item__icon > :global(.icon) {
-    transition: rotate 0.2s ease;
+    transition: rotate 0.6s var(--ease-osmo);
   }
-  .faq-item[open] .faq-item__icon > :global(.icon) {
+  [data-accordion-status='active'] .faq-item__icon > :global(.icon) {
     rotate: 180deg;
+  }
+  .faq-item__bottom {
+    display: grid;
+    grid-template-rows: 0fr;
+    position: relative;
+    overflow: hidden;
+    transition: grid-template-rows 0.6s var(--ease-osmo);
+  }
+  [data-accordion-status='active'] .faq-item__bottom {
+    grid-template-rows: 1fr;
+  }
+  .faq-item__bottom-wrap {
+    display: flex;
+    flex-flow: column;
+    height: 100000%;
+    position: relative;
+    overflow: hidden;
+    visibility: hidden; /* closed answers stay out of tab order and screen readers, after the close finishes */
+    transition: visibility 0s 0.6s;
+  }
+  [data-accordion-status='active'] .faq-item__bottom-wrap {
+    visibility: visible;
+    transition-delay: 0s;
   }
   /* shortcut: answer styling is not in Figma (only closed rows) — inferred, review in fase 5 */
   .faq-item__answer {

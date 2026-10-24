@@ -7,6 +7,7 @@ import { initClocks } from './clock';
 import { initProjectArchive } from './project-archive';
 import { initProcessSteps } from './process-steps';
 import { initLogoWallCycle } from './logo-wall';
+import { initAccordions } from './accordion';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -14,7 +15,7 @@ import { initLogoWallCycle } from './logo-wall';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle];
+const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.
