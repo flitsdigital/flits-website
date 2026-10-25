@@ -17,7 +17,7 @@ export const widgets: Record<WidgetId, { size: SlotSize; season?: Season }> = {
 
 export const pools: Record<SlotSize, WidgetId[]> = {
   square: ['weather', 'spotify', 'pagespeed'],
-  wide: ['reviews', 'office', 'stories'],
+  wide: ['reviews', 'office', 'stories', 'studio-post'],
 };
 
 /** The slots on the site, for the overview on /widgets. */

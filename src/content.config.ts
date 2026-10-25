@@ -244,4 +244,19 @@ const stories = defineCollection({
   schema: ({ image }) => z.object({ image: image(), label: z.string().max(18), caption: z.string().max(90), date: z.coerce.date().optional() }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories };
+/**
+ * "Bericht van de studio": Jordi sends a note (and maybe a photo) in chat, Claude adds it here, newest last.
+ * Images go in src/assets/images/studio-posts/.
+ */
+const studioPosts = defineCollection({
+  loader: file('./src/content/studio-posts.json'),
+  schema: ({ image }) =>
+    z.object({
+      author: z.enum(['jordi', 'joery']),
+      date: z.coerce.date(),
+      text: z.string().max(140, 'Studio posts are at most 140 characters'),
+      image: image().optional(),
+    }),
+});
+
+export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };

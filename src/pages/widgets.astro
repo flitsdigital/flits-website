@@ -14,6 +14,8 @@ import PageSpeedWidget from '../components/molecules/PageSpeedWidget.astro';
 import ReviewsWidget from '../components/molecules/ReviewsWidget.astro';
 import OfficeWidget from '../components/molecules/OfficeWidget.astro';
 import StoriesWidget from '../components/molecules/StoriesWidget.astro';
+import StudioPostWidget from '../components/molecules/StudioPostWidget.astro';
+import officePhoto from '../assets/images/office/2026-10-25.jpg';
 
 // Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
 const temps: Record<string, number> = { lente: 14, zomer: 22, herfst: 12, winter: 3, sneeuw: -1, vorst: -4, onweer: 21 };
@@ -105,6 +107,20 @@ const christmasStates = [
         <OfficeWidget today="2026-10-25" />
         <OfficeWidget today="2026-10-28" />
         <OfficeWidget today="2026-11-20" />
+      </div>
+    </section>
+
+    <!-- Bericht van de studio -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">StudioPostWidget</Heading>
+        <code>src/content/studio-posts.json (nu nog leeg → widget uit elke pool) · voorbeeld hieronder via posts=</code>
+      </div>
+      <div class="wg-panel wg-row" data-theme="light">
+        <StudioPostWidget posts={[
+          { author: 'jordi', date: new Date('2026-10-25'), text: 'Voorbeeld: herfst bij ons kantoor. De koffie staat klaar, loop gerust binnen.', image: officePhoto },
+          { author: 'joery', date: new Date('2026-10-20'), text: 'Voorbeeld: vandaag een draaidag in Emmen, morgen alles monteren.' },
+        ]} />
       </div>
     </section>
 

@@ -7,6 +7,7 @@ import PageSpeedWidget from './PageSpeedWidget.astro';
 import ReviewsWidget from './ReviewsWidget.astro';
 import OfficeWidget from './OfficeWidget.astro';
 import StoriesWidget from './StoriesWidget.astro';
+import StudioPostWidget from './StudioPostWidget.astro';
 import { widgets, pools, fixed } from '../../data/widgets';
 import { candidates, inSeason, slotWidget, type WidgetId, type SlotSize } from '../../lib/slots';
 
@@ -32,6 +33,7 @@ const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
   reviews: ReviewsWidget,
   office: OfficeWidget,
   stories: StoriesWidget,
+  'studio-post': StudioPostWidget,
 };
 
 // A widget fed by a collection only counts once that collection has an entry (no empty cards).
@@ -39,6 +41,7 @@ const counts: Partial<Record<WidgetId, number>> = {
   reviews: (await getCollection('reviews')).length,
   office: (await getCollection('officePhotos')).length,
   stories: (await getCollection('stories')).length,
+  'studio-post': (await getCollection('studioPosts')).length,
 };
 const available = (w: WidgetId) => w in components && counts[w] !== 0;
 const pinned = fixed[Astro.url.pathname]?.[id];
