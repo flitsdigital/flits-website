@@ -15,6 +15,8 @@ import { initRotatingImageTrail } from './image-trail';
 import { initRotatingText } from './rotating-text';
 import { initContactModal } from './contact-modal';
 import { initWeather } from './weather';
+import { initChristmas } from './christmas';
+import { initSpotify } from './spotify';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -22,7 +24,7 @@ import { initWeather } from './weather';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather];
+const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.
@@ -54,7 +56,7 @@ const swup = new Swup({
   ignoreVisit: (url, { el } = {}) =>
     !document.getElementById('swup') ||
     !!el?.closest('[data-no-swup]') ||
-    ['/styleguide', '/components', '/sections'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
+    ['/styleguide', '/components', '/sections', '/widgets'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
   plugins: [new SwupHeadPlugin({ awaitAssets: true }), new SwupA11yPlugin(), new SwupPreloadPlugin()],
 });
 

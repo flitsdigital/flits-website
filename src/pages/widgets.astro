@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Heading from '../components/atoms/Heading.astro';
+import Text from '../components/atoms/Text.astro';
+import WeatherWidget from '../components/molecules/WeatherWidget.astro';
+import ClockWidget from '../components/molecules/ClockWidget.astro';
+import MapWidget from '../components/molecules/MapWidget.astro';
+import SpotifyWidget from '../components/molecules/SpotifyWidget.astro';
+import ChristmasWidget from '../components/molecules/ChristmasWidget.astro';
+import { allScenes } from '../lib/weather';
+
+// Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
+const temps: Record<string, number> = { lente: 14, zomer: 22, herfst: 12, winter: 3, sneeuw: -1, vorst: -4, onweer: 21 };
+const weatherPanels = Object.entries(Object.groupBy(allScenes(), (s) => (['sneeuw', 'vorst', 'onweer'].includes(s.sky) ? 'vast seizoen' : s.season))).map(
+  ([title, scenes]) => ({ title, rows: Object.values(Object.groupBy(scenes!, (s) => s.sky)).map((r) => r!.map((s) => ({ ...s, temperature: `${temps[s.sky] ?? temps[s.season]} °` }))) }),
+);
+// Christmas countdown: stage 0 → 12 (one step every two days in December), day and night.
+const christmasStates = [
+  { days: 61, stage: 0, note: 'voor december' },
+  { days: 12, stage: 6, note: 'halverwege' },
+  { days: 1, stage: 12, note: 'kerstavond' },
+  { days: 0, stage: 12, note: 'kerst' },
+];
+---
+
+<BaseLayout title="Widgets — Flits" noindex>
+  <main class="wg">
+    <header>
+      <p class="wg-eyebrow">Flits design system</p>
+      <Heading as="h1" size="116">Widgets</Heading>
+      <Text size="l" tone="secondary">Alle widgets en hun varianten. Live widgets bovenaan, vaste states eronder.</Text>
+    </header>
+
+    <!-- Live -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">Live</Heading>
+        <code>zoals op de site: echt weer, echte tijd, echte aftelling</code>
+      </div>
+      <div class="wg-panel wg-row" data-theme="light">
+        <WeatherWidget />
+        <ClockWidget />
+        <ClockWidget layout="wide" />
+        <MapWidget />
+        <SpotifyWidget />
+        <ChristmasWidget />
+      </div>
+    </section>
+
+    <!-- Kerst -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">Kerst</Heading>
+        <code>SpotifyWidget · ChristmasWidget days? stage? (0–12) dark? — foto's: assets/images/widgets/christmas/dag-NN|nacht-NN.jpg, ontbrekende vallen terug</code>
+      </div>
+      {[false, true].map((dark) => (
+        <div class="wg-panel" data-theme="light">
+          <span class="wg-tag">{dark ? 'nacht' : 'dag'}</span>
+          <div class="wg-row">
+            {christmasStates.map((s) => <ChristmasWidget days={s.days} stage={s.stage} dark={dark} />)}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- WeatherWidget -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">WeatherWidget</Heading>
+        <code>live via Open-Meteo · scene? pint één foto (seizoen-dagdeel-weer) zonder live weer · 92 foto's</code>
+      </div>
+      {weatherPanels.map((panel) => (
+        <div class="wg-panel" data-theme="light">
+          <span class="wg-tag">{panel.title} · ochtend · middag · avond · nacht</span>
+          {panel.rows.map((row) => (
+            <div class="wg-row">
+              {row.map((s) => <WeatherWidget scene={s.key} condition={s.label} temperature={s.temperature} date={s.sky} />)}
+            </div>
+          ))}
+        </div>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .wg {
+    width: min(100% - 2 * var(--space-48), var(--container-max));
+    margin-inline: auto;
+    padding-block: var(--space-96);
+    display: grid;
+    gap: var(--space-96);
+  }
+  .wg-eyebrow {
+    font: var(--text-body-s);
+    background: var(--color-brand-500);
+    color: var(--color-dark-900);
+    display: inline-block;
+    padding: var(--space-4) var(--space-8);
+    margin-bottom: var(--space-16);
+  }
+  code {
+    font: var(--text-caption);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--color-text-muted);
+  }
+  .wg-block {
+    display: grid;
+    gap: var(--space-16);
+  }
+  .wg-head {
+    display: grid;
+    gap: var(--space-8);
+    margin-bottom: var(--space-8);
+  }
+  .wg-panel {
+    padding: var(--space-32);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-16);
+    align-content: start;
+  }
+  .wg-tag {
+    font: var(--text-caption);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+  .wg-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+  }
+</style>
