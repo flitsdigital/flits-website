@@ -21,6 +21,7 @@ const { title, lead } = Astro.props;
       <ClockWidget layout="wide" />
       <WidgetSlot id="contact" size="square" fallback="weather" />
     </div>
+    <WidgetSlot id="contact-wide" size="wide" fallback="christmas" class="contact__wide" />
   </div>
   <ContactForm />
 </section>
@@ -48,6 +49,9 @@ const { title, lead } = Astro.props;
     align-items: end;
     gap: var(--grid-gap);
     margin-top: 2.5rem; /* 40px */
+  }
+  .contact__side :global(.contact__wide) {
+    margin-top: var(--grid-gap);
   }
   .contact__widgets > :global(.slot) {
     align-self: flex-start;

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { inSeason, candidates, pickSlot } from './slots.ts';
+import { inSeason, candidates, pickSlot, slotWidget } from './slots.ts';
 
 test('season window, inclusive, also across the new year', () => {
   const xmas = { from: [12, 1], to: [12, 26] } as const;
@@ -28,4 +28,11 @@ test('random picks across the pool', () => {
 
 test('unavailable widgets leave the pool', () => {
   assert.deepEqual(candidates(['christmas', 'stories'], (id) => id !== 'stories'), ['christmas']);
+});
+
+test('a slot with nothing in season shows nothing', () => {
+  assert.equal(slotWidget({ candidates: [], fallback: 'christmas', fallbackAvailable: false, random: () => 0 }), null);
+  assert.equal(slotWidget({ candidates: [], fallback: 'weather', fallbackAvailable: true, random: () => 0 }), 'weather');
+  assert.equal(slotWidget({ candidates: ['reviews'], fallback: 'christmas', fallbackAvailable: false, random: () => 0 }), 'reviews');
+  assert.equal(slotWidget({ fixed: 'office', candidates: [], fallback: 'christmas', fallbackAvailable: false, random: () => 0 }), 'office');
 });

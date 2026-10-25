@@ -16,6 +16,12 @@ export function inSeason(season: Season | undefined, month: number, day: number)
 
 export const candidates = (pool: WidgetId[], isAvailable: (id: WidgetId) => boolean) => pool.filter(isAvailable);
 
+/** Like pickSlot, but null when nothing fits (e.g. only Christmas in the pool, in November): the slot is then left out. */
+export function slotWidget(opts: { fixed?: WidgetId; candidates: WidgetId[]; fallback: WidgetId; fallbackAvailable: boolean; random: () => number }): WidgetId | null {
+  if (!opts.fixed && !opts.candidates.length && !opts.fallbackAvailable) return null;
+  return pickSlot(opts);
+}
+
 /** The widget a slot shows: the page's fixed choice, else a random candidate, else the fallback. */
 export function pickSlot({ fixed, candidates, fallback, random }: { fixed?: WidgetId; candidates: WidgetId[]; fallback: WidgetId; random: () => number }): WidgetId {
   if (fixed) return fixed;

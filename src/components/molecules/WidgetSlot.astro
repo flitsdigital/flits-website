@@ -1,8 +1,9 @@
 ---
 import WeatherWidget from './WeatherWidget.astro';
 import SpotifyWidget from './SpotifyWidget.astro';
+import ChristmasWidget from './ChristmasWidget.astro';
 import { widgets, pools, fixed } from '../../data/widgets';
-import { candidates, inSeason, pickSlot, type WidgetId, type SlotSize } from '../../lib/slots';
+import { candidates, inSeason, slotWidget, type WidgetId, type SlotSize } from '../../lib/slots';
 
 interface Props {
   /** Slot name, unique per page; `fixed` in src/data/widgets.ts refers to it. */
@@ -21,6 +22,7 @@ const { id, size, fallback, today, class: className } = Astro.props;
 const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
   weather: WeatherWidget,
   spotify: SpotifyWidget,
+  christmas: ChristmasWidget,
 };
 
 const available = (w: WidgetId) => w in components;
@@ -28,28 +30,37 @@ const pinned = fixed[Astro.url.pathname]?.[id];
 const options = pinned ? [] : candidates(pools[size], available).filter((w) => w !== fallback);
 
 // With a pinned date (/widgets) the slot is decided here; otherwise the browser picks (scripts/widget-slots.ts).
-let shown: WidgetId = pinned ?? fallback;
+// A seasonal fallback (Christmas) is not rendered visibly: the slot starts hidden and the browser decides, so a
+// November page never flashes Christmas, and a slot with nothing in season is removed.
+const seasonal = !pinned && !today && !!widgets[fallback].season;
+let shown: WidgetId | null = seasonal ? null : (pinned ?? fallback);
 if (today && !pinned) {
   const [, m, d] = today.split('-').map(Number);
-  shown = pickSlot({ candidates: candidates([fallback, ...options], (w) => inSeason(widgets[w].season, m, d)), fallback, random: () => 0 });
+  const fits = (w: WidgetId) => inSeason(widgets[w].season, m, d);
+  shown = slotWidget({ candidates: candidates([fallback, ...options], fits), fallback, fallbackAvailable: fits(fallback), random: () => 0 });
 }
-const Shown = components[shown]!;
+const Shown = shown && components[shown];
+const live = !pinned && !today && (seasonal || options.length > 0);
+const templates = seasonal ? [fallback, ...options] : options;
 const seasons = Object.fromEntries([fallback, ...options].map((w) => [w, widgets[w].season]).filter(([, s]) => s));
-const live = !pinned && !today && options.length > 0;
 ---
 
+{(Shown || live) && (
 <div
   class:list={['slot', `slot--${size}`, className]}
   data-widget-slot={live ? id : undefined}
-  data-slot-current={shown}
+  data-slot-current={shown ?? ''}
+  data-slot-fallback={fallback}
   data-slot-seasons={live ? JSON.stringify(seasons) : undefined}
+  hidden={!Shown}
 >
-  <Shown />
-  {live && options.map((w) => {
+  {Shown && <Shown />}
+  {live && templates.map((w) => {
     const C = components[w]!;
     return <template data-slot-option={w}><C /></template>;
   })}
 </div>
+)}
 
 <!-- Behaviour: src/scripts/widget-slots.ts (first in pageInits, so swapped-in widgets start normally) -->
 
@@ -61,6 +72,9 @@ const live = !pinned && !today && options.length > 0;
   }
   .slot--wide {
     width: 21rem; /* 336px */
+  }
+  .slot[hidden] {
+    display: none;
   }
   /* The weather card stretches with its slot on tablet/phone; fixed-layout widgets keep their size */
   .slot > :global(.weather) {

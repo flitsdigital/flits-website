@@ -24,6 +24,7 @@ export const pools: Record<SlotSize, WidgetId[]> = {
 export const slots: { id: string; size: SlotSize; where: string }[] = [
   { id: 'team', size: 'square', where: 'TeamSection (home, over ons), naast de eerste teamfoto' },
   { id: 'contact', size: 'square', where: 'ContactSection (contact, diensten), naast de klok' },
+  { id: 'contact-wide', size: 'wide', where: 'ContactSection, onder de klok (alleen als er iets in seizoen is)' },
 ];
 
 /** e.g. `'/contact': { contact: 'weather' }` */
