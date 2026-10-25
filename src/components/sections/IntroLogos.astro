@@ -51,6 +51,14 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
   .intro__text > :global(.ticker) {
     margin-bottom: calc(var(--space-16) - var(--space-24));
   }
+  /* Always the two lines of the design: each line stays whole and may run wider than the
+     6-column text block (between ~1000 and ~1370px the first line didn't fit and broke into three) */
+  .intro__text > :global(.intro__title) {
+    align-self: center;
+    width: max-content;
+    max-width: var(--grid-width);
+    white-space: nowrap;
+  }
   /* Faces sit in the line like a word: about the cap height, centred on the capitals */
   .intro__face {
     display: inline-block;
