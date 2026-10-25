@@ -1,3 +1,5 @@
+import { neighbours } from '../lib/spotify-ids';
+import type { Track } from '../lib/spotify';
 /**
  * Inline playback for the Spotify widget through Spotify's iFrame API: a hidden embed plays the track,
  * our own play button and progress bar drive and follow it. Nothing from Spotify loads (no script, no
@@ -6,6 +8,7 @@
 type PlaybackUpdate = { data: { isPaused: boolean; position: number; duration: number } };
 type Controller = {
   play(): void;
+  loadUri(uri: string): void;
   togglePlay(): void;
   destroy(): void;
   addListener(event: 'ready', cb: () => void): void;
@@ -34,6 +37,8 @@ export function initSpotify(): (() => void) | void {
   const offs = widgets.map((widget) => {
     const button = widget.querySelector<HTMLButtonElement>('[data-spotify-play]')!;
     const fill = widget.querySelector<HTMLElement>('[data-spotify-fill]')!;
+    const tracks: Track[] = JSON.parse(widget.dataset.spotifyTracks ?? '[]');
+    let index = 0;
     let controller: Promise<Controller> | undefined;
 
     const create = () =>
@@ -61,8 +66,42 @@ export function initSpotify(): (() => void) | void {
         .catch(() => {})
         .finally(() => widget.removeAttribute('data-loading'));
     };
+    // Previous / next: update the widget, and if Spotify is loaded, load the new track (and keep playing if it was).
+    const show = (i: number) => {
+      index = i;
+      const t = tracks[i];
+      const { prev, next } = neighbours(i, tracks.length);
+      const $ = <T extends HTMLElement>(sel: string) => widget.querySelector<T>(sel)!;
+      $<HTMLImageElement>('[data-spotify-now]').src = t.cover;
+      $<HTMLImageElement>('[data-spotify-glow]').src = t.cover;
+      $('[data-spotify-title]').textContent = t.title;
+      $('[data-spotify-artist]').textContent = t.artist;
+      const link = $<HTMLAnchorElement>('[data-spotify-link]');
+      link.href = t.href;
+      link.setAttribute('aria-label', `${t.title} van ${t.artist} op Spotify (opent in nieuw tabblad)`);
+      button.setAttribute('aria-label', `Speel ${t.title} van ${t.artist}`);
+      widget.querySelectorAll<HTMLButtonElement>('[data-spotify-step]').forEach((b) => {
+        const side = tracks[b.dataset.spotifyStep === '-1' ? prev : next];
+        b.querySelector('img')!.src = side.cover;
+        b.setAttribute('aria-label', `${b.dataset.spotifyStep === '-1' ? 'Vorig' : 'Volgend'} nummer: ${side.title}`);
+      });
+      widget.dataset.spotify = t.uri;
+      fill.style.width = '0';
+      const wasPlaying = widget.hasAttribute('data-playing');
+      controller?.then((c) => {
+        c.loadUri(t.uri);
+        if (wasPlaying) c.play();
+      });
+    };
+    const steps = [...widget.querySelectorAll<HTMLButtonElement>('[data-spotify-step]')];
+    const onStep = (e: Event) => show(((index + Number((e.currentTarget as HTMLElement).dataset.spotifyStep)) % tracks.length + tracks.length) % tracks.length);
+    if (tracks.length > 1) steps.forEach((b) => b.addEventListener('click', onStep));
+
     button.addEventListener('click', onClick);
-    return () => button.removeEventListener('click', onClick);
+    return () => {
+      button.removeEventListener('click', onClick);
+      steps.forEach((b) => b.removeEventListener('click', onStep));
+    };
   });
 
   return () => {

@@ -3,6 +3,7 @@ import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { PROJECT_TYPES, SECTORS } from './lib/taxonomy';
 import { iconNames } from './design-system/icons';
+import { trackId } from './lib/spotify-ids';
 
 // Single entry point for content. Pages and sections only use getCollection()/getEntry(),
 // so swapping a loader (e.g. to Sanity) later does not touch components.
@@ -217,4 +218,18 @@ const legal = defineCollection({
   schema: z.object({ title: z.string(), draft: z.boolean().default(false) }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal };
+/**
+ * Tracks for the Spotify widget, in play order. Add a track: paste its Spotify share link and the artist;
+ * title and cover come from Spotify at build (stored ones are the fallback).
+ */
+const tracks = defineCollection({
+  loader: file('./src/content/tracks.json'),
+  schema: z.object({
+    url: z.string().refine((u) => trackId(u) !== null, 'Not a Spotify track link (album and playlist links do not work)'),
+    artist: z.string(),
+    title: z.string().optional(),
+    cover: z.string().url().optional(),
+  }),
+});
+
+export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks };

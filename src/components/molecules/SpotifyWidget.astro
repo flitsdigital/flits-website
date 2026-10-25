@@ -1,6 +1,8 @@
 ---
 import logo from '../../assets/images/widgets/spotify-logo.svg';
 import play from '../../assets/images/widgets/play.svg';
+import { getTracks } from '../../lib/spotify';
+import { neighbours } from '../../lib/spotify-ids';
 
 interface Props {
   class?: string;
@@ -8,31 +10,31 @@ interface Props {
 
 const { class: className } = Astro.props;
 
-// shortcut: three hand-picked tracks; artwork comes from Spotify's CDN (oEmbed thumbnail_url), which their
-// guidelines allow as long as it links back to Spotify. Swap for a Flits playlist link when there is one.
-const left = { title: 'Last Christmas', cover: 'https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02f2d2adaa21ad616df6241e7d' };
-const right = { title: "It's Beginning to Look a Lot like Christmas", cover: 'https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02119e4094f07a8123b471ac1d' };
-const now = {
-  title: 'All I want for Christmas',
-  artist: 'Mariah Carey',
-  cover: 'https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c0862332847213b151ffab31',
-  uri: 'spotify:track:0bYg9bo50gSsH3LtXe2SQn',
-  href: 'https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn',
-};
+// Tracks from src/content/tracks.json; artwork comes from Spotify (oEmbed), which their guidelines allow
+// as long as it links back to Spotify. The script switches tracks; the HTML starts on the first one.
+const tracks = await getTracks();
+const now = tracks[0];
+const { prev, next } = neighbours(0, tracks.length);
+const left = tracks[prev];
+const right = tracks[next];
 ---
 
 <!-- Figma 991:4187 (168×168). Positions are the design's, in rem. Playback: src/scripts/spotify.ts -->
-<div class:list={['spotify', className]} data-spotify={now.uri}>
+<div class:list={['spotify', className]} data-spotify={now.uri} data-spotify-tracks={JSON.stringify(tracks)}>
   <span class="spotify__embed" aria-hidden="true"><span data-spotify-embed></span></span>
-  <img class="spotify__glow" src={now.cover} alt="" />
-  <img class="spotify__cover spotify__cover--left" src={left.cover} width="64" height="64" alt="" />
-  <img class="spotify__cover spotify__cover--right" src={right.cover} width="64" height="64" alt="" />
-  <span class="spotify__text">
-    <span>{now.title}</span>
-    <span class="spotify__artist">{now.artist}</span>
+  <img class="spotify__glow" src={now.cover} alt="" data-spotify-glow />
+  <button class="spotify__cover spotify__cover--left" type="button" data-spotify-step="-1" aria-label={`Vorig nummer: ${left.title}`}>
+    <img src={left.cover} width="64" height="64" alt="" />
+  </button>
+  <button class="spotify__cover spotify__cover--right" type="button" data-spotify-step="1" aria-label={`Volgend nummer: ${right.title}`}>
+    <img src={right.cover} width="64" height="64" alt="" />
+  </button>
+  <span class="spotify__text" aria-live="polite">
+    <span data-spotify-title>{now.title}</span>
+    <span class="spotify__artist" data-spotify-artist>{now.artist}</span>
   </span>
-  <img class="spotify__cover spotify__cover--now" src={now.cover} width="80" height="80" alt="" />
-  <a class="spotify__logo" href={now.href} target="_blank" rel="noopener" aria-label={`${now.title} van ${now.artist} op Spotify (opent in nieuw tabblad)`}>
+  <img class="spotify__cover spotify__cover--now" src={now.cover} width="80" height="80" alt="" data-spotify-now />
+  <a class="spotify__logo" data-spotify-link href={now.href} target="_blank" rel="noopener" aria-label={`${now.title} van ${now.artist} op Spotify (opent in nieuw tabblad)`}>
     <img src={logo.src} width={logo.width} height={logo.height} alt="" />
   </a>
   <span class="spotify__player">
@@ -83,6 +85,24 @@ const now = {
     border-radius: var(--radius-sm);
     object-fit: cover;
     transition: rotate 0.3s ease;
+  }
+  /* Side covers are buttons: previous / next track */
+  button.spotify__cover {
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background: none;
+    cursor: pointer;
+  }
+  button.spotify__cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  button.spotify__cover:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
   }
   .spotify__cover--left {
     left: 1.074rem; /* 17.18px */

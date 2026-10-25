@@ -1,0 +1,23 @@
+[
+  {
+    "id": "all-i-want-for-christmas",
+    "url": "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn",
+    "artist": "Mariah Carey",
+    "title": "All I Want for Christmas Is You",
+    "cover": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c0862332847213b151ffab31"
+  },
+  {
+    "id": "beginning-to-look-a-lot-like-christmas",
+    "url": "https://open.spotify.com/track/5a1iz510sv2W9Dt1MvFd5R",
+    "artist": "Michael Bublé",
+    "title": "It's Beginning to Look a Lot like Christmas",
+    "cover": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02119e4094f07a8123b471ac1d"
+  },
+  {
+    "id": "last-christmas",
+    "url": "https://open.spotify.com/track/2FRnf9qhLbvw8fu4IBXx78",
+    "artist": "Wham!",
+    "title": "Last Christmas",
+    "cover": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02f2d2adaa21ad616df6241e7d"
+  }
+]

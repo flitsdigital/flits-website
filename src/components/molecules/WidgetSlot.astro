@@ -1,5 +1,6 @@
 ---
 import WeatherWidget from './WeatherWidget.astro';
+import SpotifyWidget from './SpotifyWidget.astro';
 import { widgets, pools, fixed } from '../../data/widgets';
 import { candidates, inSeason, pickSlot, type WidgetId, type SlotSize } from '../../lib/slots';
 
@@ -19,6 +20,7 @@ const { id, size, fallback, today, class: className } = Astro.props;
 // Every widget a slot can show. Add new ones here and in src/data/widgets.ts.
 const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
   weather: WeatherWidget,
+  spotify: SpotifyWidget,
 };
 
 const available = (w: WidgetId) => w in components;
