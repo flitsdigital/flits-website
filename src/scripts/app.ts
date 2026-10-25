@@ -19,6 +19,7 @@ import { initWeather } from './weather';
 import { initChristmas } from './christmas';
 import { initSpotify } from './spotify';
 import { initPageSpeed } from './pagespeed';
+import { initReviewsWidget } from './reviews-widget';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -26,7 +27,7 @@ import { initPageSpeed } from './pagespeed';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed];
+const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.

@@ -3,6 +3,7 @@ import WeatherWidget from './WeatherWidget.astro';
 import SpotifyWidget from './SpotifyWidget.astro';
 import ChristmasWidget from './ChristmasWidget.astro';
 import PageSpeedWidget from './PageSpeedWidget.astro';
+import ReviewsWidget from './ReviewsWidget.astro';
 import { widgets, pools, fixed } from '../../data/widgets';
 import { candidates, inSeason, slotWidget, type WidgetId, type SlotSize } from '../../lib/slots';
 
@@ -25,6 +26,7 @@ const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
   spotify: SpotifyWidget,
   christmas: ChristmasWidget,
   pagespeed: PageSpeedWidget,
+  reviews: ReviewsWidget,
 };
 
 const available = (w: WidgetId) => w in components;
