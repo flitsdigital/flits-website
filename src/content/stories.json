@@ -1,0 +1,6 @@
+[
+  { "id": "koffiekoets", "label": "Draaidag", "image": "../assets/images/behind-the-scenes/koffiekoets-draaidag.jpg", "caption": "Draaidag met Thijs, van de Koffie Koets" },
+  { "id": "koffiekoets-2", "label": "Achter de schermen", "image": "../assets/images/behind-the-scenes/draaidag-extra.jpg", "caption": "Nog een shot van de draaidag bij de Koffie Koets" },
+  { "id": "cupra", "label": "Cupra", "image": "../assets/images/behind-the-scenes/seat-cupra.jpg", "caption": "Seat Cupra Leon ST filmen" },
+  { "id": "fpv", "label": "FPV", "image": "../assets/images/behind-the-scenes/fpv-drone.jpg", "caption": "FPV Drone opnames bij Car Rally Noord" }
+]

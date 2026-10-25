@@ -232,4 +232,16 @@ const tracks = defineCollection({
   }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks };
+/** Office photos for the "Kijk binnen" widget; the newest is shown with its date. Add one per upload. */
+const officePhotos = defineCollection({
+  loader: file('./src/content/office-photos.json'),
+  schema: ({ image }) => z.object({ image: image(), date: z.coerce.date() }),
+});
+
+/** Story-style posts with our own photos, in order. `label` sits under the ring (keep it short). */
+const stories = defineCollection({
+  loader: file('./src/content/stories.json'),
+  schema: ({ image }) => z.object({ image: image(), label: z.string().max(18), caption: z.string().max(90), date: z.coerce.date().optional() }),
+});
+
+export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories };

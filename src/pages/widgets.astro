@@ -12,6 +12,8 @@ import { pools, fixed, slots } from '../data/widgets';
 import WidgetSlot from '../components/molecules/WidgetSlot.astro';
 import PageSpeedWidget from '../components/molecules/PageSpeedWidget.astro';
 import ReviewsWidget from '../components/molecules/ReviewsWidget.astro';
+import OfficeWidget from '../components/molecules/OfficeWidget.astro';
+import StoriesWidget from '../components/molecules/StoriesWidget.astro';
 
 // Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
 const temps: Record<string, number> = { lente: 14, zomer: 22, herfst: 12, winter: 3, sneeuw: -1, vorst: -4, onweer: 21 };
@@ -73,6 +75,8 @@ const christmasStates = [
         <SpotifyWidget />
         <PageSpeedWidget />
         <ReviewsWidget />
+        <OfficeWidget />
+        <StoriesWidget />
         <ChristmasWidget />
       </div>
     </section>
@@ -88,6 +92,19 @@ const christmasStates = [
         <PageSpeedWidget result={{ mobile: 72, desktop: 91, measuredAt: '2026-10-25T12:00:00Z', stale: false }} />
         <PageSpeedWidget result={{ mobile: 41, desktop: 63, measuredAt: '2026-10-25T12:00:00Z', stale: false }} />
         <PageSpeedWidget result={{ mobile: null, desktop: null, measuredAt: '2026-10-25T12:00:00Z', stale: true }} />
+      </div>
+    </section>
+
+    <!-- Kijk binnen -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">OfficeWidget</Heading>
+        <code>nieuwste foto uit src/content/office-photos.json · "vers" alleen op de dag zelf · today? pint de datum</code>
+      </div>
+      <div class="wg-panel wg-row" data-theme="light">
+        <OfficeWidget today="2026-10-25" />
+        <OfficeWidget today="2026-10-28" />
+        <OfficeWidget today="2026-11-20" />
       </div>
     </section>
 
