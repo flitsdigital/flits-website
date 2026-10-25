@@ -1,0 +1,69 @@
+---
+import WeatherWidget from './WeatherWidget.astro';
+import { widgets, pools, fixed } from '../../data/widgets';
+import { candidates, inSeason, pickSlot, type WidgetId, type SlotSize } from '../../lib/slots';
+
+interface Props {
+  /** Slot name, unique per page; `fixed` in src/data/widgets.ts refers to it. */
+  id: string;
+  size: SlotSize;
+  /** Shown in the HTML and when nothing else is available. */
+  fallback: WidgetId;
+  /** Pins the date (ISO) and turns off the random pick; only for /widgets. */
+  today?: string;
+  class?: string;
+}
+
+const { id, size, fallback, today, class: className } = Astro.props;
+
+// Every widget a slot can show. Add new ones here and in src/data/widgets.ts.
+const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
+  weather: WeatherWidget,
+};
+
+const available = (w: WidgetId) => w in components;
+const pinned = fixed[Astro.url.pathname]?.[id];
+const options = pinned ? [] : candidates(pools[size], available).filter((w) => w !== fallback);
+
+// With a pinned date (/widgets) the slot is decided here; otherwise the browser picks (scripts/widget-slots.ts).
+let shown: WidgetId = pinned ?? fallback;
+if (today && !pinned) {
+  const [, m, d] = today.split('-').map(Number);
+  shown = pickSlot({ candidates: candidates([fallback, ...options], (w) => inSeason(widgets[w].season, m, d)), fallback, random: () => 0 });
+}
+const Shown = components[shown]!;
+const seasons = Object.fromEntries([fallback, ...options].map((w) => [w, widgets[w].season]).filter(([, s]) => s));
+const live = !pinned && !today && options.length > 0;
+---
+
+<div
+  class:list={['slot', `slot--${size}`, className]}
+  data-widget-slot={live ? id : undefined}
+  data-slot-current={shown}
+  data-slot-seasons={live ? JSON.stringify(seasons) : undefined}
+>
+  <Shown />
+  {live && options.map((w) => {
+    const C = components[w]!;
+    return <template data-slot-option={w}><C /></template>;
+  })}
+</div>
+
+<!-- Behaviour: src/scripts/widget-slots.ts (first in pageInits, so swapped-in widgets start normally) -->
+
+<style>
+  .slot {
+    display: grid;
+    justify-items: center;
+    width: 10.5rem; /* 168px */
+  }
+  .slot--wide {
+    width: 21rem; /* 336px */
+  }
+  /* The weather card stretches with its slot on tablet/phone; fixed-layout widgets keep their size */
+  .slot > :global(.weather) {
+    justify-self: stretch;
+    width: 100%;
+    height: 100%;
+  }
+</style>

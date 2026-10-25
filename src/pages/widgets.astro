@@ -8,6 +8,7 @@ import MapWidget from '../components/molecules/MapWidget.astro';
 import SpotifyWidget from '../components/molecules/SpotifyWidget.astro';
 import ChristmasWidget from '../components/molecules/ChristmasWidget.astro';
 import { allScenes } from '../lib/weather';
+import { pools, fixed, slots } from '../data/widgets';
 
 // Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
 const temps: Record<string, number> = { lente: 14, zomer: 22, herfst: 12, winter: 3, sneeuw: -1, vorst: -4, onweer: 21 };
@@ -30,6 +31,30 @@ const christmasStates = [
       <Heading as="h1" size="116">Widgets</Heading>
       <Text size="l" tone="secondary">Alle widgets en hun varianten. Live widgets bovenaan, vaste states eronder.</Text>
     </header>
+
+    <!-- Widgetplekken -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">Widgetplekken</Heading>
+        <code>src/data/widgets.ts · zonder vaste keuze kiest een plek per bezoek een willekeurige widget uit zijn pool</code>
+      </div>
+      <div class="wg-panel" data-theme="light">
+        <table class="wg-table">
+          <thead><tr><th>Plek</th><th>Formaat</th><th>Waar</th><th>Pool</th><th>Vast per pagina</th></tr></thead>
+          <tbody>
+            {slots.map((s) => (
+              <tr>
+                <td><code>{s.id}</code></td>
+                <td>{s.size}</td>
+                <td>{s.where}</td>
+                <td>{pools[s.size].join(', ') || '—'}</td>
+                <td>{Object.entries(fixed).filter(([, f]) => f[s.id]).map(([page, f]) => `${page}: ${f[s.id]}`).join(' · ') || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
 
     <!-- Live -->
     <section class="wg-block">
@@ -125,6 +150,18 @@ const christmasStates = [
     font: var(--text-caption);
     color: var(--color-text-muted);
     text-transform: uppercase;
+  }
+  .wg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font: var(--text-body-s);
+    text-align: left;
+  }
+  .wg-table th,
+  .wg-table td {
+    padding: var(--space-8) var(--space-12);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
   }
   .wg-row {
     display: flex;

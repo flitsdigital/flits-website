@@ -2,6 +2,7 @@ import Swup from 'swup';
 import SwupHeadPlugin from '@swup/head-plugin';
 import SwupA11yPlugin from '@swup/a11y-plugin';
 import SwupPreloadPlugin from '@swup/preload-plugin';
+import { initWidgetSlots } from './widget-slots';
 import { initRadialSliders } from './radial-slider';
 import { initClocks } from './clock';
 import { initProjectArchive } from './project-archive';
@@ -24,7 +25,7 @@ import { initSpotify } from './spotify';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify];
+const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.
