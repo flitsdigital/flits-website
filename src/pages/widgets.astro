@@ -10,6 +10,7 @@ import ChristmasWidget from '../components/molecules/ChristmasWidget.astro';
 import { allScenes } from '../lib/weather';
 import { pools, fixed, slots } from '../data/widgets';
 import WidgetSlot from '../components/molecules/WidgetSlot.astro';
+import PageSpeedWidget from '../components/molecules/PageSpeedWidget.astro';
 
 // Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
 const temps: Record<string, number> = { lente: 14, zomer: 22, herfst: 12, winter: 3, sneeuw: -1, vorst: -4, onweer: 21 };
@@ -69,7 +70,22 @@ const christmasStates = [
         <ClockWidget layout="wide" />
         <MapWidget />
         <SpotifyWidget />
+        <PageSpeedWidget />
         <ChristmasWidget />
+      </div>
+    </section>
+
+    <!-- PageSpeed -->
+    <section class="wg-block">
+      <div class="wg-head">
+        <Heading size="36">PageSpeedWidget</Heading>
+        <code>echte PSI-score van SITE_URL (build + /api/pagespeed, 24 u gecachet) · result? pint een stand</code>
+      </div>
+      <div class="wg-panel wg-row" data-theme="light">
+        <PageSpeedWidget result={{ mobile: 98, desktop: 100, measuredAt: '2026-10-25T12:00:00Z', stale: false }} />
+        <PageSpeedWidget result={{ mobile: 72, desktop: 91, measuredAt: '2026-10-25T12:00:00Z', stale: false }} />
+        <PageSpeedWidget result={{ mobile: 41, desktop: 63, measuredAt: '2026-10-25T12:00:00Z', stale: false }} />
+        <PageSpeedWidget result={{ mobile: null, desktop: null, measuredAt: '2026-10-25T12:00:00Z', stale: true }} />
       </div>
     </section>
 

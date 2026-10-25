@@ -1,0 +1,10 @@
+{
+  "id": "https://flitsdigital.nl/",
+  "analysisUTCTimestamp": "2026-10-25T12:00:00.000Z",
+  "lighthouseResult": {
+    "requestedUrl": "https://flitsdigital.nl/",
+    "categories": {
+      "performance": { "id": "performance", "title": "Performance", "score": 0.98 }
+    }
+  }
+}
