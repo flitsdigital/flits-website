@@ -81,6 +81,9 @@ const { title, lead } = Astro.props;
     .contact > :global(.contact-form) {
       order: 2;
     }
+    .contact__side :global(.contact__wide) {
+      order: 4; /* after the form and the clock/weather row, like the other widgets */
+    }
     .contact__widgets {
       order: 3;
       margin-top: 0;

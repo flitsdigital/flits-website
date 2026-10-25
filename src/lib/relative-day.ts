@@ -6,6 +6,9 @@ const dayDiff = (a: Date, b: Date, timeZone: string) => Math.round((Date.parse(y
 
 export const isToday = (date: Date, today: Date, timeZone = TIME_ZONE) => dayDiff(date, today, timeZone) <= 0;
 
+/** "foto van vandaag", "foto van 3 dagen geleden", "foto van 3 okt". */
+export const photoLabel = (date: Date, today: Date, timeZone = TIME_ZONE) => `foto van ${relativeDay(date, today, timeZone).replace(/^op /, '')}`;
+
 /** "vandaag", "gisteren", "3 dagen geleden" (2–13 days), else "op 3 okt". A future date counts as today. */
 export function relativeDay(date: Date, today: Date, timeZone = TIME_ZONE): string {
   const days = dayDiff(date, today, timeZone);

@@ -15,21 +15,30 @@ export function initStoriesWidget(): (() => void) | void {
     const photos = [...viewer.querySelectorAll<HTMLElement>('[data-story-photo]')];
     const bars = [...viewer.querySelectorAll<HTMLElement>('[data-story-bar]')];
     const caption = viewer.querySelector<HTMLElement>('[data-story-caption]')!;
+    const row = w.querySelector<HTMLElement>('.stories__row')!;
+    const closeButton = viewer.querySelector<HTMLButtonElement>('[data-story-close]')!;
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let at = -1;
     let frame = 0;
     let started = 0;
 
+    // Focus only moves back to a ring when it was inside the widget: an auto-ending story must not pull a
+    // visitor out of the contact form they started typing in.
     const close = () => {
       cancelAnimationFrame(frame);
+      const hadFocus = w.contains(document.activeElement);
       viewer.hidden = true;
-      rings[Math.max(0, at)]?.focus();
+      row.inert = false;
+      if (hadFocus) rings[Math.max(0, at)]?.focus({ preventScroll: true });
       at = -1;
     };
     const open = (i: number) => {
       if (i >= photos.length) return close();
+      const first = viewer.hidden;
       at = Math.max(0, i);
       viewer.hidden = false;
+      row.inert = true; // the rings behind the viewer leave the tab order
+      if (first) closeButton.focus({ preventScroll: true });
       rings[at].classList.add('is-seen');
       photos.forEach((p, n) => p.classList.toggle('is-active', n === at));
       bars.forEach((b, n) => (b.style.width = n < at ? '100%' : '0'));
@@ -47,8 +56,8 @@ export function initStoriesWidget(): (() => void) | void {
 
     rings.forEach((r) => r.addEventListener('click', () => open(Number(r.dataset.story))));
     viewer.querySelectorAll<HTMLButtonElement>('[data-story-step]').forEach((b) => b.addEventListener('click', () => open(at + Number(b.dataset.storyStep))));
-    viewer.querySelector('[data-story-close]')!.addEventListener('click', close);
-    viewer.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+    closeButton.addEventListener('click', close);
+    w.addEventListener('keydown', (e) => e.key === 'Escape' && !viewer.hidden && close());
     stops.push(() => cancelAnimationFrame(frame));
   });
 

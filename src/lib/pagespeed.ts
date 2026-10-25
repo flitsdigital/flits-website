@@ -20,12 +20,11 @@ export async function measure(siteUrl: string, key: string, { fetch: get = fetch
     if (!res.ok) throw new Error(`PSI ${res.status}`);
     return parsePsi(await res.json());
   };
-  try {
-    const [mobile, desktop] = await Promise.all([one('mobile'), one('desktop')]);
-    return { mobile, desktop, measuredAt: new Date().toISOString(), stale: mobile === null && desktop === null };
-  } catch {
-    return { mobile: null, desktop: null, measuredAt: new Date().toISOString(), stale: true };
-  }
+  // allSettled: a failing desktop run must not throw away a good mobile score (and the other way round).
+  const [m, d] = await Promise.allSettled([one('mobile'), one('desktop')]);
+  const mobile = m.status === 'fulfilled' ? m.value : null;
+  const desktop = d.status === 'fulfilled' ? d.value : null;
+  return { mobile, desktop, measuredAt: new Date().toISOString(), stale: mobile === null && desktop === null };
 }
 
 /** Env at build (Astro loads .env into import.meta.env) and at runtime on Vercel (process.env). */

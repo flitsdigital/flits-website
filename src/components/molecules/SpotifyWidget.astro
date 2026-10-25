@@ -50,7 +50,7 @@ const right = tracks[next];
   .spotify {
     position: relative;
     display: block;
-    width: 10.5rem; /* 168px */
+    width: 10.5rem; /* 168px; positions below are % of it, so the card scales with a slot */
     aspect-ratio: 1;
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -62,9 +62,9 @@ const right = tracks[next];
   }
   .spotify__glow {
     left: 50%;
-    top: -1.831rem; /* -29.3px */
-    width: 12.853rem; /* 205.65px */
-    height: 12.853rem;
+    top: -17.44%; /* -29.3px of 168 */
+    width: 122.41%; /* 205.65px */
+    height: 122.41%;
     translate: -50% 0;
     object-fit: cover;
     filter: blur(25px);
@@ -72,9 +72,9 @@ const right = tracks[next];
   .spotify::after {
     content: '';
     position: absolute;
-    top: 4.8125rem; /* 77px */
+    top: 45.83%; /* 77px */
     inset-inline: 0;
-    height: 5.945rem; /* 95.12px */
+    height: 56.62%; /* 95.12px */
     background: linear-gradient(rgb(29 12 33 / 0), rgb(29 12 33 / 0.6));
   }
   .spotify__text {
@@ -105,17 +105,17 @@ const right = tracks[next];
     outline-offset: 2px;
   }
   .spotify__cover--left {
-    left: 1.074rem; /* 17.18px */
-    top: 1.447rem; /* 23.15px */
-    width: 3.949rem; /* 63.18px */
-    height: 3.949rem;
+    left: 10.23%; /* 17.18px */
+    top: 13.78%; /* 23.15px */
+    width: 37.61%; /* 63.18px */
+    height: 37.61%;
     rotate: -7.05deg;
   }
   .spotify__cover--right {
-    left: 5.871rem; /* 93.93px */
-    top: 1.39rem; /* 22.24px */
-    width: 3.685rem; /* 58.95px */
-    height: 3.685rem;
+    left: 55.91%; /* 93.93px */
+    top: 13.24%; /* 22.24px */
+    width: 35.09%; /* 58.95px */
+    height: 35.09%;
     rotate: 7.65deg;
   }
   .spotify:hover .spotify__cover--left {
@@ -127,16 +127,16 @@ const right = tracks[next];
   .spotify__cover--now {
     z-index: 2;
     left: 50%;
-    top: 0.784rem; /* 12.55px */
-    width: 4.895rem; /* 78.33px */
-    height: 4.895rem;
+    top: 7.47%; /* 12.55px */
+    width: 46.63%; /* 78.33px */
+    height: 46.63%;
     translate: -50% 0;
     box-shadow: 0 5px 15px rgb(0 0 0 / 0.3);
   }
   .spotify__text {
-    left: 2.125rem; /* 34px */
-    top: 6.405rem; /* 102.48px */
-    width: 6.3125rem; /* 101px */
+    left: 20.24%; /* 34px */
+    top: 61%; /* 102.48px */
+    width: 60.12%; /* 101px */
     display: grid;
     gap: var(--space-4);
     font: var(--text-widget-title);
@@ -150,11 +150,14 @@ const right = tracks[next];
   .spotify__logo {
     z-index: 1;
     display: block;
-    left: 0.625rem; /* 10px */
-    top: 8.375rem; /* 134px */
+    left: 5.95%; /* 10px */
+    top: 79.76%; /* 134px */
+    width: 13.69%; /* 23px */
   }
   .spotify__logo img {
     display: block;
+    width: 100%;
+    height: auto;
   }
   /* Spotify's embed does the playing; kept rendered (it won't play at 0×0) but out of sight */
   .spotify__embed {
@@ -168,10 +171,10 @@ const right = tracks[next];
   }
   .spotify__player {
     z-index: 1;
-    left: 2.624rem; /* 41.98px */
-    top: 8.373rem; /* 133.96px */
-    width: 7.171rem; /* 114.74px */
-    height: 1.479rem; /* 23.66px */
+    left: 24.99%; /* 41.98px */
+    top: 79.74%; /* 133.96px */
+    width: 68.3%; /* 114.74px */
+    height: 14.08%; /* 23.66px */
     display: flex;
     align-items: center;
     border-radius: var(--radius-pill);
@@ -224,7 +227,8 @@ const right = tracks[next];
     }
   }
   .spotify__track {
-    width: 4.969rem; /* 79.51px */
+    flex: 1;
+    margin-right: 0.6rem;
     height: 1.627px;
     margin-left: 0.466rem; /* 70.06 - 45.01 - 17.64 */
     border-radius: var(--radius-pill);

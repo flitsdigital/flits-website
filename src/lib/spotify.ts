@@ -1,5 +1,7 @@
 import { getCollection } from 'astro:content';
 import { trackId } from './spotify-ids';
+import { byFileOrder } from './slots';
+import trackFile from '../content/tracks.json';
 
 export type Track = { id: string; uri: string; href: string; title: string; artist: string; cover: string };
 
@@ -21,7 +23,7 @@ let tracks: Promise<Track[]> | undefined;
 export const getTracks = () =>
   (tracks ??= getCollection('tracks').then((entries) =>
     Promise.all(
-      entries.map(async ({ id, data }) => {
+      byFileOrder(entries, trackFile.map((t) => t.id)).map(async ({ id, data }) => {
         const tid = trackId(data.url)!; // the collection schema already rejects non-track links
         const o = await oembed(data.url);
         const title = o?.title ?? data.title;

@@ -14,6 +14,15 @@ export function inSeason(season: Season | undefined, month: number, day: number)
   return from <= to ? today >= from && today <= to : today >= from || today <= to;
 }
 
+/** `fixed` keys are paths without a trailing slash; static builds add one ("/contact/"). */
+export const pagePath = (pathname: string) => pathname.replace(/\/+$/, '') || '/';
+
+/** What a slot shows before the browser picks: the first widget without a season, or null (start hidden). */
+export const initialWidget = (ids: WidgetId[], seasons: Partial<Record<WidgetId, Season>>) => ids.find((w) => !seasons[w]) ?? null;
+
+/** Collection entries in the order of their JSON file (getCollection sorts by id). */
+export const byFileOrder = <T extends { id: string }>(entries: T[], ids: string[]) => [...entries].sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+
 export const candidates = (pool: WidgetId[], isAvailable: (id: WidgetId) => boolean) => pool.filter(isAvailable);
 
 /** Like pickSlot, but null when nothing fits (e.g. only Christmas in the pool, in November): the slot is then left out. */

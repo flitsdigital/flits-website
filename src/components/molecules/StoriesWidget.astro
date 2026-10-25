@@ -1,6 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import storyFile from '../../content/stories.json';
+import { byFileOrder } from '../../lib/slots';
 
 interface Props {
   class?: string;
@@ -8,7 +10,7 @@ interface Props {
 
 const { class: className } = Astro.props;
 // Our own photos (src/content/stories.json), max five rings. It looks like stories; it is not Instagram.
-const stories = (await getCollection('stories')).slice(0, 5);
+const stories = byFileOrder(await getCollection('stories'), storyFile.map((s) => s.id)).slice(0, 5);
 ---
 
 <!-- Look: prototype 29 (feature/widget-ideas). Behaviour: src/scripts/stories-widget.ts -->

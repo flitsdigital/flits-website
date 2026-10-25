@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import { relativeDay, isToday } from '../../lib/relative-day';
+import { photoLabel, isToday } from '../../lib/relative-day';
 
 interface Props {
   /** Pins "today" (ISO) for the widgets page; otherwise the browser recomputes the label. */
@@ -24,7 +24,7 @@ const now = today ? new Date(`${today}T12:00:00`) : new Date();
     <span>Ons kantoor in Emmen</span>
     <span class="office__when">
       <span class="office__fresh" data-office-fresh hidden={!isToday(photo.data.date, now)}>vers</span>
-      <span data-office-when>foto van {relativeDay(photo.data.date, now)}</span>
+      <span data-office-when>{photoLabel(photo.data.date, now)}</span>
     </span>
   </figcaption>
 </figure>

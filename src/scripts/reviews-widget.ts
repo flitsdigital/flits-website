@@ -11,7 +11,8 @@ export function initReviewsWidget(): (() => void) | void {
       at = (n + quotes.length) % quotes.length;
       quotes.forEach((q, i) => {
         q.classList.toggle('is-active', i === at);
-        q.toggleAttribute('aria-hidden', i !== at);
+        if (i === at) q.removeAttribute('aria-hidden');
+        else q.setAttribute('aria-hidden', 'true');
       });
       dots.forEach((d, i) => d.setAttribute('aria-pressed', String(i === at)));
     };

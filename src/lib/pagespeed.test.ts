@@ -39,3 +39,10 @@ test('both strategies measured', async () => {
 test('Lighthouse colour bands', () => {
   assert.deepEqual([0, 49, 50, 89, 90, 100].map(band), ['bad', 'bad', 'mid', 'mid', 'good', 'good']);
 });
+
+test('one device failing keeps the other score', async () => {
+  const fake = (u: string | URL | Request) =>
+    new URL(String(u)).searchParams.get('strategy') === 'mobile' ? Promise.resolve(new Response(JSON.stringify(fixture))) : Promise.reject(new Error('desktop down'));
+  const r = await measure('https://flitsdigital.nl', 'k', { fetch: fake as typeof fetch });
+  assert.deepEqual([r.mobile, r.desktop, r.stale], [98, null, false]);
+});
