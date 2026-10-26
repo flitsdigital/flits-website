@@ -7,7 +7,6 @@ types: [Websites, Foto]
 sector: Retail
 cover: ../../assets/images/case/kaasloods28/foto-rik-toonbank.jpg
 caseStudy:
-  draft: true
   heroTitle: Een nieuwe kaaswinkel in Coevorden, vanaf dag één herkenbaar online
   hero: ../../assets/images/case/kaasloods28/foto-rik-toonbank.jpg
   share: ../../assets/images/case/kaasloods28/d02-site-op-sfeerfoto.jpg
@@ -31,12 +30,12 @@ caseStudy:
   results:
     title: Live, met de eerste reacties binnen
     body:
-      - 'De site staat live op kaasloods28.nl. Rik kreeg er veel leuke reacties op [van wie: klanten in de winkel, via social? Voorbeeld toevoegen].'
-      - "Harde cijfers hebben we nog niet, daarvoor is het te vroeg. Over drie maanden vullen we deze case aan met bezoekers, klikken op route en bellen, en de positie op 'kaaswinkel Coevorden'. [bijgewerkt op …]"
+      - 'De site staat live op kaasloods28.nl. Rik kreeg er veel leuke reacties op.'
+      - "Harde cijfers hebben we nog niet, daarvoor is het te vroeg. Over drie maanden vullen we deze case aan met bezoekers, klikken op route en bellen, en de positie op 'kaaswinkel Coevorden'."
     image: ../../assets/images/case/kaasloods28/foto-winkel-rik.jpg
   stats:
     title: Van kennismaking tot fotoshoot in de winkel
-    lead: Rik kwam via via bij ons, toen hij een kaaswinkel ging beginnen. [datum kennismaking] We kwamen langs en fotografeerden de kaas, de schappen en Rik zelf. Zo zie je online wat je in de winkel krijgt.
+    lead: Rik kwam via via bij ons, toen hij een kaaswinkel ging beginnen. We kwamen langs en fotografeerden de kaas, de schappen en Rik zelf. Zo zie je online wat je in de winkel krijgt.
     items:
       - { label: Eigen foto's op de homepage, value: '14' }
   visuals:
@@ -47,7 +46,7 @@ caseStudy:
     - ../../assets/images/case/kaasloods28/v01-closeup-favoriet.jpg
     - ../../assets/images/case/kaasloods28/v06-volledige-pagina.jpg
     - title: Gebouwd in Astro
-      lead: 'Een lichte, snelle site. De kaas van de maand is een vast blok dat elke maand een nieuwe kaas krijgt. [wie zet hem online: Rik of Flits?]'
+      lead: 'Een lichte, snelle site. De kaas van de maand is een vast blok dat elke maand een nieuwe kaas krijgt.'
     - ../../assets/images/case/kaasloods28/m02-twee-schermen.jpg
     - ../../assets/images/case/kaasloods28/m03-mobiele-uitsnede.jpg
 ---
