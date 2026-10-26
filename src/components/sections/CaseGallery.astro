@@ -76,4 +76,19 @@ const columns = [0, 1].map((col) => images.map((src, i) => ({ src, ratio: ratios
     object-fit: cover;
     border-radius: var(--radius-sm);
   }
+  @media (max-width: 767px) {
+    /* the panel is as wide as the grid here, so give it the page margin inside too */
+    .case-gallery__inner {
+      padding-inline: var(--gutter); /* = the gap outside the panel */
+      padding-bottom: var(--gutter);
+    }
+    .case-gallery__header,
+    .case-gallery__grid {
+      width: 100%;
+    }
+    .case-gallery__grid {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 2.75rem; /* the columns stack with the same gap as inside a column */
+    }
+  }
 </style>

@@ -38,6 +38,8 @@ const projects = defineCollection({
           videos: z.array(image()).default([]),
           /** Landscape mockups shown full width under the intro; leave empty to skip. */
           wide: z.array(image()).default([]),
+          /** Supporting design visuals after the gallery: one wide, two side by side; a { title, lead } entry is a text block in between. */
+          visuals: z.array(z.union([image(), z.object({ title: z.string(), lead: z.string() })])).default([]),
           gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }),
           results: z.object({ title: z.string(), body: z.array(z.string()), image: image() }),
           stats: z.object({

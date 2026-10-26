@@ -39,7 +39,7 @@ export async function getCase(id: string) {
   const reviewId = caseStudy.testimonial?.review;
   const review = reviewId ? await getEntry('reviews', reviewId) : undefined;
   if (reviewId && !review) {
-    throw new Error(`Unknown review "${caseStudy.testimonial.review}" in src/content/projects/${id}.md (see src/content/reviews.json)`);
+    throw new Error(`Unknown review "${reviewId}" in src/content/projects/${id}.md (see src/content/reviews.json)`);
   }
   const { Content } = await render(project);
   const related = (await getProjects()).filter((p) => p.id !== id).slice(0, 4);

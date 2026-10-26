@@ -71,4 +71,17 @@ const { posters } = Astro.props;
   .video-fan__card[data-radial-slider-active] .video-fan__controls {
     opacity: 1;
   }
+  /* Phones: no gap beside the centre card, so the hands go under it (as in ReviewsCarousel) */
+  @media (max-width: 767px) {
+    .video-fan :global(.video-fan__slider .radial-slider__hand) {
+      top: calc(100% + 3.5rem);
+      scale: 0.6;
+    }
+    .video-fan :global(.video-fan__slider .radial-slider__hand--prev) {
+      margin-left: -2.75rem;
+    }
+    .video-fan :global(.video-fan__slider .radial-slider__hand--next) {
+      margin-left: 2.75rem;
+    }
+  }
 </style>

@@ -50,6 +50,12 @@ const { title, services, website } = Astro.props;
     background: var(--color-light-0);
     font: var(--text-label);
   }
+  /* shortcut: CSS can't see when the pill wraps, so phones (where it does) get a plain rounded box */
+  @media (max-width: 767px) {
+    .case-intro__services {
+      border-radius: var(--radius-sm);
+    }
+  }
   .visually-hidden {
     position: absolute;
     width: 1px;

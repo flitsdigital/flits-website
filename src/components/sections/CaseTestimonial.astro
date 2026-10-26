@@ -47,4 +47,14 @@ const { title, lead, image, review } = Astro.props;
   .case-testimonial :global(.case-testimonial__review) {
     width: auto;
   }
+  @media (max-width: 767px) {
+    .case-testimonial__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .case-testimonial :global(.case-testimonial__img) {
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+    }
+  }
 </style>
