@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-  /** Landscape mockups, each the full grid width, stacked. */
+  /** Landscape mockups, edge to edge with the panels' page margin, stacked. */
   images: ImageMetadata[];
 }
 
@@ -11,14 +11,14 @@ const { images } = Astro.props;
 ---
 
 <section class="case-wide">
-  {images.map((src) => <Image src={src} alt="" widths={[800, 1400, 2400]} sizes="(min-width: 1440px) 1344px, 92vw" />)}
+  {images.map((src) => <Image src={src} alt="" widths={[800, 1400, 2400]} sizes="100vw" />)}
 </section>
 
 <style>
   .case-wide {
     display: grid;
     gap: var(--grid-gap);
-    width: var(--grid-width);
+    width: calc(100% - 2 * var(--gutter-panel)); /* same edges as Panel width="full" */
     margin-inline: auto;
     margin-bottom: 9.5625rem; /* same rhythm as the gallery's gap to the next block */
   }

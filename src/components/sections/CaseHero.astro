@@ -36,6 +36,11 @@ const { image, client, year, title } = Astro.props;
     overflow: hidden;
     text-align: center;
   }
+  @media (max-width: 767px) {
+    .case-hero {
+      min-height: 80svh; /* phones: a peek of the intro below the photo */
+    }
+  }
   .case-hero__text {
     position: relative;
     display: grid;

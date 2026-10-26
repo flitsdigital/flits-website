@@ -34,6 +34,11 @@ h6 {
   overflow-wrap: break-word;
 }
 
+/* no lone word on the last line of a section title */
+h2 {
+  text-wrap: pretty;
+}
+
 /* Lists in components are layout (grids, rows), never bullets */
 ul,
 ol {

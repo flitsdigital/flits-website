@@ -32,7 +32,7 @@ caseStudy:
     title: De configurator in cijfers
     lead: Shopify verkoopt producten, geen doos die je zelf vult. Dus bouwden we er iets eigens voor. Geen kant-en-klare app, maar zelf geschreven.
     items:
-      - { label: Doosformaten, value: '3' }
+      - { label: Bonbons om uit te kiezen, value: '34+' }
       - { label: Stappen tot je doos, value: '3' }
       - { label: Apps nodig, value: '0' }
 ---
