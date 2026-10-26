@@ -1,5 +1,5 @@
-import { neighbours } from '../lib/spotify-ids';
-import type { Track } from '../lib/spotify';
+import { neighbours } from './logic';
+import type { Track } from './tracks';
 /**
  * Inline playback for the Spotify widget through Spotify's iFrame API: a hidden embed plays the track,
  * our own play button and progress bar drive and follow it. Nothing from Spotify loads (no script, no
@@ -29,7 +29,7 @@ const loadApi = () =>
     document.head.append(script);
   }));
 
-export function initSpotify(): (() => void) | void {
+export function init(): (() => void) | void {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-spotify]')];
   if (!widgets.length) return;
   const controllers: Controller[] = [];

@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
-import { trackId } from './spotify-ids';
-import { byFileOrder } from './slots';
-import trackFile from '../content/tracks.json';
+import { trackId } from './logic';
+import { byFileOrder } from '../../lib/slots';
+import trackFile from '../../content/tracks.json';
 
 export type Track = { id: string; uri: string; href: string; title: string; artist: string; cover: string };
 

@@ -1,7 +1,7 @@
-import { relativeDay } from '../lib/relative-day';
+import { relativeDay } from '../../lib/relative-day';
 
 /** Bericht van de studio: ‹ › browse newer/older posts; dates are recomputed so a cached page stays right. */
-export function initStudioPosts() {
+export function init() {
   const now = new Date();
   document.querySelectorAll<HTMLElement>('[data-studio-posts]').forEach((w) => {
     w.querySelectorAll<HTMLTimeElement>('[data-post-date]').forEach((t) => (t.textContent = relativeDay(new Date(t.dateTime), now)));

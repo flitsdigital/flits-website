@@ -1,5 +1,5 @@
-import { band, type PageSpeed } from '../lib/pagespeed';
-import { shortDate } from '../lib/time';
+import { band, type PageSpeed } from './logic';
+import { shortDate } from '../../lib/time';
 
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -7,7 +7,7 @@ const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
  * PageSpeed widget: when it comes into view, asks /api/pagespeed for the latest score (cached a day on the CDN)
  * and counts the ring up to it; a stale answer keeps the score the page was built with. Mobiel/Desktop toggles.
  */
-export function initPageSpeed(): (() => void) | void {
+export function init(): (() => void) | void {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-pagespeed]')];
   if (!widgets.length) return;
   const frames = new Set<number>();

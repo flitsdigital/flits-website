@@ -3,8 +3,10 @@ import SwupHeadPlugin from '@swup/head-plugin';
 import SwupA11yPlugin from '@swup/a11y-plugin';
 import SwupPreloadPlugin from '@swup/preload-plugin';
 import { initWidgetSlots } from './widget-slots';
+
+// Every widget's init (src/widgets/<id>/init.ts), found by folder; they run after the slots have picked.
+const widgetInits = Object.values(import.meta.glob<{ init: () => (() => void) | void }>('../widgets/*/init.ts', { eager: true })).map((m) => m.init);
 import { initRadialSliders } from './radial-slider';
-import { initClocks } from './clock';
 import { initProjectArchive } from './project-archive';
 import { initProcessSteps } from './process-steps';
 import { initLogoWallCycle } from './logo-wall';
@@ -15,14 +17,6 @@ import { initAnimatedGrid } from './grid-overlay';
 import { initRotatingImageTrail } from './image-trail';
 import { initRotatingText } from './rotating-text';
 import { initContactModal } from './contact-modal';
-import { initWeather } from './weather';
-import { initChristmas } from './christmas';
-import { initSpotify } from './spotify';
-import { initPageSpeed } from './pagespeed';
-import { initReviewsWidget } from './reviews-widget';
-import { initOfficeWidget } from './office-widget';
-import { initStoriesWidget } from './stories-widget';
-import { initStudioPosts } from './studio-posts';
 import { initContactForms } from './contact-form';
 
 /**
@@ -31,7 +25,7 @@ import { initContactForms } from './contact-form';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget, initOfficeWidget, initStoriesWidget, initStudioPosts, initContactForms];
+const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, ...widgetInits, initRadialSliders, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initContactForms];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.

@@ -1,11 +1,11 @@
-import { studioTime, everyTick, clockAngles, secondsSince } from '../lib/time';
+import { studioTime, everyTick, clockAngles, secondsSince } from '../../lib/time';
 
 /**
  * Osmo "Analog Clock" markup and look; driven once per second from the studio time
  * (no animation-frame loop: nothing runs between ticks, and a hidden tab can't make it drift).
  * Returns a cleanup for page transitions.
  */
-export function initClocks(): (() => void) | void {
+export function init(): (() => void) | void {
   const clocks = [...document.querySelectorAll<HTMLElement>('[data-analog-clock-init]')].map((clock) => ({
     hour: clock.querySelector<HTMLElement>('[data-analog-clock-hour]')!,
     minute: clock.querySelector<HTMLElement>('[data-analog-clock-minute]')!,

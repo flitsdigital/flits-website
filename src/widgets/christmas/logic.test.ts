@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto } from './christmas.ts';
+import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto } from './logic.ts';
 
 test('days until Christmas', () => {
   assert.equal(daysUntilChristmas(2026, 12, 4), 21);

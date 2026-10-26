@@ -2,19 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Heading from '../components/atoms/Heading.astro';
 import Text from '../components/atoms/Text.astro';
-import WeatherWidget from '../components/molecules/WeatherWidget.astro';
-import ClockWidget from '../components/molecules/ClockWidget.astro';
-import MapWidget from '../components/molecules/MapWidget.astro';
-import SpotifyWidget from '../components/molecules/SpotifyWidget.astro';
-import ChristmasWidget from '../components/molecules/ChristmasWidget.astro';
-import { allScenes } from '../lib/weather';
+import WeatherWidget from '../widgets/weather/Widget.astro';
+import ClockWidget from '../widgets/clock/Widget.astro';
+import ChristmasWidget from '../widgets/christmas/Widget.astro';
+import { allScenes } from '../widgets/weather/logic';
+import { widgetMeta } from '../widgets/registry';
 import { pools, fixed, slots } from '../data/widgets';
 import WidgetSlot from '../components/molecules/WidgetSlot.astro';
-import PageSpeedWidget from '../components/molecules/PageSpeedWidget.astro';
-import ReviewsWidget from '../components/molecules/ReviewsWidget.astro';
-import OfficeWidget from '../components/molecules/OfficeWidget.astro';
-import StoriesWidget from '../components/molecules/StoriesWidget.astro';
-import StudioPostWidget from '../components/molecules/StudioPostWidget.astro';
+import PageSpeedWidget from '../widgets/pagespeed/Widget.astro';
+import OfficeWidget from '../widgets/office/Widget.astro';
+import StudioPostWidget from '../widgets/studio-post/Widget.astro';
 import officePhoto from '../assets/images/office/2026-10-25.jpg';
 
 // Every weather photo, grouped per season and sky; columns are the dayparts. Sample temperatures only.
@@ -29,6 +26,11 @@ const christmasStates = [
   { days: 1, stage: 12, note: 'kerstavond' },
   { days: 0, stage: 12, note: 'kerst' },
 ];
+// Every widget folder (src/widgets/<id>/Widget.astro), so a new widget shows up here by itself.
+const allWidgets = Object.entries(import.meta.glob<{ default: typeof WeatherWidget }>('../widgets/*/Widget.astro', { eager: true })).map(([path, m]) => {
+  const id = path.split('/')[2];
+  return { id, title: widgetMeta[id]?.title ?? id, Widget: m.default };
+});
 ---
 
 <BaseLayout title="Widgets — Flits" noindex>
@@ -70,16 +72,16 @@ const christmasStates = [
         <code>zoals op de site: echt weer, echte tijd, echte aftelling</code>
       </div>
       <div class="wg-panel wg-row" data-theme="light">
-        <WeatherWidget />
-        <ClockWidget />
-        <ClockWidget layout="wide" />
-        <MapWidget />
-        <SpotifyWidget />
-        <PageSpeedWidget />
-        <ReviewsWidget />
-        <OfficeWidget />
-        <StoriesWidget />
-        <ChristmasWidget />
+        {allWidgets.map(({ id, title, Widget }) => (
+          <figure class="wg-widget">
+            <Widget />
+            <figcaption class="wg-tag">{title} · <code>src/widgets/{id}</code></figcaption>
+          </figure>
+        ))}
+        <figure class="wg-widget">
+          <ClockWidget layout="wide" />
+          <figcaption class="wg-tag">Klok, brede variant · <code>layout="wide"</code></figcaption>
+        </figure>
       </div>
     </section>
 
@@ -222,6 +224,12 @@ const christmasStates = [
     padding: var(--space-8) var(--space-12);
     border-bottom: 1px solid var(--color-border);
     vertical-align: top;
+  }
+  .wg-widget {
+    display: grid;
+    gap: var(--space-8);
+    margin: 0;
+    align-content: start;
   }
   .wg-row {
     display: flex;

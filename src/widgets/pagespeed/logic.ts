@@ -1,4 +1,4 @@
-import { env } from './env.ts';
+import { env } from '../../lib/env.ts';
 
 /** Google PageSpeed Insights (v5) performance scores for the deployed site. */
 export type PageSpeed = { mobile: number | null; desktop: number | null; measuredAt: string; stale: boolean };

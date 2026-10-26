@@ -1,7 +1,7 @@
-import { photoLabel, isToday } from '../lib/relative-day';
+import { photoLabel, isToday } from '../../lib/relative-day';
 
 /** "Kijk binnen": recompute "foto van vandaag / 3 dagen geleden" in the browser, so a cached page stays right. */
-export function initOfficeWidget() {
+export function init() {
   const now = new Date();
   document.querySelectorAll<HTMLElement>('[data-office]').forEach((w) => {
     const date = new Date(w.dataset.office!);

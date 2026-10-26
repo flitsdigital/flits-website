@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { MET_URL, currentFromMet } from '../../lib/weather';
+import { MET_URL, currentFromMet } from '../../widgets/weather/logic';
 
 // Runs on Vercel. One MET Norway call per ~15 min for every visitor together (CDN cache); their terms ask
 // for an identifying User-Agent and for not hammering the API. Visitors' IPs never reach MET Norway.

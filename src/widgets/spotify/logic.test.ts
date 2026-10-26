@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { trackId, neighbours } from './spotify-ids.ts';
+import { trackId, neighbours } from './logic.ts';
 
 test('track id from the link variants Spotify hands out', () => {
   assert.equal(trackId('https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=abc'), '0bYg9bo50gSsH3LtXe2SQn');

@@ -1,7 +1,8 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
+import { photosByKey, photoUrls } from '../photo-set';
 import { studioNow } from '../../lib/time';
-import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto } from '../../lib/christmas';
+import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto } from './logic';
 
 interface Props {
   /** Pins a fixed state (no live countdown), e.g. for the widgets page. */
@@ -13,16 +14,14 @@ interface Props {
 
 // Office photos: "dag-06" / "nacht-06", stage 0 (no decoration) to 12 (Christmas Eve). Missing ones fall back.
 const files = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/widgets/christmas/*.jpg', { eager: true });
-const byKey = Object.fromEntries(Object.entries(files).map(([path, m]) => [path.split('/').pop()!.replace('.jpg', ''), m.default]));
+const byKey = photosByKey(files);
 const pinned = Astro.props.days !== undefined;
 
 // Build-time values; scripts/christmas.ts sets the live ones on page load unless pinned.
 const now = studioNow(); // Amsterdam date, not the build machine's (UTC)
 const { days = daysUntilChristmas(now.year, now.month, now.day), stage = christmasStage(now.month, now.day), dark = false, class: className } = Astro.props;
 const photo = byKey[christmasPhoto(stage, dark, new Set(Object.keys(byKey)))!];
-const photos = pinned
-  ? undefined
-  : Object.fromEntries(await Promise.all(Object.entries(byKey).map(async ([key, src]) => [key, (await getImage({ src, width: 480 })).src])));
+const photos = pinned ? undefined : await photoUrls(files, 480);
 ---
 
 <div class:list={['xmas', className]} data-christmas={photos && JSON.stringify(photos)}>

@@ -1,5 +1,5 @@
-import { studioNow } from '../lib/time';
-import { weatherScene, type CurrentWeather } from '../lib/weather';
+import { studioNow } from '../../lib/time';
+import { weatherScene, type CurrentWeather } from './logic';
 
 // One request per 15 minutes, shared across page views (Swup re-runs this on every visit).
 let cache: { at: number; data: Promise<CurrentWeather> } | undefined;
@@ -13,7 +13,7 @@ const current = () => {
 
 
 /** Live weather for Emmen in the weather widget; on a failed request temperature and condition stay empty. */
-export function initWeather(): (() => void) | void {
+export function init(): (() => void) | void {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-weather]')];
   if (!widgets.length) return;
   let stopped = false;

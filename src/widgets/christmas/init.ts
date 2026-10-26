@@ -1,8 +1,8 @@
-import { studioNow } from '../lib/time';
-import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto, isDark } from '../lib/christmas';
+import { studioNow } from '../../lib/time';
+import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto, isDark } from './logic';
 
 /** Live countdown and office photo for the Christmas widget (studio date, Amsterdam). Pinned widgets have no data-christmas. */
-export function initChristmas() {
+export function init() {
   const widgets = document.querySelectorAll<HTMLElement>('[data-christmas]');
   if (!widgets.length) return;
   const now = studioNow();

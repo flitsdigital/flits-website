@@ -1,19 +1,10 @@
-import type { WidgetId, SlotSize, Season } from '../lib/slots';
+import type { WidgetId, SlotSize } from '../lib/slots';
 
 // Widget slots (src/components/molecules/WidgetSlot.astro). Jordi decides what goes where:
 // - `pools`: what a slot may show; without a fixed choice it picks one at random on each visit.
 // - `fixed`: per page path and slot id, the one widget that slot always shows.
-
-export const widgets: Record<WidgetId, { size: SlotSize; season?: Season }> = {
-  weather: { size: 'square' },
-  spotify: { size: 'square' },
-  pagespeed: { size: 'square' },
-  christmas: { size: 'wide', season: { from: [12, 1], to: [12, 26] } },
-  reviews: { size: 'wide' },
-  stories: { size: 'wide' },
-  office: { size: 'wide' },
-  'studio-post': { size: 'wide' },
-};
+// The widgets themselves (size, season, content they need) live in src/widgets/<id>/meta.ts;
+// src/widgets/registry.ts checks that every id here exists and has the right size.
 
 export const pools: Record<SlotSize, WidgetId[]> = {
   square: ['weather', 'spotify', 'pagespeed'],

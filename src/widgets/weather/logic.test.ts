@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { skyFor, seasonFor, weatherScene, allScenes, isDaylight, currentFromMet } from './weather.ts';
+import { skyFor, seasonFor, weatherScene, allScenes, isDaylight, currentFromMet } from './logic.ts';
 
 test('MET Norway symbol codes map to the photo skies', () => {
   const codes = ['clearsky_day', 'fair_night', 'partlycloudy_day', 'cloudy', 'fog', 'lightrain', 'rainshowers_day', 'heavyrain', 'sleet', 'lightsnow', 'snowshowers_night', 'rainandthunder', 'heavysnowandthunder'];

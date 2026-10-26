@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parsePsi, measure, band } from './pagespeed.ts';
+import { parsePsi, measure, band } from './logic.ts';
 
-const fixture = JSON.parse(readFileSync(new URL('./fixtures/psi.json', import.meta.url), 'utf8'));
+const fixture = JSON.parse(readFileSync(new URL('./psi.fixture.json', import.meta.url), 'utf8'));
 
 test('performance score from a PSI v5 response', () => {
   assert.equal(parsePsi(fixture), 98);

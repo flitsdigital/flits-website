@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { shortQuote, firstName } from './quotes.ts';
+import { shortQuote, firstName } from './logic.ts';
 
 test('first sentence of the first paragraph', () => {
   assert.equal(

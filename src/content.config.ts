@@ -3,7 +3,7 @@ import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { PROJECT_TYPES, SECTORS } from './lib/taxonomy';
 import { iconNames } from './design-system/icons';
-import { trackId } from './lib/spotify-ids';
+import { trackId } from './widgets/spotify/logic';
 
 // Single entry point for content. Pages and sections only use getCollection()/getEntry(),
 // so swapping a loader (e.g. to Sanity) later does not touch components.

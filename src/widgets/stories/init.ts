@@ -4,7 +4,7 @@ const STORY_MS = 5000;
  * Stories widget: a ring opens the viewer at that story; each runs 5 s with its bar, then the next;
  * after the last (or ×, or Escape) it closes and the rings it showed turn grey.
  */
-export function initStoriesWidget(): (() => void) | void {
+export function init(): (() => void) | void {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-stories]')];
   if (!widgets.length) return;
   const stops: (() => void)[] = [];

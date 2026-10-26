@@ -1,5 +1,6 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
+import { photosByKey, photoUrls } from '../photo-set';
 import dot from '../../assets/images/widgets/live-dot.svg';
 import { contact } from '../../data/site';
 
@@ -16,17 +17,11 @@ interface Props {
 // stays empty rather than showing a made-up "24° Lekker zonnetje". The props are for the /widgets demos.
 const { temperature = '', condition = '', date = '', scene, class: className } = Astro.props;
 
-// One photo per season × daypart × sky ("herfst-ochtend-regen", see lib/weather.ts), made from one street photo of the office.
+// One photo per season × daypart × sky ("herfst-ochtend-regen", see logic.ts), made from one street photo of the office.
 const files = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/widgets/weather/*.jpg', { eager: true });
-const photos = scene
-  ? undefined
-  : Object.fromEntries(
-      await Promise.all(
-        Object.entries(files).map(async ([path, m]) => [path.split('/').pop()!.replace('.jpg', ''), (await getImage({ src: m.default, width: 400 })).src]),
-      ),
-    );
-const dir = '../../assets/images/widgets/weather/';
-const photo = (files[`${dir}${scene}.jpg`] ?? files[`${dir}zomer-middag-helder.jpg`]).default;
+const byKey = photosByKey(files);
+const photos = scene ? undefined : await photoUrls(files, 400);
+const photo = byKey[scene ?? ''] ?? byKey['zomer-middag-helder'];
 ---
 
 <div class:list={['weather', className]} data-weather={photos && JSON.stringify(photos)}>

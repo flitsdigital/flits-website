@@ -2,8 +2,8 @@
 import logo from '../../assets/images/widgets/spotify-logo.svg';
 import play from '../../assets/images/widgets/play.svg';
 import { getImage } from 'astro:assets';
-import { getTracks } from '../../lib/spotify';
-import { neighbours } from '../../lib/spotify-ids';
+import { getTracks } from './tracks';
+import { neighbours } from './logic';
 
 interface Props {
   class?: string;

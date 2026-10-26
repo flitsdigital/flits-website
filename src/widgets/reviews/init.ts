@@ -1,5 +1,5 @@
 /** Reviews widget: a new quote every 5 s, the dots jump, hover or focus pauses. */
-export function initReviewsWidget(): (() => void) | void {
+export function init(): (() => void) | void {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-reviews-widget]')];
   if (!widgets.length) return;
   const timers = widgets.map((w) => {
