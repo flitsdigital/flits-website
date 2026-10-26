@@ -3,6 +3,7 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import CaseHero from '../../components/sections/CaseHero.astro';
 import CaseIntro from '../../components/sections/CaseIntro.astro';
 import VideoFan from '../../components/sections/VideoFan.astro';
+import CaseWide from '../../components/sections/CaseWide.astro';
 import CaseGallery from '../../components/sections/CaseGallery.astro';
 import CaseResults from '../../components/sections/CaseResults.astro';
 import StatsPanel from '../../components/sections/StatsPanel.astro';
@@ -31,9 +32,10 @@ const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
   <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />
   <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
   {cs.videos.length > 0 && <VideoFan posters={cs.videos} straddle={false} />}
+  {cs.wide.length > 0 && <CaseWide images={cs.wide} />}
   <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />
   <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />
   <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />
-  <CaseTestimonial {...cs.testimonial} review={review} />
+  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} />}
   <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
 </PageLayout>
