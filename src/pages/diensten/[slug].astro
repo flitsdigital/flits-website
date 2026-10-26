@@ -15,7 +15,7 @@ import ProcessSteps from '../../components/sections/ProcessSteps.astro';
 import ProjectsGrid from '../../components/sections/ProjectsGrid.astro';
 import FaqSection from '../../components/sections/FaqSection.astro';
 import ContactSection from '../../components/sections/ContactSection.astro';
-import { getServices, getProjects, getFounders, avatarsOf } from '../../lib/content';
+import { getServices, getProjects, getFounderAvatars } from '../../lib/content';
 import { projectsFor, faqsFor } from '../../lib/select';
 
 // Service pages (Figma 1:2397, 1:2884): one YAML file per service in src/content/services.
@@ -26,7 +26,7 @@ export async function getStaticPaths() {
 
 const { service } = Astro.props;
 const { page } = service.data;
-const founders = avatarsOf(await getFounders());
+const founders = await getFounderAvatars();
 const logos = (await getCollection('logowall')).filter((l) => !l.data.repeat);
 const moments = (await getCollection('behindTheScenes')).map((m) => m.data);
 const projects = await getProjects();

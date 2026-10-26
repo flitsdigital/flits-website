@@ -9,7 +9,6 @@ import ReviewsCarousel from '../components/sections/ReviewsCarousel.astro';
 import ServicesTeaser from '../components/sections/ServicesTeaser.astro';
 import TeamSection from '../components/sections/TeamSection.astro';
 import Showreel from '../components/sections/Showreel.astro';
-import { serviceTicker } from '../data/site';
 import { getProjects, getTeaserServices, getFounders, avatarsOf } from '../lib/content';
 import fanLeft from '../assets/images/fan/truck-left.jpg';
 import fanCenter from '../assets/images/fan/kaasloods.jpg';
@@ -42,15 +41,13 @@ const founders = avatarsOf(team);
     <ImageFan slot="media" images={[fanCenter, fanRight, fanLeft]} />
   </HeroHome>
   <IntroLogos
-    ticker={serviceTicker}
-    joery={joery}
-    jordi={jordi}
+    members={[joery, jordi]}
     lead="Flits bestaat al sinds 2024, dat betekent dat we al flink 2 jaar onderweg zijn. In die 2 jaar hebben we al veel bedrijven mogen helpen met hun website, social media of online marketing vraagstuk!"
     logos={logos}
   />
-  <ProjectsGrid title="Een verzameling aan projecten" ticker={serviceTicker} projects={projects.slice(0, 4)} />
+  <ProjectsGrid title="Een verzameling aan projecten" projects={projects.slice(0, 4)} />
   <ReviewsCarousel title="Waarom klanten met ons samenwerken" reviews={reviews} />
-  <ServicesTeaser title="Waar kunnen we je mee helpen?" ticker={serviceTicker} services={services} />
+  <ServicesTeaser title="Waar kunnen we je mee helpen?" services={services} />
   <TeamSection
     title="Wie zijn wij?"
     lead="Je praat altijd met degene die filmt, ontwerpt en bouwt. Zonder accountmanager, of doorgeefluik er tussen. Sinds 2024 werken we vanuit Emmen voor ondernemers in heel Drenthe"

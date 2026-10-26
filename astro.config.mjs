@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import { readdirSync, readFileSync } from 'node:fs';
+import { REVIEW_PAGES } from './src/data/site.ts';
 
 // Legal pages still marked `draft: true` are noindex, so they stay out of the sitemap too
 const draftLegal = readdirSync('src/content/legal')
@@ -18,7 +19,7 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const path = new URL(page).pathname;
-        return !/^\/(styleguide|components|sections|widgets)(\/|$)/.test(path) && !draftLegal.includes(path);
+        return !REVIEW_PAGES.some((p) => path === `${p}/` || path.startsWith(`${p}/`)) && !draftLegal.includes(path);
       },
     }),
   ],

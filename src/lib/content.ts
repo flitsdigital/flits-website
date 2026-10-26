@@ -44,3 +44,6 @@ export async function getCase(id: string) {
   const related = (await getProjects()).filter((p) => p.id !== id).slice(0, 4);
   return { project, caseStudy, review, Content, related, year: String(project.data.date.getFullYear()) };
 }
+
+/** The founders' avatars, for the avatar stacks on several pages. */
+export const getFounderAvatars = async () => avatarsOf(await getFounders());

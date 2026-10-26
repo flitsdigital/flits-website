@@ -6,17 +6,21 @@ import Heading from '../atoms/Heading.astro';
 import Text from '../atoms/Text.astro';
 import Ticker from '../molecules/Ticker.astro';
 import LogoWall from '../molecules/LogoWall.astro';
+import { serviceTicker } from '../../data/site';
 
 interface Props {
-  ticker: string[];
+  /** Defaults to the service ticker. */
+  ticker?: string[];
   lead: string;
-  joery: CollectionEntry<'team'>;
-  jordi: CollectionEntry<'team'>;
+  /** The two people in the title, in title order. */
+  members: [CollectionEntry<'team'>, CollectionEntry<'team'>];
   /** Client logos for the wall (dark, for a light background) */
   logos: { name: string; logo: ImageMetadata }[];
 }
 
-const { ticker, lead, joery, jordi, logos } = Astro.props;
+const { ticker = serviceTicker, lead, members, logos } = Astro.props;
+// the title uses first names only
+const [first, second] = members.map((m) => ({ avatar: m.data.avatar, name: m.data.name.split(' ')[0] }));
 ---
 
 <section class="intro">
@@ -25,8 +29,8 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
     <!-- Home-only title with the faces inline in the sentence. Hovering a face spins it slowly and shows
          its name in the cursor marquee (CursorMarquee, BaseLayout). -->
     <Heading size="64" class="intro__title">
-      Wij zijn <span class="intro__face" data-cursor-marquee-text="Joery"><Avatar src={joery.data.avatar} size={48} /></span> Joery<br />
-      En <span class="intro__face" data-cursor-marquee-text="Jordi"><Avatar src={jordi.data.avatar} size={48} /></span> Jordi
+      Wij zijn <span class="intro__face" data-cursor-marquee-text={first.name}><Avatar src={first.avatar} size={48} /></span> {first.name}<br />
+      En <span class="intro__face" data-cursor-marquee-text={second.name}><Avatar src={second.avatar} size={48} /></span> {second.name}
     </Heading>
     <Text size="l" tone="secondary">{lead}</Text>
   </div>

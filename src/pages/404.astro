@@ -2,7 +2,6 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import HeroPage from '../components/sections/HeroPage.astro';
 import ProjectsGrid from '../components/sections/ProjectsGrid.astro';
-import { serviceTicker } from '../data/site';
 import { getProjects } from '../lib/content';
 
 // 404: no Figma page. The page hero + the latest projects, so a lost visitor still lands somewhere useful.
@@ -16,5 +15,5 @@ const projects = (await getProjects()).slice(0, 4);
     title="Deze pagina bestaat niet"
     intro={['De link klopt niet (meer). Bekijk hieronder ons werk, of ga terug naar de homepagina.']}
   />
-  <ProjectsGrid title="Bekijk onze projecten" ticker={serviceTicker} projects={projects} />
+  <ProjectsGrid title="Bekijk onze projecten" projects={projects} />
 </PageLayout>

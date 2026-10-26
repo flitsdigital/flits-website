@@ -1,4 +1,5 @@
 ---
+import { serviceTicker } from '../../data/site';
 import type { CollectionEntry } from 'astro:content';
 import SectionHeader from '../molecules/SectionHeader.astro';
 import ServiceCard from '../molecules/ServiceCard.astro';
@@ -6,12 +7,13 @@ import { serviceHref } from '../../lib/content';
 
 interface Props {
   title: string;
+  /** Defaults to the service ticker. */
   ticker?: string[];
   /** Services that have a teaser image (see getTeaserServices). */
   services: CollectionEntry<'services'>[];
 }
 
-const { title, ticker, services } = Astro.props;
+const { title, ticker = serviceTicker, services } = Astro.props;
 ---
 
 <section class="services">

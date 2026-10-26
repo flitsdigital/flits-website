@@ -1,4 +1,5 @@
 import Swup from 'swup';
+import { REVIEW_PAGES } from '../data/site';
 import SwupHeadPlugin from '@swup/head-plugin';
 import SwupA11yPlugin from '@swup/a11y-plugin';
 import SwupPreloadPlugin from '@swup/preload-plugin';
@@ -63,7 +64,7 @@ const swup = new Swup({
   ignoreVisit: (url, { el } = {}) =>
     !document.getElementById('swup') ||
     !!el?.closest('[data-no-swup]') ||
-    ['/styleguide', '/components', '/sections', '/widgets'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
+    REVIEW_PAGES.some((p) => new URL(url, location.origin).pathname.startsWith(p)),
   plugins: [new SwupHeadPlugin({ awaitAssets: true }), new SwupA11yPlugin(), new SwupPreloadPlugin()],
 });
 
