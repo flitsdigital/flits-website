@@ -1,4 +1,5 @@
 import { getCollection, getEntry, render, type CollectionEntry } from 'astro:content';
+import { findPlaceholder } from './placeholders';
 
 // Sorted views on the collections, so ordering rules live in one place.
 
@@ -22,8 +23,9 @@ export const getFounders = async () => (await getCollection('team')).sort((a, b)
 /** Avatar props for Eyebrow / StatsPanel / CaseResults. */
 export const avatarsOf = (members: CollectionEntry<'team'>[]) => members.map((m) => ({ src: m.data.avatar, alt: m.data.name }));
 
-/** A project gets its own page only when its Markdown has a `caseStudy` block. */
-export const hasCase = (project: CollectionEntry<'projects'>) => Boolean(project.data.caseStudy);
+/** A project gets its own page only when its Markdown has a `caseStudy` block (drafts: only in dev). */
+export const hasCase = (project: CollectionEntry<'projects'>) =>
+  Boolean(project.data.caseStudy) && (import.meta.env.DEV || !project.data.caseStudy?.draft);
 
 /** Slugs for /projecten/[slug]. */
 export const getCaseSlugs = async () => (await getProjects()).filter(hasCase).map((p) => p.id);
@@ -36,6 +38,10 @@ export async function getCase(id: string) {
   const project = await getEntry('projects', id);
   const caseStudy = project?.data.caseStudy;
   if (!project || !caseStudy) throw new Error(`Project "${id}" has no caseStudy block (src/content/projects/${id}.md)`);
+  const placeholder = caseStudy.draft ? null : findPlaceholder([project.body, project.data]);
+  if (placeholder) {
+    throw new Error(`Placeholder ${placeholder} left in src/content/projects/${id}.md: fill it in or set caseStudy.draft: true`);
+  }
   const reviewId = caseStudy.testimonial?.review;
   const review = reviewId ? await getEntry('reviews', reviewId) : undefined;
   if (reviewId && !review) {
