@@ -252,12 +252,14 @@ const services = await getServices();
     visibility: hidden;
     opacity: 0;
     translate: 0 -4px;
-    transition: opacity 0.15s ease, translate 0.15s ease, visibility 0.15s;
+    /* Osmo curve (slow start, soft landing); closing a bit quicker than opening */
+    transition: opacity 0.3s var(--ease-osmo), translate 0.3s var(--ease-osmo), visibility 0.3s;
   }
   [data-nav-sub-status='active'] > .nav__dropdown {
     visibility: visible;
     opacity: 1;
     translate: 0 0;
+    transition-duration: 0.45s;
   }
   .nav__dropdown-list {
     display: grid;
@@ -396,7 +398,7 @@ const services = await getServices();
       visibility: visible;
       opacity: 1;
       translate: none;
-      transition: grid-template-rows 0.3s ease;
+      transition: grid-template-rows 0.45s var(--ease-osmo);
     }
     [data-nav-sub-status='active'] > .nav__dropdown {
       grid-template-rows: 1fr;
@@ -405,7 +407,7 @@ const services = await getServices();
       min-height: 0;
       overflow: hidden;
       visibility: hidden;
-      transition: visibility 0.3s;
+      transition: visibility 0.45s;
     }
     [data-nav-sub-status='active'] .nav__dropdown-inner {
       visibility: visible;
