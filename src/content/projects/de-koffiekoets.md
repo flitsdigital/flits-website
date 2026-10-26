@@ -10,7 +10,7 @@ cover: ../../assets/images/projects/koffiekoets.jpg
 caseStudy:
   heroTitle: Hoe wij video advertenties maakten voor de Koffiekoets
   hero: ../../assets/images/case/koffiekoets-hero.jpg
-  website: https://example.com # placeholder: vervang door de echte site van de klant
+  # website: de echte site van de klant (de gele strook verschijnt pas als die er staat)
   intro:
     title: Binnen 2 weken 5000,- omzet uit 500,- adspend
     services: [Scripts schrijven, Videografie, Video Editing, Meta Ads]
@@ -40,11 +40,11 @@ caseStudy:
       - { label: Warme leads, value: 3500+ }
       - { label: Uitgegeven, value: '€ 7000,-' }
       - { label: Conversieratio, value: 12% }
-  testimonial:
-    title: Wat zegt Thijs over onze samenwerking?
-    lead: Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.
-    image: ../../assets/images/gallery/koffiekoets-3.jpg
-    review: de-koffiekoets
+  # testimonial: terug zodra Thijs zijn eigen review stuurt (de oude was een kopie van een andere review)
+  #   title: Wat zegt Thijs over onze samenwerking?
+  #   lead: Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.
+  #   image: ../../assets/images/gallery/koffiekoets-3.jpg
+  #   review: de-koffiekoets
 ---
 
 Flits bestaat al sinds 2024, dat betekent dat we al flink 2 jaar onderweg zijn.

@@ -37,9 +37,11 @@ const pages = [
     <div class="footer__meta footer__legal">
       {legal.map((l) => <a href={l.href}>{l.label}</a>)}
       <a href="https://api.met.no/" rel="noopener">Weerdata: MET Norway</a>
-      <ul class="footer__socials" role="list">
-        {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
-      </ul>
+      {socials.some((s) => s.href) && (
+        <ul class="footer__socials" role="list">
+          {socials.filter((s) => s.href).map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
+        </ul>
+      )}
     </div>
   </div>
   <Logo variant="footer" class="footer__logo" />

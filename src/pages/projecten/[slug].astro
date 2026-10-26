@@ -34,6 +34,6 @@ const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
   <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />
   <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />
   <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />
-  <CaseTestimonial {...cs.testimonial} review={review} />
+  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} />}
   <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
 </PageLayout>

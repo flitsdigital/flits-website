@@ -43,13 +43,14 @@ const projects = defineCollection({
             lead: z.string(),
             items: z.array(z.object({ label: z.string(), value: z.string() })).length(3),
           }),
+          /** Optional: only with a real review from this client (never a copied or made-up one). */
           testimonial: z.object({
             title: z.string(),
             lead: z.string(),
             image: image(),
             /** id in reviews.json. shortcut: plain id, because reference() inside this nested object made Astro 7.4 silently drop caseStudy. */
             review: z.string(),
-          }),
+          }).optional(),
         })
         .optional(),
     }),
@@ -65,7 +66,8 @@ const reviews = defineCollection({
       logoHeight: z.number().default(24),
       quote: z.array(z.string()),
       author: z.string(),
-      avatar: image(),
+      /** Leave out rather than use a placeholder photo. */
+      avatar: image().optional(),
     }),
 });
 

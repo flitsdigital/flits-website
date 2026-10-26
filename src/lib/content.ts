@@ -36,8 +36,8 @@ export async function getCase(id: string) {
   const project = await getEntry('projects', id);
   const caseStudy = project?.data.caseStudy;
   if (!project || !caseStudy) throw new Error(`Project "${id}" has no caseStudy block (src/content/projects/${id}.md)`);
-  const review = await getEntry('reviews', caseStudy.testimonial.review);
-  if (!review) {
+  const review = caseStudy.testimonial ? await getEntry('reviews', caseStudy.testimonial.review) : undefined;
+  if (caseStudy.testimonial && !review) {
     throw new Error(`Unknown review "${caseStudy.testimonial.review}" in src/content/projects/${id}.md (see src/content/reviews.json)`);
   }
   const { Content } = await render(project);
