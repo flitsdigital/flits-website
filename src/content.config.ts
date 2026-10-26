@@ -71,20 +71,6 @@ const reviews = defineCollection({
     }),
 });
 
-/** Client logo tiles for the brand strip. */
-const clients = defineCollection({
-  loader: file('./src/content/clients.json'),
-  schema: ({ image }) =>
-    z.object({
-      name: z.string(),
-      logo: image(),
-      background: z.string().optional(),
-      logoWidth: z.number(),
-      logoHeight: z.number(),
-    }),
-});
-
-/** Logo wall on /over-ons: each logo sits in a cell of the 4-column grid (empty cells are intentional). */
 const logowall = defineCollection({
   loader: file('./src/content/logowall.json'),
   schema: ({ image }) =>
@@ -93,6 +79,8 @@ const logowall = defineCollection({
       logo: image(),
       row: z.number().int().min(1),
       column: z.number().int().min(1).max(4),
+      /** A logo repeated only to fill the over-ons grid; left out wherever clients are listed once. */
+      repeat: z.boolean().default(false),
     }),
 });
 
@@ -261,4 +249,4 @@ const studioPosts = defineCollection({
     }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };
+export const collections = { projects, reviews, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };

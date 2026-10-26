@@ -16,6 +16,7 @@ import ProjectsGrid from '../../components/sections/ProjectsGrid.astro';
 import FaqSection from '../../components/sections/FaqSection.astro';
 import ContactSection from '../../components/sections/ContactSection.astro';
 import { getServices, getProjects, getFounders, avatarsOf } from '../../lib/content';
+import { projectsFor, faqsFor } from '../../lib/select';
 
 // Service pages (Figma 1:2397, 1:2884): one YAML file per service in src/content/services.
 // The file's `page.blocks` list is rendered top to bottom, one section per block.
@@ -26,15 +27,10 @@ export async function getStaticPaths() {
 const { service } = Astro.props;
 const { page } = service.data;
 const founders = avatarsOf(await getFounders());
-const logos = await getCollection('logowall');
+const logos = (await getCollection('logowall')).filter((l) => !l.data.repeat);
 const moments = (await getCollection('behindTheScenes')).map((m) => m.data);
 const projects = await getProjects();
-const faqs = (await getCollection('faqs'))
-  .filter((f) => !f.data.services?.length || f.data.services.includes(service.id))
-  .map((f) => f.data);
-/** Projects of the block's type first, then the newest others: always 4 cards. */
-const matches = (p: (typeof projects)[number], type?: string) => (p.data.types as string[]).includes(type ?? '');
-const projectsFor = (type?: string) => [...projects].sort((a, b) => Number(matches(b, type)) - Number(matches(a, type))).slice(0, 4);
+const faqs = faqsFor(await getCollection('faqs'), service.id).map((f) => f.data);
 const media = page.heroMedia;
 ---
 
@@ -70,7 +66,7 @@ const media = page.heroMedia;
         case 'steps':
           return <ProcessSteps title={block.title} lead={block.lead} steps={block.items} />;
         case 'projects':
-          return <ProjectsGrid title={block.title} ticker={block.ticker} projects={projectsFor(block.projectType)} />;
+          return <ProjectsGrid title={block.title} ticker={block.ticker} projects={projectsFor(projects, block.projectType)} />;
         case 'faq':
           return <FaqSection title={block.title} lead={block.lead} faqs={faqs} />;
         case 'contact':

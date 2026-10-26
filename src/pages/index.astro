@@ -18,8 +18,8 @@ import fanRight from '../assets/images/fan/truck-right.jpg';
 // Home (Figma 1:1176). Sections own their spacing, so a page is just the list in design order.
 const projects = await getProjects();
 const reviews = await getCollection('reviews');
-// The over-ons logo wall lists some logos twice (grid layout); here each client once
-const logos = [...new Map((await getCollection('logowall')).map((l) => [l.data.logo.src, l.data])).values()];
+// Each client once (the over-ons wall repeats a few logos to fill its grid)
+const logos = (await getCollection('logowall')).filter((l) => !l.data.repeat).map((l) => l.data);
 const services = await getTeaserServices();
 const team = await getFounders();
 const [jordi, joery] = team;
