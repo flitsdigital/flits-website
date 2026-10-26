@@ -1,25 +1,30 @@
 ---
 import Heading from '../atoms/Heading.astro';
 import Button from '../atoms/Button.astro';
-import StepIndicator from './StepIndicator.astro';
+import Label from '../atoms/Label.astro';
+import Input from '../atoms/Input.astro';
 import ContactFields from './ContactFields.astro';
+import { contact } from '../../data/site';
 
-// Figma 1:2828 designs only the first ("Start") step of a multi-step form.
-// shortcut: steps 01–03 and the stepping/submit logic are not designed yet — the indicator
-// and VORIGE/VOLGENDE are in place (disabled) for fase 5.
-const steps = ['Start', '01', '02', '03'];
+// Figma 1:2828 (first step) as one plain form: it posts to /api/contact (n8n mails it), also without
+// JavaScript (the route then redirects back with ?verzonden=1 or ?fout=1). Behaviour: src/scripts/contact-form.ts
 ---
 
-<form class="contact-form" aria-labelledby="contact-form-title">
-  <StepIndicator steps={steps} class="contact-form__steps" />
+<form class="contact-form" action="/api/contact" method="post" aria-labelledby="contact-form-title" data-contact-form data-email={contact.email}>
+  <input type="hidden" name="source" value="contact" />
   <div class="contact-form__intro">
     <Heading as="h3" size="36" id="contact-form-title">Om te beginnen</Heading>
     <p>We zijn benieuwd naar wie je bent. En hebben wat contactinformatie nodig</p>
   </div>
   <ContactFields idPrefix="cf" class="contact-form__fields" />
+  <div class="contact-form__field">
+    <Label for="cf-message">Je vraag of project</Label>
+    <Input multiline id="cf-message" name="message" placeholder="Ik wil graag..." rows={4} />
+  </div>
+  <p class="contact-form__status" data-contact-form-status role="status" hidden></p>
   <div class="contact-form__nav">
-    <Button variant="step" icon="hand-left" disabled>Vorige</Button>
-    <Button variant="step" icon="hand-right" iconPosition="end" disabled>Volgende</Button>
+    <p class="contact-form__privacy">We gebruiken je gegevens alleen om contact met je op te nemen.</p>
+    <Button type="submit" variant="step" icon="hand-right" iconPosition="end" data-contact-form-submit>Versturen</Button>
   </div>
 </form>
 
@@ -30,9 +35,6 @@ const steps = ['Start', '01', '02', '03'];
     border-radius: var(--radius-md);
     background: var(--color-light-0);
     color: var(--color-dark-800);
-  }
-  .contact-form :global(.contact-form__steps) {
-    margin-top: var(--space-16);
   }
   .contact-form__intro {
     display: grid;
@@ -52,12 +54,36 @@ const steps = ['Start', '01', '02', '03'];
     width: min(100% - 2 * 49px, 31.375rem);
     margin-top: 2.6875rem; /* fields at y=229 */
   }
+  .contact-form__field {
+    display: grid;
+    gap: var(--space-8);
+    width: min(100% - 2 * 49px, 31.375rem);
+    margin-top: var(--space-24);
+  }
+  .contact-form__status {
+    width: min(100% - 2 * 49px, 31.375rem);
+    margin-top: var(--space-24);
+    font: var(--text-body-s);
+  }
+  .contact-form__status[data-tone='error'] {
+    color: #c5221f;
+  }
+  .contact-form__status a {
+    color: inherit;
+    text-decoration: underline;
+  }
   .contact-form__nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
     width: 100%;
     margin-top: 3.8125rem; /* bar at y=557 */
     padding: var(--space-16);
     border-top: 1px solid var(--color-border-subtle);
+  }
+  .contact-form__privacy {
+    font: var(--text-caption);
+    color: var(--color-text-muted);
   }
 </style>

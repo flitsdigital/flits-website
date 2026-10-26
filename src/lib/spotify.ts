@@ -17,11 +17,14 @@ async function oembed(url: string): Promise<{ title?: string; thumbnail_url?: st
 
 /**
  * The widget's tracks from src/content/tracks.json, in file order, with title and cover from Spotify at build.
- * The stored title/cover keep the build going when Spotify is down. Memoised: one build asks Spotify once per track.
+ * The stored title/cover keep the build going when Spotify is down. Memoised per build (one oEmbed call per
+ * track); not in dev, where a remembered result would outlive content edits.
  */
 let tracks: Promise<Track[]> | undefined;
-export const getTracks = () =>
-  (tracks ??= getCollection('tracks').then((entries) =>
+export const getTracks = () => (import.meta.env?.DEV ? loadTracks() : (tracks ??= loadTracks()));
+
+const loadTracks = () =>
+  getCollection('tracks').then((entries) =>
     Promise.all(
       byFileOrder(entries, trackFile.map((t) => t.id)).map(async ({ id, data }) => {
         const tid = trackId(data.url)!; // the collection schema already rejects non-track links
@@ -32,4 +35,4 @@ export const getTracks = () =>
         return { id, uri: `spotify:track:${tid}`, href: `https://open.spotify.com/track/${tid}`, title, artist: data.artist, cover };
       }),
     ),
-  ));
+  );

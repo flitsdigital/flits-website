@@ -31,12 +31,21 @@ const { idPrefix: p, class: className } = Astro.props;
     <Label for={`${p}-phone`} required>Telefoonnummer</Label>
     <Input id={`${p}-phone`} name="phone" type="tel" autocomplete="tel" placeholder="06 12345678" required />
   </div>
+  <!-- Trap for bots: people never see or reach this field; a filled one is dropped as spam (lib/lead.ts) -->
+  <label class="fields__trap" aria-hidden="true">Website <input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
 </div>
 
 <style>
   .fields {
     display: grid;
     gap: var(--space-24);
+  }
+  .fields__trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
   .fields__row {
     display: grid;

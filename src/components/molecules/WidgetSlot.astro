@@ -43,6 +43,7 @@ const counts: Partial<Record<WidgetId, number>> = {
   office: (await getCollection('officePhotos')).length,
   stories: (await getCollection('stories')).length,
   'studio-post': (await getCollection('studioPosts')).length,
+  spotify: (await getCollection('tracks')).length,
   pagespeed: (await measureAtBuild()).mobile === null ? 0 : 1, // no key / no score yet: not a "— meting volgt" card
 };
 const available = (w: WidgetId) => w in components && counts[w] !== 0;

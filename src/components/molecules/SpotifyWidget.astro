@@ -14,12 +14,13 @@ const { class: className } = Astro.props;
 // as long as it links back to Spotify. The script switches tracks; the HTML starts on the first one.
 const tracks = await getTracks();
 const now = tracks[0];
-const { prev, next } = neighbours(0, tracks.length);
+const { prev, next } = neighbours(0, Math.max(1, tracks.length));
 const left = tracks[prev];
 const right = tracks[next];
 ---
 
 <!-- Figma 991:4187 (168×168). Positions are the design's, in rem. Playback: src/scripts/spotify.ts -->
+{now && (
 <div class:list={['spotify', className]} data-spotify={now.uri} data-spotify-tracks={JSON.stringify(tracks)}>
   <span class="spotify__embed" aria-hidden="true"><span data-spotify-embed></span></span>
   <img class="spotify__glow" src={now.cover} alt="" data-spotify-glow />
@@ -46,6 +47,7 @@ const right = tracks[next];
   </span>
 </div>
 
+)}
 <style>
   .spotify {
     position: relative;
