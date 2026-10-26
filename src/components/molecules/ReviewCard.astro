@@ -9,7 +9,7 @@ interface Props {
   logoAlt: string;
   quote: string[];
   author: string;
-  avatar: ImageMetadata;
+  avatar?: ImageMetadata;
   class?: string;
 }
 
@@ -27,7 +27,7 @@ const { logo, logoHeight, logoAlt, quote, author, avatar, class: className } = A
   />
   <blockquote class="review-card__quote">{quote.map((p) => <p>{p}</p>)}</blockquote>
   <figcaption class="review-card__author">
-    <Avatar src={avatar} />
+    {avatar && <Avatar src={avatar} />}
     <span>{author}</span>
   </figcaption>
 </figure>

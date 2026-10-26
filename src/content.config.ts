@@ -3,7 +3,7 @@ import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { PROJECT_TYPES, SECTORS } from './lib/taxonomy';
 import { iconNames } from './design-system/icons';
-import { trackId } from './lib/spotify-ids';
+import { trackId } from './widgets/spotify/logic';
 
 // Single entry point for content. Pages and sections only use getCollection()/getEntry(),
 // so swapping a loader (e.g. to Sanity) later does not touch components.
@@ -32,7 +32,7 @@ const projects = defineCollection({
           heroTitle: z.string(),
           hero: image(),
           /** Live site: the yellow "Website bekijken" strip links here. */
-          website: z.string().url().optional(),
+          website: z.url().optional(),
           intro: z.object({ title: z.string(), services: z.array(z.string()).default([]) }),
           /** Posters for the video fan; leave empty to skip the fan. */
           videos: z.array(image()).default([]),
@@ -43,13 +43,14 @@ const projects = defineCollection({
             lead: z.string(),
             items: z.array(z.object({ label: z.string(), value: z.string() })).length(3),
           }),
+          /** Optional: only with a real review from this client (never a copied or made-up one). */
           testimonial: z.object({
             title: z.string(),
             lead: z.string(),
             image: image(),
             /** id in reviews.json. shortcut: plain id, because reference() inside this nested object made Astro 7.4 silently drop caseStudy. */
             review: z.string(),
-          }),
+          }).optional(),
         })
         .optional(),
     }),
@@ -65,24 +66,11 @@ const reviews = defineCollection({
       logoHeight: z.number().default(24),
       quote: z.array(z.string()),
       author: z.string(),
-      avatar: image(),
+      /** Leave out rather than use a placeholder photo. */
+      avatar: image().optional(),
     }),
 });
 
-/** Client logo tiles for the brand strip. */
-const clients = defineCollection({
-  loader: file('./src/content/clients.json'),
-  schema: ({ image }) =>
-    z.object({
-      name: z.string(),
-      logo: image(),
-      background: z.string().optional(),
-      logoWidth: z.number(),
-      logoHeight: z.number(),
-    }),
-});
-
-/** Logo wall on /over-ons: each logo sits in a cell of the 4-column grid (empty cells are intentional). */
 const logowall = defineCollection({
   loader: file('./src/content/logowall.json'),
   schema: ({ image }) =>
@@ -91,6 +79,8 @@ const logowall = defineCollection({
       logo: image(),
       row: z.number().int().min(1),
       column: z.number().int().min(1).max(4),
+      /** A logo repeated only to fill the over-ons grid; left out wherever clients are listed once. */
+      repeat: z.boolean().default(false),
     }),
 });
 
@@ -228,7 +218,7 @@ const tracks = defineCollection({
     url: z.string().refine((u) => trackId(u) !== null, 'Not a Spotify track link (album and playlist links do not work)'),
     artist: z.string(),
     title: z.string().optional(),
-    cover: z.string().url().optional(),
+    cover: z.url().optional(),
   }),
 });
 
@@ -259,4 +249,4 @@ const studioPosts = defineCollection({
     }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };
+export const collections = { projects, reviews, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };

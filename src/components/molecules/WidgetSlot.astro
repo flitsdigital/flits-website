@@ -1,16 +1,7 @@
 ---
-import { getCollection } from 'astro:content';
-import WeatherWidget from './WeatherWidget.astro';
-import SpotifyWidget from './SpotifyWidget.astro';
-import ChristmasWidget from './ChristmasWidget.astro';
-import PageSpeedWidget from './PageSpeedWidget.astro';
-import ReviewsWidget from './ReviewsWidget.astro';
-import OfficeWidget from './OfficeWidget.astro';
-import StoriesWidget from './StoriesWidget.astro';
-import StudioPostWidget from './StudioPostWidget.astro';
-import { widgets, pools, fixed } from '../../data/widgets';
+import { pools, fixed } from '../../data/widgets';
 import { candidates, inSeason, initialWidget, pagePath, slotWidget, type WidgetId, type SlotSize } from '../../lib/slots';
-import { measureAtBuild } from '../../lib/pagespeed';
+import { widgetMeta, widgetComponent, isAvailable } from '../../widgets/registry';
 
 interface Props {
   /** Slot name, unique per page; `fixed` in src/data/widgets.ts refers to it. */
@@ -25,31 +16,13 @@ interface Props {
 
 const { id, size, fallback, today, class: className } = Astro.props;
 
-// Every widget a slot can show. Add new ones here and in src/data/widgets.ts.
-const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
-  weather: WeatherWidget,
-  spotify: SpotifyWidget,
-  christmas: ChristmasWidget,
-  pagespeed: PageSpeedWidget,
-  reviews: ReviewsWidget,
-  office: OfficeWidget,
-  stories: StoriesWidget,
-  'studio-post': StudioPostWidget,
-};
-
-// A widget fed by a collection only counts once that collection has an entry (no empty cards).
-const counts: Partial<Record<WidgetId, number>> = {
-  reviews: (await getCollection('reviews')).length,
-  office: (await getCollection('officePhotos')).length,
-  stories: (await getCollection('stories')).length,
-  'studio-post': (await getCollection('studioPosts')).length,
-  pagespeed: (await measureAtBuild()).mobile === null ? 0 : 1, // no key / no score yet: not a "— meting volgt" card
-};
-const available = (w: WidgetId) => w in components && counts[w] !== 0;
+// Widgets come from src/widgets/ (registry.ts); one that has nothing real to show is left out.
+const availability = Object.fromEntries(await Promise.all([fallback, ...pools[size]].map(async (w) => [w, await isAvailable(w)] as const)));
+const available = (w: WidgetId) => availability[w] ?? false;
 const pinned = fixed[pagePath(Astro.url.pathname)]?.[id];
 // The fallback first, then the rest of the pool; only widgets that have something to show.
 const pool = pinned ? [] : candidates([fallback, ...pools[size].filter((w) => w !== fallback)], available);
-const seasons = Object.fromEntries(pool.map((w) => [w, widgets[w].season]).filter(([, s]) => s));
+const seasons = Object.fromEntries(pool.map((w) => [w, widgetMeta[w].season]).filter(([, s]) => s));
 
 // The HTML shows the first widget without a season (no layout shift when the browser picks another of the
 // same size); seasonal ones (Christmas) are only templates, so a November page never flashes them.
@@ -57,10 +30,10 @@ const seasons = Object.fromEntries(pool.map((w) => [w, widgets[w].season]).filte
 let shown: WidgetId | null = pinned ?? initialWidget(pool, seasons);
 if (today && !pinned) {
   const [, m, d] = today.split('-').map(Number);
-  const fits = (w: WidgetId) => inSeason(widgets[w].season, m, d);
+  const fits = (w: WidgetId) => inSeason(widgetMeta[w].season, m, d);
   shown = slotWidget({ candidates: candidates(pool, fits), fallback, fallbackAvailable: false, random: () => 0 });
 }
-const Shown = shown && components[shown];
+const Shown = shown && widgetComponent(shown);
 const templates = pinned || today ? [] : pool.filter((w) => w !== shown);
 const live = templates.length > 0;
 ---
@@ -75,7 +48,7 @@ const live = templates.length > 0;
 >
   {Shown && <Shown />}
   {live && templates.map((w) => {
-    const C = components[w]!;
+    const C = widgetComponent(w)!;
     return <template data-slot-option={w}><C /></template>;
   })}
 </div>

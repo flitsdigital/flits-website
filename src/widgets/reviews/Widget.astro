@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import { rating } from '../../data/site';
+import { shortQuote, firstName } from './logic';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+// Our own reviews (src/content/reviews.json) and the Google score from src/data/site.ts — nothing invented.
+const reviews = (await getCollection('reviews')).map((r) => ({ text: shortQuote(r.data.quote), name: firstName(r.data.author) }));
+const score = rating.score;
+const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z';
+---
+
+<!-- Look: prototype 05 (feature/widget-ideas). Behaviour: src/scripts/reviews-widget.ts -->
+<div class:list={['reviews-w', className]} data-reviews-widget>
+  <div class="reviews-w__score">
+    <p class="reviews-w__title">Reviews</p>
+    <p class="reviews-w__num">{score}</p>
+    <p class="reviews-w__stars" aria-label={`${score} van 5 sterren`}>
+      {[0, 1, 2, 3, 4].map(() => <svg viewBox="0 0 24 24" aria-hidden="true"><path d={star} /></svg>)}
+    </p>
+    <p class="reviews-w__meta">{rating.count} Google-reviews</p>
+  </div>
+  <div class="reviews-w__quotes">
+    {reviews.map((r, i) => (
+      <blockquote class:list={['reviews-w__quote', { 'is-active': i === 0 }]} data-reviews-quote aria-hidden={i === 0 ? undefined : 'true'}>
+        <p>“{r.text}”</p>
+        <footer class="reviews-w__meta">— {r.name}</footer>
+      </blockquote>
+    ))}
+    {reviews.length > 1 && (
+      <p class="reviews-w__dots">
+        {reviews.map((_, i) => <button type="button" data-reviews-dot aria-label={`Review ${i + 1}`} aria-pressed={i === 0 ? 'true' : 'false'} />)}
+      </p>
+    )}
+  </div>
+</div>
+
+<style>
+  .reviews-w {
+    display: flex;
+    gap: var(--space-12);
+    width: 21rem; /* 336px */
+    aspect-ratio: 2;
+    padding: var(--space-12);
+    border-radius: var(--radius-md);
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+  }
+  .reviews-w__title {
+    font: var(--text-widget-title);
+  }
+  .reviews-w__meta {
+    font: var(--text-widget-meta);
+    color: var(--color-dark-900-60);
+  }
+  .reviews-w__score {
+    display: flex;
+    flex-direction: column;
+    width: 6.5rem;
+    flex: none;
+  }
+  .reviews-w__num {
+    margin-top: auto;
+    font: var(--text-display-48);
+    font-size: 3rem;
+  }
+  .reviews-w__stars {
+    display: flex;
+    gap: 2px;
+    margin: var(--space-8) 0 var(--space-6);
+  }
+  .reviews-w__stars svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    fill: #fbbc04;
+  }
+  .reviews-w__quotes {
+    position: relative;
+    flex: 1;
+    border-radius: var(--radius-sm);
+    background: var(--color-light-100);
+  }
+  .reviews-w__quote {
+    position: absolute;
+    inset: 0 0 1.5rem;
+    margin: 0;
+    padding: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-8);
+    opacity: 0;
+    translate: 0 6px;
+    transition: opacity 0.4s ease, translate 0.4s ease;
+  }
+  .reviews-w__quote.is-active {
+    opacity: 1;
+    translate: 0;
+  }
+  .reviews-w__quote p {
+    font: var(--text-widget-title);
+    font-size: 0.75rem;
+    line-height: 1.25;
+  }
+  .reviews-w__dots {
+    position: absolute;
+    left: var(--space-12);
+    bottom: var(--space-10);
+    display: flex;
+    gap: var(--space-4);
+  }
+  .reviews-w__dots button {
+    width: 0.375rem;
+    height: 0.375rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-dark-900-60);
+    opacity: 0.4;
+    cursor: pointer;
+    transition: width 0.3s ease, opacity 0.3s ease;
+  }
+  .reviews-w__dots button[aria-pressed='true'] {
+    width: 1rem;
+    opacity: 1;
+    background: var(--color-dark-900);
+  }
+  .reviews-w__dots button:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reviews-w__quote,
+    .reviews-w__dots button {
+      transition: none;
+    }
+  }
+</style>

@@ -17,14 +17,18 @@ export const contact = {
 };
 
 /** Google rating shown above the reviews. */
-export const rating = { score: '4.9', count: '30' };
+export const rating = { score: '4,9', count: '30' };
 
-export const socials = [
-  { icon: 'instagram', label: 'Instagram', href: '#' },
-  { icon: 'facebook', label: 'Facebook', href: '#' },
-  { icon: 'tiktok', label: 'TikTok', href: '#' },
-  { icon: 'linkedin', label: 'LinkedIn', href: '#' },
-] as const;
+/** Design-system review pages: noindex, out of the sitemap, and loaded without Swup (they keep their own scripts). */
+export const REVIEW_PAGES = ['/styleguide', '/components', '/sections', '/widgets'];
+
+/** Social profiles; one without a URL is not shown (no dead "#" links). */
+export const socials: { icon: 'instagram' | 'facebook' | 'tiktok' | 'linkedin'; label: string; href: string }[] = [
+  { icon: 'instagram', label: 'Instagram', href: '' },
+  { icon: 'facebook', label: 'Facebook', href: '' },
+  { icon: 'tiktok', label: 'TikTok', href: '' },
+  { icon: 'linkedin', label: 'LinkedIn', href: '' },
+];
 
 export const legal = [
   { label: 'Algemene voorwaarden', href: '/algemene-voorwaarden' },

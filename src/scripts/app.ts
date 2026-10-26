@@ -1,10 +1,13 @@
 import Swup from 'swup';
+import { REVIEW_PAGES } from '../data/site';
 import SwupHeadPlugin from '@swup/head-plugin';
 import SwupA11yPlugin from '@swup/a11y-plugin';
 import SwupPreloadPlugin from '@swup/preload-plugin';
 import { initWidgetSlots } from './widget-slots';
+
+// Every widget's init (src/widgets/<id>/init.ts), found by folder; they run after the slots have picked.
+const widgetInits = Object.values(import.meta.glob<{ init: () => (() => void) | void }>('../widgets/*/init.ts', { eager: true })).map((m) => m.init);
 import { initRadialSliders } from './radial-slider';
-import { initClocks } from './clock';
 import { initProjectArchive } from './project-archive';
 import { initProcessSteps } from './process-steps';
 import { initLogoWallCycle } from './logo-wall';
@@ -15,14 +18,10 @@ import { initAnimatedGrid } from './grid-overlay';
 import { initRotatingImageTrail } from './image-trail';
 import { initRotatingText } from './rotating-text';
 import { initContactModal } from './contact-modal';
-import { initWeather } from './weather';
-import { initChristmas } from './christmas';
-import { initSpotify } from './spotify';
-import { initPageSpeed } from './pagespeed';
-import { initReviewsWidget } from './reviews-widget';
-import { initOfficeWidget } from './office-widget';
-import { initStoriesWidget } from './stories-widget';
-import { initStudioPosts } from './studio-posts';
+import { initNavbar } from './navbar';
+import { initLocalTime } from './local-time';
+import { initCursorMarquee } from './cursor-marquee';
+import { initContactForms } from './contact-form';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -30,7 +29,7 @@ import { initStudioPosts } from './studio-posts';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget, initOfficeWidget, initStoriesWidget, initStudioPosts];
+const pageInits: (() => (() => void) | void)[] = [initWidgetSlots, ...widgetInits, initRadialSliders, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initContactForms];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.
@@ -50,8 +49,11 @@ const unmount = () => {
 };
 
 mount();
-initAnimatedGrid(); // once: the overlay sits outside #swup
-initContactModal(); // once: the modal sits outside #swup too
+// Shell behaviour: the parts outside #swup (navbar, footer clock, cursor, modal) start once and stay.
+// The design grid (Shift+G) is for us, not for visitors: dev server, or ?grid on any page.
+const shellInits = [initNavbar, initLocalTime, initCursorMarquee, initContactModal];
+if (import.meta.env.DEV || new URLSearchParams(location.search).has('grid')) shellInits.push(initAnimatedGrid);
+shellInits.forEach((init) => init());
 
 const swup = new Swup({
   containers: ['#swup', '#nav-back'],
@@ -62,7 +64,7 @@ const swup = new Swup({
   ignoreVisit: (url, { el } = {}) =>
     !document.getElementById('swup') ||
     !!el?.closest('[data-no-swup]') ||
-    ['/styleguide', '/components', '/sections', '/widgets'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
+    REVIEW_PAGES.some((p) => new URL(url, location.origin).pathname.startsWith(p)),
   plugins: [new SwupHeadPlugin({ awaitAssets: true }), new SwupA11yPlugin(), new SwupPreloadPlugin()],
 });
 

@@ -2,30 +2,22 @@
 
 Figma-bestand `UFqTVWWPaxVwCS6UQSJndT`. De node-ids zijn voorbeeld-instances, zodat je ze in Figma terugvindt. Bij **Status** staat ✅ als het component gebouwd is en ⏳ als het later volgt.
 
-## Architectuurregels (na review, 2026-10-23)
-
-- **Content komt alleen binnen via content collections** (`src/content.config.ts`). Pagina's halen content op met `getCollection`/`getEntry` of met de gesorteerde helpers in `src/lib/content.ts`, en geven die als props door aan secties. Een overstap naar Sanity verandert alleen de loader.
-- **`src/data/site.ts`** bevat alleen site-brede instellingen: nav, contact, rating, socials, legal en de ticker.
-- **De paginaschil is `PageLayout`**: BaseLayout + Navbar + `<main>` + Footer. De navbar ligt over de eerste (donkere) sectie heen. Die sectie begint haar content op `var(--page-top)`.
-- **Secties bepalen hun eigen ruimte** (de Figma-afstanden). Een pagina is daardoor gewoon een lijst secties.
-- **Breedtes komen uit tokens**: `--width-content` (1248), `--width-narrow` (817) en `--width-panel` (1344). Die past de mobiele fase op één plek aan.
-- **Paginaovergangen (Swup, `src/scripts/app.ts`)**: Swup wisselt alleen `#swup` (de pagina-inhoud) en `#nav-back`; navbar en footer blijven staan. Gedrag van pagina-inhoud staat in `src/scripts/*.ts` als `init()` die een opruimfunctie teruggeeft; `app.ts` start die bij elke pagina en ruimt ze op vóór de wissel. Een nieuw interactief component = een init-functie toevoegen aan `pageInits`, geen `<script>` in het component (Swup voert scripts in nieuwe inhoud niet uit). Animaties: `src/styles/motion.css`.
+Huisregels (lagen, content, widgets, scripts): `CLAUDE.md`.
 
 ## Content collections — `src/content/`
 
 | Collectie | Bron | Velden |
 |---|---|---|
 | `projects` | `projects/*.md` (1 bestand per case) | client, title, date (ook het jaartal), tags, badge?, types, sector, cover, **caseStudy?** (hero, intro, video's, galerij, resultaten, stats, testimonial) + Markdown-body = intro-tekst van de case |
-| `reviews` | `reviews.json` | logo, logoAlt, logoHeight, quote[], author, avatar |
-| `clients` | `clients.json` | name, logo, background?, logoWidth, logoHeight (tegels in de logostrip) |
-| `logowall` | `logowall.json` | name, logo, row, column (cel in de 4-koloms logowall; lege cellen zijn bewust) |
+| `reviews` | `reviews.json` | logo, logoAlt, logoHeight, quote[], author, avatar? |
+| `logowall` | `logowall.json` | name, logo, row, column, repeat (cel in de 4-koloms logowall; lege cellen zijn bewust; `repeat` = tweede tegel van dezelfde klant, niet in de logostrip) |
 | `behindTheScenes` | `behind-the-scenes.json` | image, year, caption, tilt (polaroids, volgorde = slidervolgorde) |
 | `team` | `team.json` | name, order, role, photo, avatar |
 | `services` | `services/*.yaml` | order, label, teaser*, `page` (breadcrumb, title, intro, description, heroMedia, blocks[]) — voedt nav, footer, teaser en `/diensten/[slug]` |
 | `faqs` | `faqs.json` | question, answer, services? |
 | `legal` | `legal/*.md` | title, draft + Markdown-body |
 
-**Helpers** (`src/lib/content.ts`): `getCase(id)` levert een complete, gecontroleerde case (fout met bestandsnaam bij ontbrekende `caseStudy` of onbekende review-id), `getCaseSlugs()` voor `/projecten/[slug]`, `hasCase()`, `getFounders()` + `avatarsOf()` (volgorde via `order` in team.json). Het jaartal komt uit `date`.
+**Helpers** (`src/lib/content.ts`): `getCase(id)` levert een complete, gecontroleerde case (fout met bestandsnaam bij ontbrekende `caseStudy` of onbekende review-id), `getCaseSlugs()` voor `/projecten/[slug]`, `hasCase()`, `getFounders()`, `getFounderAvatars()` (volgorde via `order` in team.json); welke projecten en FAQ's een dienstpagina toont: `src/lib/select.ts`. Het jaartal komt uit `date`.
 
 **Een nieuwe case toevoegen** = één `.md` in `src/content/projects/` met `caseStudy` in de frontmatter (zie `de-koffiekoets.md` als voorbeeld). Zonder `caseStudy` verschijnt het project alleen als kaart.
 
@@ -63,7 +55,7 @@ Figma-bestand `UFqTVWWPaxVwCS6UQSJndT`. De node-ids zijn voorbeeld-instances, zo
 | `Review Card` | `ReviewCard.astro` | velden uit `reviews` | ✅ | `1:1305` |
 | Dienst-teaser | `ServiceCard.astro` | `href`, `image`, `label` | ✅ | `1:1586` |
 | Teamlid | `TeamCard.astro` | `image`, `name`, `role`, `tagSide?` | ✅ | `1:1229` |
-| Weer / klok / kaart | `WeatherWidget`, `ClockWidget` (`layout` stack/wide), `MapWidget` | standaardwaarden uit `site.ts` | ✅ | `1:1178`, `1:1194`, `1:2804`, `1:1218` |
+| Weer / klok / kaart (en alle andere widgets) | `src/widgets/<id>/Widget.astro`, overzicht op `/widgets` | zie `CLAUDE.md` | ✅ | `1:1178`, `1:1194`, `1:2804`, `1:1218` |
 | Stat-card | `StatCard.astro` | `label`, `value` | ✅ | `1:1761`, `1:3247` |
 | Feature-/pijnpunt-card | `FeatureCard.astro` | `icon`, `title`, `text` | ✅ | `1:2523`, `1:3062` |
 | Proces-stap | `StepCard.astro` | `step`, `image`, `title`, `text` | ✅ | `1:2539` |
@@ -89,7 +81,7 @@ Figma-bestand `UFqTVWWPaxVwCS6UQSJndT`. De node-ids zijn voorbeeld-instances, zo
 | Reviews | `ReviewsCarousel.astro` (`ticker?` i.p.v. Google-score) | ✅ | `1:1239`, `1:2094` |
 | Dienst-teasers | `ServicesTeaser.astro` | ✅ | `1:1568` |
 | Wie zijn wij + widgets | `TeamSection.astro` (`theme` surface/light) | ✅ | `1:1177`, `1:1673` |
-| Telefoon met "Een kijkje achter de schermen" | `Showreel.astro` | ✅ | `1:1617` |
+| "Een kijkje achter de schermen" (showreel) | `Showreel.astro` | ✅ | `1:1617` |
 | Dark hero met breadcrumb | `HeroPage.astro` (`size` l/m) | ✅ | `1:2220`, `1:2885` |
 | Foto-hero over ons | `HeroPhoto.astro` | ✅ | `1:1738`, `1:1770` |
 | Polaroid-slider | `BehindTheScenes.astro` | ✅ | `1:1638` |
@@ -97,7 +89,7 @@ Figma-bestand `UFqTVWWPaxVwCS6UQSJndT`. De node-ids zijn voorbeeld-instances, zo
 | Stats-paneel (over ons + case) | `StatsPanel.astro` | ✅ | `1:1751`, `1:3234` |
 | Logowall | `ClientLogoGrid.astro` | ✅ | `1:1737` |
 | Pijnpunten / features (één patroon) | `FeatureGrid.astro` (`variant` pains/services) | ✅ | `1:2493`, `1:3056` |
-| Video-fan | `VideoFan.astro` (`straddle?`) | ✅ | `1:2564`, `1:3172` |
+| Video-fan | `VideoFan.astro` | ✅ | `1:2564`, `1:3172` |
 | Logo-fan + CTA | `LogoFan.astro` | ✅ | `1:2576`–`1:2697` |
 | Tekst + donker mediablok | `SplitMedia.astro` (`mediaSide`, slots eyebrow/actions/media) | ✅ | `1:2754`, `1:2956`, `1:2962` |
 | Foto + telefoon onder de hero | `PhotoPhone.astro` | ✅ | `1:2955`, `1:2973` |
@@ -122,6 +114,6 @@ Showcase per pagina: `/sections` (home), `/sections/over-ons`, `/sections/projec
 | — (afgeleid) | `contact.astro` | HeroPage + ContactSection |
 | — (afgeleid) | `[legal].astro` | `content/legal/*.md` (`draft: true` = noindex) |
 | — (afgeleid) | `404.astro` | HeroPage + ProjectsGrid |
-| review | `/styleguide`, `/components`, `/sections` (overzicht pagina → secties) | |
+| review | `/styleguide`, `/components`, `/sections` (overzicht pagina → secties), `/widgets` | |
 
 **Nieuwe dienst** = één YAML-bestand in `src/content/services/`. **Nieuwe case** = één Markdown in `src/content/projects/` met `caseStudy`. **FAQ** = `src/content/faqs.json` (`services` leeg = overal).

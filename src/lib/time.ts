@@ -23,6 +23,22 @@ export function studioTime(date = new Date()) {
   };
 }
 
+const dateParts = new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE, year: 'numeric', month: 'numeric', day: 'numeric' });
+const dayMonth = new Intl.DateTimeFormat('nl-NL', { timeZone: TIME_ZONE, day: 'numeric', month: 'short' });
+
+/** "3 okt" in the studio's time zone (no trailing dot). */
+export const shortDate = (date: Date) => dayMonth.format(date).replace('.', '');
+
+/**
+ * The studio's clock and calendar in one: studioTime plus year/month/day and "26 okt", all in Amsterdam.
+ * Use this for anything that depends on the day (seasons, Christmas, "vandaag"), also at build time —
+ * the build machine runs in UTC, so `new Date().getMonth()` can be a day off around midnight.
+ */
+export function studioNow(date = new Date()) {
+  const p = Object.fromEntries(dateParts.formatToParts(date).map((x) => [x.type, Number(x.value)]));
+  return { ...studioTime(date), year: p.year, month: p.month, day: p.day, dateLabel: shortDate(date) };
+}
+
 /**
  * Calls `fn` now and then on every whole multiple of `ms` (whole seconds for 1000), so every clock on
  * the page changes at the same moment and a tick never lands twice in one second. Returns a stop function.

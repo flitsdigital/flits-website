@@ -11,14 +11,16 @@ interface Props {
   image?: string;
   /** See Navbar: centred back link in the bar. */
   backLink?: { label: string; href: string };
+  /** Home only, see BaseLayout. */
+  landing?: boolean;
 }
 
-const { title, description, noindex, image, backLink } = Astro.props;
+const { title, description, noindex, image, backLink, landing } = Astro.props;
 ---
 
 <!-- Page shell: the navbar overlays the first section, which must be dark and start its
      content at var(--page-top). Sections own their own spacing, so a page is just a list. -->
-<BaseLayout title={title} description={description} noindex={noindex} image={image}>
+<BaseLayout title={title} description={description} noindex={noindex} image={image} landing={landing}>
   <div class="page">
     <Navbar backLink={backLink} />
     <!-- Swup swaps this element on navigation; navbar and footer stay. -->

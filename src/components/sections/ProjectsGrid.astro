@@ -1,4 +1,5 @@
 ---
+import { serviceTicker } from '../../data/site';
 import type { CollectionEntry } from 'astro:content';
 import Panel from '../atoms/Panel.astro';
 import Button from '../atoms/Button.astro';
@@ -7,11 +8,12 @@ import ProjectGrid from '../molecules/ProjectGrid.astro';
 
 interface Props {
   title: string;
+  /** Defaults to the service ticker. */
   ticker?: string[];
   projects: CollectionEntry<'projects'>[];
 }
 
-const { title, ticker, projects } = Astro.props;
+const { title, ticker = serviceTicker, projects } = Astro.props;
 ---
 
 <Panel as="section" width="full" class="projects">

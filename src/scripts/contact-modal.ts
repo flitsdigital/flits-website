@@ -1,10 +1,12 @@
+import { leadFrom, mailtoFor } from '../lib/lead';
+
 /**
  * The "Start een project" modal (ContactModal.astro): every link to /contact opens it instead of the
  * page ("Klik dan hier" and links marked data-no-modal still go there). Start → 01 services → 02 the
  * project → 03 contact details; VOLGENDE stays off on 01 until a service is chosen, and on 03 the
  * browser checks the required fields.
- * shortcut: there is no form backend yet, so sending opens the visitor's mail app with the request
- * filled in (to data-email); swap `send` for a POST once there is an endpoint.
+ * Sending posts to /api/contact (which hands it to n8n); "Bedankt" only after a 2xx, otherwise an
+ * error with a mailto link carrying the whole request.
  * Runs once: the modal lives outside the Swup container.
  */
 export function initContactModal() {
@@ -16,6 +18,9 @@ export function initContactModal() {
   const prev = dialog.querySelector<HTMLButtonElement>('[data-contact-prev]')!;
   const next = dialog.querySelector<HTMLButtonElement>('[data-contact-next]')!;
   const nextLabel = next.querySelector('.btn__label')!;
+  const error = dialog.querySelector<HTMLElement>('[data-contact-error]')!;
+  const mailto = dialog.querySelector<HTMLAnchorElement>('[data-contact-mailto]')!;
+  let sending = false;
   const last = 3;
   let step: number | 'done' = 0;
 
@@ -24,8 +29,8 @@ export function initContactModal() {
   function update() {
     const chose = !!form.querySelector('[name="services"]:checked');
     prev.disabled = step === 0 || step === 'done';
-    next.disabled = step === 1 && !chose;
-    nextLabel.textContent = step === 'done' ? 'Sluiten' : step === last ? 'Versturen' : 'Volgende';
+    next.disabled = sending || (step === 1 && !chose);
+    nextLabel.textContent = step === 'done' ? 'Sluiten' : step === last ? (sending ? 'Versturen…' : 'Versturen') : 'Volgende';
   }
 
   function show(s: number | 'done') {
@@ -36,21 +41,22 @@ export function initContactModal() {
     update();
   }
 
-  function send() {
+  async function send() {
     const data = new FormData(form);
-    const name = [data.get('firstName'), data.get('lastName')].filter(Boolean).join(' ');
-    const body = [
-      `Ik ben op zoek naar: ${data.getAll('services').join(', ')}`,
-      '',
-      String(data.get('message') || '').trim(),
-      '',
-      `Naam: ${name}`,
-      `E-mail: ${data.get('email')}`,
-      `Telefoon: ${data.get('phone')}`,
-    ].join('\n');
-    const subject = `Nieuw project via de website — ${name}`;
-    window.location.href = `mailto:${dialog!.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    show('done');
+    error.hidden = true;
+    sending = true;
+    update();
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', body: data, headers: { accept: 'application/json' } });
+      if (!res.ok) throw new Error(`contact ${res.status}`);
+      sending = false;
+      show('done');
+    } catch {
+      sending = false;
+      mailto.href = mailtoFor(leadFrom(data), dialog!.dataset.email!);
+      error.hidden = false;
+      update();
+    }
   }
 
   function open() {
@@ -66,7 +72,7 @@ export function initContactModal() {
     // Required fields of this step first (03: name, e-mail, phone)
     const invalid = [...panel(step).querySelectorAll<HTMLInputElement>('input, textarea')].find((f) => !f.checkValidity());
     if (invalid) return invalid.reportValidity();
-    if (step === last) return send();
+    if (step === last) return void send();
     show(step + 1);
   });
   prev.addEventListener('click', () => typeof step === 'number' && step > 0 && show(step - 1));

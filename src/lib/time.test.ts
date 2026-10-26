@@ -1,6 +1,6 @@
 import { test, mock } from 'node:test';
 import assert from 'node:assert/strict';
-import { studioTime, clockAngles, secondsSince, everyTick } from './time.ts';
+import { studioTime, studioNow, shortDate, clockAngles, secondsSince, everyTick } from './time.ts';
 
 test('formats in Europe/Amsterdam with DST zone names', () => {
   // 2026-07-01 10:05:30 UTC = 12:05:30 CEST
@@ -34,4 +34,16 @@ test('everyTick ticks now, then on whole seconds, and stops', () => {
   mock.timers.tick(5000);
   assert.equal(calls, 3);
   mock.timers.reset();
+});
+
+test('studioNow: the date in Emmen, not in UTC or on the build machine', () => {
+  // 23:30 UTC on 31 Dec = already New Year's Day in Amsterdam
+  const t = studioNow(new Date('2026-12-31T23:30:00Z'));
+  assert.deepEqual([t.year, t.month, t.day, t.h, t.dateLabel], [2027, 1, 1, 0, '1 jan']);
+  assert.equal(studioNow(new Date('2026-10-26T11:00:00Z')).dateLabel, '26 okt');
+});
+
+test('shortDate: "3 okt", no trailing dot', () => {
+  assert.equal(shortDate(new Date('2026-10-03T12:00:00Z')), '3 okt');
+  assert.equal(shortDate(new Date('2026-09-10T12:00:00Z')), '10 sep');
 });

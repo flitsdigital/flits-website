@@ -2,8 +2,10 @@
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'input'> & {
-  /** A textarea with the same look (contact modal, step 02). */
+  /** A textarea with the same look (contact modal, step 02; contact form). */
   multiline?: boolean;
+  /** Textarea height in lines (only with multiline). */
+  rows?: number;
 };
 
 const { class: className, type = 'text', multiline = false, ...rest } = Astro.props;

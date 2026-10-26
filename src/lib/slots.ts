@@ -1,4 +1,5 @@
-export type WidgetId = 'weather' | 'spotify' | 'pagespeed' | 'christmas' | 'reviews' | 'stories' | 'office' | 'studio-post';
+/** A folder name in src/widgets/ (see src/widgets/registry.ts). */
+export type WidgetId = string;
 export type SlotSize = 'square' | 'wide';
 /** [month, day], inclusive on both ends; `to` before `from` wraps the new year. */
 export type Season = { from: readonly [number, number]; to: readonly [number, number] };

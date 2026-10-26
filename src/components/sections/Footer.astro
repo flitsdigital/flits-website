@@ -36,24 +36,19 @@ const pages = [
     <p class="footer__meta" data-local-time data-region={contact.region}>17:45 in {contact.region}</p>
     <div class="footer__meta footer__legal">
       {legal.map((l) => <a href={l.href}>{l.label}</a>)}
-      <ul class="footer__socials" role="list">
-        {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
-      </ul>
+      <a href="https://api.met.no/" rel="noopener">Weerdata: MET Norway</a>
+      {socials.some((s) => s.href) && (
+        <ul class="footer__socials" role="list">
+          {socials.filter((s) => s.href).map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
+        </ul>
+      )}
     </div>
   </div>
   <Logo variant="footer" class="footer__logo" />
 </footer>
 
-<script>
-  import { studioTime, everyTick } from '../../lib/time';
 
-  everyTick(() => {
-    const { hh, mm } = studioTime();
-    document.querySelectorAll<HTMLElement>('[data-local-time]').forEach((el) => {
-      el.textContent = `${hh}:${mm} in ${el.dataset.region}`;
-    });
-  }, 1000);
-</script>
+<!-- Behaviour: src/scripts/local-time.ts (started once by src/scripts/app.ts) -->
 
 <style>
   .footer {

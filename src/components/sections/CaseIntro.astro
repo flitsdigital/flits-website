@@ -20,7 +20,7 @@ const { title, services, website } = Astro.props;
     website && (
       <a class="case-intro__site" href={website} target="_blank" rel="noopener">
         <Ticker items={['Website bekijken']} variant="pill" size="m" decorative />
-        <span class="visually-hidden">Website bekijken (opent in nieuw tabblad)</span>
+        <span class="sr-only">Website bekijken (opent in nieuw tabblad)</span>
       </a>
     )
   }
@@ -49,13 +49,5 @@ const { title, services, website } = Astro.props;
     border-radius: var(--radius-pill);
     background: var(--color-light-0);
     font: var(--text-label);
-  }
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 </style>

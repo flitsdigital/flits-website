@@ -9,6 +9,6 @@
   { "id": "nnet-energy", "name": "nnet energy", "logo": "../assets/logos/nnet-energy.svg", "row": 3, "column": 2 },
   { "id": "chocodoki", "name": "Chocodoki", "logo": "../assets/logos/chocodoki.svg", "row": 3, "column": 4 },
   { "id": "cr-noord", "name": "Car Rally Noord", "logo": "../assets/logos/cr-noord.svg", "row": 4, "column": 2 },
-  { "id": "menges-de-vries-2", "name": "Menges & De Vries", "logo": "../assets/logos/menges-de-vries.svg", "row": 4, "column": 3 },
-  { "id": "jh-automotive-2", "name": "JH Automotive", "logo": "../assets/logos/jh-automotive.svg", "row": 4, "column": 4 }
+  { "id": "menges-de-vries-2", "repeat": true, "name": "Menges & De Vries", "logo": "../assets/logos/menges-de-vries.svg", "row": 4, "column": 3 },
+  { "id": "jh-automotive-2", "repeat": true, "name": "JH Automotive", "logo": "../assets/logos/jh-automotive.svg", "row": 4, "column": 4 }
 ]

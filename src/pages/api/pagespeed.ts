@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
-import { env, measure } from '../../lib/pagespeed';
+import { measure } from '../../widgets/pagespeed/logic';
+import { env } from '../../lib/env';
 
 // Runs on Vercel, not at build. The CDN keeps the answer a day, so PSI is asked about once a day.
 export const prerender = false;

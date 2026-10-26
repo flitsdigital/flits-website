@@ -8,9 +8,8 @@ import CaseResults from '../../components/sections/CaseResults.astro';
 import StatsPanel from '../../components/sections/StatsPanel.astro';
 import CaseTestimonial from '../../components/sections/CaseTestimonial.astro';
 import ProjectsGrid from '../../components/sections/ProjectsGrid.astro';
-import { serviceTicker } from '../../data/site';
 import { getImage } from 'astro:assets';
-import { getCase, getCaseSlugs, getFounders, avatarsOf } from '../../lib/content';
+import { getCase, getCaseSlugs, getFounderAvatars } from '../../lib/content';
 
 // Case detail (Figma 1:3140): one page per project whose Markdown has a `caseStudy` block.
 export async function getStaticPaths() {
@@ -18,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { project, caseStudy: cs, review, Content, related, year } = await getCase(Astro.params.slug);
-const founders = avatarsOf(await getFounders());
+const founders = await getFounderAvatars();
 const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
 ---
 
@@ -30,10 +29,10 @@ const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
 >
   <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />
   <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
-  {cs.videos.length > 0 && <VideoFan posters={cs.videos} straddle={false} />}
-  <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />
+  {cs.videos.length > 0 && <VideoFan posters={cs.videos} />}
+  <CaseGallery title={cs.gallery.title} images={cs.gallery.images} />
   <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />
   <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />
-  <CaseTestimonial {...cs.testimonial} review={review} />
-  <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
+  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} />}
+  <ProjectsGrid title="Bekijk deze projecten ook eens!" projects={related} />
 </PageLayout>
