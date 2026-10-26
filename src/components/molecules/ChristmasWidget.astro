@@ -1,5 +1,6 @@
 ---
 import { Image, getImage } from 'astro:assets';
+import { studioNow } from '../../lib/time';
 import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto } from '../../lib/christmas';
 
 interface Props {
@@ -16,8 +17,8 @@ const byKey = Object.fromEntries(Object.entries(files).map(([path, m]) => [path.
 const pinned = Astro.props.days !== undefined;
 
 // Build-time values; scripts/christmas.ts sets the live ones on page load unless pinned.
-const now = new Date();
-const { days = daysUntilChristmas(now.getFullYear(), now.getMonth() + 1, now.getDate()), stage = christmasStage(now.getMonth() + 1, now.getDate()), dark = false, class: className } = Astro.props;
+const now = studioNow(); // Amsterdam date, not the build machine's (UTC)
+const { days = daysUntilChristmas(now.year, now.month, now.day), stage = christmasStage(now.month, now.day), dark = false, class: className } = Astro.props;
 const photo = byKey[christmasPhoto(stage, dark, new Set(Object.keys(byKey)))!];
 const photos = pinned
   ? undefined

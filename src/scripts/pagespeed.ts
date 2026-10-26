@@ -1,4 +1,5 @@
 import { band, type PageSpeed } from '../lib/pagespeed';
+import { shortDate } from '../lib/time';
 
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -57,8 +58,7 @@ export function initPageSpeed(): (() => void) | void {
             if (r.stale) return;
             w.dataset.mobile = String(r.mobile ?? '');
             w.dataset.desktop = String(r.desktop ?? '');
-            const when = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', timeZone: 'Europe/Amsterdam' }).format(new Date(r.measuredAt)).replace('.', '');
-            w.querySelector('[data-speed-when]')!.textContent = `gemeten op ${when}`;
+            w.querySelector('[data-speed-when]')!.textContent = `gemeten op ${shortDate(new Date(r.measuredAt))}`;
           })
           .catch(() => {})
           .finally(show);

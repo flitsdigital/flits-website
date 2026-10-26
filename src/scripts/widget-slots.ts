@@ -1,7 +1,5 @@
-import { TIME_ZONE } from '../lib/time';
+import { studioNow } from '../lib/time';
 import { candidates, inSeason, pickSlot, type Season, type WidgetId } from '../lib/slots';
-
-const monthDay = new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE, month: 'numeric', day: 'numeric' });
 
 /**
  * Picks what each unfixed widget slot shows on this visit: a random in-season widget from its pool.
@@ -10,7 +8,7 @@ const monthDay = new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE, month: 
 export function initWidgetSlots() {
   const slots = document.querySelectorAll<HTMLElement>('[data-widget-slot]');
   if (!slots.length) return;
-  const parts = Object.fromEntries(monthDay.formatToParts(new Date()).map((p) => [p.type, Number(p.value)]));
+  const parts = studioNow();
   slots.forEach((slot) => {
     const seasons: Partial<Record<WidgetId, Season>> = JSON.parse(slot.dataset.slotSeasons ?? '{}');
     const current = slot.dataset.slotCurrent as WidgetId | ''; // '' = only seasonal widgets, nothing rendered yet

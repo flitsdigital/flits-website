@@ -1,6 +1,7 @@
 ---
 import { band, measureAtBuild, type PageSpeed } from '../../lib/pagespeed';
 import { env } from '../../lib/env';
+import { shortDate } from '../../lib/time';
 
 interface Props {
   /** Pins a result (no live update), e.g. for the widgets page. */
@@ -13,7 +14,7 @@ const { result: pinned, class: className } = Astro.props;
 const result = pinned ?? (await measureAtBuild());
 const host = new URL(env('SITE_URL') ?? 'https://flitsdigital.nl').host.replace(/^www\./, '');
 const score = result.mobile;
-const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', timeZone: 'Europe/Amsterdam' }).format(new Date(result.measuredAt)).replace('.', '');
+const date = shortDate(new Date(result.measuredAt));
 ---
 
 <!-- Look: prototype 11 (feature/widget-ideas). Behaviour: src/scripts/pagespeed.ts -->
