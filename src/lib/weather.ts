@@ -1,6 +1,11 @@
-/** Open-Meteo "current" for the studio in Emmen; free, no key, CORS-enabled. */
-export const WEATHER_URL =
-  'https://api.open-meteo.com/v1/forecast?latitude=52.78&longitude=6.91&current=temperature_2m,weather_code,is_day&timezone=Europe%2FAmsterdam';
+/** The studio in Emmen. */
+const EMMEN = { lat: 52.78, lon: 6.91 };
+
+/**
+ * MET Norway locationforecast (free, also commercially, CC BY 4.0: "Weerdata: MET Norway"). Called only by
+ * /api/weather, with an identifying User-Agent as their terms ask; the browser never talks to them.
+ */
+export const MET_URL = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${EMMEN.lat}&lon=${EMMEN.lon}`;
 
 export type Season = 'lente' | 'zomer' | 'herfst' | 'winter';
 export type Daypart = 'ochtend' | 'middag' | 'avond' | 'nacht';
@@ -26,17 +31,44 @@ const labels: Record<Sky, string | Partial<Record<Daypart, string>> & { default:
   vorst: { default: 'Het vriest', ochtend: 'Ruiten krabben' },
 };
 
-/** WMO weather code (+ temperature for frost) → one of the photo skies. */
-export function skyFor(code: number, temperature = 10): Sky {
-  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'sneeuw';
-  if (code >= 95) return 'onweer';
-  if (code === 45 || code === 48) return 'mist';
-  if (code > 3) return 'regen';
+/** MET Norway symbol code ("partlycloudy_day", "lightrain", …) + temperature for frost → one of the photo skies. */
+export function skyFor(symbol: string, temperature = 10): Sky {
+  const s = symbol.replace(/_(day|night|polartwilight)$/, '');
+  if (s.includes('thunder')) return 'onweer';
+  if (s.includes('snow')) return 'sneeuw';
+  if (s.includes('rain') || s.includes('sleet')) return 'regen'; // sleet: wet, reads as rain in NL
+  if (s === 'fog') return 'mist';
   if (temperature <= 0) return 'vorst';
-  return code <= 1 ? 'helder' : code === 2 ? 'halfbewolkt' : 'bewolkt';
+  return s === 'clearsky' || s === 'fair' ? 'helder' : s === 'partlycloudy' ? 'halfbewolkt' : 'bewolkt';
 }
 
-/** Daylight first (Open-Meteo's is_day), then the studio hour. */
+/** Is the sun up (incl. refraction) at this moment in Emmen? NOAA's short solar-position formulas. */
+export function isDaylight(date: Date, { lat, lon } = EMMEN) {
+  const rad = Math.PI / 180;
+  const start = Date.UTC(date.getUTCFullYear(), 0, 1);
+  const hours = date.getUTCHours() + date.getUTCMinutes() / 60;
+  const g = ((2 * Math.PI) / 365) * (Math.floor((date.getTime() - start) / 864e5) + (hours - 12) / 24);
+  const decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  const eqTime = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  const hourAngle = ((hours * 60 + eqTime + 4 * lon) / 4 - 180) * rad;
+  const cosZenith = Math.sin(lat * rad) * Math.sin(decl) + Math.cos(lat * rad) * Math.cos(decl) * Math.cos(hourAngle);
+  return 90 - Math.acos(cosZenith) / rad > -0.833;
+}
+
+export type CurrentWeather = { temperature: number; symbol: string; isDay: boolean };
+
+/** Now from a MET Norway response: the first time step; day/night from the symbol's suffix, else from the sun. */
+export function currentFromMet(json: unknown, now: Date): CurrentWeather | null {
+  type Step = { data?: { instant?: { details?: { air_temperature?: number } }; next_1_hours?: { summary?: { symbol_code?: string } } } };
+  const step = (json as { properties?: { timeseries?: Step[] } })?.properties?.timeseries?.[0];
+  const temperature = step?.data?.instant?.details?.air_temperature;
+  const symbol = step?.data?.next_1_hours?.summary?.symbol_code;
+  if (typeof temperature !== 'number' || !symbol) return null;
+  const suffix = symbol.match(/_(day|night|polartwilight)$/)?.[1];
+  return { temperature, symbol, isDay: suffix ? suffix !== 'night' : isDaylight(now) };
+}
+
+/** Daylight first, then the studio hour. */
 export const daypartFor = (isDay: boolean, hour: number): Daypart =>
   !isDay ? 'nacht' : hour < 12 ? 'ochtend' : hour < 18 ? 'middag' : 'avond';
 
@@ -58,5 +90,5 @@ export const allScenes = () => [
 ];
 
 /** Scene for the live weather. `hour` and `month` are studio (Amsterdam) time. */
-export const weatherScene = (code: number, temperature: number, isDay: boolean, hour: number, month: number) =>
-  scene(seasonFor(month), daypartFor(isDay, hour), skyFor(code, temperature));
+export const weatherScene = (symbol: string, temperature: number, isDay: boolean, hour: number, month: number) =>
+  scene(seasonFor(month), daypartFor(isDay, hour), skyFor(symbol, temperature));

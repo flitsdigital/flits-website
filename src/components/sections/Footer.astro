@@ -36,6 +36,7 @@ const pages = [
     <p class="footer__meta" data-local-time data-region={contact.region}>17:45 in {contact.region}</p>
     <div class="footer__meta footer__legal">
       {legal.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a href="https://api.met.no/" rel="noopener">Weerdata: MET Norway</a>
       <ul class="footer__socials" role="list">
         {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
       </ul>

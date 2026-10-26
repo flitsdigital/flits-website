@@ -12,8 +12,9 @@ interface Props {
   class?: string;
 }
 
-// Static design values until scripts/weather.ts fills in the live Open-Meteo weather (and keeps them if it fails).
-const { temperature = '24 °', condition = 'Lekker zonnetje', date = '10 sep', scene, class: className } = Astro.props;
+// Empty until scripts/weather.ts fills in the live weather (MET Norway via /api/weather); if that fails it
+// stays empty rather than showing a made-up "24° Lekker zonnetje". The props are for the /widgets demos.
+const { temperature = '', condition = '', date = '', scene, class: className } = Astro.props;
 
 // One photo per season × daypart × sky ("herfst-ochtend-regen", see lib/weather.ts), made from one street photo of the office.
 const files = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/widgets/weather/*.jpg', { eager: true });
