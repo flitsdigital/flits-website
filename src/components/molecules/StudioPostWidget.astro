@@ -1,0 +1,145 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import jordi from '../../assets/images/avatars/jordi.png';
+import joery from '../../assets/images/avatars/joery.png';
+import { relativeDay } from '../../lib/relative-day';
+
+type Post = { author: 'jordi' | 'joery'; date: Date; text: string; image?: ImageMetadata };
+
+interface Props {
+  /** Sample posts for the widgets page; otherwise src/content/studio-posts.json. */
+  posts?: Post[];
+  class?: string;
+}
+
+const { posts: sample, class: className } = Astro.props;
+const posts = (sample ?? (await getCollection('studioPosts')).map((p) => p.data)).sort((a, b) => +b.date - +a.date);
+const people = { jordi: { name: 'Jordi', photo: jordi }, joery: { name: 'Joery', photo: joery } };
+const now = new Date();
+---
+
+<!-- Look: prototype 74 (feature/widget-ideas). Posts are added from chat (see src/content.config.ts). Behaviour: src/scripts/studio-posts.ts -->
+{posts.length > 0 && (
+<div class:list={['post', className]} data-studio-posts>
+  {posts.map((p, i) => (
+    <article class:list={['post__slide', { 'is-active': i === 0, 'post__slide--photo': p.image }]} data-post aria-hidden={i === 0 ? undefined : 'true'}>
+      {p.image && <Image class="post__photo" src={p.image} alt="" width={320} />}
+      <div class="post__body">
+        <p class="post__who">
+          <Image class="post__avatar" src={people[p.author].photo} alt="" width={56} height={56} />
+          <span>
+            <span class="post__name">{people[p.author].name}</span>
+            <time class="post__meta" datetime={p.date.toISOString()} data-post-date>{relativeDay(p.date, now)}</time>
+          </span>
+        </p>
+        <p class="post__text">{p.text}</p>
+      </div>
+    </article>
+  ))}
+  {posts.length > 1 && (
+    <div class="post__nav">
+      <span class="post__meta" data-post-pos>1/{posts.length}</span>
+      <button type="button" data-post-step="-1" aria-label="Nieuwer bericht" disabled>‹</button>
+      <button type="button" data-post-step="1" aria-label="Ouder bericht">›</button>
+    </div>
+  )}
+</div>
+)}
+
+<style>
+  .post {
+    position: relative;
+    width: 21rem; /* 336px */
+    aspect-ratio: 2;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+  }
+  .post__slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+  }
+  .post__slide.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+  .post__slide :global(.post__photo) {
+    width: 40%;
+    height: 100%;
+    object-fit: cover;
+    flex: none;
+  }
+  .post__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-12) var(--space-12) 2rem;
+    min-width: 0;
+  }
+  .post__who {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .post__who :global(.post__avatar) {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .post__who > span {
+    display: grid;
+    gap: 2px;
+  }
+  .post__name {
+    font: var(--text-widget-title);
+  }
+  .post__meta {
+    font: var(--text-widget-meta);
+    color: var(--color-dark-900-60);
+  }
+  .post__text {
+    font: var(--text-widget-title);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+  }
+  .post__nav {
+    position: absolute;
+    right: var(--space-12);
+    bottom: var(--space-8);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .post__nav button {
+    width: 1.375rem;
+    height: 1.375rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-light-100);
+    color: var(--color-dark-900);
+    font: var(--text-widget-title);
+    cursor: pointer;
+  }
+  .post__nav button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .post__nav button:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .post__slide {
+      transition: none;
+    }
+  }
+</style>

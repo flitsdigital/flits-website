@@ -2,7 +2,7 @@
 import SectionHeader from '../molecules/SectionHeader.astro';
 import ContactForm from '../molecules/ContactForm.astro';
 import ClockWidget from '../molecules/ClockWidget.astro';
-import WeatherWidget from '../molecules/WeatherWidget.astro';
+import WidgetSlot from '../molecules/WidgetSlot.astro';
 
 interface Props {
   title: string;
@@ -19,8 +19,9 @@ const { title, lead } = Astro.props;
     <SectionHeader title={title} lead={lead} softLead span={6} align="start" spaced={false} />
     <div class="contact__widgets">
       <ClockWidget layout="wide" />
-      <WeatherWidget />
+      <WidgetSlot id="contact" size="square" fallback="weather" />
     </div>
+    <WidgetSlot id="contact-wide" size="wide" fallback="christmas" class="contact__wide" />
   </div>
   <ContactForm />
 </section>
@@ -49,7 +50,10 @@ const { title, lead } = Astro.props;
     gap: var(--grid-gap);
     margin-top: 2.5rem; /* 40px */
   }
-  .contact__widgets > :global(.weather) {
+  .contact__side :global(.contact__wide) {
+    margin-top: var(--grid-gap);
+  }
+  .contact__widgets > :global(.slot) {
     align-self: flex-start;
   }
   /* Tablet: the side column is 3 columns → clock 2 + weather 1 */
@@ -76,6 +80,9 @@ const { title, lead } = Astro.props;
     }
     .contact > :global(.contact-form) {
       order: 2;
+    }
+    .contact__side :global(.contact__wide) {
+      order: 4; /* after the form and the clock/weather row, like the other widgets */
     }
     .contact__widgets {
       order: 3;

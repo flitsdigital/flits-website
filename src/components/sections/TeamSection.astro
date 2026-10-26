@@ -2,7 +2,7 @@
 import SectionHeader from '../molecules/SectionHeader.astro';
 import type { CollectionEntry } from 'astro:content';
 import TeamCard from '../molecules/TeamCard.astro';
-import WeatherWidget from '../molecules/WeatherWidget.astro';
+import WidgetSlot from '../molecules/WidgetSlot.astro';
 import ClockWidget from '../molecules/ClockWidget.astro';
 import MapWidget from '../molecules/MapWidget.astro';
 import BgShapes from '../atoms/BgShapes.astro';
@@ -27,7 +27,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
     <div class="team__col">
       <SectionHeader title={title} lead={lead} softLead span={7} align="start" spaced={false} />
       <div class="team__row team__row--top">
-        <WeatherWidget />
+        <WidgetSlot id="team" size="square" fallback="weather" />
         <TeamCard image={members[0].data.photo} name={members[0].data.name} role={members[0].data.role} tagSide="right" />
       </div>
     </div>
@@ -74,7 +74,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
     flex: 1;
     min-width: 0;
   }
-  .team__row--top > :global(.weather) {
+  .team__row--top > :global(.slot) {
     flex-shrink: 0;
   }
   .team__row--bottom {
@@ -113,7 +113,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
     .team__col > :global(.team-card) {
       grid-area: card2;
     }
-    .team__grid :global(.weather) {
+    .team__grid :global(.slot) {
       grid-area: weather;
       width: 100%;
     }

@@ -1,0 +1,225 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import storyFile from '../../content/stories.json';
+import { byFileOrder } from '../../lib/slots';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+// Our own photos (src/content/stories.json), max five rings. It looks like stories; it is not Instagram.
+const stories = byFileOrder(await getCollection('stories'), storyFile.map((s) => s.id)).slice(0, 5);
+---
+
+<!-- Look: prototype 29 (feature/widget-ideas). Behaviour: src/scripts/stories-widget.ts -->
+{stories.length > 0 && (
+<div class:list={['stories', className]} data-stories>
+  <div class="stories__head">
+    <p class="stories__title">Stories</p>
+    <p class="stories__meta">uit de studio</p>
+  </div>
+  <div class="stories__row">
+    {stories.map((s, i) => (
+      <button type="button" class="stories__ring" data-story={i} aria-label={`Bekijk story: ${s.data.caption}`}>
+        <span class="stories__face"><Image src={s.data.image} alt="" width={96} /></span>
+        <span class="stories__label">{s.data.label}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Viewer: one story at a time, 5 s each, tap left/right half to step, × to close -->
+  <div class="stories__viewer" data-story-viewer hidden>
+    {stories.map((s) => <Image class="stories__photo" src={s.data.image} alt={s.data.caption} width={700} data-story-photo />)}
+    <span class="stories__bars" aria-hidden="true">
+      {stories.map(() => <span class="stories__bar"><span data-story-bar></span></span>)}
+    </span>
+    <p class="stories__caption" data-story-caption aria-live="polite"></p>
+    <button type="button" class="stories__step stories__step--prev" data-story-step="-1" aria-label="Vorige story"></button>
+    <button type="button" class="stories__step stories__step--next" data-story-step="1" aria-label="Volgende story"></button>
+    <button type="button" class="stories__close" data-story-close aria-label="Sluiten">×</button>
+  </div>
+</div>
+)}
+
+<style>
+  .stories {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 21rem; /* 336px */
+    aspect-ratio: 2;
+    padding: var(--space-12);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+  }
+  .stories__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .stories__title {
+    font: var(--text-widget-title);
+  }
+  .stories__meta {
+    font: var(--text-widget-meta);
+    color: var(--color-dark-900-60);
+  }
+  .stories__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+  .stories__ring {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-6);
+    width: 3.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .stories__face {
+    display: block;
+    width: 3.5rem;
+    aspect-ratio: 1;
+    padding: 2px;
+    border-radius: 50%;
+    background: conic-gradient(from 200deg, var(--color-brand-500), #ff7a59, var(--color-brand-500));
+    transition: scale 0.2s ease;
+  }
+  .stories__ring.is-seen .stories__face {
+    background: var(--color-light-100);
+  }
+  .stories__ring:hover .stories__face {
+    scale: 1.06;
+  }
+  .stories__face :global(img) {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--color-light-0);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .stories__label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: var(--text-widget-meta);
+    color: var(--color-dark-900);
+  }
+  .stories__ring:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .stories__viewer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: var(--color-dark-900);
+    color: var(--color-light-0);
+  }
+  .stories__viewer[hidden] {
+    display: none;
+  }
+  .stories__viewer :global(.stories__photo) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .stories__viewer :global(.stories__photo.is-active) {
+    opacity: 1;
+  }
+  .stories__viewer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-shade-top), var(--gradient-shade-bottom);
+    background-size: 100% 40%, 100% 50%;
+    background-position: top, bottom;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+  .stories__bars {
+    position: absolute;
+    inset: var(--space-8) var(--space-12) auto;
+    z-index: 1;
+    display: flex;
+    gap: 3px;
+  }
+  .stories__bar {
+    flex: 1;
+    height: 2px;
+    border-radius: 1px;
+    background: rgb(255 255 255 / 0.35);
+    overflow: hidden;
+  }
+  .stories__bar span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: var(--color-light-0);
+  }
+  .stories__caption {
+    position: absolute;
+    inset: auto var(--space-12) var(--space-12);
+    z-index: 1;
+    font: var(--text-widget-title);
+  }
+  .stories__step {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 50%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .stories__step--prev {
+    left: 0;
+  }
+  .stories__step--next {
+    right: 0;
+  }
+  .stories__close {
+    position: absolute;
+    top: var(--space-16);
+    right: var(--space-8);
+    z-index: 2;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.35);
+    color: var(--color-light-0);
+    font: var(--text-widget-title);
+    line-height: 1.5rem;
+    cursor: pointer;
+  }
+  .stories__step:focus-visible,
+  .stories__close:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: -2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stories__face,
+    .stories__viewer :global(.stories__photo) {
+      transition: none;
+    }
+  }
+</style>
