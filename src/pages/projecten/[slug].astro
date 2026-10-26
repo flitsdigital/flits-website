@@ -30,7 +30,7 @@ const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
 >
   <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />
   <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
-  {cs.videos.length > 0 && <VideoFan posters={cs.videos} straddle={false} />}
+  {cs.videos.length > 0 && <VideoFan posters={cs.videos} />}
   <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />
   <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />
   <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />

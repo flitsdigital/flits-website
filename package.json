@@ -17,5 +17,10 @@
     "astro": "^7.4.2",
     "gsap": "^3.15.0",
     "swup": "^4.10.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.5",
+    "typescript": "^6.0.3"
   }
 }

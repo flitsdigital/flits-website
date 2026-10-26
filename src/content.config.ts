@@ -32,7 +32,7 @@ const projects = defineCollection({
           heroTitle: z.string(),
           hero: image(),
           /** Live site: the yellow "Website bekijken" strip links here. */
-          website: z.string().url().optional(),
+          website: z.url().optional(),
           intro: z.object({ title: z.string(), services: z.array(z.string()).default([]) }),
           /** Posters for the video fan; leave empty to skip the fan. */
           videos: z.array(image()).default([]),
@@ -230,7 +230,7 @@ const tracks = defineCollection({
     url: z.string().refine((u) => trackId(u) !== null, 'Not a Spotify track link (album and playlist links do not work)'),
     artist: z.string(),
     title: z.string().optional(),
-    cover: z.string().url().optional(),
+    cover: z.url().optional(),
   }),
 });
 

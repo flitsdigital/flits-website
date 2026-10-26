@@ -9,6 +9,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export function initLogoWallCycle(): () => void {
+  // Reduced motion: the HTML already shows the first logos (the rest are display: none); no swapping.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
   const loopDelay = 1.5; // Loop Duration
   const duration = 0.9; // Animation Duration
   const cleanups: (() => void)[] = [];
@@ -17,7 +19,6 @@ export function initLogoWallCycle(): () => void {
     const list = root.querySelector('[data-logo-wall-list]')!;
     const items = Array.from(list.querySelectorAll<HTMLElement>('[data-logo-wall-item]'));
 
-    const shuffleFront = root.getAttribute('data-logo-wall-shuffle') !== 'false';
     const originalTargets = items
       .map((item) => item.querySelector('[data-logo-wall-target]'))
       .filter((n): n is Element => Boolean(n));
@@ -61,16 +62,8 @@ export function initLogoWallCycle(): () => void {
 
       pool = originalTargets.map((n) => n.cloneNode(true) as Element);
 
-      let front: Element[], rest: Element[];
-      if (shuffleFront) {
-        const shuffledAll = shuffleArray(pool);
-        front = shuffledAll.slice(0, visibleCount);
-        rest = shuffleArray(shuffledAll.slice(visibleCount));
-      } else {
-        front = pool.slice(0, visibleCount);
-        rest = shuffleArray(pool.slice(visibleCount));
-      }
-      pool = front.concat(rest);
+      // The first logos stay in front (the wall never sets data-logo-wall-shuffle); the rest cycle in random order.
+      pool = pool.slice(0, visibleCount).concat(shuffleArray(pool.slice(visibleCount)));
 
       for (let i = 0; i < visibleCount; i++) {
         const parent = visibleItems[i].querySelector('[data-logo-wall-target-parent]') || visibleItems[i];

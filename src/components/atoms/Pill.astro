@@ -12,13 +12,13 @@ interface Props extends HTMLAttributes<'span'> {
 // ...rest lets filter chips carry data-*/value attributes for the projects filter script.
 const { variant = 'outline', size = 's', active = false, class: className, ...rest } = Astro.props;
 const isFilter = variant === 'filter';
-const Tag = isFilter ? 'button' : 'span';
+// One tag variable for <span> and <button>: typed loosely, the attributes are the shared span ones
+const Tag = (isFilter ? 'button' : 'span') as 'span';
 ---
 
 <Tag
   class:list={['pill', `pill--${variant}`, { 'pill--m': size === 'm', 'is-active': active }, className]}
-  type={isFilter ? 'button' : undefined}
-  aria-pressed={isFilter ? String(active) : undefined}
+  {...(isFilter ? { type: 'button', 'aria-pressed': active ? ('true' as const) : ('false' as const) } : {})}
   {...rest}
 >
   <slot />
