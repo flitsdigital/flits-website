@@ -5,7 +5,7 @@ date: 2026-01-22
 tags: [Website, Webflow]
 types: [Websites]
 sector: Evenementen
-cover: ../../assets/images/projects/chaos-in-de-venen.jpg
+cover: ../../assets/images/case/chaos-in-de-venen/00-hero-markt.jpg
 caseStudy:
   heroTitle: 1.112 mensen tegelijk op de site van de jaarmarkt in Nieuw-Dordrecht
   hero: ../../assets/images/case/chaos-in-de-venen/00-hero-markt.jpg
