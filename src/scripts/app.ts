@@ -17,6 +17,9 @@ import { initAnimatedGrid } from './grid-overlay';
 import { initRotatingImageTrail } from './image-trail';
 import { initRotatingText } from './rotating-text';
 import { initContactModal } from './contact-modal';
+import { initNavbar } from './navbar';
+import { initLocalTime } from './local-time';
+import { initCursorMarquee } from './cursor-marquee';
 import { initContactForms } from './contact-form';
 
 /**
@@ -45,9 +48,11 @@ const unmount = () => {
 };
 
 mount();
-// Design grid (Shift+G) for us, not for visitors: dev server, or ?grid on any page
-if (import.meta.env.DEV || new URLSearchParams(location.search).has('grid')) initAnimatedGrid(); // once: outside #swup
-initContactModal(); // once: the modal sits outside #swup too
+// Shell behaviour: the parts outside #swup (navbar, footer clock, cursor, modal) start once and stay.
+// The design grid (Shift+G) is for us, not for visitors: dev server, or ?grid on any page.
+const shellInits = [initNavbar, initLocalTime, initCursorMarquee, initContactModal];
+if (import.meta.env.DEV || new URLSearchParams(location.search).has('grid')) shellInits.push(initAnimatedGrid);
+shellInits.forEach((init) => init());
 
 const swup = new Swup({
   containers: ['#swup', '#nav-back'],
