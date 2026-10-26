@@ -1,7 +1,7 @@
 /*
  * Primitive design tokens — single source of truth.
  * Colors come from Figma Variables; type/spacing/radii are derived from the
- * Figma design context (no variables exist for them). See ANALYSE.md §2.
+ * Figma design context (no variables exist for them). See docs/archive/ANALYSE.md §2.
  * `@group` comments drive the /styleguide page.
  */
 :root {
