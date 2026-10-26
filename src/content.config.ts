@@ -36,6 +36,8 @@ const projects = defineCollection({
           intro: z.object({ title: z.string(), services: z.array(z.string()).default([]) }),
           /** Posters for the video fan; leave empty to skip the fan. */
           videos: z.array(image()).default([]),
+          /** Landscape mockups shown full width under the intro; leave empty to skip. */
+          wide: z.array(image()).default([]),
           gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }),
           results: z.object({ title: z.string(), body: z.array(z.string()), image: image() }),
           stats: z.object({
@@ -43,13 +45,16 @@ const projects = defineCollection({
             lead: z.string(),
             items: z.array(z.object({ label: z.string(), value: z.string() })).length(3),
           }),
-          testimonial: z.object({
-            title: z.string(),
-            lead: z.string(),
-            image: image(),
-            /** id in reviews.json. shortcut: plain id, because reference() inside this nested object made Astro 7.4 silently drop caseStudy. */
-            review: z.string(),
-          }),
+          /** Leave out until the client has given a quote; the section is then skipped. */
+          testimonial: z
+            .object({
+              title: z.string(),
+              lead: z.string(),
+              image: image(),
+              /** id in reviews.json. shortcut: plain id, because reference() inside this nested object made Astro 7.4 silently drop caseStudy. */
+              review: z.string(),
+            })
+            .optional(),
         })
         .optional(),
     }),
