@@ -51,7 +51,8 @@ const unmount = () => {
 };
 
 mount();
-initAnimatedGrid(); // once: the overlay sits outside #swup
+// Design grid (Shift+G) for us, not for visitors: dev server, or ?grid on any page
+if (import.meta.env.DEV || new URLSearchParams(location.search).has('grid')) initAnimatedGrid(); // once: outside #swup
 initContactModal(); // once: the modal sits outside #swup too
 
 const swup = new Swup({

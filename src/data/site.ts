@@ -17,7 +17,7 @@ export const contact = {
 };
 
 /** Google rating shown above the reviews. */
-export const rating = { score: '4.9', count: '30' };
+export const rating = { score: '4,9', count: '30' };
 
 /** Social profiles; one without a URL is not shown (no dead "#" links). */
 export const socials: { icon: 'instagram' | 'facebook' | 'tiktok' | 'linkedin'; label: string; href: string }[] = [

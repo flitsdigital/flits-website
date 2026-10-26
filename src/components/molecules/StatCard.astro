@@ -15,7 +15,7 @@ const { label, value } = Astro.props;
 <div class="stat-card">
   <dt>{label}</dt>
   <dd>
-    <span class="stat-card__sr">{value}</span>
+    <span class="sr-only">{value}</span>
     <Heading as="span" size="64"><span data-odometer-element aria-hidden="true">{value}</span></Heading>
   </dd>
 </div>
@@ -36,14 +36,6 @@ const { label, value } = Astro.props;
   }
   dd {
     color: var(--color-dark-900);
-  }
-  .stat-card__sr {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
   /* Osmo "Number Odometer" CSS; global because the script builds these spans */
   :global([data-odometer-element]) {

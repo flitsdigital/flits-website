@@ -1,6 +1,7 @@
 ---
 import logo from '../../assets/images/widgets/spotify-logo.svg';
 import play from '../../assets/images/widgets/play.svg';
+import { getImage } from 'astro:assets';
 import { getTracks } from '../../lib/spotify';
 import { neighbours } from '../../lib/spotify-ids';
 
@@ -11,8 +12,16 @@ interface Props {
 const { class: className } = Astro.props;
 
 // Tracks from src/content/tracks.json; artwork comes from Spotify (oEmbed), which their guidelines allow
-// as long as it links back to Spotify. The script switches tracks; the HTML starts on the first one.
-const tracks = await getTracks();
+// as long as it links back to Spotify. The covers are downloaded at build and served from our own site, so
+// visitors' browsers contact Spotify only after they press play. The script switches tracks.
+const selfHosted = async (url: string) => {
+  try {
+    return (await getImage({ src: url, width: 160, inferSize: true })).src;
+  } catch {
+    return url; // shortcut: Spotify's CDN unreachable at build → hotlink this once rather than break the build
+  }
+};
+const tracks = await Promise.all((await getTracks()).map(async (t) => ({ ...t, cover: await selfHosted(t.cover) })));
 const now = tracks[0];
 const { prev, next } = neighbours(0, Math.max(1, tracks.length));
 const left = tracks[prev];

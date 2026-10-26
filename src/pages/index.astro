@@ -14,7 +14,6 @@ import { getProjects, getTeaserServices, getFounders, avatarsOf } from '../lib/c
 import fanLeft from '../assets/images/fan/truck-left.jpg';
 import fanCenter from '../assets/images/fan/kaasloods.jpg';
 import fanRight from '../assets/images/fan/truck-right.jpg';
-import phoneScreen from '../assets/images/behind-the-scenes/phone-screen.png';
 
 // Home (Figma 1:1176). Sections own their spacing, so a page is just the list in design order.
 const projects = await getProjects();
@@ -28,6 +27,7 @@ const founders = avatarsOf(team);
 ---
 
 <PageLayout
+  landing
   title="Flits — Marketingbureau in Emmen"
   description="Flits maakt websites, webshops, social content en advertenties voor ondernemers in Drenthe. Je praat altijd met degene die het maakt."
 >
@@ -56,5 +56,5 @@ const founders = avatarsOf(team);
     lead="Je praat altijd met degene die filmt, ontwerpt en bouwt. Zonder accountmanager, of doorgeefluik er tussen. Sinds 2024 werken we vanuit Emmen voor ondernemers in heel Drenthe"
     members={[joery, jordi]}
   />
-  <Showreel title="Een kijkje achter de schermen" screen={phoneScreen} />
+  <Showreel title="Een kijkje achter de schermen" />
 </PageLayout>

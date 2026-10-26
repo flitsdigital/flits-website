@@ -26,13 +26,18 @@ const { href, image, label, class: className } = Astro.props;
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--color-light-0);
-    /* shortcut: Figma shows both cards at 60% opacity (likely the idle state); full opacity on hover is inferred */
-    opacity: 0.6;
     transition: opacity 0.2s ease;
   }
-  .service-card:hover,
-  .service-card:focus-visible {
-    opacity: 1;
+  /* shortcut: Figma shows both cards at 60% opacity (likely the idle state); full opacity on hover is inferred.
+     Only where hover exists: on touch screens they would stay half see-through. */
+  @media (hover: hover) and (pointer: fine) {
+    .service-card {
+      opacity: 0.6;
+    }
+    .service-card:hover,
+    .service-card:focus-visible {
+      opacity: 1;
+    }
   }
   .service-card :global(img) {
     width: 100%;

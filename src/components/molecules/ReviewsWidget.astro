@@ -10,7 +10,7 @@ interface Props {
 const { class: className } = Astro.props;
 // Our own reviews (src/content/reviews.json) and the Google score from src/data/site.ts — nothing invented.
 const reviews = (await getCollection('reviews')).map((r) => ({ text: shortQuote(r.data.quote), name: firstName(r.data.author) }));
-const score = rating.score.replace('.', ',');
+const score = rating.score;
 const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z';
 ---
 

@@ -108,9 +108,12 @@ const services = await getServices();
       };
       item.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && !mobile.matches && setSub(true));
       item.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && !mobile.matches && setSub(false));
-      control.addEventListener('click', (e) => {
+      // Older Safari reports no pointerType on click events, so remember it from pointerdown.
+      let lastPointer = '';
+      control.addEventListener('pointerdown', (e) => (lastPointer = e.pointerType));
+      control.addEventListener('click', () => {
         // On desktop a mouse click lands on a menu that hover already opened.
-        if (!mobile.matches && (e as PointerEvent).pointerType === 'mouse') return;
+        if (!mobile.matches && lastPointer === 'mouse') return;
         setSub(item.dataset.navSubStatus !== 'active');
       });
       item.addEventListener('focusout', (e) => {
