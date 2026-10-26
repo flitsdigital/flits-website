@@ -1,17 +1,45 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import SectionHeader from '../molecules/SectionHeader.astro';
+
+type Note = { title: string; lead: string };
 
 interface Props {
-  /** Landscape mockups, edge to edge with the panels' page margin, stacked. */
-  images: ImageMetadata[];
+  /** Landscape mockups, edge to edge with the panels' page margin, stacked. A note is a text block between them. */
+  images: (ImageMetadata | Note)[];
+  /** One full-width image, then two side by side, repeating (phones: all stacked). */
+  mixed?: boolean;
 }
 
-const { images } = Astro.props;
+const { images, mixed = false } = Astro.props;
+const isNote = (item: ImageMetadata | Note): item is Note => 'title' in item;
+// The rhythm counts images only and runs on past notes; a half with no partner after it (end, or a note next) goes full width
+let n = -1;
+const items: ({ note: Note } | { src: ImageMetadata; full: boolean })[] = images.map((item, k) => {
+  if (isNote(item)) return { note: item };
+  n++;
+  const lone = n % 3 === 1 && !(images[k + 1] && !isNote(images[k + 1]));
+  return { src: item, full: !mixed || n % 3 === 0 || lone };
+});
 ---
 
-<section class="case-wide">
-  {images.map((src) => <Image src={src} alt="" widths={[800, 1400, 2400]} sizes="100vw" />)}
+<section class:list={['case-wide', { 'case-wide--mixed': mixed }]}>
+  {
+    items.map((item) =>
+      'note' in item ? (
+        <SectionHeader title={item.note.title} lead={item.note.lead} align="start" class="case-wide__note" />
+      ) : (
+        <Image
+          src={item.src}
+          alt=""
+          class:list={{ 'case-wide__full': item.full }}
+          widths={[800, 1400, 2400]}
+          sizes={item.full ? '100vw' : '(min-width: 768px) 50vw, 100vw'}
+        />
+      ),
+    )
+  }
 </section>
 
 <style>
@@ -22,9 +50,21 @@ const { images } = Astro.props;
     margin-inline: auto;
     margin-bottom: 9.5625rem; /* same rhythm as the gallery's gap to the next block */
   }
+  .case-wide--mixed {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .case-wide :global(.case-wide__full),
+  .case-wide :global(.case-wide__note) {
+    grid-column: 1 / -1;
+  }
   .case-wide :global(img) {
     width: 100%;
     height: auto;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
+  }
+  @media (max-width: 767px) {
+    .case-wide--mixed {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

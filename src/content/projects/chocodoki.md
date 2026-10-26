@@ -22,10 +22,24 @@ caseStudy:
     images:
       - ../../assets/images/case/chocodoki-iphone-tafel.jpg
       - ../../assets/images/case/chocodoki-iphone-beton.jpg
+  visuals:
+    - ../../assets/images/case/chocodoki/02-productpagina-sfeer.jpg
+    - ../../assets/images/case/chocodoki/01-productpagina-hero.jpg
+    - ../../assets/images/case/chocodoki/04-bonbon-kaart.jpg
+    - ../../assets/images/case/chocodoki/03-configurator.jpg
+    - title: Zie in één oogopslag wat erin zit
+      lead: Chocodoki maakt 34 smaken bonbons, in puur, melk en wit. Elke smaak heeft eigen ingrediënten. Kies je een doos voor iemand anders, dan wil je zeker weten dat diegene alles mag eten. Daarom staan de allergenen als icoontjes op elke bonbon, en filter je met één klik op chocoladesoort of allergeen.
+    - ../../assets/images/case/chocodoki/07-allergenen.jpg
+    - ../../assets/images/case/chocodoki/05-bonbon-kaarten-waaier.jpg
+    - ../../assets/images/case/chocodoki/06-doosje-states.jpg
+    - ../../assets/images/case/chocodoki/08-reviews.jpg
+    - ../../assets/images/case/chocodoki/09-accordion.jpg
+    - ../../assets/images/case/chocodoki/10-ui-bento.jpg
+    - ../../assets/images/case/chocodoki/11-accordion-footer.jpg
   results:
     title: Live, en klaar voor de kerst
     body:
-      - De webshop staat live. Je kiest een doos van 6, 12 of 18 bonbons, vult hem met je eigen smaken, kiest een wrapper en schrijft er een boodschap bij. Filter op chocoladesmaak en allergenen, dan zie je meteen wat je kunt geven.
+      - De webshop staat live. Je kiest een doos van 6, 12 of 15 bonbons, vult hem met je eigen smaken, kiest een wrapper en schrijft er een boodschap bij. Filter op chocoladesmaak en allergenen, dan zie je meteen wat je kunt geven.
       - Echte verkoopcijfers volgen nog. De kerstdrukte is de eerste grote test, daarna vullen we deze case aan. Wat Chocodoki zelf al bereikte, staat los van ons werk. Meer dan 4.500 uur werkervaring voor hun deelnemers en een 5,0 op Google.
     image: ../../assets/images/case/chocodoki-iphone-tafel.jpg
   stats:
