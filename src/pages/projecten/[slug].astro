@@ -20,13 +20,14 @@ export async function getStaticPaths() {
 
 const { project, caseStudy: cs, review, Content, related, year } = await getCase(Astro.params.slug);
 const founders = avatarsOf(await getFounders());
-const share = await getImage({ src: cs.hero, width: 1200, format: 'jpg' });
+const share = await getImage({ src: cs.share ?? cs.hero, width: 1200, format: 'jpg' });
 ---
 
 <PageLayout
   title={`${cs.heroTitle} — Flits`}
   description={`${project.data.client}: ${cs.intro.title}.`}
   image={share.src}
+  noindex={cs.draft}
   backLink={{ label: 'Terug naar Projecten', href: '/projecten' }}
 >
   <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />

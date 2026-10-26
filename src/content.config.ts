@@ -29,8 +29,12 @@ const projects = defineCollection({
        */
       caseStudy: z
         .object({
+          /** Draft: the page only builds in `astro dev`; in production the project stays a card. */
+          draft: z.boolean().default(false),
           heroTitle: z.string(),
           hero: image(),
+          /** Share (Open Graph) image; defaults to the hero. */
+          share: image().optional(),
           /** Live site: the yellow "Website bekijken" strip links here. */
           website: z.string().url().optional(),
           intro: z.object({ title: z.string(), services: z.array(z.string()).default([]) }),
@@ -45,7 +49,7 @@ const projects = defineCollection({
           stats: z.object({
             title: z.string(),
             lead: z.string(),
-            items: z.array(z.object({ label: z.string(), value: z.string() })).length(3),
+            items: z.array(z.object({ label: z.string(), value: z.string() })).min(1).max(3),
           }),
           /** Leave out until the client has given a quote; the section is then skipped. */
           testimonial: z
