@@ -40,6 +40,11 @@ test('required fields and an e-mail that is not one', () => {
   assert.deepEqual(r.errors.sort(), ['email', 'name', 'phone']);
 });
 
+test('line breaks in one-line fields are refused (they could end up in a mail header)', () => {
+  const r = validateLead(leadFrom(form({ firstName: 'Jan\r\nBcc: spam@x.nl', email: 'a@b.nl', phone: '0612\n345678', source: 'contact', services: 'Web\nsite' })));
+  assert.deepEqual(r.errors, ['name', 'phone', 'services']);
+});
+
 test('too long input is refused, not cut', () => {
   const r = validateLead(leadFrom(form({ firstName: 'x', email: 'a@b.nl', phone: '0612345678', message: 'y'.repeat(2001), source: 'contact' })));
   assert.deepEqual(r.errors, ['message']);

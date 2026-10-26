@@ -40,7 +40,7 @@ npm run build
 
 ## Forms
 
-`/api/contact` validates (`src/lib/lead.ts`, honeypot field `website`) and forwards to the n8n webhook, which mails through Flits' own mail server. Without JS a post gets a 303 back to `/contact?verzonden=1` or `?fout=1`; on failure the form offers a mailto link.
+`/api/contact` validates (`src/lib/lead.ts`, honeypot field `website`) and forwards to the n8n webhook, which mails through Flits' own mail server. Without JS a post gets a 303 to `/contact#verzonden` or `#fout`, shown by CSS `:target` (the page stays static); on failure the form offers a mailto link.
 
 ## Environment (`.env.example`; set the same names in Vercel)
 

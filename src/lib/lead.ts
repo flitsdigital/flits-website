@@ -32,13 +32,16 @@ export function leadFrom(data: Fields): Lead {
 // Too long is refused, not cut: a cut request reads wrong and nobody notices.
 const MAX = { name: 120, email: 160, phone: 30, message: 2000, service: 60, services: 10 };
 
+// One-line fields may end up in a mail subject or header, so a line break there is refused.
+const multiline = (s: string) => /[\r\n]/.test(s);
+
 export function validateLead(lead: Lead) {
   const errors: string[] = [];
-  if (!lead.name || lead.name.length > MAX.name) errors.push('name');
+  if (!lead.name || lead.name.length > MAX.name || multiline(lead.name)) errors.push('name');
   if (lead.email.length > MAX.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) errors.push('email');
-  if (lead.phone.length > MAX.phone || lead.phone.replace(/\D/g, '').length < 6) errors.push('phone');
+  if (lead.phone.length > MAX.phone || multiline(lead.phone) || lead.phone.replace(/\D/g, '').length < 6) errors.push('phone');
   if (lead.message.length > MAX.message) errors.push('message');
-  if (lead.services.length > MAX.services || lead.services.some((s) => s.length > MAX.service)) errors.push('services');
+  if (lead.services.length > MAX.services || lead.services.some((s) => s.length > MAX.service || multiline(s))) errors.push('services');
   return { ok: errors.length === 0, spam: lead.trap !== '', errors };
 }
 

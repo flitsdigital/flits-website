@@ -22,5 +22,5 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
   const outcome = result.status === 200 ? 'verzonden' : 'fout';
-  return new Response(null, { status: 303, headers: { location: `/contact?${outcome}=1#contact` } });
+  return new Response(null, { status: 303, headers: { location: `/contact#${outcome}` } });
 };

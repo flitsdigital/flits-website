@@ -7,7 +7,8 @@ import ContactFields from './ContactFields.astro';
 import { contact } from '../../data/site';
 
 // Figma 1:2828 (first step) as one plain form: it posts to /api/contact (n8n mails it), also without
-// JavaScript (the route then redirects back with ?verzonden=1 or ?fout=1). Behaviour: src/scripts/contact-form.ts
+// JavaScript: the route then redirects to /contact#verzonden or #fout, and :target shows that message
+// (the page stays static). Behaviour: src/scripts/contact-form.ts
 ---
 
 <form class="contact-form" action="/api/contact" method="post" aria-labelledby="contact-form-title" data-contact-form data-email={contact.email}>
@@ -22,6 +23,10 @@ import { contact } from '../../data/site';
     <Input multiline id="cf-message" name="message" placeholder="Ik wil graag..." rows={4} />
   </div>
   <p class="contact-form__status" data-contact-form-status role="status" hidden></p>
+  <p class="contact-form__status contact-form__outcome" id="verzonden">Bedankt! We hebben je bericht ontvangen en nemen snel contact met je op.</p>
+  <p class="contact-form__status contact-form__outcome" id="fout" data-tone="error">
+    Versturen lukte niet. <a href={`mailto:${contact.email}`}>Mail je bericht</a> of probeer het zo nog eens.
+  </p>
   <div class="contact-form__nav">
     <p class="contact-form__privacy">We gebruiken je gegevens alleen om contact met je op te nemen.</p>
     <Button type="submit" variant="step" icon="hand-right" iconPosition="end" data-contact-form-submit>Versturen</Button>
@@ -64,6 +69,12 @@ import { contact } from '../../data/site';
     width: min(100% - 2 * 49px, 31.375rem);
     margin-top: var(--space-24);
     font: var(--text-body-s);
+  }
+  .contact-form__outcome:not(:target) {
+    display: none;
+  }
+  .contact-form__outcome {
+    scroll-margin-top: var(--page-top); /* clear of the fixed navbar */
   }
   .contact-form__status[data-tone='error'] {
     color: #c5221f;
