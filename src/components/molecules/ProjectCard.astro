@@ -23,7 +23,7 @@ const Root = linked ? 'a' : 'div';
 ---
 
 <Root class:list={['project-card', className]} href={linked ? projectHref(project.id) : undefined}>
-  <div class="project-card__media">
+  <div class="project-card__media" data-cursor-marquee-text={linked ? 'Case bekijken' : undefined}>
     <Image src={cover} alt="" width={1200} widths={[600, 1200]} sizes="(min-width: 1440px) 599px, 50vw" />
     <div class="project-card__overlay">
       <div class="project-card__top">
@@ -54,6 +54,13 @@ const Root = linked ? 'a' : 'div';
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: scale 0.8s var(--ease-osmo);
+  }
+  /* Hovering a linked card: the photo grows inside its frame (the cursor shows "Case bekijken") */
+  @media (hover: hover) and (pointer: fine) {
+    a.project-card:is(:hover, :focus-visible) .project-card__media > :global(img) {
+      scale: 1.06;
+    }
   }
   .project-card__overlay {
     position: absolute;
