@@ -11,8 +11,21 @@ import { trackId } from './lib/spotify-ids';
 /** Case studies: one Markdown file per project. Add a new .md file to publish a case. */
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: ({ image }) => {
+    const statsBlock = z.object({
+      title: z.string(),
+      lead: z.string(),
+      items: z.array(z.object({ label: z.string(), value: z.string() })).min(1).max(3),
+    });
+    /** Case board blocks: a white text block, the stats panel, or the dark results band (photo or Bunny video). */
+    const text = z.object({ title: z.string(), body: z.array(z.string()) });
+    /** Bunny Stream: HLS playlist + thumbnail; plays muted while in view. */
+    const video = z.object({ src: z.string().url(), poster: z.string().url() });
+    const results = z
+      .object({ title: z.string(), body: z.array(z.string()), image: image().optional(), video: video.optional() })
+      .refine((r) => r.image || r.video, 'results needs an image or a video');
+    const half = z.union([image(), text]);
+    return z.object({
       client: z.string(),
       title: z.string(),
       /** Sort order and the year pill (the year is taken from this date). */
@@ -44,13 +57,14 @@ const projects = defineCollection({
           wide: z.array(image()).default([]),
           /** Supporting design visuals after the gallery: one wide, two side by side; a { title, lead } entry is a text block in between. */
           visuals: z.array(z.union([image(), z.object({ title: z.string(), lead: z.string() })])).default([]),
-          gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }),
-          results: z.object({ title: z.string(), body: z.array(z.string()), image: image() }),
-          stats: z.object({
-            title: z.string(),
-            lead: z.string(),
-            items: z.array(z.object({ label: z.string(), value: z.string() })).min(1).max(3),
-          }),
+          /**
+           * Case board (Figma "Cases" file): the blocks after the intro, in order, in place of gallery, results,
+           * stats and visuals. An image runs full width; a [left, right] pair sits side by side.
+           */
+          board: z.array(z.union([image(), text, z.object({ stats: statsBlock }), z.object({ results }), z.tuple([half, half])])).default([]),
+          gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }).optional(),
+          results: z.object({ title: z.string(), body: z.array(z.string()), image: image() }).optional(),
+          stats: statsBlock.optional(),
           /** Leave out until the client has given a quote; the section is then skipped. */
           testimonial: z
             .object({
@@ -63,7 +77,8 @@ const projects = defineCollection({
             .optional(),
         })
         .optional(),
-    }),
+    });
+  },
 });
 
 const reviews = defineCollection({

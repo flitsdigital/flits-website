@@ -5,16 +5,20 @@ import type { ImageMetadata } from 'astro';
 import BgShapes from '../atoms/BgShapes.astro';
 import Heading from '../atoms/Heading.astro';
 import Eyebrow from '../molecules/Eyebrow.astro';
+import BunnyPlayer from '../molecules/BunnyPlayer.astro';
 
 interface Props {
   avatars: { src: ImageMetadata; alt?: string }[];
   eyebrow: string;
   title: string;
   body: string[];
-  image: ImageMetadata;
+  /** The photo on the right… */
+  image?: ImageMetadata;
+  /** …or a Bunny video in its place (plays muted while in view). */
+  video?: { src: string; poster: string };
 }
 
-const { avatars, eyebrow, title, body, image } = Astro.props;
+const { avatars, eyebrow, title, body, image, video } = Astro.props;
 ---
 
 <!-- Figma 1:3221: dark full-width band, text left (541px), 616×786 photo right -->
@@ -28,7 +32,15 @@ const { avatars, eyebrow, title, body, image } = Astro.props;
       </div>
       <Prose paragraphs={body} medium opacity={0.8} />
     </div>
-    <Image class="case-results__img" src={image} alt="" widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" />
+    {
+      video ? (
+        <div class="case-results__img case-results__video">
+          <BunnyPlayer {...video} cover />
+        </div>
+      ) : (
+        image && <Image class="case-results__img" src={image} alt="" widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" />
+      )
+    }
   </div>
 </section>
 
@@ -63,6 +75,13 @@ const { avatars, eyebrow, title, body, image } = Astro.props;
     aspect-ratio: 616 / 786;
     object-fit: cover;
     border-radius: var(--radius-sm);
+  }
+  .case-results__video {
+    position: relative;
+    overflow: hidden;
+  }
+  .case-results__video :global(.bunny-player) {
+    border-radius: inherit;
   }
   /* Tablet: text 3 columns · photo 3 columns; phone: stacked */
   @media (max-width: 991px) {

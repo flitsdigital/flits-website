@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Heading from '../atoms/Heading.astro';
+import Prose from '../atoms/Prose.astro';
+import StatsPanel from './StatsPanel.astro';
+import CaseResults from './CaseResults.astro';
+
+type Text = { title: string; body: string[] };
+type Half = ImageMetadata | Text;
+type Stats = { title: string; lead: string; items: { label: string; value: string }[] };
+type Results = { title: string; body: string[]; image?: ImageMetadata; video?: { src: string; poster: string } };
+type Tile = ImageMetadata | Text | [Half, Half];
+type Block = Tile | { stats: Stats } | { results: Results };
+
+interface Props {
+  /** In order: an image runs full width, a [left, right] pair sits side by side; stats and results are the usual case sections. */
+  blocks: Block[];
+  avatars: { src: ImageMetadata; alt?: string }[];
+}
+
+const { blocks, avatars } = Astro.props;
+const isImage = (item: object): item is ImageMetadata => 'src' in item && 'width' in item;
+const isText = (item: object): item is Text => 'title' in item;
+// Tiles that follow each other share one grid; a stats or results block is its own section in between
+const groups: (Tile[] | { stats: Stats } | { results: Results })[] = [];
+for (const block of blocks) {
+  if (!Array.isArray(block) && ('stats' in block || 'results' in block)) groups.push(block);
+  else if (Array.isArray(groups.at(-1))) (groups.at(-1) as Tile[]).push(block);
+  else groups.push([block]);
+}
+---
+
+<!-- Figma "Flits Website V2 – Cases" 4:1223: mockups and white text blocks on the panels' edges, pairs side by side;
+     the numbers are the stats panel, the ending the dark results band (here with the Bunny video) -->
+<div class="case-board">
+  {
+    groups.map((group) =>
+      Array.isArray(group) ? (
+        <section class="case-board__tiles">
+          {group.map((tile) =>
+            Array.isArray(tile) ? (
+              tile.map((half) =>
+                isImage(half) ? (
+                  <Image src={half} alt="" widths={[720, 1440]} sizes="(min-width: 768px) 50vw, 100vw" />
+                ) : (
+                  <div class="case-board__text case-board__text--half">
+                    <Heading>{half.title}</Heading>
+                    <Prose paragraphs={half.body} />
+                  </div>
+                ),
+              )
+            ) : isImage(tile) ? (
+              <Image src={tile} alt="" class="case-board__full" widths={[800, 1440, 2880]} sizes="100vw" />
+            ) : (
+              <div class="case-board__text case-board__full">
+                <Heading>{tile.title}</Heading>
+                <Prose paragraphs={tile.body} />
+              </div>
+            ),
+          )}
+        </section>
+      ) : 'stats' in group ? (
+        <StatsPanel avatars={avatars} eyebrow="Wat hebben we bereikt?" title={group.stats.title} lead={group.stats.lead} stats={group.stats.items} />
+      ) : (
+        <CaseResults avatars={avatars} eyebrow="De resultaten spreken voor zich" {...group.results} />
+      ),
+    )
+  }
+</div>
+
+<style>
+  .case-board {
+    display: grid;
+    gap: var(--grid-gap);
+    margin-bottom: 9.5625rem;
+  }
+  /* the sections bring their own outer margins; inside the board the gap spaces them */
+  .case-board > :global(*) {
+    margin-block: 0;
+  }
+  .case-board__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    width: calc(100% - 2 * var(--gutter-panel)); /* same edges as the wide mockups */
+    margin-inline: auto;
+  }
+  .case-board__full {
+    grid-column: 1 / -1;
+  }
+  .case-board__tiles :global(img),
+  .case-board__text {
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+  .case-board__tiles :global(img) {
+    height: auto;
+  }
+  /* Figma: white, 64px title over 24px copy, 24px apart; full width in a 928px column, a half with 48px around it */
+  .case-board__text {
+    display: grid;
+    align-content: center;
+    gap: var(--space-24);
+    padding: var(--space-128) var(--space-24);
+    background: var(--color-light-0);
+  }
+  .case-board__text > :global(*) {
+    width: min(100%, 58rem);
+    margin-inline: auto;
+  }
+  .case-board__text--half {
+    padding: var(--space-128) var(--space-48);
+  }
+
+  @media (max-width: 767px) {
+    .case-board__tiles {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .case-board__text,
+    .case-board__text--half {
+      padding: var(--space-48) var(--space-24);
+    }
+  }
+</style>

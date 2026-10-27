@@ -3,6 +3,7 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import CaseHero from '../../components/sections/CaseHero.astro';
 import CaseIntro from '../../components/sections/CaseIntro.astro';
 import VideoFan from '../../components/sections/VideoFan.astro';
+import CaseBoard from '../../components/sections/CaseBoard.astro';
 import CaseWide from '../../components/sections/CaseWide.astro';
 import CaseGallery from '../../components/sections/CaseGallery.astro';
 import CaseResults from '../../components/sections/CaseResults.astro';
@@ -34,9 +35,10 @@ const share = await getImage({ src: cs.share ?? cs.hero, width: 1200, format: 'j
   <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
   {cs.videos.length > 0 && <VideoFan posters={cs.videos} straddle={false} />}
   {cs.wide.length > 0 && <CaseWide images={cs.wide} />}
-  <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />
-  <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />
-  <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />
+  {cs.board.length > 0 && <CaseBoard blocks={cs.board} avatars={founders} />}
+  {cs.gallery && <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />}
+  {cs.results && <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />}
+  {cs.stats && <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />}
   {cs.visuals.length > 0 && <CaseWide images={cs.visuals} mixed />}
   {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} />}
   <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
