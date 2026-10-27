@@ -55,6 +55,10 @@ const { title, services, website } = Astro.props;
     .case-intro__services {
       border-radius: var(--radius-sm);
     }
+    /* the 269px only lines up with the video fan's centre card; before mockups it is an empty screen */
+    .case-intro:not(:has(+ :global(.video-fan))) {
+      padding-bottom: var(--space-64);
+    }
   }
   .visually-hidden {
     position: absolute;

@@ -19,7 +19,7 @@ caseStudy:
     - [../../assets/images/case/chocodoki/iphone-beton.jpg, ../../assets/images/case/chocodoki/doosje-zijbalk.jpg]
     - stats:
         title: De configurator in cijfers
-        lead: Shopify verkoopt producten, geen doos die je zelf vult. Dus bouwden we er iets eigens voor. Geen kant-en-klare app, maar zelf geschreven.
+        lead: Shopify verkoopt producten, geen doos die je zelf vult. Normaal los je dat op met apps. Dan ben je al snel 40 tot 60 euro per maand kwijt, en heb je het niet zelf in beheer. Daarom schreven we de configurator zelf. Een kleine aanpassing of een nieuwe feature is nu zo gedaan.
         items:
           - { label: Maandelijkse kosten, value: '€ 0,-' }
           - { label: Regels code, value: '5000+' }
