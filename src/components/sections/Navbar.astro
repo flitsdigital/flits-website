@@ -53,23 +53,22 @@ const services = await getServices();
         <div class="nav__end">
           <div class="nav__end-inner">
             <ul class="nav__list" id="nav-list" data-nav-list role="list">
-              {nav.map((item) => <li class="nav__item"><a class="nav__link" href={item.href}><span data-underline-link>{item.label}</span></a></li>)}
+              {nav.map((item) => <li class="nav__item"><a class="nav__link" href={item.href}>{item.label}</a></li>)}
               <li class="nav__item" data-nav-sub-status="not-active">
                 <button
                   type="button"
                   class="nav__link"
-                  data-hover
                   data-nav-sub-control="toggle"
                   aria-controls="nav-dropdown-diensten"
                   aria-expanded="false"
                 >
-                  <span data-underline-link>Diensten</span>
+                  <span>Diensten</span>
                   <span class="nav__link-chevron" aria-hidden="true">+</span>
                 </button>
                 <div class="nav__dropdown">
                   <div class="nav__dropdown-inner">
                     <ul class="nav__dropdown-list" id="nav-dropdown-diensten" role="list">
-                      {services.map((s) => <li><a class="nav__dropdown-link" href={serviceHref(s.id)} data-underline-link>{s.data.label}</a></li>)}
+                      {services.map((s) => <li><a class="nav__dropdown-link" href={serviceHref(s.id)}>{s.data.label}</a></li>)}
                     </ul>
                   </div>
                 </div>
@@ -270,6 +269,9 @@ const services = await getServices();
     border-radius: var(--radius-sm);
     background: var(--color-light-0);
     color: var(--color-dark-800);
+  }
+  .nav__dropdown-link:hover {
+    text-decoration: underline;
   }
   .nav__btn-wrap {
     display: flex;
