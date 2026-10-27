@@ -130,7 +130,7 @@ const pages = [
     gap: var(--space-16);
   }
   /* Osmo character stagger, sized to the display type (line-height 0.9): each letter slides up and
-     its copy (the text-shadow) slides in from below. Hovering one link dims the others. */
+     its copy (the text-shadow) slides in from below. Hovering one link dims the others (60%). */
   .footer__page {
     transition: opacity 0.3s var(--ease-out);
   }
@@ -152,7 +152,7 @@ const pages = [
       transform: translateY(-1.1em) rotate(0.001deg);
     }
     .footer__pages:has(.footer__page:hover) .footer__page:not(:hover) {
-      opacity: 0.8;
+      opacity: 0.6;
     }
   }
   .footer__meta {
