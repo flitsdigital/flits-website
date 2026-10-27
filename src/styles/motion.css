@@ -135,3 +135,61 @@ html[data-landing] .hero + .hero-media .radial-slider {
   --radial-intro-delay: 0.32;
   --radial-intro-ease: var(--ease-osmo);
 }
+
+/* ---------- Underline links (Osmo "Underline Link Animation") ----------
+   [data-underline-link]: a line grows left → right under the text on hover and leaves to the right.
+   [data-underline-link="alt"]: the line is there, slides out and back in. [data-hover] on a parent
+   triggers it too (the nav's "Diensten" button underlines only its label). Global: plain attributes. */
+[data-underline-link] {
+  text-decoration: none;
+  position: relative;
+}
+
+[data-underline-link]::before,
+[data-underline-link='alt']::before,
+[data-underline-link='alt']::after {
+  content: '';
+  position: absolute;
+  bottom: -0.0625em;
+  left: 0;
+  width: 100%;
+  height: 0.0625em;
+  background-color: currentColor;
+  transition: transform 0.735s var(--ease-osmo);
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+}
+
+[data-underline-link='alt']::before {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+  transition-delay: 0.3s;
+}
+
+[data-underline-link='alt']::after {
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+  transition-delay: 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-hover]:hover [data-underline-link]::before,
+  [data-underline-link]:hover::before {
+    transform-origin: left;
+    transform: scaleX(1) rotate(0.001deg);
+  }
+
+  [data-hover]:hover [data-underline-link='alt']::before,
+  [data-underline-link='alt']:hover::before {
+    transform-origin: right;
+    transform: scaleX(0) rotate(0.001deg);
+    transition-delay: 0s;
+  }
+
+  [data-hover]:hover [data-underline-link='alt']::after,
+  [data-underline-link='alt']:hover::after {
+    transform-origin: left;
+    transform: scaleX(1) rotate(0.001deg);
+    transition-delay: 0.3s;
+  }
+}
