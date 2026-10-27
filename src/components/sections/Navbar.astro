@@ -172,20 +172,20 @@ const services = await getServices();
     border-radius: var(--radius-md);
     background: transparent;
     pointer-events: auto;
-    transition:
-      color 0.3s var(--ease-out),
-      background-color 0.25s ease;
+    transition: color 0.3s var(--ease-out);
   }
-  /* The bar stays see-through and takes the theme of the section under it (data-theme-nav, set by
-     scripts/section-theme.ts). On phones the open menu turns dark (its panel needs a background). */
-  .nav[data-nav-status='not-active'] .nav__bar[data-theme-nav='light'] {
-    --color-text: var(--color-dark-900);
-    --color-border: var(--color-border-subtle);
-    --color-focus: var(--color-dark-800-60);
-  }
-  /* the outline button's WhatsApp icon is white artwork: ink on a light section */
-  .nav[data-nav-status='not-active'] .nav__bar[data-theme-nav='light'] :global(.btn--outline .icon img) {
-    filter: brightness(0);
+  /* Desktop: the bar stays see-through and takes the theme of the section under it (data-theme-nav,
+     set by scripts/section-theme.ts). Phones keep the dark bar, which is also the menu's background. */
+  @media (min-width: 992px) {
+    .nav__bar[data-theme-nav='light'] {
+      --color-text: var(--color-dark-900);
+      --color-border: var(--color-border-subtle);
+      --color-focus: var(--color-dark-800-60);
+    }
+    /* the outline button's WhatsApp icon is white artwork: ink on a light section */
+    .nav__bar[data-theme-nav='light'] :global(.btn--outline .icon img) {
+      filter: brightness(0);
+    }
   }
   .nav__bar-inner {
     position: relative;
@@ -313,9 +313,6 @@ const services = await getServices();
       max-height: 100%;
       overflow: auto;
       padding: 0;
-    }
-    [data-nav-status='active'] .nav__bar,
-    [data-nav-status='active'] .nav__start {
       background: var(--color-dark-900);
     }
     .nav__bar-inner {
@@ -331,7 +328,7 @@ const services = await getServices();
       justify-content: space-between;
       align-items: center;
       padding: var(--space-8) var(--space-8) var(--space-8) var(--space-16);
-      transition: background-color 0.25s ease;
+      background: var(--color-dark-900);
     }
     .nav__hamburger {
       display: flex;
