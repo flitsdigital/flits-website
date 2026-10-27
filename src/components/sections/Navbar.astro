@@ -314,6 +314,12 @@ const services = await getServices();
       overflow: auto;
       padding: 0;
       background: var(--color-dark-900);
+      border-radius: var(--space-32); /* half the closed bar's 64px: fully round ends */
+      transition: border-radius 0.35s ease;
+    }
+    /* open, the bar becomes a tall panel: back to the regular corners */
+    [data-nav-status='active'] .nav__bar {
+      border-radius: var(--radius-md);
     }
     .nav__bar-inner {
       flex-direction: column;
