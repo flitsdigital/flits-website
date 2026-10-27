@@ -91,6 +91,10 @@ const pages = [
   .footer__contact span {
     display: grid;
   }
+  /* grid items stretch: keep the links (and their underline) as wide as their text */
+  .footer__contact > a {
+    justify-self: start;
+  }
   .footer__pages {
     display: grid;
     gap: var(--space-16);
