@@ -172,12 +172,13 @@ export function initRadialSliders(): () => void {
       });
     }
     // Scroll: the whole fan turns as one around the centre of its own circle (--radial-arc-origin, see the
-    // track's CSS), scrubbed (0.6s catch-up) on the Osmo curve across its pass through the viewport
+    // track's CSS), scrubbed (0.6s catch-up) on the Osmo curve; it keeps turning until the fan is a full
+    // screen past the top, so the turn is spread over a long scroll
     if (scrollTurn) {
       const turn = gsap.to(track, {
         rotation: -scrollTurn,
         ease: osmo,
-        scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: 0.6 },
+        scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom -100%', scrub: 0.6 },
       });
       cleanups.push(() => turn.scrollTrigger?.kill(), () => turn.kill());
     }
