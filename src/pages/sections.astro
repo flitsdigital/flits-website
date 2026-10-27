@@ -10,7 +10,7 @@ const routes = [
   { href: '/', label: 'Home', sections: 'HeroHome + ImageFan · IntroLogos · ProjectsGrid · ReviewsCarousel · ServicesTeaser · TeamSection · Showreel' },
   { href: '/over-ons', label: 'Over ons', sections: 'HeroPhoto + ImageFan · TextBlock · StatsPanel · TeamSection (light) · ClientLogoGrid · BehindTheScenes · ReviewsCarousel' },
   { href: '/projecten', label: 'Projecten', sections: 'HeroPage · ProjectArchive' },
-  ...cases.map((slug) => ({ href: projectHref(slug), label: `Case: ${slug}`, sections: 'CaseHero · CaseIntro · VideoFan · CaseGallery · CaseResults · StatsPanel · CaseTestimonial · ProjectsGrid' })),
+  ...cases.map((slug) => ({ href: projectHref(slug), label: `Case: ${slug}`, sections: 'CaseHero · CaseIntro · VideoFan · CaseBoard · CaseGallery · CaseResults · StatsPanel · CaseTestimonial · ProjectsGrid' })),
   ...services.map((s) => ({ href: serviceHref(s.id), label: `Dienst: ${s.data.label}`, sections: s.data.page.blocks.map((b) => b.type).join(' · ') })),
   { href: '/contact', label: 'Contact', sections: 'HeroPage · ContactSection' },
   { href: '/404', label: '404', sections: 'HeroPage · ProjectsGrid' },

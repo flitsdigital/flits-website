@@ -1,0 +1,238 @@
+---
+interface Props {
+  /** Bunny Stream HLS playlist (.m3u8). */
+  src: string;
+  /** Bunny thumbnail, shown until the video plays. */
+  poster: string;
+  /** Fill the parent (which sets the size) and crop, instead of a 16:9 box. */
+  cover?: boolean;
+}
+
+const { src, poster, cover = false } = Astro.props;
+---
+
+<!-- Osmo "Custom Bunny HLS Player (Basic)" (scripts/bunny-player.ts): autoplays muted and looped while in view,
+     nothing loads before it scrolls in. The play/pause control is a <button> so it works by keyboard too. -->
+<div
+  class="bunny-player"
+  data-bunny-player-init=""
+  data-player-muted="true"
+  data-player-activated="false"
+  data-player-autoplay="true"
+  data-player-hover="idle"
+  data-player-src={src}
+  data-player-status="idle"
+  data-player-update-size={cover ? 'cover' : 'false'}
+  data-player-lazy="true"
+>
+  <div data-player-before="" class="bunny-player__before"></div>
+  <video preload="auto" width="1920" height="1080" playsinline="" class="bunny-player__video"></video>
+  <img src={poster} alt="" width="1920" height="1080" loading="lazy" class="bunny-player__placeholder" />
+  <div class="bunny-player__dark"></div>
+  <button type="button" data-player-control="playpause" class="bunny-player__playpause" aria-label="Video afspelen of pauzeren">
+    <div class="bunny-player__big-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__pause-svg"
+        ><path d="M16 5V19" stroke="currentColor" stroke-width="3" stroke-miterlimit="10"></path><path
+          d="M8 5V19"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-miterlimit="10"></path></svg
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__play-svg"
+        ><path
+          d="M6 12V5.01109C6 4.05131 7.03685 3.4496 7.87017 3.92579L14 7.42855L20.1007 10.9147C20.9405 11.3945 20.9405 12.6054 20.1007 13.0853L14 16.5714L7.87017 20.0742C7.03685 20.5503 6 19.9486 6 18.9889V12Z"
+          fill="currentColor"></path></svg
+      >
+    </div>
+  </button>
+  <div class="bunny-player__loading">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" class="bunny-player__loading-svg" fill="none"
+      ><path
+        fill="currentColor"
+        d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+        ><!-- On the path, not the <svg> (as Osmo had it): there "50 50" is the viewBox centre; on the svg it is 50 CSS px, off-centre at 6em -->
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          dur="1s"
+          from="0 50 50"
+          to="360 50 50"
+          repeatCount="indefinite"></animateTransform></path
+      ></svg
+    >
+  </div>
+</div>
+
+<style>
+  /* Osmo CSS from here; changes: our radius, 16:9 (the Bunny stream), and a reset for the <button> */
+  .bunny-player {
+    pointer-events: none;
+    color: #fff;
+    isolation: isolate;
+    border-radius: var(--radius-md);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    transform: translateX(0);
+  }
+
+  .bunny-player__before {
+    padding-top: 56.25%;
+  }
+
+  /* Cover Mode */
+  [data-bunny-player-init][data-player-update-size='cover'] {
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-update-size='cover'] [data-player-before] {
+    display: none;
+  }
+
+  [data-bunny-player-init][data-player-update-size='cover'] .bunny-player__video {
+    object-fit: cover;
+  }
+
+  /* Animation */
+  [data-bunny-player-init] :is(.bunny-player__placeholder, .bunny-player__dark, .bunny-player__playpause, .bunny-player__loading) {
+    transition:
+      opacity 0.3s linear,
+      visibility 0.3s linear;
+  }
+
+  /* Placeholder */
+  .bunny-player__placeholder {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__placeholder,
+  [data-bunny-player-init][data-player-status='paused'] .bunny-player__placeholder,
+  [data-bunny-player-init][data-player-activated='true'][data-player-status='ready'] .bunny-player__placeholder {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Dark Overlay */
+  .bunny-player__dark {
+    opacity: 0.1;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='paused'] .bunny-player__dark,
+  [data-bunny-player-init][data-player-status='playing'][data-player-hover='active'] .bunny-player__dark {
+    opacity: 0.3;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__dark {
+    opacity: 0;
+  }
+
+  .bunny-player__video {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 0;
+    padding-right: 0;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* Play/Pause */
+  .bunny-player__playpause {
+    pointer-events: auto;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__playpause,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__playpause {
+    opacity: 0;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'][data-player-hover='active'] .bunny-player__playpause,
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__playpause:focus-visible {
+    opacity: 1;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__play-svg,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__play-svg {
+    display: none;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__pause-svg,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__pause-svg {
+    display: block;
+  }
+
+  .bunny-player__big-btn {
+    -webkit-backdrop-filter: blur(1em);
+    backdrop-filter: blur(1em);
+    cursor: pointer;
+    background-color: #64646433;
+    border: 1px solid #ffffff1a;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 6em;
+    height: 6em;
+    padding: 2em;
+    display: flex;
+    position: relative;
+  }
+
+  .bunny-player__loading-svg {
+    width: 6em;
+  }
+
+  .bunny-player__pause-svg {
+    display: none;
+  }
+
+  @media screen and (max-width: 767px) {
+    .bunny-player__big-btn {
+      width: 20vw;
+      height: 20vw;
+      padding: 6vw;
+    }
+  }
+
+  /* Loading */
+  .bunny-player__loading {
+    opacity: 0;
+    visibility: hidden;
+    background-color: #00000054;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__loading {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>

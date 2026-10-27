@@ -9,46 +9,39 @@ sector: Retail
 cover: ../../assets/images/projects/chocodoki.jpg
 caseStudy:
   heroTitle: Een webshop waarin je zelf je bonbondoos samenstelt
-  hero: ../../assets/images/case/chocodoki-macbook.jpg
+  hero: ../../assets/images/case/chocodoki/iphone-koffie.jpg
   website: https://www.chocodoki.nl
   intro:
     title: Een bonbondoos kies je niet uit een dropdown
     services: [Webdesign, Shopify-webshop, Custom bonbonconfigurator]
-  wide:
-    - ../../assets/images/case/chocodoki-macbook.jpg
-    - ../../assets/images/case/chocodoki-iphone-koffie.jpg
-  gallery:
-    title: Ook op je telefoon gewoon te doen
-    images:
-      - ../../assets/images/case/chocodoki-iphone-tafel.jpg
-      - ../../assets/images/case/chocodoki-iphone-beton.jpg
-  visuals:
-    - ../../assets/images/case/chocodoki/02-productpagina-sfeer.jpg
-    - ../../assets/images/case/chocodoki/01-productpagina-hero.jpg
-    - ../../assets/images/case/chocodoki/04-bonbon-kaart.jpg
-    - ../../assets/images/case/chocodoki/03-configurator.jpg
+  board:
+    - ../../assets/images/case/chocodoki/website-home.jpg
+    - [../../assets/images/case/chocodoki/iphone-beton.jpg, ../../assets/images/case/chocodoki/doosje-zijbalk.jpg]
+    - stats:
+        title: De configurator in cijfers
+        lead: Shopify verkoopt producten, geen doos die je zelf vult. Dus bouwden we er iets eigens voor. Geen kant-en-klare app, maar zelf geschreven.
+        items:
+          - { label: Maandelijkse kosten, value: '€ 0,-' }
+          - { label: Regels code, value: '5000+' }
+          - { label: Smaken bonbons, value: '34+' }
+    - ../../assets/images/case/chocodoki/productpagina.jpg
+    - ../../assets/images/case/chocodoki/mobiel-schermen.jpg
+    - ../../assets/images/case/chocodoki/doosje-states.jpg
+    - ../../assets/images/case/chocodoki/ui-bento.jpg
+    - [../../assets/images/case/chocodoki/social-post.jpg, ../../assets/images/case/chocodoki/iphone-tafel.jpg]
     - title: Zie in één oogopslag wat erin zit
-      lead: Chocodoki maakt 34 smaken bonbons, in puur, melk en wit. Elke smaak heeft eigen ingrediënten. Kies je een doos voor iemand anders, dan wil je zeker weten dat diegene alles mag eten. Daarom staan de allergenen als icoontjes op elke bonbon, en filter je met één klik op chocoladesoort of allergeen.
-    - ../../assets/images/case/chocodoki/07-allergenen.jpg
-    - ../../assets/images/case/chocodoki/05-bonbon-kaarten-waaier.jpg
-    - ../../assets/images/case/chocodoki/06-doosje-states.jpg
-    - ../../assets/images/case/chocodoki/08-reviews.jpg
-    - ../../assets/images/case/chocodoki/09-accordion.jpg
-    - ../../assets/images/case/chocodoki/10-ui-bento.jpg
-    - ../../assets/images/case/chocodoki/11-accordion-footer.jpg
-  results:
-    title: Live, en klaar voor de kerst
-    body:
-      - De webshop staat live. Je kiest een doos van 6, 12 of 15 bonbons, vult hem met je eigen smaken, kiest een wrapper en schrijft er een boodschap bij. Filter op chocoladesmaak en allergenen, dan zie je meteen wat je kunt geven.
-      - Echte verkoopcijfers volgen nog. De kerstdrukte is de eerste grote test, daarna vullen we deze case aan. Wat Chocodoki zelf al bereikte, staat los van ons werk. Meer dan 4.500 uur werkervaring voor hun deelnemers en een 5,0 op Google.
-    image: ../../assets/images/case/chocodoki-iphone-tafel.jpg
-  stats:
-    title: De configurator in cijfers
-    lead: Shopify verkoopt producten, geen doos die je zelf vult. Dus bouwden we er iets eigens voor. Geen kant-en-klare app, maar zelf geschreven.
-    items:
-      - { label: Bonbons om uit te kiezen, value: '34+' }
-      - { label: Stappen tot je doos, value: '3' }
-      - { label: Apps nodig, value: '0' }
+      body:
+        - Chocodoki maakt 34 smaken bonbons, in puur, melk en wit. Elke smaak heeft eigen ingrediënten. Kies je een doos voor iemand anders, dan wil je zeker weten dat diegene alles mag eten.
+        - Daarom staan de allergenen als icoontjes op elke bonbon, en filter je met één klik op chocoladesoort of allergeen.
+    - ../../assets/images/case/chocodoki/allergenen.jpg
+    - ../../assets/images/case/chocodoki/bonbon-kaarten.jpg
+    - results:
+        title: Live, en klaar voor de kerst
+        body:
+          - De webshop staat live. Je kiest een doos van 6, 12 of 15 bonbons, vult hem met je eigen smaken, kiest een wrapper en schrijft er een boodschap bij. Filter op chocoladesmaak en allergenen, dan zie je meteen wat je kunt geven.
+        video:
+          src: https://vz-c3a5e4d9-74d.b-cdn.net/b1953260-4b69-4a9f-89c5-2086829b0b5f/playlist.m3u8
+          poster: https://vz-c3a5e4d9-74d.b-cdn.net/b1953260-4b69-4a9f-89c5-2086829b0b5f/thumbnail.jpg
 ---
 
 Chocodoki is een sociale chocolaterie in Emmen. Mensen met een afstand tot de arbeidsmarkt maken er met de hand bonbons. Die verkopen ze aan particulieren en aan bedrijven die relatiegeschenken zoeken.
