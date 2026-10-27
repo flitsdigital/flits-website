@@ -23,7 +23,11 @@ const Root = linked ? 'a' : 'div';
 ---
 
 <Root class:list={['project-card', className]} href={linked ? projectHref(project.id) : undefined}>
-  <div class="project-card__media" data-cursor-marquee-text={linked ? 'Case bekijken' : undefined}>
+  <div
+    class="project-card__media"
+    data-cursor-marquee-text={linked ? 'Case bekijken' : undefined}
+    data-cursor-marquee-theme={linked ? 'light' : undefined}
+  >
     <Image src={cover} alt="" width={1200} widths={[600, 1200]} sizes="(min-width: 1440px) 599px, 50vw" />
     <div class="project-card__overlay">
       <div class="project-card__top">
