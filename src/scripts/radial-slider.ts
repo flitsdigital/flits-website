@@ -13,7 +13,7 @@ import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry
  *   -angle      tilt in degrees between neighbours (0 = straight row)     default 10
  *   -shape      arch (∩, sides drop) | valley (∪, sides rise)             default arch
  *   -equal      present: every item gets the height of the tallest one
- *   -scroll     places the items travel while the slider scrolls through the viewport  default 0
+ *   -scroll     degrees the whole fan turns while it scrolls through the viewport   default 0
  * [data-radial-slider-track]      direct children are the items, the first one starts in the centre
  *                                 (it is also the only one shown before the script runs); the centre one gets
  *                                 [data-radial-slider-active] (style it in the section)
@@ -46,7 +46,7 @@ export function initRadialSliders(): () => void {
 
     const num = (name: string, fallback: number) => Number(wrap.getAttribute(`data-radial-slider-${name}`) ?? fallback);
     const speed = reduceMotion ? 0 : num('speed', 0);
-    const scrollSteps = reduceMotion ? 0 : num('scroll', 0);
+    const scrollTurn = reduceMotion ? 0 : num('scroll', 0);
     const angle = num('angle', 10);
     const shape = wrap.getAttribute('data-radial-slider-shape') === 'valley' ? 'valley' : 'arch';
 
@@ -56,7 +56,6 @@ export function initRadialSliders(): () => void {
     let radius = 1;
     let loop = 1;
     const state = { offset: 0 };
-    const scrolled = { shift: 0 }; // apart from offset, so drift, steps and the intro keep working
     let target = 0;
     let stepping: gsap.core.Tween | null = null;
 
@@ -101,7 +100,7 @@ export function initRadialSliders(): () => void {
 
     const render = () => {
       items.forEach((el, i) => {
-        const s = wrapCentered(i * step + state.offset + scrolled.shift, loop);
+        const s = wrapCentered(i * step + state.offset, loop);
         const { x, y, rotation } = arcPosition(s, radius, shape);
         gsap.set(el, { x, y, rotation, xPercent: -50, yPercent: -50, zIndex: Math.round(1000 - Math.abs(s)) });
         el.toggleAttribute('data-radial-slider-active', Math.abs(s) < step / 2);
@@ -172,15 +171,15 @@ export function initRadialSliders(): () => void {
         onComplete: () => (stepping = null),
       });
     }
-    // Scroll travel: scrubbed (0.6s catch-up) on the Osmo curve across the slider's pass through the viewport
-    if (scrollSteps) {
-      const travel = gsap.to(scrolled, {
-        shift: () => -scrollSteps * step,
+    // Scroll: the whole fan turns as one around the centre of its own circle (--radial-arc-origin, see the
+    // track's CSS), scrubbed (0.6s catch-up) on the Osmo curve across its pass through the viewport
+    if (scrollTurn) {
+      const turn = gsap.to(track, {
+        rotation: -scrollTurn,
         ease: osmo,
-        onUpdate: render,
-        scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: 0.6, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: 0.6 },
       });
-      cleanups.push(() => travel.scrollTrigger?.kill(), () => travel.kill());
+      cleanups.push(() => turn.scrollTrigger?.kill(), () => turn.kill());
     }
     const resize = new ResizeObserver(() => requestAnimationFrame(layout));
     resize.observe(wrap);

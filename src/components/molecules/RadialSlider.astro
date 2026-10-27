@@ -4,7 +4,7 @@ import HandButton from '../atoms/HandButton.astro';
 interface Props {
   /** Autoplay drift in px/s; 0 = only moves via the hands. */
   speed?: number;
-  /** Places the items travel along the arc while the slider scrolls past (scrubbed, Osmo curve). */
+  /** Degrees the whole fan turns around its circle's centre while it scrolls past (scrubbed, Osmo curve). */
   scroll?: number;
   /** Tilt between neighbours in degrees (sets the curvature; 0 = straight row). */
   angle?: number;
@@ -56,9 +56,11 @@ const { speed = 0, scroll, angle = 10, shape = 'arch', equalHeight = false, hand
     position: relative;
     isolation: isolate;
   }
+  /* Turns (scroll option) around the centre of the items' circle, which the script sets */
   .radial-slider__track {
     position: absolute;
     inset: 0;
+    transform-origin: 50% calc(50% + var(--radial-arc-origin, 0px));
   }
   /* Items are centred on the wrapper's middle; the script places them on the arc. */
   .radial-slider__track > :global(*) {

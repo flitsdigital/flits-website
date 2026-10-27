@@ -14,7 +14,7 @@ const { images } = Astro.props;
 <!-- Figma: three photos 352×253, tilted 10° per neighbour. Made into a slowly
      drifting radial slider (pauses on hover/focus, off-screen and with reduced motion). -->
 <div class="fan">
-  <RadialSlider label="Foto's van ons werk" speed={40} scroll={1.5} angle={10} class="fan__slider">
+  <RadialSlider label="Foto's van ons werk" speed={40} scroll={6} angle={10} class="fan__slider">
     {images.map((src) => <Image class="fan__photo" src={src} alt="" width={704} loading="eager" />)}
   </RadialSlider>
 </div>
