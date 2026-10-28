@@ -20,10 +20,10 @@ export const contact = {
 export const rating = { score: '4.9', count: '30' };
 
 export const socials = [
-  { icon: 'instagram', label: 'Instagram', href: '#' },
-  { icon: 'facebook', label: 'Facebook', href: '#' },
-  { icon: 'tiktok', label: 'TikTok', href: '#' },
-  { icon: 'linkedin', label: 'LinkedIn', href: '#' },
+  { icon: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/wijzijnflits/' },
+  { icon: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61566720772653' },
+  { icon: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@wijzijnflits' },
+  { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/flitsdigital/' },
 ] as const;
 
 export const legal = [
