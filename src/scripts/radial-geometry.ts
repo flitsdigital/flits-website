@@ -24,6 +24,15 @@ export const wrapCentered = (v: number, len: number) => ((((v + len / 2) % len) 
  * Distance between neighbour centres so the *visible* gap is `gap`, also when the neighbour is
  * tilted `angleDeg` (a tilted card's bounding box is wider than the card).
  */
+/**
+ * New offset and step target after the spacing changes from `prevStep` to `nextStep` (a resize),
+ * so the same item stays in the centre.
+ */
+export function rescaleOffset(offset: number, prevStep: number, nextStep: number) {
+  const scaled = (offset / prevStep) * nextStep;
+  return { offset: scaled, target: Math.round(scaled / nextStep) * nextStep };
+}
+
 export function stepFor(width: number, height: number, gap: number, angleDeg: number) {
   const t = (Math.abs(angleDeg) * Math.PI) / 180;
   return width / 2 + (width * Math.cos(t) + height * Math.sin(t)) / 2 + gap;
