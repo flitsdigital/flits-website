@@ -25,6 +25,10 @@ const { theme = 'surface', as: Tag = 'div', width = 'default', class: className 
   .panel + .panel {
     margin-top: var(--gutter-panel);
   }
+  /* nor does the last panel touch the footer */
+  :global(main) > .panel:last-child {
+    margin-bottom: var(--gutter-panel);
+  }
   .panel--wide {
     width: max(var(--grid-width), min(100% - 60px, 86.25rem)); /* never inside the grid's edges */
   }
