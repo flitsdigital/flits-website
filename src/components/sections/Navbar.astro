@@ -178,6 +178,7 @@ const services = await getServices();
      set by scripts/section-theme.ts). Phones keep the dark bar, which is also the menu's background. */
   @media (min-width: 992px) {
     .nav__bar[data-theme-nav='light'] {
+      --color-bg: var(--color-light-100); /* the outline button's hover label colour */
       --color-text: var(--color-dark-900);
       --color-border: var(--color-border-subtle);
       --color-focus: var(--color-dark-800-60);
@@ -185,6 +186,12 @@ const services = await getServices();
     /* the outline button's WhatsApp icon is white artwork: ink on a light section */
     .nav__bar[data-theme-nav='light'] :global(.btn--outline .icon img) {
       filter: brightness(0);
+    }
+    /* …and stays white on the ink hover fill */
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .nav__bar[data-theme-nav='light'] :global(.btn--outline:is(:hover, :focus-visible) :is(.icon, .icon img)) {
+        filter: none;
+      }
     }
     /* the back chevron is dark artwork, inverted for the dark bar: on a light section it keeps its own ink */
     .nav__bar[data-theme-nav='light'] .nav__back :global(.nav__back-icon) {
@@ -204,6 +211,10 @@ const services = await getServices();
   }
   .nav__logo {
     display: flex;
+  }
+  /* the white wordmark follows the nav's theme; the yellow bolt stays */
+  .nav__logo :global(path[fill='white']) {
+    fill: currentColor;
   }
   @media (pointer: coarse) {
     .nav__logo {
