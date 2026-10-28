@@ -4,7 +4,7 @@ import BgShapes from '../atoms/BgShapes.astro';
 import PhotoBackdrop from '../atoms/PhotoBackdrop.astro';
 import Heading from '../atoms/Heading.astro';
 import HeroMedia from '../atoms/HeroMedia.astro';
-import bolt from '../../assets/images/about/bolt.svg';
+import Bolt from '../../assets/icons/bolt.svg';
 
 interface Props {
   image: ImageMetadata;
@@ -21,7 +21,7 @@ const { image, title, mediaOverlap = 80 } = Astro.props;
   <PhotoBackdrop image={image} veil="brand" bleed />
   <BgShapes />
   <div class="hero-photo__title">
-    <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
+    <Bolt class="hero-photo__bolt" width={44} height={59} aria-hidden="true" />
     <Heading as="h1" size="116">{title}</Heading>
   </div>
 </section>
@@ -45,6 +45,9 @@ const { image, title, mediaOverlap = 80 } = Astro.props;
     width: var(--span-6); /* still wraps after "ZIJN" */
     text-align: center;
     color: var(--color-light-100);
+  }
+  .hero-photo__bolt {
+    color: var(--color-brand-500);
   }
   .hero-photo__title > :global(.heading) {
     justify-self: stretch; /* title box = the 6 columns, text centred */

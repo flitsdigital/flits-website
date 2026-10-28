@@ -2,7 +2,7 @@
 import type { ImageMetadata } from 'astro';
 import BgShapes from '../atoms/BgShapes.astro';
 import PhotoBackdrop from '../atoms/PhotoBackdrop.astro';
-import bolt from '../../assets/images/case/bolt.svg';
+import Bolt from '../../assets/icons/bolt.svg';
 
 interface Props {
   image: ImageMetadata;
@@ -19,7 +19,7 @@ const { image, client, year, title } = Astro.props;
   <PhotoBackdrop image={image} veil="dark" />
   <BgShapes rightOnly />
   <div class="case-hero__text">
-    <p class="case-hero__meta">{client}{' '}<img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />{' '}{year}</p>
+    <p class="case-hero__meta">{client}{' '}<Bolt width={12} height={16} aria-hidden="true" />{' '}{year}</p>
     <h1>{title}</h1>
   </div>
 </section>

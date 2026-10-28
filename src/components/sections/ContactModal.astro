@@ -6,7 +6,7 @@ import Label from '../atoms/Label.astro';
 import StepIndicator from '../molecules/StepIndicator.astro';
 import ContactFields from '../molecules/ContactFields.astro';
 import { contact } from '../../data/site';
-import bolt from '../../assets/images/contact/bolt.svg';
+import Bolt from '../../assets/icons/bolt.svg';
 import close from '../../assets/images/contact/close.svg';
 
 const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
@@ -25,7 +25,7 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
 
     <div class="contact-modal__body">
       <section class="contact-modal__step contact-modal__step--intro" data-step="0">
-        <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
+        <Bolt class="contact-modal__bolt" width={15.6375} height={21} aria-hidden="true" />
         <Heading as="h2" size="36" id="cm-title-0">Nieuw project?<br />Wij denken graag<br />met je mee</Heading>
         <p class="contact-modal__lead">
           Druk op de “Volgende” knop om je project te starten. Liever een “normaal” contact formulier invullen?{' '}
@@ -70,7 +70,7 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
       </section>
 
       <section class="contact-modal__step contact-modal__step--intro" data-step="done" hidden>
-        <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
+        <Bolt class="contact-modal__bolt" width={15.6375} height={21} aria-hidden="true" />
         <Heading as="h2" size="36" id="cm-title-done">Bijna klaar!</Heading>
         <p class="contact-modal__lead">
           Je mailprogramma opent met je aanvraag. Verstuur die mail, dan hoor je snel van ons. Lukt dat niet? Mail
@@ -173,6 +173,9 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
     justify-content: center;
     gap: 1.0625rem;
     padding-inline: var(--space-48);
+  }
+  .contact-modal__bolt {
+    color: var(--color-brand-500);
   }
   .contact-modal__head {
     display: grid;

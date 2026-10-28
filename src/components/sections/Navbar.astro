@@ -183,20 +183,6 @@ const services = await getServices();
       --color-border: var(--color-border-subtle);
       --color-focus: var(--color-dark-800-60);
     }
-    /* the outline button's WhatsApp icon is white artwork: ink on a light section */
-    .nav__bar[data-theme-nav='light'] :global(.btn--outline .icon img) {
-      filter: brightness(0);
-    }
-    /* …and stays white on the ink hover fill */
-    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-      .nav__bar[data-theme-nav='light'] :global(.btn--outline:is(:hover, :focus-visible) :is(.icon, .icon img)) {
-        filter: none;
-      }
-    }
-    /* the back chevron is dark artwork, inverted for the dark bar: on a light section it keeps its own ink */
-    .nav__bar[data-theme-nav='light'] .nav__back :global(.nav__back-icon) {
-      filter: none;
-    }
   }
   .nav__bar-inner {
     position: relative;
@@ -239,7 +225,6 @@ const services = await getServices();
   }
   .nav__back :global(.nav__back-icon) {
     rotate: 90deg;
-    filter: invert(1); /* the dark chevron icon, shown light on the bar */
   }
   .nav__hamburger {
     display: none;

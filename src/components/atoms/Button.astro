@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 import Icon, { type IconName } from './Icon.astro';
 
 interface Props extends Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'> {
-  /** outline: only designed for dark surfaces (white whatsapp icon). */
+  /** outline: designed for dark surfaces (the nav also shows it on light sections). */
   variant?: 'primary' | 'secondary' | 'outline' | 'step';
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -102,23 +102,16 @@ const iconSize = variant === 'step' ? 20 : 18;
     border: 1px solid var(--color-border);
     color: var(--color-text);
   }
-  .btn--outline .btn__label,
-  .btn--outline :global(.icon) {
-    transition:
-      translate var(--duration-m) var(--ease-in-out-strong),
-      opacity var(--duration-m) var(--ease-in-out-strong),
-      filter var(--duration-m) var(--ease-in-out-strong);
-  }
   .btn--outline .btn__label {
     opacity: 0.6;
+    transition:
+      translate var(--duration-m) var(--ease-in-out-strong),
+      opacity var(--duration-m) var(--ease-in-out-strong);
   }
-  /* On the white hover fill the label goes full strength and the white icon turns ink */
+  /* On the hover fill the label goes full strength (the icon follows the colour swap) */
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .btn--outline:is(:hover, :focus-visible) .btn__label {
       opacity: 1;
-    }
-    .btn--outline:is(:hover, :focus-visible) :global(.icon) {
-      filter: brightness(0);
     }
   }
   /* Touch: 44px tall pills, the height of the step buttons */
