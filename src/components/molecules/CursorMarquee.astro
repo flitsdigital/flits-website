@@ -44,6 +44,8 @@
         t.style.animationPlayState = 'running';
         t.style.animationDuration = sec + 's';
       });
+      // Flits: the trigger can ask for a white pill (data-cursor-marquee-theme="light"); default is yellow
+      cursor!.setAttribute('data-cursor-marquee-theme', el.getAttribute('data-cursor-marquee-theme') || 'brand');
       cursor!.setAttribute('data-cursor-marquee-status', 'active');
       activeEl = el;
     }
@@ -131,6 +133,10 @@
   }
 
   /* Above the cursor (Osmo: -25%, over it) */
+  [data-cursor-marquee-theme='light'] .cursor-marquee__card {
+    background-color: var(--color-light-0);
+  }
+
   [data-cursor-marquee-status='active'] .cursor-marquee__card {
     clip-path: inset(0 round 50em);
     transform: translateY(calc(-50% - 1rem)) rotate(0.001deg);

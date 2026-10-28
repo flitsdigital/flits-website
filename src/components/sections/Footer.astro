@@ -17,29 +17,37 @@ const pages = [
 ];
 ---
 
-<footer class="footer" data-theme="dark">
+<footer class="footer" data-theme="dark" data-theme-section="dark">
   <BgShapes leftTop={417} rightTop={-47} />
   <div class="footer__inner">
     <div class="footer__col">
       <p class="footer__label">Contactinformatie</p>
       <address class="footer__contact">
         <div class="footer__email">
-          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <a href={`mailto:${contact.email}`} data-underline-link>{contact.email}</a>
           <CopyEmailButton email={contact.email} />
         </div>
         <span>{contact.address.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</span>
-        <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
+        <a href={`tel:${contact.phone.replaceAll(' ', '')}`} data-underline-link>{contact.phone}</a>
       </address>
     </div>
     <nav class="footer__col" aria-label="Pagina’s">
       <p class="footer__label">Pagina’s</p>
       <ul class="footer__pages" role="list">
-        {pages.map((p) => <li><a href={p.href}><Heading as="span" size="64">{p.label}</Heading></a></li>)}
+        {
+          pages.map((p) => (
+            <li>
+              <a href={p.href} aria-label={p.label} class="footer__page">
+                <Heading as="span" size="64"><span data-button-animate-chars>{p.label}</span></Heading>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
     <p class="footer__meta" data-local-time data-region={contact.region}>17:45 in {contact.region}</p>
     <div class="footer__meta footer__legal">
-      {legal.map((l) => <a href={l.href}>{l.label}</a>)}
+      {legal.map((l) => <a href={l.href} data-underline-link>{l.label}</a>)}
       <ul class="footer__socials" role="list">
         {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} /></a></li>)}
       </ul>
@@ -57,6 +65,32 @@ const pages = [
       el.textContent = `${hh}:${mm} in ${el.dataset.region}`;
     });
   }, 1000);
+
+  // Osmo "Button with CSS Character Stagger": split each big page link into letters with a growing delay.
+  // Once per full load is enough: the footer sits outside the Swup container.
+  function initButtonCharacterStagger() {
+    const offsetIncrement = 0.01; // Transition offset increment in seconds
+    const buttons = document.querySelectorAll('[data-button-animate-chars]');
+
+    buttons.forEach((button) => {
+      const text = button.textContent ?? ''; // Get the button's text content
+      button.innerHTML = ''; // Clear the original content
+
+      [...text].forEach((char, index) => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.style.transitionDelay = `${index * offsetIncrement}s`;
+
+        // Handle spaces explicitly
+        if (char === ' ') {
+          span.style.whiteSpace = 'pre'; // Preserve space width
+        }
+
+        button.appendChild(span);
+      });
+    });
+  }
+  initButtonCharacterStagger();
 </script>
 
 <style>
@@ -100,9 +134,39 @@ const pages = [
     align-items: center;
     gap: var(--space-12);
   }
+  /* grid items stretch: keep the links (and their underline) as wide as their text */
+  .footer__contact > a {
+    justify-self: start;
+  }
   .footer__pages {
     display: grid;
     gap: var(--space-16);
+  }
+  /* Osmo character stagger, sized to the display type (line-height 0.9): each letter slides up and
+     its copy (the text-shadow) slides in from below. Hovering one link dims the others (60%). */
+  .footer__page {
+    transition: opacity 0.3s var(--ease-out);
+  }
+  .footer [data-button-animate-chars] {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .footer [data-button-animate-chars] :global(span) {
+    display: inline-block;
+    position: relative;
+    text-shadow: 0px 1.1em currentColor;
+    transform: translateY(0em) rotate(0.001deg);
+    transition: transform 0.6s var(--ease-osmo);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .footer__page:hover [data-button-animate-chars] :global(span) {
+      transform: translateY(-1.1em) rotate(0.001deg);
+    }
+    .footer__pages:has(.footer__page:hover) .footer__page:not(:hover) {
+      opacity: 0.6;
+    }
   }
   .footer__meta {
     align-self: end;
@@ -117,6 +181,14 @@ const pages = [
   .footer__socials {
     display: flex;
     gap: var(--space-8);
+  }
+  .footer__socials a {
+    display: flex;
+    opacity: 0.6;
+    transition: opacity 0.3s var(--ease-out);
+  }
+  .footer__socials a:is(:hover, :focus-visible) {
+    opacity: 1;
   }
   .footer :global(.footer__logo) {
     position: absolute;

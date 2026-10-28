@@ -1,5 +1,5 @@
 ---
-import logo from '../../assets/brand/logo.svg';
+import logoSvg from '../../assets/brand/logo.svg?raw';
 import logoFooter from '../../assets/brand/logo-footer.svg';
 
 interface Props {
@@ -8,13 +8,23 @@ interface Props {
 }
 
 const { variant = 'nav', class: className } = Astro.props;
-const src = variant === 'footer' ? logoFooter : logo;
+// Nav: inline, the white wordmark becomes currentColor so it follows the nav's theme; the bolt stays yellow
+const navSvg = logoSvg.replaceAll('fill="white"', 'fill="currentColor"');
 ---
 
-<img class:list={['logo', className]} src={src.src} width={src.width} height={src.height} alt="Flits" />
+{
+  variant === 'footer' ? (
+    <img class:list={['logo', className]} src={logoFooter.src} width={logoFooter.width} height={logoFooter.height} alt="Flits" />
+  ) : (
+    <span class:list={['logo', 'logo--inline', className]} role="img" aria-label="Flits" set:html={navSvg} />
+  )
+}
 
 <style>
   .logo {
     height: auto;
+  }
+  .logo--inline {
+    display: block;
   }
 </style>
