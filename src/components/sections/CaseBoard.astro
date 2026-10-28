@@ -3,38 +3,34 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Heading from '../atoms/Heading.astro';
 import Prose from '../atoms/Prose.astro';
-import StatsPanel from './StatsPanel.astro';
-import CaseResults from './CaseResults.astro';
+import CaseGallery from './CaseGallery.astro';
+import VideoFan from './VideoFan.astro';
 import BunnyPlayer from '../molecules/BunnyPlayer.astro';
+import { serviceTicker } from '../../data/site';
 
 type Text = { title: string; body: string[] };
 type Half = ImageMetadata | Text;
 type Video = { src: string; poster: string };
-type Stats = { title: string; lead: string; items: { label: string; value: string }[] };
-type Results = { title: string; body: string[]; image?: ImageMetadata; video?: Video };
 type Tile = ImageMetadata | Text | { video: Video } | [Half, Half];
-type Block = Tile | { stats: Stats } | { results: Results };
+type Section = { gallery: { title: string; images: ImageMetadata[] } } | { videos: ImageMetadata[] };
 
 interface Props {
-  /** In order: an image runs full width, a [left, right] pair sits side by side; stats and results are the usual case sections. */
-  blocks: Block[];
-  avatars: { src: ImageMetadata; alt?: string }[];
+  /** In order: an image runs full width, a [left, right] pair sits side by side; gallery and videos are sections of their own. */
+  blocks: (Tile | Section)[];
 }
 
-const { blocks, avatars } = Astro.props;
+const { blocks } = Astro.props;
 const isImage = (item: object): item is ImageMetadata => 'src' in item && 'width' in item;
-const isText = (item: object): item is Text => 'title' in item;
-// Tiles that follow each other share one grid; a stats or results block is its own section in between
-const groups: (Tile[] | { stats: Stats } | { results: Results })[] = [];
+// Tiles that follow each other share one grid; a gallery or video fan is its own section in between
+const groups: (Tile[] | Section)[] = [];
 for (const block of blocks) {
-  if (!Array.isArray(block) && ('stats' in block || 'results' in block)) groups.push(block);
+  if (!Array.isArray(block) && ('gallery' in block || 'videos' in block)) groups.push(block);
   else if (Array.isArray(groups.at(-1))) (groups.at(-1) as Tile[]).push(block);
   else groups.push([block]);
 }
 ---
 
-<!-- Figma "Flits Website V2 – Cases" 4:1223: mockups and white text blocks on the panels' edges, pairs side by side;
-     the numbers are the stats panel, the ending the dark results band (here with the Bunny video) -->
+<!-- Figma "Flits Website V2 – Cases" 4:1223: mockups and white text blocks on the panels' edges, pairs side by side -->
 <div class="case-board">
   {
     groups.map((group) =>
@@ -66,10 +62,10 @@ for (const block of blocks) {
             ),
           )}
         </section>
-      ) : 'stats' in group ? (
-        <StatsPanel avatars={avatars} eyebrow="Wat hebben we bereikt?" title={group.stats.title} lead={group.stats.lead} stats={group.stats.items} />
+      ) : 'gallery' in group ? (
+        <CaseGallery title={group.gallery.title} ticker={serviceTicker} images={group.gallery.images} />
       ) : (
-        <CaseResults avatars={avatars} eyebrow="De resultaten spreken voor zich" {...group.results} />
+        <VideoFan posters={group.videos} />
       ),
     )
   }

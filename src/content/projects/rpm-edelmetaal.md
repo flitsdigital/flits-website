@@ -14,26 +14,25 @@ caseStudy:
   intro:
     title: Live goudprijs, tour-agenda en B2B-portaal in één eigen website
     services: [Webdesign, Website in Astro, Goudprijs-API, B2B-login, Advertenties]
-  wide:
+  board:
     - ../../assets/images/case/rpm-edelmetaal/d01-hero-home.jpg
-  gallery:
-    title: Elke week een andere plek
-    images:
-      - ../../assets/images/case/rpm-edelmetaal/m01-goudtour-mobiel.jpg
-      - ../../assets/images/case/rpm-edelmetaal/v02-waaier-tourstops.jpg
-      - ../../assets/images/case/rpm-edelmetaal/m03-tourstop-kaart.jpg
-      - ../../assets/images/case/rpm-edelmetaal/m02-weekagenda-mobiel.jpg
-  visuals:
+    - gallery:
+        title: Elke week een andere plek
+        images:
+          - ../../assets/images/case/rpm-edelmetaal/m01-goudtour-mobiel.jpg
+          - ../../assets/images/case/rpm-edelmetaal/v02-waaier-tourstops.jpg
+          - ../../assets/images/case/rpm-edelmetaal/m03-tourstop-kaart.jpg
+          - ../../assets/images/case/rpm-edelmetaal/m02-weekagenda-mobiel.jpg
     - ../../assets/images/case/rpm-edelmetaal/d02-goudtour-sfeerfoto.jpg
     - title: Elke dag een andere prijs
-      lead: Goud, zilver, platina en palladium veranderen voortdurend van waarde. Wie een oude prijs ziet, voelt zich achteraf niet eerlijk behandeld. Daarom haalt de site drie keer per dag de nieuwe prijzen op en rekent ze door naar 14 karaten. Partners loggen in en zien hun eigen B2B-prijzen, particulieren zien de particuliere prijs.
-    - ../../assets/images/case/rpm-edelmetaal/v05-inkoopprijzen.jpg
-    - ../../assets/images/case/rpm-edelmetaal/v04-b2b-login.jpg
+      body:
+        - Goud, zilver, platina en palladium veranderen voortdurend van waarde. Wie een oude prijs ziet, voelt zich achteraf niet eerlijk behandeld. Daarom haalt de site drie keer per dag de nieuwe prijzen op en rekent ze door naar 14 karaten. Partners loggen in en zien hun eigen B2B-prijzen, particulieren zien de particuliere prijs.
+    - [../../assets/images/case/rpm-edelmetaal/v05-inkoopprijzen.jpg, ../../assets/images/case/rpm-edelmetaal/v04-b2b-login.jpg]
     - ../../assets/images/case/rpm-edelmetaal/d03-weekagenda.jpg
     - title: Eigen ontwerp, geen template
-      lead: Zwart met goud, de klassieke Cinzel-letter en een eigen merkmotief. Elk metaal is een tegel uit het periodiek systeem, van AU 79 tot PD 46. Gebouwd in Astro, zodat de site snel blijft en makkelijk te koppelen is.
-    - ../../assets/images/case/rpm-edelmetaal/v03-element-tegels.jpg
-    - ../../assets/images/case/rpm-edelmetaal/v01-element-tegel.jpg
+      body:
+        - Zwart met goud, de klassieke Cinzel-letter en een eigen merkmotief. Elk metaal is een tegel uit het periodiek systeem, van AU 79 tot PD 46. Gebouwd in Astro, zodat de site snel blijft en makkelijk te koppelen is.
+    - [../../assets/images/case/rpm-edelmetaal/v03-element-tegels.jpg, ../../assets/images/case/rpm-edelmetaal/v01-element-tegel.jpg]
     - ../../assets/images/case/rpm-edelmetaal/d04-bento.jpg
     - ../../assets/images/case/rpm-edelmetaal/d05-footer-home.jpg
   results:

@@ -13,21 +13,20 @@ caseStudy:
   intro:
     title: Eén site voor bezoekers, standhouders en vrijwilligers
     services: [Webdesign, Webflow-website, Zelf te bewerken]
-  wide:
+  board:
     - ../../assets/images/case/chaos-in-de-venen/02-site-op-sfeerfoto.jpg
-  gallery:
-    title: Ook op je telefoon in één oogopslag
-    images:
-      - ../../assets/images/case/chaos-in-de-venen/10-mobiel-hero.jpg
-      - ../../assets/images/case/chaos-in-de-venen/09-cijferbalk.jpg
-      - ../../assets/images/case/chaos-in-de-venen/08-icoontegels.jpg
-      - ../../assets/images/case/chaos-in-de-venen/11-mobiel-twee-schermen.jpg
-  visuals:
+    - gallery:
+        title: Ook op je telefoon in één oogopslag
+        images:
+          - ../../assets/images/case/chaos-in-de-venen/10-mobiel-hero.jpg
+          - ../../assets/images/case/chaos-in-de-venen/09-cijferbalk.jpg
+          - ../../assets/images/case/chaos-in-de-venen/08-icoontegels.jpg
+          - ../../assets/images/case/chaos-in-de-venen/11-mobiel-twee-schermen.jpg
     - title: Eerst in grijs, dan pas in kleur
-      lead: We begonnen met wireframes van alle zes pagina's, zodat per doelgroep duidelijk was wat bovenaan moet staan. Daarna kwamen de ontwerprondes, met echte foto's van eerdere markten. In de eerste ronde was de cijferbalk blauw. In het definitieve ontwerp werd hij oranje, en kreeg blauw een eigen rol bij de vrijwilligers.
+      body:
+        - We begonnen met wireframes van alle zes pagina's, zodat per doelgroep duidelijk was wat bovenaan moet staan. Daarna kwamen de ontwerprondes, met echte foto's van eerdere markten. In de eerste ronde was de cijferbalk blauw. In het definitieve ontwerp werd hij oranje, en kreeg blauw een eigen rol bij de vrijwilligers.
     - ../../assets/images/case/chaos-in-de-venen/05-wireframe-naar-ontwerp.jpg
-    - ../../assets/images/case/chaos-in-de-venen/06-taakkaart.jpg
-    - ../../assets/images/case/chaos-in-de-venen/07-taakkaarten-waaier.jpg
+    - [../../assets/images/case/chaos-in-de-venen/06-taakkaart.jpg, ../../assets/images/case/chaos-in-de-venen/07-taakkaarten-waaier.jpg]
     - ../../assets/images/case/chaos-in-de-venen/03-vrijwilligers.jpg
     - ../../assets/images/case/chaos-in-de-venen/04-ui-bento.jpg
   results:
