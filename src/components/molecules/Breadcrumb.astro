@@ -44,7 +44,21 @@ const { items, class: className } = Astro.props;
     display: flex;
     gap: var(--space-16);
   }
-  a:hover {
+  a {
+    transition: color 0.15s ease;
+  }
+  @media (pointer: coarse) {
+    a {
+      padding-block: var(--space-12);
+      margin-block: calc(-1 * var(--space-12));
+    }
+  }
+  a:active {
     color: var(--color-light-0);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    a:hover {
+      color: var(--color-light-0);
+    }
   }
 </style>

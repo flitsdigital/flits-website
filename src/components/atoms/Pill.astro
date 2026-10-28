@@ -56,4 +56,16 @@ const Tag = isFilter ? 'button' : 'span';
     background: var(--color-accent);
     color: var(--color-on-accent);
   }
+  /* Touch: 44px chips, like the buttons; a quick press-in */
+  @media (pointer: coarse) {
+    .pill--filter {
+      min-height: 2.75rem;
+    }
+  }
+  .pill--filter {
+    transition: scale 0.15s var(--ease-out);
+  }
+  .pill--filter:active {
+    scale: 0.96;
+  }
 </style>

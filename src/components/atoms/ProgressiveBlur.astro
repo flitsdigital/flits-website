@@ -67,4 +67,11 @@
     -webkit-mask: linear-gradient(#0000 88%, #000 100%);
     mask: linear-gradient(#0000 88%, #000 100%);
   }
+
+  /* Phones: five backdrop blurs re-rendered on every scroll frame, over the text being read */
+  @media (pointer: coarse) {
+    .progressive-blur {
+      display: none;
+    }
+  }
 </style>

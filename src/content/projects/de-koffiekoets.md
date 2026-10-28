@@ -34,7 +34,7 @@ caseStudy:
       - In die 2 jaar hebben we al veel bedrijven mogen helpen met hun website, social media of online marketing vraagstuk!
     image: ../../assets/images/gallery/koffiekoets-4.jpg
   stats:
-    title: Hier komt een leuke tekst over resultaten
+    title: Wat het opleverde
     lead: Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.
     items:
       - { label: Warme leads, value: 3500+ }

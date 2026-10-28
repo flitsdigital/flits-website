@@ -56,10 +56,13 @@ const iconSize = variant === 'step' ? 20 : 18;
     font: var(--text-ui);
     white-space: nowrap;
     overflow: clip; /* hides the label copy below; the focus outline is drawn outside and stays visible */
-    -webkit-tap-highlight-color: transparent;
     transition:
       color 0.325s var(--btn-ease-hover),
-      background-color 0.325s var(--btn-ease-hover);
+      background-color 0.325s var(--btn-ease-hover),
+      scale 0.15s var(--ease-out);
+  }
+  .btn:active {
+    scale: 0.97;
   }
   .btn__label {
     text-shadow: 0 2lh 0 currentColor;
@@ -117,6 +120,15 @@ const iconSize = variant === 'step' ? 20 : 18;
     }
     .btn--outline:is(:hover, :focus-visible) :global(.icon) {
       filter: brightness(0);
+    }
+  }
+  /* Touch: 44px tall pills, the height of the step buttons */
+  @media (pointer: coarse) {
+    .btn {
+      min-height: 2.75rem;
+    }
+    .btn--outline {
+      height: 2.75rem;
     }
   }
   .btn--step {

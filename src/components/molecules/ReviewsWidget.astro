@@ -129,6 +129,20 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9
     opacity: 1;
     background: var(--color-dark-900);
   }
+  /* Touch: a taller, wider invisible hit area per dot (the dots stay 6px) */
+  @media (pointer: coarse) {
+    .reviews-w__dots {
+      gap: var(--space-12);
+    }
+    .reviews-w__dots button {
+      position: relative;
+    }
+    .reviews-w__dots button::after {
+      content: '';
+      position: absolute;
+      inset: -1rem -0.375rem;
+    }
+  }
   .reviews-w__dots button:focus-visible {
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;

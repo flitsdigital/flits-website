@@ -129,6 +129,23 @@ const now = new Date();
     font: var(--text-widget-title);
     cursor: pointer;
   }
+  /* Touch: ~38px invisible hit areas around the 22px arrows */
+  @media (pointer: coarse) {
+    .post__nav {
+      gap: var(--space-12);
+    }
+    .post__nav button {
+      position: relative;
+    }
+    .post__nav button::after {
+      content: '';
+      position: absolute;
+      inset: -0.5rem;
+    }
+  }
+  .post__nav button:active:not(:disabled) {
+    scale: 0.9;
+  }
   .post__nav button:disabled {
     opacity: 0.35;
     cursor: default;

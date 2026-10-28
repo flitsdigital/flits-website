@@ -84,7 +84,7 @@ const right = tracks[next];
     z-index: 1;
     border-radius: var(--radius-sm);
     object-fit: cover;
-    transition: rotate 0.3s ease;
+    transition: rotate 0.3s ease, scale 0.15s var(--ease-out);
   }
   /* Side covers are buttons: previous / next track */
   button.spotify__cover {
@@ -118,11 +118,16 @@ const right = tracks[next];
     height: 35.09%;
     rotate: 7.65deg;
   }
-  .spotify:hover .spotify__cover--left {
-    rotate: -11deg;
+  @media (hover: hover) and (pointer: fine) {
+    .spotify:hover .spotify__cover--left {
+      rotate: -11deg;
+    }
+    .spotify:hover .spotify__cover--right {
+      rotate: 11deg;
+    }
   }
-  .spotify:hover .spotify__cover--right {
-    rotate: 11deg;
+  button.spotify__cover:active {
+    scale: 0.94;
   }
   .spotify__cover--now {
     z-index: 2;
@@ -143,6 +148,11 @@ const right = tracks[next];
     font-size: 0.625rem; /* 10px semibold */
     letter-spacing: -0.1px;
     text-align: center;
+  }
+  @media (max-width: 767px) {
+    .spotify__text {
+      font-size: 0.6875rem; /* 11px, like the other widget meta on phones */
+    }
   }
   .spotify__artist {
     opacity: 0.6;
@@ -196,6 +206,18 @@ const right = tracks[next];
   }
   .spotify__play:active {
     scale: 0.9;
+  }
+  /* Touch: invisible hit areas around the tiny play button and logo link */
+  @media (pointer: coarse) {
+    .spotify__play {
+      position: relative;
+    }
+    .spotify__play::after,
+    .spotify__logo::after {
+      content: '';
+      position: absolute;
+      inset: -0.75rem;
+    }
   }
   .spotify__play:focus-visible {
     outline: 2px solid var(--color-focus);

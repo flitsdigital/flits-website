@@ -12,6 +12,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* no grey flash on tap; components give their own :active feedback */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -36,7 +38,7 @@ h6 {
 
 /* no lone word on the last line of a section title */
 h2 {
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 /* Lists in components are layout (grids, rows), never bullets */
@@ -67,6 +69,17 @@ button {
   border: 0;
   padding: 0;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* taps fire at once: these never double-tap-zoom */
+a,
+button,
+label,
+summary,
+[role='button'] {
+  touch-action: manipulation;
 }
 
 a {

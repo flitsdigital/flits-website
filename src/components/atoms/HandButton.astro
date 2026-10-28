@@ -27,8 +27,13 @@ const { direction, tone = 'dark', label, class: className, ...rest } = Astro.pro
     border-radius: 50%;
     transition: scale 0.2s ease;
   }
-  .hand-btn:hover {
-    scale: 1.04;
+  @media (hover: hover) and (pointer: fine) {
+    .hand-btn:hover {
+      scale: 1.04;
+    }
+  }
+  .hand-btn:active {
+    scale: 0.95;
   }
   .hand-btn--dark {
     background: var(--color-dark-900);

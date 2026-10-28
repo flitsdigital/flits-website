@@ -162,5 +162,6 @@
 @media (max-width: 767px) {
   :root {
     --grid-columns: 4;
+    --text-widget-meta: 500 0.6875rem/0.9 var(--font-body); /* 11px: 10px is hard to read on a phone */
   }
 }

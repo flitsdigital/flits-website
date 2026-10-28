@@ -53,6 +53,10 @@ const Root = linked ? 'a' : 'div';
     aspect-ratio: 599 / 446;
     border-radius: var(--radius-md);
     overflow: hidden;
+    transition: scale 0.15s var(--ease-out);
+  }
+  a.project-card:active .project-card__media {
+    scale: 0.98;
   }
   .project-card__media > :global(img) {
     width: 100%;
