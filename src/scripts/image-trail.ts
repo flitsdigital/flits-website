@@ -1,3 +1,5 @@
+import { reducedMotion, finePointer } from './media';
+
 /**
  * Osmo "Rotating Image Trail", unchanged except: fewer photos that stay longer and fade out instead of
  * spinning away (feedback 2026-10-24), typed, every [data-trail-area] on the page, started
@@ -7,7 +9,7 @@
  * while it is on screen, and feeds the same trail.
  */
 export function initRotatingImageTrail(): (() => void) | void {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (reducedMotion()) return;
   const cleanups: (() => void)[] = [];
 
   document.querySelectorAll<HTMLElement>('[data-trail-area]').forEach((area) => {
@@ -88,7 +90,7 @@ export function initRotatingImageTrail(): (() => void) | void {
     });
 
     // Touch: a virtual cursor on a figure eight (one loop ≈ 9s), only while the area is on screen
-    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    if (!finePointer()) {
       let frame = 0;
       let start = 0;
       const drift = (now: number) => {

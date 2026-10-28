@@ -1,6 +1,5 @@
 import { band, type PageSpeed } from '../lib/pagespeed';
-
-const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+import { reducedMotion } from './media';
 
 /**
  * PageSpeed widget: when it comes into view, asks /api/pagespeed for the latest score (cached a day on the CDN)
@@ -29,7 +28,7 @@ export function initPageSpeed(): (() => void) | void {
       if (!raw) return; // no score yet: keep "—"
       const to = Number(raw);
       gauge.setAttribute('aria-label', `PageSpeed-score ${to} van 100`);
-      if (reduce()) return set(to);
+      if (reducedMotion()) return set(to);
       const start = performance.now();
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / 1400);

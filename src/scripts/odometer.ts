@@ -1,19 +1,16 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from './gsap';
+import { reducedMotion } from './media';
+
+type Segment = { type: 'digit' | 'static'; char: string; startDigit?: number; hidden?: boolean };
 
 /**
  * Osmo "Number Odometer", unchanged except: GSAP from npm, typed, started per page view from app.ts
  * (Swup) with a cleanup (timelines and the resize listener), and the programmatic update add-on left
  * out (unused). Digits roll like a mechanical counter when a [data-odometer-group] scrolls into view.
  */
-gsap.registerPlugin(ScrollTrigger);
-
-type Segment = { type: 'digit' | 'static'; char: string; startDigit?: number; hidden?: boolean };
-
 export function initNumberOdometer(): (() => void) | void {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = reducedMotion();
   const initFlag = 'data-odometer-initialized';
-  const timelines: gsap.core.Timeline[] = [];
 
   // Configuration
   const defaults = {
@@ -31,8 +28,8 @@ export function initNumberOdometer(): (() => void) | void {
   const groups = [...document.querySelectorAll<HTMLElement>('[data-odometer-group]')];
   if (!groups.length) return;
 
-  // Scroll-triggered groups
-  groups.forEach((group) => {
+  // Scroll-triggered groups; the context collects their timelines for the cleanup
+  const ctx = gsap.context(() => groups.forEach((group) => {
     if (group.hasAttribute(initFlag)) return;
     group.setAttribute(initFlag, '');
 
@@ -81,7 +78,6 @@ export function initNumberOdometer(): (() => void) | void {
         });
       },
     });
-    timelines.push(tl);
 
     ordered.forEach((data, orderIdx) => {
       const { rollers, duration, step, revealData } = data;
@@ -114,7 +110,7 @@ export function initNumberOdometer(): (() => void) | void {
         );
       });
     });
-  });
+  }));
 
   // Helpers
   function getLineHeightRatio(el: HTMLElement) {
@@ -293,7 +289,6 @@ export function initNumberOdometer(): (() => void) | void {
   return () => {
     window.removeEventListener('resize', onResize);
     clearTimeout(resizeTimer);
-    timelines.forEach((tl) => tl.scrollTrigger?.kill() ?? tl.kill());
-    timelines.forEach((tl) => tl.kill());
+    ctx.revert();
   };
 }

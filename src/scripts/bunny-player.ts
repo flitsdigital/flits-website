@@ -1,4 +1,6 @@
 // @ts-nocheck -- Osmo code kept as delivered (untyped JS)
+import { reducedMotion } from './media';
+
 /**
  * Osmo "Custom Bunny HLS Player (Basic)", unchanged except: hls.js is loaded from the CDN only on pages
  * with a player, it starts per page view from app.ts (Swup) with a cleanup (observers, hls, playback),
@@ -36,7 +38,6 @@ export function initBunnyPlayers(): (() => void) | void {
 }
 
 function initBunnyPlayerBasic(observers) {
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('[data-bunny-player-init]').forEach(function(player) {
     var src = player.getAttribute('data-player-src');
     if (!src) return;
@@ -61,7 +62,7 @@ function initBunnyPlayerBasic(observers) {
     var lazyMode   = player.getAttribute('data-player-lazy'); // "true" | "meta" | null
     var isLazyTrue = lazyMode === 'true';
     var isLazyMeta = lazyMode === 'meta';
-    var autoplay   = player.getAttribute('data-player-autoplay') === 'true' && !reducedMotion;
+    var autoplay   = player.getAttribute('data-player-autoplay') === 'true' && !reducedMotion();
 
     // Used to suppress 'ready' flicker when user just pressed play in lazy modes
     var pendingPlay = false;

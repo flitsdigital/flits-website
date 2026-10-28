@@ -1,3 +1,6 @@
+import { reducedMotion } from './media';
+import { showOnly } from './show-only';
+
 const STORY_MS = 5000;
 
 /**
@@ -17,7 +20,7 @@ export function initStoriesWidget(): (() => void) | void {
     const caption = viewer.querySelector<HTMLElement>('[data-story-caption]')!;
     const row = w.querySelector<HTMLElement>('.stories__row')!;
     const closeButton = viewer.querySelector<HTMLButtonElement>('[data-story-close]')!;
-    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const still = reducedMotion();
     let at = -1;
     let frame = 0;
     let started = 0;
@@ -40,7 +43,7 @@ export function initStoriesWidget(): (() => void) | void {
       row.inert = true; // the rings behind the viewer leave the tab order
       if (first) closeButton.focus({ preventScroll: true });
       rings[at].classList.add('is-seen');
-      photos.forEach((p, n) => p.classList.toggle('is-active', n === at));
+      showOnly(photos, at);
       bars.forEach((b, n) => (b.style.width = n < at ? '100%' : '0'));
       caption.textContent = photos[at].getAttribute('alt');
       cancelAnimationFrame(frame);

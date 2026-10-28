@@ -1,13 +1,10 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from './gsap';
 
 /**
  * Osmo "Logo Wall Cycle", unchanged except: GSAP from npm, started per page view from app.ts (Swup)
  * with a cleanup, and the cycle only plays while the wall is on screen and the tab is visible
  * (Osmo starts it at once, so a wall below the fold kept swapping until it was scrolled past).
  */
-gsap.registerPlugin(ScrollTrigger);
-
 export function initLogoWallCycle(): () => void {
   const loopDelay = 1.5; // Loop Duration
   const duration = 0.9; // Animation Duration
