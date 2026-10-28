@@ -71,4 +71,15 @@ const hasMedia = Astro.slots.has('media');
     font: var(--text-body-l-medium);
     letter-spacing: var(--tracking-desc);
   }
+
+  /* Phones: 571px is ~70% of the screen; the hero hugs its content instead */
+  @media (max-width: 767px) {
+    .hero-page {
+      min-height: 0;
+      padding-bottom: var(--space-64);
+    }
+    .hero-page--with-media {
+      padding-bottom: var(--space-128);
+    }
+  }
 </style>

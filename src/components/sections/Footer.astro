@@ -187,8 +187,13 @@ const pages = [
     opacity: 0.6;
     transition: opacity 0.3s var(--ease-out);
   }
-  .footer__socials a:is(:hover, :focus-visible) {
+  .footer__socials a:is(:active, :focus-visible) {
     opacity: 1;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .footer__socials a:hover {
+      opacity: 1;
+    }
   }
   .footer :global(.footer__logo) {
     position: absolute;
@@ -222,6 +227,34 @@ const pages = [
       top: auto;
       display: block;
       margin: var(--space-64) 0 -4vw;
+    }
+  }
+
+  /* Touch: ~44px tap targets. Padding grows the hit area, the negative margin gives the space back,
+     so nothing moves; the stacked page links and the icons get real spacing instead. */
+  @media (pointer: coarse) {
+    .footer__contact a,
+    .footer__legal > a {
+      padding-block: 0.625rem;
+      margin-block: -0.625rem;
+    }
+    .footer__pages {
+      gap: 0;
+    }
+    .footer__page {
+      display: block;
+      padding-block: var(--space-12);
+    }
+    .footer__socials {
+      gap: var(--space-20);
+    }
+    .footer__socials a {
+      padding: 0.625rem;
+      margin: -0.625rem;
+    }
+    .footer :global(.copy-email-button) {
+      padding: var(--space-12);
+      margin: calc(-1 * var(--space-12));
     }
   }
 </style>

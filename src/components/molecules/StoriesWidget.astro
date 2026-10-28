@@ -96,8 +96,13 @@ const stories = byFileOrder(await getCollection('stories'), storyFile.map((s) =>
   .stories__ring.is-seen .stories__face {
     background: var(--color-light-100);
   }
-  .stories__ring:hover .stories__face {
-    scale: 1.06;
+  @media (hover: hover) and (pointer: fine) {
+    .stories__ring:hover .stories__face {
+      scale: 1.06;
+    }
+  }
+  .stories__ring:active .stories__face {
+    scale: 0.94;
   }
   .stories__face :global(img) {
     width: 100%;

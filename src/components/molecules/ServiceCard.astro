@@ -26,13 +26,23 @@ const { href, image, label, class: className } = Astro.props;
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--color-light-0);
-    /* shortcut: Figma shows both cards at 60% opacity (likely the idle state); full opacity on hover is inferred */
-    opacity: 0.6;
-    transition: opacity 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      scale 0.15s var(--ease-out);
   }
-  .service-card:hover,
-  .service-card:focus-visible {
-    opacity: 1;
+  .service-card:active {
+    scale: 0.98;
+  }
+  /* shortcut: Figma shows both cards at 60% opacity (likely the idle state); full opacity on hover is inferred.
+     Touch has no hover to light them up, so they stay at full strength there. */
+  @media (hover: hover) and (pointer: fine) {
+    .service-card {
+      opacity: 0.6;
+    }
+    .service-card:hover,
+    .service-card:focus-visible {
+      opacity: 1;
+    }
   }
   .service-card :global(img) {
     width: 100%;

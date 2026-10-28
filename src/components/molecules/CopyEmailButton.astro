@@ -110,7 +110,7 @@ const { email, class: className } = Astro.props;
   }
 
   /* Hover styling */
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     .copy-email-button:hover .copy-email-icon__wrap {
       background-color: color-mix(in srgb, currentColor 22%, transparent);
     }
