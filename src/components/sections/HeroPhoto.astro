@@ -17,7 +17,7 @@ const { image, title, mediaOverlap = 80 } = Astro.props;
 ---
 
 <!-- Figma 1:1738 + 1:1770: team photo under a 50% dark-800 veil, bolts, title at the bottom -->
-<section class="hero-photo" data-theme="dark">
+<section class="hero-photo" data-theme="dark" data-theme-section="dark">
   <PhotoBackdrop image={image} veil="brand" bleed />
   <BgShapes />
   <div class="hero-photo__title">

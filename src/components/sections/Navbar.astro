@@ -20,7 +20,7 @@ const services = await getServices();
 <header class="nav" data-nav-status="not-active">
   <button type="button" class="nav__dark-overlay" data-nav-control="close" aria-hidden="true" tabindex="-1"></button>
   <nav class="nav__main" aria-label="Hoofdmenu">
-    <div class="nav__bar" data-theme="dark">
+    <div class="nav__bar" data-theme="dark" data-theme-nav="dark" data-nav-bar-height>
       <div class="nav__bar-inner">
         <!-- Swup container: swapped per page, so the back link follows the page (case pages) -->
         <div id="nav-back" class="nav__back-slot">
@@ -143,11 +143,6 @@ const services = await getServices();
         item.querySelector('[data-nav-sub-control]')?.setAttribute('aria-expanded', 'false');
       });
     });
-
-    // Bar gets a background once the page scrolls away from the dark hero.
-    const onScroll = () => header.toggleAttribute('data-nav-scrolled', window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
   }
 </script>
 
@@ -177,11 +172,20 @@ const services = await getServices();
     border-radius: var(--radius-md);
     background: transparent;
     pointer-events: auto;
-    transition: background-color 0.25s ease;
+    transition: color 0.3s var(--ease-out);
   }
-  .nav[data-nav-scrolled] .nav__bar {
-    /* shortcut: one scrolled style for every background; per-section variants come later */
-    background: var(--color-dark-900);
+  /* Desktop: the bar stays see-through and takes the theme of the section under it (data-theme-nav,
+     set by scripts/section-theme.ts). Phones keep the dark bar, which is also the menu's background. */
+  @media (min-width: 992px) {
+    .nav__bar[data-theme-nav='light'] {
+      --color-text: var(--color-dark-900);
+      --color-border: var(--color-border-subtle);
+      --color-focus: var(--color-dark-800-60);
+    }
+    /* the outline button's WhatsApp icon is white artwork: ink on a light section */
+    .nav__bar[data-theme-nav='light'] :global(.btn--outline .icon img) {
+      filter: brightness(0);
+    }
   }
   .nav__bar-inner {
     position: relative;
@@ -310,6 +314,12 @@ const services = await getServices();
       overflow: auto;
       padding: 0;
       background: var(--color-dark-900);
+      border-radius: var(--space-32); /* half the closed bar's 64px: fully round ends */
+      transition: border-radius 0.35s ease;
+    }
+    /* open, the bar becomes a tall panel: back to the regular corners */
+    [data-nav-status='active'] .nav__bar {
+      border-radius: var(--radius-md);
     }
     .nav__bar-inner {
       flex-direction: column;
