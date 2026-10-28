@@ -186,6 +186,10 @@ const services = await getServices();
     .nav__bar[data-theme-nav='light'] :global(.btn--outline .icon img) {
       filter: brightness(0);
     }
+    /* the back chevron is dark artwork, inverted for the dark bar: on a light section it keeps its own ink */
+    .nav__bar[data-theme-nav='light'] .nav__back :global(.nav__back-icon) {
+      filter: none;
+    }
   }
   .nav__bar-inner {
     position: relative;
