@@ -1,0 +1,12 @@
+---
+/** One span per letter with its index in --c, for letter-by-letter CSS motion; spaces stay plain text. */
+interface Props {
+  text: string;
+  /** Class on every letter span. */
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+---
+
+{[...text].map((char, c) => (char === ' ' ? ' ' : <span class={className} style={`--c:${c}`}>{char}</span>))}
