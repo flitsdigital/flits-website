@@ -45,7 +45,7 @@ const pages = [
         }
       </ul>
     </nav>
-    <p class="footer__meta" data-local-time data-region={contact.region}>17:45 in {contact.region}</p>
+    <p class="footer__meta" data-local-time data-region={contact.region}>17:45:00 in {contact.region}</p>
     <div class="footer__meta footer__legal">
       {legal.map((l) => <a href={l.href} data-underline-link>{l.label}</a>)}
       <ul class="footer__socials" role="list">
@@ -60,9 +60,9 @@ const pages = [
   import { studioTime, everyTick } from '../../lib/time';
 
   everyTick(() => {
-    const { hh, mm } = studioTime();
+    const { hh, mm, s } = studioTime();
     document.querySelectorAll<HTMLElement>('[data-local-time]').forEach((el) => {
-      el.textContent = `${hh}:${mm} in ${el.dataset.region}`;
+      el.textContent = `${hh}:${mm}:${String(s).padStart(2, '0')} in ${el.dataset.region}`;
     });
   }, 1000);
 
@@ -171,6 +171,7 @@ const pages = [
   .footer__meta {
     align-self: end;
     font: var(--text-body-m-medium);
+    font-variant-numeric: tabular-nums; /* the ticking seconds don't shift the line */
     color: var(--color-light-muted-on-dark);
   }
   .footer__legal {
