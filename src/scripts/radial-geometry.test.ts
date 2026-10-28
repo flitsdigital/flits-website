@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry.ts';
+import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './radial-geometry.ts';
 
 const close = (a: number, b: number) => assert.ok(Math.abs(a - b) < 0.01, `${a} ≈ ${b}`);
 
@@ -37,4 +37,11 @@ test('stepFor keeps the same visible gap however much the neighbour tilts', () =
   const tilted = stepFor(400, 500, 96, 18);
   const neighbourHalf = (400 * Math.cos(Math.PI / 10) + 500 * Math.sin(Math.PI / 10)) / 2;
   close(tilted, 200 + neighbourHalf + 96);
+});
+
+test('rescaleOffset keeps the same item centred when the spacing changes', () => {
+  // three steps on at 400px spacing is three steps on at 500px
+  assert.deepEqual(rescaleOffset(-1200, 400, 500), { offset: -1500, target: -1500 });
+  // mid-drift (2.75 steps): the offset keeps its fraction, the target snaps to the nearest item
+  assert.deepEqual(rescaleOffset(-1100, 400, 500), { offset: -1375, target: -1500 });
 });
