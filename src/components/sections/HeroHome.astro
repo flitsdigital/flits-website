@@ -24,7 +24,7 @@ interface Props {
 const { eyebrow, avatars, title, highlight, rotatingWords, stepDuration = 2.25, intro, mediaOverlap = 106 } = Astro.props;
 ---
 
-<section class="hero" data-theme="dark" style={`--hero-overlap:${mediaOverlap}px`}>
+<section class="hero" data-theme="dark" data-theme-section="dark" style={`--hero-overlap:${mediaOverlap}px`}>
   <BgShapes />
   <div class="hero__content">
     <div class="hero__heading">

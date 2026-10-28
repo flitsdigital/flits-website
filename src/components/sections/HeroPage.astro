@@ -20,7 +20,7 @@ const hasMedia = Astro.slots.has('media');
 ---
 
 <!-- Figma 1:2220 / 1:2885: dark 571px hero, breadcrumb + title + intro centred -->
-<section class:list={['hero-page', `hero-page--${size}`, { 'hero-page--with-media': hasMedia }]} data-theme="dark">
+<section class:list={['hero-page', `hero-page--${size}`, { 'hero-page--with-media': hasMedia }]} data-theme="dark" data-theme-section="dark">
   <BgShapes leftTop={81} />
   <div class="hero-page__content">
     <Breadcrumb items={[{ label: 'Home', href: '/' }, ...breadcrumb]} />

@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { CustomEase } from 'gsap/CustomEase';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { radiusFor, arcPosition, wrapCentered, stepFor } from './radial-geometry';
+import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './radial-geometry';
 
 /**
  * Radial Slider — items ride along a large circle and tilt with it.
@@ -76,8 +76,7 @@ export function initRadialSliders(): () => void {
         // The spacing really changed: finish a running step (it aims at the old spacing) and
         // keep the same item centred. Same spacing (e.g. the observer's first call): leave tweens alone.
         stepping?.progress(1);
-        state.offset = (state.offset / prevStep) * nextStep;
-        target = Math.round(state.offset / nextStep) * nextStep;
+        ({ offset: state.offset, target } = rescaleOffset(state.offset, prevStep, nextStep));
       }
       step = nextStep;
       radius = radiusFor(step, angle);
