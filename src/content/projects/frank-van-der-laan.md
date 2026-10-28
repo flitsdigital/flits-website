@@ -33,7 +33,9 @@ caseStudy:
     - ../../assets/images/case/frank-van-der-laan/cijfer-kaarten.jpg
     - ../../assets/images/case/frank-van-der-laan/faq.jpg
     - ../../assets/images/case/frank-van-der-laan/paginas.jpg
-    - ../../assets/images/case/frank-van-der-laan/laptop-sfeer.jpg
+    - video:
+        src: https://vz-c3a5e4d9-74d.b-cdn.net/df5a5c50-ca4b-4ca5-ac83-908b254516c5/playlist.m3u8
+        poster: https://vz-c3a5e4d9-74d.b-cdn.net/df5a5c50-ca4b-4ca5-ac83-908b254516c5/thumbnail.jpg
     - ../../assets/images/case/frank-van-der-laan/lassen.jpg
 ---
 

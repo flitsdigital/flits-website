@@ -5,12 +5,14 @@ import Heading from '../atoms/Heading.astro';
 import Prose from '../atoms/Prose.astro';
 import StatsPanel from './StatsPanel.astro';
 import CaseResults from './CaseResults.astro';
+import BunnyPlayer from '../molecules/BunnyPlayer.astro';
 
 type Text = { title: string; body: string[] };
 type Half = ImageMetadata | Text;
+type Video = { src: string; poster: string };
 type Stats = { title: string; lead: string; items: { label: string; value: string }[] };
-type Results = { title: string; body: string[]; image?: ImageMetadata; video?: { src: string; poster: string } };
-type Tile = ImageMetadata | Text | [Half, Half];
+type Results = { title: string; body: string[]; image?: ImageMetadata; video?: Video };
+type Tile = ImageMetadata | Text | { video: Video } | [Half, Half];
 type Block = Tile | { stats: Stats } | { results: Results };
 
 interface Props {
@@ -52,6 +54,10 @@ for (const block of blocks) {
               )
             ) : isImage(tile) ? (
               <Image src={tile} alt="" class="case-board__full" widths={[800, 1440, 2880]} sizes="100vw" />
+            ) : 'video' in tile ? (
+              <div class="case-board__full">
+                <BunnyPlayer {...tile.video} />
+              </div>
             ) : (
               <div class="case-board__text case-board__full">
                 <Heading>{tile.title}</Heading>
@@ -89,12 +95,12 @@ for (const block of blocks) {
   .case-board__full {
     grid-column: 1 / -1;
   }
-  .case-board__tiles :global(img),
+  .case-board__tiles > :global(img),
   .case-board__text {
     width: 100%;
     border-radius: var(--radius-md);
   }
-  .case-board__tiles :global(img) {
+  .case-board__tiles > :global(img) {
     height: auto;
   }
   /* Figma: white, 64px title over 24px copy, 24px apart; full width in a 928px column, a half with 48px around it */

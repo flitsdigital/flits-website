@@ -59,9 +59,9 @@ const projects = defineCollection({
           visuals: z.array(z.union([image(), z.object({ title: z.string(), lead: z.string() })])).default([]),
           /**
            * Case board (Figma "Cases" file): the blocks after the intro, in order, in place of gallery, results,
-           * stats and visuals. An image runs full width; a [left, right] pair sits side by side.
+           * stats and visuals. An image or { video } runs full width; a [left, right] pair sits side by side.
            */
-          board: z.array(z.union([image(), text, z.object({ stats: statsBlock }), z.object({ results }), z.tuple([half, half])])).default([]),
+          board: z.array(z.union([image(), text, z.object({ video }), z.object({ stats: statsBlock }), z.object({ results }), z.tuple([half, half])])).default([]),
           gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }).optional(),
           results: z.object({ title: z.string(), body: z.array(z.string()), image: image() }).optional(),
           stats: statsBlock.optional(),
