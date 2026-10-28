@@ -4,6 +4,8 @@ import HandButton from '../atoms/HandButton.astro';
 interface Props {
   /** Autoplay drift in px/s; 0 = only moves via the hands. */
   speed?: number;
+  /** Degrees the whole fan turns around its circle's centre while it scrolls past (scrubbed, Osmo curve). */
+  scroll?: number;
   /** Tilt between neighbours in degrees (sets the curvature; 0 = straight row). */
   angle?: number;
   /** arch: sides drop (∩) · valley: sides rise (∪). */
@@ -16,7 +18,7 @@ interface Props {
   class?: string;
 }
 
-const { speed = 0, angle = 10, shape = 'arch', equalHeight = false, hands, label, class: className } = Astro.props;
+const { speed = 0, scroll, angle = 10, shape = 'arch', equalHeight = false, hands, label, class: className } = Astro.props;
 ---
 
 <!-- Items are the direct children of the default slot; the first one starts in the centre.
@@ -25,6 +27,7 @@ const { speed = 0, angle = 10, shape = 'arch', equalHeight = false, hands, label
   class:list={['radial-slider', className]}
   data-radial-slider-init
   data-radial-slider-speed={speed}
+  data-radial-slider-scroll={scroll}
   data-radial-slider-angle={angle}
   data-radial-slider-shape={shape}
   data-radial-slider-equal={equalHeight || undefined}
@@ -53,9 +56,11 @@ const { speed = 0, angle = 10, shape = 'arch', equalHeight = false, hands, label
     position: relative;
     isolation: isolate;
   }
+  /* Turns (scroll option) around the centre of the items' circle, which the script sets */
   .radial-slider__track {
     position: absolute;
     inset: 0;
+    transform-origin: 50% calc(50% + var(--radial-arc-origin, 0px));
   }
   /* Items are centred on the wrapper's middle; the script places them on the arc. */
   .radial-slider__track > :global(*) {
