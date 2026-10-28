@@ -56,6 +56,18 @@ mount();
 initAnimatedGrid(); // once: the overlay sits outside #swup
 initContactModal(); // once: the modal sits outside #swup too
 
+// iOS Low Power Mode (and slow phones) run requestAnimationFrame at ~30fps; there is no API that says so directly.
+// A median frame over 25ms sets html[data-low-power]: the radial fans stop drifting by themselves.
+// shortcut: measured once per full page load, so switching Low Power Mode mid-visit counts from the next full load.
+const frames: number[] = [];
+const sampleFrame = (t: number) => {
+  frames.push(t);
+  if (frames.length < 21) return void requestAnimationFrame(sampleFrame);
+  const deltas = frames.slice(1).map((f, i) => f - frames[i]).sort((a, b) => a - b);
+  document.documentElement.toggleAttribute('data-low-power', deltas[10] > 25);
+};
+requestAnimationFrame(sampleFrame);
+
 const swup = new Swup({
   containers: ['#swup', '#nav-back'],
   // No out/in animation on the page itself (it would expose the body background); see motion.css.

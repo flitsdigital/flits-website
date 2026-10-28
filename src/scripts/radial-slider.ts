@@ -103,7 +103,8 @@ export function initRadialSliders(): () => void {
       items.forEach((el, i) => {
         const s = wrapCentered(i * step + state.offset, loop);
         const { x, y, rotation } = arcPosition(s, radius, shape);
-        gsap.set(el, { x, y, rotation, xPercent: -50, yPercent: -50, zIndex: Math.round(1000 - Math.abs(s)) });
+        // z-index in tenths of a step, not px: a per-frame change forces a repaint instead of a cheap transform
+        gsap.set(el, { x, y, rotation, xPercent: -50, yPercent: -50, zIndex: 1000 - Math.round((Math.abs(s) / step) * 10) });
         el.toggleAttribute('data-radial-slider-active', Math.abs(s) < step / 2);
       });
     };
@@ -118,7 +119,8 @@ export function initRadialSliders(): () => void {
     let velocity = 0;
     if (speed > 0) {
       const drift = (_t: number, deltaMs: number) => {
-        const moving = (canHover ? hovered : inView && !paused) && !stepping;
+        const lowPower = document.documentElement.hasAttribute('data-low-power'); // set in app.ts
+        const moving = (canHover ? hovered : inView && !paused) && !stepping && !lowPower;
         velocity += ((moving ? speed : 0) - velocity) * Math.min(1, deltaMs / 300);
         if (velocity < 0.5) return;
         state.offset -= (velocity * deltaMs) / 1000;
