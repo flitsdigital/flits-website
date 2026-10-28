@@ -3,6 +3,7 @@ import logo from '../../assets/images/widgets/spotify-logo.svg';
 import play from '../../assets/images/widgets/play.svg';
 import { getTracks } from '../../lib/spotify';
 import { neighbours } from '../../lib/spotify-ids';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
   class?: string;
@@ -20,7 +21,7 @@ const right = tracks[next];
 ---
 
 <!-- Figma 991:4187 (168×168). Positions are the design's, in rem. Playback: src/scripts/spotify.ts -->
-<div class:list={['spotify', className]} data-spotify={now.uri} data-spotify-tracks={JSON.stringify(tracks)}>
+<WidgetCard size="square" tone="photo" class:list={['spotify', className]} data-spotify={now.uri} data-spotify-tracks={JSON.stringify(tracks)}>
   <span class="spotify__embed" aria-hidden="true"><span data-spotify-embed></span></span>
   <img class="spotify__glow" src={now.cover} alt="" data-spotify-glow />
   <button class="spotify__cover spotify__cover--left" type="button" data-spotify-step="-1" aria-label={`Vorig nummer: ${left.title}`}>
@@ -44,18 +45,13 @@ const right = tracks[next];
     </button>
     <span class="spotify__track"><span class="spotify__fill" data-spotify-fill></span></span>
   </span>
-</div>
+</WidgetCard>
 
 <style>
+  /* Positions below are % of the 168px card, so it scales with a slot */
   .spotify {
-    position: relative;
     display: block;
-    width: 10.5rem; /* 168px; positions below are % of it, so the card scales with a slot */
-    aspect-ratio: 1;
-    border-radius: var(--radius-md);
-    overflow: hidden;
     background: var(--color-light-0);
-    color: var(--color-light-0);
   }
   .spotify > * {
     position: absolute;

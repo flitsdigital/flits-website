@@ -2,6 +2,7 @@
 import { Image, getImage } from 'astro:assets';
 import dot from '../../assets/images/widgets/live-dot.svg';
 import { contact } from '../../data/site';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
   temperature?: string;
@@ -28,26 +29,21 @@ const dir = '../../assets/images/widgets/weather/';
 const photo = (files[`${dir}${scene}.jpg`] ?? files[`${dir}zomer-middag-helder.jpg`]).default;
 ---
 
-<div class:list={['weather', className]} data-weather={photos && JSON.stringify(photos)}>
+<WidgetCard size="square" tone="photo" class:list={['weather', className]} data-weather={photos && JSON.stringify(photos)}>
   <Image src={photo} alt="" width={400} />
   <div class="weather__top">
-    <p class="weather__row"><span class="weather__title">Flits Digital</span><img src={dot.src} width={dot.width} height={dot.height} alt="" /></p>
-    <p class="weather__row weather__meta"><span>{contact.city}, Nederland</span>{' '}<span data-weather-date>{date}</span></p>
+    <p class="weather__row"><span class="widget__title">Flits Digital</span><img src={dot.src} width={dot.width} height={dot.height} alt="" /></p>
+    <p class="weather__row widget__meta weather__meta"><span>{contact.city}, Nederland</span>{' '}<span data-weather-date>{date}</span></p>
   </div>
   <div class="weather__bottom">
     <p class="weather__temp" data-weather-temp>{temperature}</p>
-    <p class="weather__meta" data-weather-condition>{condition}</p>
+    <p class="widget__meta weather__meta" data-weather-condition>{condition}</p>
   </div>
-</div>
+</WidgetCard>
 
 <style>
   .weather {
-    position: relative;
     width: var(--span-2);
-    aspect-ratio: 1;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    color: var(--color-light-0);
   }
   .weather > :global(img) {
     position: absolute;
@@ -92,11 +88,7 @@ const photo = (files[`${dir}${scene}.jpg`] ?? files[`${dir}zomer-middag-helder.j
     justify-content: space-between;
     align-items: flex-start;
   }
-  .weather__title {
-    font: var(--text-widget-title);
-  }
   .weather__meta {
-    font: var(--text-widget-meta);
     opacity: 0.8;
   }
   .weather__temp {

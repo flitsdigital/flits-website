@@ -1,6 +1,7 @@
 ---
 import markers from '../../assets/images/widgets/clock-markers.svg';
 import { contact } from '../../data/site';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
   city?: string;
@@ -13,7 +14,7 @@ const { city = contact.city, layout = 'stack', class: className } = Astro.props;
 ---
 
 <!-- Clock mechanics + data-attributes: Osmo Supply "Analog Clock". Look: Figma widget 1:1194. -->
-<div class:list={['clock', `clock--${layout}`, className]}>
+<WidgetCard tone="surface" class:list={['clock', `clock--${layout}`, className]}>
   <p class="clock__label" data-clock-time>12:15 (CEST)</p>
   <div data-analog-clock-init class="analog-clock" aria-hidden="true">
     <div class="analog-clock__face">
@@ -38,7 +39,7 @@ const { city = contact.city, layout = 'stack', class: className } = Astro.props;
     </div>
   </div>
   <p class="clock__label">{city}</p>
-</div>
+</WidgetCard>
 
 <!-- Behaviour: src/scripts/clock.ts (started per page by src/scripts/app.ts) -->
 
@@ -52,8 +53,6 @@ const { city = contact.city, layout = 'stack', class: className } = Astro.props;
     width: var(--span-2);
     height: 12.5625rem; /* 201px */
     padding-block: var(--space-12);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
   }
   .clock--wide {
     flex-direction: row;

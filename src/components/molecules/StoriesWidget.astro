@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import storyFile from '../../content/stories.json';
 import { byFileOrder } from '../../lib/slots';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
   class?: string;
@@ -15,10 +16,10 @@ const stories = byFileOrder(await getCollection('stories'), storyFile.map((s) =>
 
 <!-- Look: prototype 29 (feature/widget-ideas). Behaviour: src/scripts/stories-widget.ts -->
 {stories.length > 0 && (
-<div class:list={['stories', className]} data-stories>
+<WidgetCard size="wide" class:list={['stories', className]} data-stories>
   <div class="stories__head">
-    <p class="stories__title">Stories</p>
-    <p class="stories__meta">uit de studio</p>
+    <p class="widget__title">Stories</p>
+    <p class="widget__meta">uit de studio</p>
   </div>
   <div class="stories__row">
     {stories.map((s, i) => (
@@ -40,34 +41,20 @@ const stories = byFileOrder(await getCollection('stories'), storyFile.map((s) =>
     <button type="button" class="stories__step stories__step--next" data-story-step="1" aria-label="Volgende story"></button>
     <button type="button" class="stories__close" data-story-close aria-label="Sluiten">×</button>
   </div>
-</div>
+</WidgetCard>
 )}
 
 <style>
   .stories {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 21rem; /* 336px */
-    aspect-ratio: 2;
     padding: var(--space-12);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background: var(--color-light-0);
-    color: var(--color-dark-900);
   }
   .stories__head {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-  }
-  .stories__title {
-    font: var(--text-widget-title);
-  }
-  .stories__meta {
-    font: var(--text-widget-meta);
-    color: var(--color-dark-900-60);
   }
   .stories__row {
     display: flex;
