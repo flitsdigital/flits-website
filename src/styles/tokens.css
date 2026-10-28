@@ -14,6 +14,7 @@
   --color-dark-900-60: #14021899;
   --color-dark-800: #1d0c21;
   --color-dark-800-60: #1d0c2199;
+  --color-dark-800-50: rgb(29 12 33 / 0.5); /* veil on the over ons photo */
 
   /* @group Kleuren — light */
   --color-light-0: #ffffff;
@@ -25,6 +26,19 @@
   --color-light-muted-on-dark: rgb(246 232 249 / 0.8);
   --color-border-subtle: rgb(31 4 37 / 0.1);
   --color-border-on-dark: rgb(255 255 255 / 0.6);
+  --color-black: #000000; /* video letterbox / dimming (Bunny player) */
+
+  /* @group Kleuren — merken van derden (their colours, not ours) */
+  --color-google-star: #fbbc04;
+  --color-lighthouse-pass: #0cce6b;
+  --color-lighthouse-pass-text: #0a7a40;
+  --color-lighthouse-average: #ffa400;
+  --color-lighthouse-average-text: #a85d00;
+  --color-lighthouse-fail: #ff4e42;
+  --color-lighthouse-fail-text: #c5221f;
+  --color-stories-ring: #ff7a59; /* the warm half of the story ring, Instagram-style */
+  --color-figma-select: #0d99ff; /* Shift+G grid overlay: Figma's selection blue */
+  --color-figma-grid: #808080; /* grid overlay columns: a mid grey that reads on light and dark */
 
   /* @group Gradients */
   --gradient-card: linear-gradient(to bottom, var(--color-light-100), var(--color-light-0));
@@ -140,17 +154,50 @@
   --page-top: clamp(7rem, 6.12rem + 3.756vw, 9.5rem);
 
   /* @group Overlays */
+  --color-overlay-light-10: rgb(255 255 255 / 0.1);
   --color-overlay-light-20: rgb(255 255 255 / 0.2);
+  --color-overlay-light-30: rgb(255 255 255 / 0.3);
+  --color-overlay-grey-20: rgb(100 100 100 / 0.2); /* frosted video buttons */
+  --color-overlay-dark-20: rgb(0 0 0 / 0.2);
   --color-overlay-dark-40: rgb(0 0 0 / 0.4); /* dimmed photos (case hero, side videos) */
-  --color-overlay-brand-50: rgb(29 12 33 / 0.5); /* dark-800 veil on the over ons photo */
+  --color-overlay-dark-60: rgb(0 0 0 / 0.6); /* modal backdrop */
   --gradient-shade-top: linear-gradient(rgb(0 0 0 / 0.55), rgb(0 0 0 / 0));
   --gradient-shade-bottom: linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.55));
 
+  /* @group Shadows */
+  --shadow-chip: 0 1px 3px rgb(20 2 24 / 0.12);
+  --shadow-cover: 0 5px 15px rgb(0 0 0 / 0.3); /* album cover lifted off the widget */
+
   /* @group Motion */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* things arriving */
-  --ease-in: cubic-bezier(0.64, 0, 0.78, 0); /* things leaving */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* things arriving, hover fades */
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in-out-strong: cubic-bezier(0.785, 0.135, 0.15, 0.86); /* Osmo button roll, cursor reveal */
   --ease-osmo: cubic-bezier(0.625, 0.05, 0, 1); /* the home entry curve (GSAP: CustomEase from the same bezier) */
+  /* UI transitions. Loops (tickers, spinners) and the hand-timed home entry in motion.css keep their own seconds. */
+  --duration-xs: 0.15s; /* press feedback */
+  --duration-s: 0.2s;
+  --duration-m: 0.3s; /* hover, fades */
+  --duration-l: 0.45s; /* panels, dropdowns, modals */
+  --duration-xl: 0.6s;
+  --duration-2xl: 0.8s; /* slow image zooms, underline sweeps */
+
+  /* @group Z-index */
+  /* Global layers only: small numbers inside an isolated component stay local; dialogs use the top layer. */
+  --z-blur: 40; /* fixed progressive blur at the bottom of the screen */
+  --z-nav: 100;
+  --z-flash: 200; /* page-arrival bar */
+  --z-cursor: 300; /* custom cursor, above the nav */
+  --z-devtools: 400; /* Shift+G grid overlay, above everything */
+
+  /* @group Sectie-ruimte */
+  /* Vertical padding of sections. Fluid from 375px to 1440px like the type: the desktop value is the Figma rhythm rounded to 16px,
+     phones get ~60%. Each section picks the step nearest its Figma value. */
+  --section-space-xs: clamp(2.5rem, 1.972rem + 2.254vw, 4rem); /* 40 → 64px */
+  --section-space-s: clamp(3rem, 2.296rem + 3.005vw, 5rem); /* 48 → 80px */
+  --section-space-m: clamp(3.5rem, 2.62rem + 3.756vw, 6rem); /* 56 → 96px */
+  --section-space-l: clamp(4rem, 2.944rem + 4.507vw, 7rem); /* 64 → 112px */
+  --section-space-xl: clamp(5rem, 3.944rem + 4.507vw, 8rem); /* 80 → 128px */
+  --section-space-2xl: clamp(6rem, 4.592rem + 6.009vw, 10rem); /* 96 → 160px */
 }
 
 /* @group Grid breakpoints: 6 columns on tablets, 4 on phones */

@@ -54,7 +54,7 @@ const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
   }
   /* Only the chevron turns; the yellow tile stays put */
   .faq-item__icon > :global(.icon) {
-    transition: rotate 0.6s var(--ease-osmo);
+    transition: rotate var(--duration-xl) var(--ease-osmo);
   }
   [data-accordion-status='active'] .faq-item__icon > :global(.icon) {
     rotate: 180deg;
@@ -64,7 +64,7 @@ const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
     grid-template-rows: 0fr;
     position: relative;
     overflow: hidden;
-    transition: grid-template-rows 0.6s var(--ease-osmo);
+    transition: grid-template-rows var(--duration-xl) var(--ease-osmo);
   }
   [data-accordion-status='active'] .faq-item__bottom {
     grid-template-rows: 1fr;
@@ -76,7 +76,7 @@ const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
     position: relative;
     overflow: hidden;
     visibility: hidden; /* closed answers stay out of tab order and screen readers, after the close finishes */
-    transition: visibility 0s 0.6s;
+    transition: visibility 0s var(--duration-xl);
   }
   [data-accordion-status='active'] .faq-item__bottom-wrap {
     visibility: visible;

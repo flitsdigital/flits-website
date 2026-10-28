@@ -41,10 +41,10 @@ const columns = [0, 1].map((col) => images.map((src, i) => ({ src, ratio: ratios
 
 <style>
   .case-gallery {
-    margin-bottom: 9.5625rem; /* 153px to the dark results band */
+    margin-bottom: var(--section-space-2xl); /* to the dark results band */
   }
   .case-gallery__inner {
-    padding-block: 5.4375rem 4.1875rem; /* 87px top, 67px bottom */
+    padding-block: var(--section-space-s) var(--section-space-xs);
   }
   .case-gallery__header {
     display: grid;

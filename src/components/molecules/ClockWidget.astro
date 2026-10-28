@@ -66,7 +66,8 @@ const { city = contact.city, layout = 'stack', class: className } = Astro.props;
   .clock--wide .clock__label:last-child {
     text-align: right;
   }
-  /* Under 1280 the 4 columns are narrower than time + face + city side by side: stack them */
+  /* Under 1280 the 4 columns are narrower than time + face + city side by side: stack them
+     (own breakpoint on purpose: it follows the column width, not the 767/991 device steps) */
   @media (max-width: 1279px) {
     .clock--wide {
       flex-direction: column;
@@ -185,7 +186,7 @@ const { city = contact.city, layout = 'stack', class: className } = Astro.props;
     transform: rotate(150deg);
   }
   [data-analog-clock-second] {
-    transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform var(--duration-xs) var(--ease-out);
   }
   .analog-clock__second-center {
     width: 100%;

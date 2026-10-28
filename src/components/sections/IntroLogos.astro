@@ -35,7 +35,7 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
 
 <style>
   .intro {
-    padding-bottom: 6.4375rem; /* 103px to the next section */
+    padding-bottom: var(--section-space-m);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -88,7 +88,6 @@ const { ticker, lead, joery, jordi, logos } = Astro.props;
   }
   @media (max-width: 767px) {
     .intro {
-      padding-bottom: var(--space-64);
       gap: var(--space-32);
     }
   }

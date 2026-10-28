@@ -75,7 +75,7 @@ const right = tracks[next];
     top: 45.83%; /* 77px */
     inset-inline: 0;
     height: 56.62%; /* 95.12px */
-    background: linear-gradient(rgb(29 12 33 / 0), rgb(29 12 33 / 0.6));
+    background: linear-gradient(transparent, var(--color-dark-800-60));
   }
   .spotify__text {
     z-index: 1;
@@ -84,7 +84,7 @@ const right = tracks[next];
     z-index: 1;
     border-radius: var(--radius-sm);
     object-fit: cover;
-    transition: rotate 0.3s ease, scale 0.15s var(--ease-out);
+    transition: rotate var(--duration-m) var(--ease-out), scale var(--duration-xs) var(--ease-out);
   }
   /* Side covers are buttons: previous / next track */
   button.spotify__cover {
@@ -136,7 +136,7 @@ const right = tracks[next];
     width: 46.63%; /* 78.33px */
     height: 46.63%;
     translate: -50% 0;
-    box-shadow: 0 5px 15px rgb(0 0 0 / 0.3);
+    box-shadow: var(--shadow-cover);
   }
   .spotify__text {
     left: 20.24%; /* 34px */
@@ -188,7 +188,7 @@ const right = tracks[next];
     display: flex;
     align-items: center;
     border-radius: var(--radius-pill);
-    background: rgb(244 244 244 / 0.2);
+    background: var(--color-overlay-light-20);
   }
   .spotify__play {
     display: grid;
@@ -202,7 +202,7 @@ const right = tracks[next];
     border-radius: 50%;
     background: var(--color-light-0);
     cursor: pointer;
-    transition: scale 0.15s ease;
+    transition: scale var(--duration-xs) var(--ease-out);
   }
   .spotify__play:active {
     scale: 0.9;
@@ -241,7 +241,7 @@ const right = tracks[next];
     display: block;
   }
   .spotify[data-loading] .spotify__play {
-    animation: spotify-loading 0.8s ease-in-out infinite alternate;
+    animation: spotify-loading 0.8s var(--ease-in-out) infinite alternate;
   }
   @keyframes spotify-loading {
     to {
@@ -254,7 +254,7 @@ const right = tracks[next];
     height: 1.627px;
     margin-left: 0.466rem; /* 70.06 - 45.01 - 17.64 */
     border-radius: var(--radius-pill);
-    background: rgb(255 255 255 / 0.3);
+    background: var(--color-overlay-light-30);
   }
   .spotify__fill {
     display: block;

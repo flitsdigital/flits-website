@@ -46,7 +46,6 @@ const iconSize = variant === 'step' ? 20 : 18;
   .btn {
     --btn-hover-color: var(--color-bg);
     --btn-hover-bg: var(--color-text);
-    --btn-ease-hover: cubic-bezier(0.785, 0.135, 0.15, 0.86);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -57,16 +56,16 @@ const iconSize = variant === 'step' ? 20 : 18;
     white-space: nowrap;
     overflow: clip; /* hides the label copy below; the focus outline is drawn outside and stays visible */
     transition:
-      color 0.325s var(--btn-ease-hover),
-      background-color 0.325s var(--btn-ease-hover),
-      scale 0.15s var(--ease-out);
+      color var(--duration-m) var(--ease-in-out-strong),
+      background-color var(--duration-m) var(--ease-in-out-strong),
+      scale var(--duration-xs) var(--ease-out);
   }
   .btn:active {
     scale: 0.97;
   }
   .btn__label {
     text-shadow: 0 2lh 0 currentColor;
-    transition: translate 0.3s var(--btn-ease-hover);
+    transition: translate var(--duration-m) var(--ease-in-out-strong);
   }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .btn:is(:hover, :focus-visible),
@@ -106,9 +105,9 @@ const iconSize = variant === 'step' ? 20 : 18;
   .btn--outline .btn__label,
   .btn--outline :global(.icon) {
     transition:
-      translate 0.3s var(--btn-ease-hover),
-      opacity 0.325s var(--btn-ease-hover),
-      filter 0.325s var(--btn-ease-hover);
+      translate var(--duration-m) var(--ease-in-out-strong),
+      opacity var(--duration-m) var(--ease-in-out-strong),
+      filter var(--duration-m) var(--ease-in-out-strong);
   }
   .btn--outline .btn__label {
     opacity: 0.6;

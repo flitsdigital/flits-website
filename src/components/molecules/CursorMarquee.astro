@@ -103,7 +103,7 @@
 
 <style>
   .cursor-marquee {
-    z-index: 300; /* above the fixed navbar (100) */
+    z-index: var(--z-cursor);
     pointer-events: none;
     justify-content: center;
     align-items: center;
@@ -123,9 +123,9 @@
     position: absolute;
     overflow: hidden;
     transition:
-      clip-path 0.4s cubic-bezier(0.75, 0, 0.25, 1),
-      transform 0.4s cubic-bezier(0.75, 0, 0.25, 1),
-      opacity 0.15s linear 0.3s;
+      clip-path var(--duration-l) var(--ease-in-out-strong),
+      transform var(--duration-l) var(--ease-in-out-strong),
+      opacity var(--duration-xs) linear var(--duration-m);
     transform: translateY(0%) rotate(0.001deg);
     clip-path: inset(calc(50% - 0.25em) round 50em);
     will-change: clip-path;
@@ -175,12 +175,12 @@
 
   .cursor-marquee__text-span {
     animation: translateXCursor 10s linear infinite paused;
-    transition: opacity 0.15s ease-in-out 0.25s;
+    transition: opacity var(--duration-xs) var(--ease-in-out) var(--duration-s);
     opacity: 0;
   }
 
   [data-cursor-marquee-status='active'] .cursor-marquee__text-span {
-    transition: opacity 0.15s ease-in-out 0s;
+    transition: opacity var(--duration-xs) var(--ease-in-out) 0s;
     opacity: 1;
   }
 

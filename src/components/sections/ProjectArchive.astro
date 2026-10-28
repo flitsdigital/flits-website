@@ -48,7 +48,7 @@ const typeCount = (type: (typeof PROJECT_TYPES)[number]) => projects.filter((p) 
   .archive {
     width: var(--grid-width);
     margin-inline: auto;
-    padding-block: 3.5rem 8.25rem; /* 56px below the hero */
+    padding-block: var(--section-space-xs) var(--section-space-xl);
   }
   /* filters on columns 1–8, sort right-aligned in 9–12 */
   .archive__bar {
@@ -98,7 +98,7 @@ const typeCount = (type: (typeof PROJECT_TYPES)[number]) => projects.filter((p) 
   }
   /* Figma: cards start 83px under the filters */
   .archive :global(.archive__grid) {
-    margin-top: 5.1875rem;
+    margin-top: var(--section-space-s);
   }
   .archive__empty {
     font: var(--text-body-l);

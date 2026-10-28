@@ -151,7 +151,7 @@ const services = await getServices();
   .nav {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: var(--z-nav);
     pointer-events: none;
   }
   .nav__dark-overlay {
@@ -172,7 +172,7 @@ const services = await getServices();
     border-radius: var(--radius-md);
     background: transparent;
     pointer-events: auto;
-    transition: color 0.3s var(--ease-out);
+    transition: color var(--duration-m) var(--ease-out);
   }
   /* Desktop: the bar stays see-through and takes the theme of the section under it (data-theme-nav,
      set by scripts/section-theme.ts). Phones keep the dark bar, which is also the menu's background. */
@@ -261,14 +261,14 @@ const services = await getServices();
     opacity: 0.6;
     font: inherit;
     line-height: inherit;
-    transition: opacity 0.15s ease;
+    transition: opacity var(--duration-xs) var(--ease-out);
   }
   .nav__link:active,
   [data-nav-sub-status='active'] > .nav__link {
     opacity: 1;
   }
   @media (hover: hover) and (pointer: fine) {
-    .nav__link:hover {
+    .nav__link:is(:hover, :focus-visible) {
       opacity: 1;
     }
   }
@@ -283,13 +283,13 @@ const services = await getServices();
     opacity: 0;
     translate: 0 -4px;
     /* Osmo curve (slow start, soft landing); closing a bit quicker than opening */
-    transition: opacity 0.3s var(--ease-osmo), translate 0.3s var(--ease-osmo), visibility 0.3s;
+    transition: opacity var(--duration-m) var(--ease-osmo), translate var(--duration-m) var(--ease-osmo), visibility var(--duration-m);
   }
   [data-nav-sub-status='active'] > .nav__dropdown {
     visibility: visible;
     opacity: 1;
     translate: 0 0;
-    transition-duration: 0.45s;
+    transition-duration: var(--duration-l);
   }
   .nav__dropdown-list {
     display: grid;
@@ -301,7 +301,7 @@ const services = await getServices();
     color: var(--color-dark-800);
   }
   @media (hover: hover) and (pointer: fine) {
-    .nav__dropdown-link:hover {
+    .nav__dropdown-link:is(:hover, :focus-visible) {
       text-decoration: underline;
     }
   }
@@ -321,12 +321,12 @@ const services = await getServices();
       position: absolute;
       inset: 0;
       display: block;
-      background: rgb(0 0 0 / 0.2);
+      background: var(--color-overlay-dark-20);
       opacity: 0;
       visibility: hidden;
       pointer-events: auto;
       cursor: pointer;
-      transition: opacity 0.25s ease, visibility 0.25s;
+      transition: opacity var(--duration-m) var(--ease-out), visibility var(--duration-m);
     }
     [data-nav-status='active'] .nav__dark-overlay {
       opacity: 1;
@@ -348,7 +348,7 @@ const services = await getServices();
       padding: 0;
       background: var(--color-dark-900);
       border-radius: var(--space-32); /* half the closed bar's 64px: fully round ends */
-      transition: border-radius 0.35s ease;
+      transition: border-radius var(--duration-m) var(--ease-out);
     }
     /* open, the bar becomes a tall panel: back to the regular corners */
     [data-nav-status='active'] .nav__bar {
@@ -390,7 +390,7 @@ const services = await getServices();
       width: var(--space-16);
       height: 2px;
       background: currentColor;
-      transition: translate 0.25s ease, rotate 0.25s ease, opacity 0.25s ease;
+      transition: translate var(--duration-m) var(--ease-out), rotate var(--duration-m) var(--ease-out), opacity var(--duration-m) var(--ease-out);
     }
     .nav__hamburger-bar:nth-child(1) { translate: 0 -5px; }
     .nav__hamburger-bar:nth-child(3) { translate: 0 5px; }
@@ -402,7 +402,7 @@ const services = await getServices();
     .nav__end {
       display: grid;
       grid-template-rows: 0fr;
-      transition: grid-template-rows 0.35s ease;
+      transition: grid-template-rows var(--duration-m) var(--ease-out);
     }
     [data-nav-status='active'] .nav__end {
       grid-template-rows: 1fr;
@@ -414,7 +414,7 @@ const services = await getServices();
       min-height: 0;
       overflow: hidden;
       visibility: hidden;
-      transition: visibility 0.35s;
+      transition: visibility var(--duration-m);
     }
     [data-nav-status='active'] .nav__end-inner {
       visibility: visible;
@@ -441,7 +441,7 @@ const services = await getServices();
       visibility: visible;
       opacity: 1;
       translate: none;
-      transition: grid-template-rows 0.45s var(--ease-osmo);
+      transition: grid-template-rows var(--duration-l) var(--ease-osmo);
     }
     [data-nav-sub-status='active'] > .nav__dropdown {
       grid-template-rows: 1fr;
@@ -450,7 +450,7 @@ const services = await getServices();
       min-height: 0;
       overflow: hidden;
       visibility: hidden;
-      transition: visibility 0.45s;
+      transition: visibility var(--duration-l);
     }
     [data-nav-sub-status='active'] .nav__dropdown-inner {
       visibility: visible;

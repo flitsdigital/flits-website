@@ -76,7 +76,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9
   .reviews-w__stars svg {
     width: 0.875rem;
     height: 0.875rem;
-    fill: #fbbc04;
+    fill: var(--color-google-star);
   }
   .reviews-w__quotes {
     position: relative;
@@ -95,7 +95,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9
     gap: var(--space-8);
     opacity: 0;
     translate: 0 6px;
-    transition: opacity 0.4s ease, translate 0.4s ease;
+    transition: opacity var(--duration-l) var(--ease-out), translate var(--duration-l) var(--ease-out);
   }
   .reviews-w__quote.is-active {
     opacity: 1;
@@ -122,7 +122,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9
     background: var(--color-dark-900-60);
     opacity: 0.4;
     cursor: pointer;
-    transition: width 0.3s ease, opacity 0.3s ease;
+    transition: width var(--duration-m) var(--ease-out), opacity var(--duration-m) var(--ease-out);
   }
   .reviews-w__dots button[aria-pressed='true'] {
     width: 1rem;

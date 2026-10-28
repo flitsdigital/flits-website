@@ -66,8 +66,8 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
   }
   /* Colour follows Lighthouse's bands, so it passes red → orange → green while counting */
   .speed__gauge {
-    --g: #0cce6b;
-    --gt: #0a7a40;
+    --g: var(--color-lighthouse-pass);
+    --gt: var(--color-lighthouse-pass-text);
     position: relative;
     display: grid;
     place-items: center;
@@ -76,12 +76,12 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     aspect-ratio: 1;
   }
   .speed__gauge[data-band='mid'] {
-    --g: #ffa400;
-    --gt: #a85d00;
+    --g: var(--color-lighthouse-average);
+    --gt: var(--color-lighthouse-average-text);
   }
   .speed__gauge[data-band='bad'] {
-    --g: #ff4e42;
-    --gt: #c5221f;
+    --g: var(--color-lighthouse-fail);
+    --gt: var(--color-lighthouse-fail-text);
   }
   .speed__gauge[data-band='none'] {
     --g: var(--color-dark-900-60);
@@ -129,12 +129,12 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     line-height: 1.3;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background var(--duration-s) var(--ease-out), color var(--duration-s) var(--ease-out);
   }
   .speed__seg button[aria-pressed='true'] {
     background: var(--color-light-0);
     color: var(--color-dark-900);
-    box-shadow: 0 1px 3px rgb(20 2 24 / 0.12);
+    box-shadow: var(--shadow-chip);
   }
   .speed__seg button:focus-visible {
     outline: 2px solid var(--color-focus);

@@ -30,7 +30,7 @@ const { posters } = Astro.props;
 <style>
   /* On service pages it sits in the hero's "media" slot (24px overlap); on cases it stands alone */
   .video-fan {
-    padding-bottom: 8.6875rem; /* 139px to the next header */
+    padding-bottom: var(--section-space-xl);
     overflow-x: clip;
   }
   .video-fan :global(.video-fan__slider) {
@@ -54,7 +54,7 @@ const { posters } = Astro.props;
     position: absolute;
     inset: 0;
     background: var(--color-overlay-dark-40);
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-m) var(--ease-out);
   }
   .video-fan__controls {
     position: absolute;
@@ -63,7 +63,7 @@ const { posters } = Astro.props;
     left: var(--space-10);
     width: calc(100% - 2 * var(--space-10));
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-m) var(--ease-out);
   }
   .video-fan__card[data-radial-slider-active]::after {
     opacity: 0;
@@ -73,6 +73,9 @@ const { posters } = Astro.props;
   }
   /* Phones: no gap beside the centre card, so the hands go under it (as in ReviewsCarousel) */
   @media (max-width: 767px) {
+    .video-fan {
+      padding-bottom: calc(6rem + var(--section-space-xs)); /* the hands hang ~94px below the cards */
+    }
     .video-fan :global(.video-fan__slider .radial-slider__hand) {
       top: calc(100% + 3.5rem);
       scale: 0.6;

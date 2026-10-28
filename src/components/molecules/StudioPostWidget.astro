@@ -63,7 +63,7 @@ const now = new Date();
     display: flex;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s;
+    transition: opacity var(--duration-m) var(--ease-out), visibility var(--duration-m);
   }
   .post__slide.is-active {
     opacity: 1;

@@ -28,7 +28,7 @@ const centred = [...items.slice(1), ...items.slice(0, 1)];
 <style>
   .bts {
     position: relative;
-    padding-block: 7.75rem 6.8125rem; /* 124px / 109px */
+    padding-block: var(--section-space-xl) var(--section-space-l);
     background: var(--color-dark-800);
     overflow: clip;
   }
@@ -51,6 +51,6 @@ const centred = [...items.slice(1), ...items.slice(0, 1)];
   /* Slider box = one polaroid (528px); centres line up on y=598 like Figma */
   .bts :global(.bts__slider) {
     height: 33rem;
-    margin-top: 5.875rem; /* 94px */
+    margin-top: var(--section-space-m);
   }
 </style>

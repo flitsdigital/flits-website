@@ -68,7 +68,7 @@ const { src, poster, cover = false } = Astro.props;
   /* Osmo CSS from here; changes: our radius, 16:9 (the Bunny stream), and a reset for the <button> */
   .bunny-player {
     pointer-events: none;
-    color: #fff;
+    color: var(--color-light-0);
     isolation: isolate;
     border-radius: var(--radius-md);
     justify-content: center;
@@ -103,8 +103,8 @@ const { src, poster, cover = false } = Astro.props;
   /* Animation */
   [data-bunny-player-init] :is(.bunny-player__placeholder, .bunny-player__dark, .bunny-player__playpause, .bunny-player__loading) {
     transition:
-      opacity 0.3s linear,
-      visibility 0.3s linear;
+      opacity var(--duration-m) linear,
+      visibility var(--duration-m) linear;
   }
 
   /* Placeholder */
@@ -125,7 +125,7 @@ const { src, poster, cover = false } = Astro.props;
   /* Dark Overlay */
   .bunny-player__dark {
     opacity: 0.1;
-    background-color: #000;
+    background-color: var(--color-black);
     width: 100%;
     height: 100%;
     position: absolute;
@@ -190,8 +190,8 @@ const { src, poster, cover = false } = Astro.props;
     -webkit-backdrop-filter: blur(1em);
     backdrop-filter: blur(1em);
     cursor: pointer;
-    background-color: #64646433;
-    border: 1px solid #ffffff1a;
+    background-color: var(--color-overlay-grey-20);
+    border: 1px solid var(--color-overlay-light-10);
     border-radius: 50%;
     justify-content: center;
     align-items: center;
@@ -222,7 +222,7 @@ const { src, poster, cover = false } = Astro.props;
   .bunny-player__loading {
     opacity: 0;
     visibility: hidden;
-    background-color: #00000054;
+    background-color: var(--color-overlay-dark-40);
     justify-content: center;
     align-items: center;
     width: 100%;
