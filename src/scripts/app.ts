@@ -24,6 +24,7 @@ import { initOfficeWidget } from './office-widget';
 import { initStoriesWidget } from './stories-widget';
 import { initStudioPosts } from './studio-posts';
 import { initBunnyPlayers } from './bunny-player';
+import { initFooterLogo } from './footer-logo';
 import { initCheckSectionThemeScroll } from './section-theme';
 
 /**
@@ -32,7 +33,7 @@ import { initCheckSectionThemeScroll } from './section-theme';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initCheckSectionThemeScroll, initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget, initOfficeWidget, initStoriesWidget, initStudioPosts, initBunnyPlayers];
+const pageInits: (() => (() => void) | void)[] = [initCheckSectionThemeScroll, initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget, initOfficeWidget, initStoriesWidget, initStudioPosts, initBunnyPlayers, initFooterLogo];
 
 let cleanups: (() => void)[] = [];
 // One init at a time: a section that throws must not stop the others or lose their cleanups.
