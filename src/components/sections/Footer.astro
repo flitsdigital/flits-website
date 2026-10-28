@@ -2,6 +2,7 @@
 import BgShapes from '../atoms/BgShapes.astro';
 import Icon from '../atoms/Icon.astro';
 import Logo from '../atoms/Logo.astro';
+import CopyEmailButton from '../molecules/CopyEmailButton.astro';
 import Heading from '../atoms/Heading.astro';
 import { contact, legal, socials } from '../../data/site';
 import { getServices, serviceHref } from '../../lib/content';
@@ -22,7 +23,10 @@ const pages = [
     <div class="footer__col">
       <p class="footer__label">Contactinformatie</p>
       <address class="footer__contact">
-        <a href={`mailto:${contact.email}`} data-underline-link>{contact.email}</a>
+        <div class="footer__email">
+          <a href={`mailto:${contact.email}`} data-underline-link>{contact.email}</a>
+          <CopyEmailButton email={contact.email} />
+        </div>
         <span>{contact.address.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</span>
         <a href={`tel:${contact.phone.replaceAll(' ', '')}`} data-underline-link>{contact.phone}</a>
       </address>
@@ -124,6 +128,11 @@ const pages = [
   }
   .footer__contact span {
     display: grid;
+  }
+  .footer__email {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
   }
   /* grid items stretch: keep the links (and their underline) as wide as their text */
   .footer__contact > a {

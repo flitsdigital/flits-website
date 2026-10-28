@@ -1,0 +1,127 @@
+---
+interface Props {
+  email: string;
+  class?: string;
+}
+
+const { email, class: className } = Astro.props;
+---
+
+<!-- Osmo "Copy Email to Clipboard Button", icon only: the copy icon slides up for a check when copied
+     (the aria-label says so too). Place it right after the visible email address. -->
+<button
+  type="button"
+  aria-label="Kopieer e-mailadres"
+  data-copy-button=""
+  data-copy-email={email}
+  class:list={['copy-email-button', className]}
+>
+  <span class="copy-email-icon__wrap" aria-hidden="true">
+    <svg class="copy-email-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+      <path d="M16 2H8V5H16V2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M16 3H17.5L19 4.5V19.5L17.5 21H6.5L5 19.5V4.5L6.5 3H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <svg class="copy-email-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+      <path d="M5 12.5L10 17.5L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </span>
+</button>
+
+<script>
+  function initCopyEmailClipboard() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.copy-email-button');
+    if (!buttons.length) return;
+
+    const copyEmail = (button: HTMLButtonElement) => {
+      // Email to copy to clipboard is taken from the button itself
+      const email = button.getAttribute('data-copy-email');
+      if (email) {
+        navigator.clipboard.writeText(email).then(() => {
+          button.setAttribute('data-copy-button', 'copied');
+          button.setAttribute('aria-label', 'E-mailadres gekopieerd!');
+        });
+      }
+    };
+
+    const handleInteraction = (e: Event) => {
+      if (
+        e.type === 'click' ||
+        (e.type === 'keydown' && ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' '))
+      ) {
+        e.preventDefault();
+        copyEmail(e.currentTarget as HTMLButtonElement);
+      }
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', handleInteraction);
+      button.addEventListener('keydown', handleInteraction);
+      button.addEventListener('mouseleave', () => {
+        // Remove 'active' attribute to reset color and icon
+        button.removeAttribute('data-copy-button');
+        // Remove focus on mouseleave to clear keyboard focus styling
+        button.blur();
+        button.setAttribute('aria-label', 'Kopieer e-mailadres');
+      });
+      button.addEventListener('blur', () => {
+        button.removeAttribute('data-copy-button');
+        button.setAttribute('aria-label', 'Kopieer e-mailadres');
+      });
+    });
+  }
+
+  // Once per full load: the button lives in the footer, outside the Swup container
+  initCopyEmailClipboard();
+</script>
+
+<style>
+  .copy-email-button {
+    display: inline-flex;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    border-radius: var(--radius-xs);
+  }
+  .copy-email-button:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  /* One icon tall: the check waits below the copy icon */
+  .copy-email-icon__wrap {
+    display: flex;
+    flex-direction: column;
+    width: 1.1em;
+    height: 1.1em;
+    padding: 0.2em;
+    border-radius: var(--radius-xs);
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+    overflow: hidden;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .copy-email-icon {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0.4em; /* the wrap's padding top + bottom, so the next icon lands exactly in view */
+    transition: transform 0.45s var(--ease-osmo);
+  }
+
+  /* Hover styling */
+  @media (hover: hover) {
+    .copy-email-button:hover .copy-email-icon__wrap {
+      background-color: color-mix(in srgb, currentColor 22%, transparent);
+    }
+  }
+
+  /* 'Copied' state, when a user has clicked the button */
+  [data-copy-button='copied'] .copy-email-icon__wrap {
+    background: var(--color-brand-500) !important;
+    color: var(--color-dark-900);
+  }
+  [data-copy-button='copied'] .copy-email-icon {
+    transform: translateY(calc(-100% - 0.4em)) !important;
+  }
+</style>
