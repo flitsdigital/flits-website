@@ -19,6 +19,7 @@ import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './
  *                                 [data-radial-slider-active] (style it in the section)
  * [data-radial-slider-prev|next]  optional buttons: move one item, with easing; the wrapper gets
  *                                 --radial-slider-hand-x (centre of the gap beside the middle item)
+ * --radial-slider-gap             optional CSS override of GAP in px, e.g. smaller on phones
  */
 /** Visible space between neighbours, the same in every slider on the site (feedback 2026-10-24). */
 const GAP = 96;
@@ -70,8 +71,9 @@ export function initRadialSliders(): () => void {
         items.forEach((el) => (el.style.minHeight = `${tallest}px`));
       }
       const first = originals[0];
+      const gap = parseFloat(getComputedStyle(wrap).getPropertyValue('--radial-slider-gap')) || GAP;
       const prevStep = step;
-      const nextStep = stepFor(first.offsetWidth, first.offsetHeight, GAP, angle);
+      const nextStep = stepFor(first.offsetWidth, first.offsetHeight, gap, angle);
       if (prevStep && Math.abs(nextStep - prevStep) > 0.5) {
         // The spacing really changed: finish a running step (it aims at the old spacing) and
         // keep the same item centred. Same spacing (e.g. the observer's first call): leave tweens alone.
@@ -80,7 +82,7 @@ export function initRadialSliders(): () => void {
       }
       step = nextStep;
       radius = radiusFor(step, angle);
-      wrap.style.setProperty('--radial-slider-hand-x', `${first.offsetWidth / 2 + GAP / 2}px`);
+      wrap.style.setProperty('--radial-slider-hand-x', `${first.offsetWidth / 2 + gap / 2}px`);
       // Centre of the circle, relative to the track's middle, so CSS can rotate the whole fan along
       // its own arc (entry variant 12): below for arch (∩), above for valley (∪).
       if (Number.isFinite(radius)) track.style.setProperty('--radial-arc-origin', `${shape === 'arch' ? radius : -radius}px`);
