@@ -4,7 +4,6 @@ import Button from '../atoms/Button.astro';
 import Input from '../atoms/Input.astro';
 import Label from '../atoms/Label.astro';
 import StepIndicator from '../molecules/StepIndicator.astro';
-import ContactFields from '../molecules/ContactFields.astro';
 import { contact } from '../../data/site';
 import bolt from '../../assets/images/contact/bolt.svg';
 import close from '../../assets/images/contact/close.svg';
@@ -14,8 +13,9 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
 
 <!-- Figma 15:1323 (Start) and 15:1767 / 15:2222 (01, empty and with a choice): the "Start een project"
      modal. Every link to /contact opens it (scripts/contact-modal.ts); "Klik dan hier" goes to the page.
-     shortcut: steps 02 (the project) and 03 (contact details) are not designed yet — 03 reuses the
-     contact page's fields (Figma 1:2828). One instance, in BaseLayout, outside the Swup container. -->
+     Start asks name + e-mail up front; 03 only an optional phone number.
+     shortcut: steps 02 and 03 and the Start fields are not designed yet. One instance, in BaseLayout,
+     outside the Swup container. -->
 <dialog class="contact-modal" data-contact-modal data-email={contact.email} aria-labelledby="cm-title-0">
   <form class="contact-modal__card" novalidate>
     <StepIndicator steps={['Start', '01', '02', '03']} class="contact-modal__steps" />
@@ -28,9 +28,19 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
         <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
         <Heading as="h2" size="36" id="cm-title-0">Nieuw project?<br />Wij denken graag<br />met je mee</Heading>
         <p class="contact-modal__lead">
-          Druk op de “Volgende” knop om je project te starten. Liever een “normaal” contact formulier invullen?{' '}
+          Vul je naam en e-mail in en druk op “Volgende”. Liever een “normaal” contactformulier?{' '}
           <a href="/contact" data-no-modal>Klik dan hier</a>
         </p>
+        <div class="contact-modal__fields">
+          <div class="contact-modal__field">
+            <Label for="cm-name" required>Naam</Label>
+            <Input id="cm-name" name="name" autocomplete="name" placeholder="Vul hier je naam in" required />
+          </div>
+          <div class="contact-modal__field">
+            <Label for="cm-email" required>E-mailadres</Label>
+            <Input id="cm-email" name="email" type="email" autocomplete="email" placeholder="naam@mail.nl" required />
+          </div>
+        </div>
       </section>
 
       <section class="contact-modal__step" data-step="1" hidden>
@@ -63,10 +73,13 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
 
       <section class="contact-modal__step" data-step="3" hidden>
         <div class="contact-modal__head">
-          <Heading as="h2" size="36" id="cm-title-3">Hoe bereiken<br />we je?</Heading>
-          <p class="contact-modal__lead">Laat je gegevens achter, dan nemen we contact met je op.</p>
+          <Heading as="h2" size="36" id="cm-title-3">Mogen we<br />je bellen?</Heading>
+          <p class="contact-modal__lead">Laat je nummer achter, dan bellen we je even. Mag ook leeg blijven.</p>
         </div>
-        <ContactFields idPrefix="cm" class="contact-modal__fields" />
+        <div class="contact-modal__field">
+          <Label for="cm-phone">Telefoonnummer</Label>
+          <Input id="cm-phone" name="phone" type="tel" autocomplete="tel" placeholder="06 12345678" />
+        </div>
       </section>
 
       <section class="contact-modal__step contact-modal__step--intro" data-step="done" hidden>
@@ -225,15 +238,18 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
   }
 
   .contact-modal__field,
-  .contact-modal :global(.contact-modal__fields) {
+  .contact-modal__fields {
     display: grid;
     gap: 13px;
     width: 100%;
     margin-top: var(--space-24);
     text-align: start;
   }
-  .contact-modal :global(.contact-modal__fields) {
-    gap: var(--space-24);
+  .contact-modal__fields {
+    gap: var(--space-16);
+  }
+  .contact-modal__fields .contact-modal__field {
+    margin-top: 0;
   }
 
   .contact-modal__nav {
