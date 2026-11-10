@@ -67,7 +67,7 @@
   },
   {
     "id": "menges-de-vries",
-    "logo": "../assets/logos/menges-de-vries.svg",
+    "logo": "../assets/logos/menges-de-vries-color.svg",
     "logoAlt": "Menges & De Vries Verkoop",
     "logoHeight": 44,
     "quote": [
@@ -100,7 +100,7 @@
   },
   {
     "id": "car-rally-noord",
-    "logo": "../assets/logos/cr-noord.svg",
+    "logo": "../assets/logos/cr-noord-color.svg",
     "logoAlt": "Car Rally Noord",
     "logoHeight": 56,
     "quote": [
@@ -152,7 +152,7 @@
   },
   {
     "id": "drentse-vloerverwarming-specialist",
-    "logo": "../assets/logos/drentse-vloerverwarming-specialist.svg",
+    "logo": "../assets/logos/drentse-vloerverwarming-specialist-color.svg",
     "logoAlt": "Drentse Vloerverwarming Specialist",
     "logoHeight": 40,
     "quote": [
