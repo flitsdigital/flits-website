@@ -235,4 +235,124 @@ const { src, poster, cover = false, autoplay = true } = Astro.props;
     opacity: 1;
     visibility: visible;
   }
+
+  /* Docked (the video plays in the corner card): the poster holds its place here */
+  [data-bunny-player-init][data-player-docked] .bunny-player__placeholder {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>
+
+<!-- The dock is built by scripts/bunny-player.ts on <body>, outside this component, so its CSS is global -->
+<style is:global>
+  .bunny-dock {
+    position: fixed;
+    z-index: 60; /* above the progressive blur (40), below the navbar (100) */
+    right: var(--space-16);
+    bottom: var(--space-16);
+    width: min(15rem * var(--ar, 0.8), 20rem, 100vw - 2 * var(--space-16));
+    aspect-ratio: var(--ar, 0.8);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--color-dark-900);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.25);
+    color: var(--color-light-0);
+    opacity: 0;
+    translate: 0 0.75rem;
+    scale: 0.96;
+    transform-origin: bottom right;
+    pointer-events: none;
+    transition:
+      opacity 0.15s var(--ease-out),
+      translate 0.15s var(--ease-out),
+      scale 0.15s var(--ease-out);
+  }
+  .bunny-dock[data-shown] {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    pointer-events: auto;
+    transition-duration: 0.25s;
+  }
+  @media (max-width: 767px) {
+    .bunny-dock {
+      width: min(11rem * var(--ar, 0.8), 15rem, 100vw - 2 * var(--space-16));
+    }
+  }
+  .bunny-dock video {
+    object-fit: cover;
+  }
+  .bunny-dock button {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .bunny-dock button:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: -2px;
+  }
+  /* The whole card: back to where the video lives */
+  .bunny-dock .bunny-dock__back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgb(0 0 0 / 0) 55%, rgb(0 0 0 / 0.45));
+  }
+  .bunny-dock .bunny-dock__btn {
+    position: absolute;
+    -webkit-backdrop-filter: blur(1em);
+    backdrop-filter: blur(1em);
+    background-color: #64646433; /* the player's own play button */
+    border: 1px solid #ffffff1a;
+    border-radius: 50%;
+    transition: scale 0.15s var(--ease-out);
+  }
+  .bunny-dock__btn:active {
+    scale: 0.92;
+  }
+  .bunny-dock__toggle {
+    left: var(--space-8);
+    bottom: var(--space-8);
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .bunny-dock__toggle svg {
+    grid-area: 1 / 1;
+    width: 0.875rem;
+  }
+  .bunny-dock__pause,
+  .bunny-dock[data-playing] .bunny-dock__play {
+    display: none;
+  }
+  .bunny-dock[data-playing] .bunny-dock__pause {
+    display: block;
+  }
+  .bunny-dock__close {
+    top: var(--space-8);
+    right: var(--space-8);
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .bunny-dock__close svg {
+    width: 0.625rem;
+  }
+  /* Thumb-sized hit area (44px) around the small buttons; the card itself is the "back" target */
+  .bunny-dock__btn::before {
+    content: '';
+    position: absolute;
+    inset: -0.5rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bunny-dock {
+      translate: none;
+      scale: none;
+      transition: opacity 0.15s linear;
+    }
+  }
 </style>
