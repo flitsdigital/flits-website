@@ -1,10 +1,11 @@
+import { sendLead } from './send-lead';
+
 /**
  * The "Start een project" modal (ContactModal.astro): every link to /contact opens it instead of the
  * page ("Klik dan hier" and links marked data-no-modal still go there). Start (name, e-mail) → 01
  * services → 02 the project → 03 phone (optional); VOLGENDE stays off on 01 until a service is
  * chosen, and on Start the browser checks the required fields.
- * shortcut: there is no form backend yet, so sending opens the visitor's mail app with the request
- * filled in (to data-email); swap `send` for a POST once there is an endpoint.
+ * Versturen posts to /api/contact (send-lead.ts); only when that fails does the mail app open.
  * Runs once: the modal lives outside the Swup container.
  */
 export function initContactModal() {
@@ -36,21 +37,12 @@ export function initContactModal() {
     update();
   }
 
-  function send() {
-    const data = new FormData(form);
-    const name = String(data.get('name') || '').trim();
-    const body = [
-      `Ik ben op zoek naar: ${data.getAll('services').join(', ')}`,
-      '',
-      String(data.get('message') || '').trim(),
-      '',
-      `Naam: ${name}`,
-      `E-mail: ${data.get('email')}`,
-      `Telefoon: ${data.get('phone') || 'niet opgegeven'}`,
-    ].join('\n');
-    const subject = `Nieuw project via de website — ${name}`;
-    window.location.href = `mailto:${dialog!.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  async function send() {
+    next.disabled = true; // one request per click
+    const outcome = await sendLead(form, dialog!.dataset.email!);
+    panel('done').querySelectorAll<HTMLElement>('[data-done]').forEach((d) => (d.hidden = d.dataset.done !== outcome));
     show('done');
+    if (outcome === 'mail-app') dialog!.setAttribute('aria-labelledby', 'cm-title-mail');
   }
 
   function open() {
@@ -89,8 +81,9 @@ export function initContactModal() {
   document.addEventListener(
     'click',
     (e) => {
-      const link = (e.target as Element).closest?.('a[href="/contact"]');
-      if (!link || link.hasAttribute('data-no-modal')) return;
+      const link = (e.target as Element).closest?.<HTMLAnchorElement>('a[href]');
+      // Also /contact/ and /contact#…, not only the exact href
+      if (!link || link.hasAttribute('data-no-modal') || link.origin !== location.origin || link.pathname.replace(/\/$/, '') !== '/contact') return;
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // new tab etc. still works
       e.preventDefault();
       e.stopPropagation();

@@ -18,6 +18,9 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
      outside the Swup container. -->
 <dialog class="contact-modal" data-theme="surface" data-contact-modal data-email={contact.email} aria-labelledby="cm-title-0">
   <form class="contact-modal__card" novalidate>
+    <input type="hidden" name="source" value="modal" />
+    <!-- Spam trap: people never see or fill it; /api/contact drops requests where it is filled -->
+    <label class="visually-hidden" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
     <StepIndicator steps={['Start', '01', '02', '03']} class="contact-modal__steps" />
     <button type="button" class="contact-modal__close" data-contact-modal-close aria-label="Sluiten">
       <img src={close.src} width={close.width} height={close.height} alt="" />
@@ -84,11 +87,17 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
 
       <section class="contact-modal__step contact-modal__step--intro" data-step="done" hidden>
         <Bolt class="contact-modal__bolt" width={15.6375} height={21} aria-hidden="true" />
-        <Heading as="h2" size="36" id="cm-title-done">Bijna klaar!</Heading>
-        <p class="contact-modal__lead">
-          Je mailprogramma opent met je aanvraag. Verstuur die mail, dan hoor je snel van ons. Lukt dat niet? Mail
-          naar <a href={`mailto:${contact.email}`}>{contact.email}</a>.
-        </p>
+        <div data-done="sent">
+          <Heading as="h2" size="36" id="cm-title-done">Bedankt!</Heading>
+          <p class="contact-modal__lead">We hebben je aanvraag. Binnen een werkdag hoor je van ons.</p>
+        </div>
+        <div data-done="mail-app" hidden>
+          <Heading as="h2" size="36" id="cm-title-mail">Bijna klaar!</Heading>
+          <p class="contact-modal__lead">
+            Versturen lukte niet, dus je mailprogramma opent met je aanvraag. Verstuur die mail, dan hoor je snel van
+            ons. Lukt dat ook niet? Mail naar <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+          </p>
+        </div>
       </section>
     </div>
 
