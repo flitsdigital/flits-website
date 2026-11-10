@@ -400,6 +400,7 @@ function initBunnyPlayer(signal, observers) {
     var before = player.querySelector('[data-player-before]');
     if (!before) return;
     before.style.paddingTop = (h / w * 100) + '%';
+    player.style.setProperty('--player-ratio', String(w / h)); // the CSS caps the width so the whole video fits the screen height
   }
   function maybeSetRatioFromVideo(player, updateSize, video) {
     if (updateSize !== 'true') return;

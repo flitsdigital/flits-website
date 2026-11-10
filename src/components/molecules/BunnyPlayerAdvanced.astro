@@ -149,7 +149,9 @@ const { src, poster } = Astro.props;
     border-radius: var(--radius-md);
     justify-content: center;
     align-items: center;
-    width: 100%;
+    /* never taller than the screen minus 2rem: the width follows from the stream's ratio (set by the script) */
+    width: min(100%, (100svh - 2rem) * var(--player-ratio, 16 / 9));
+    margin-inline: auto;
     display: flex;
     position: relative;
     overflow: hidden;
