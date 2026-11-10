@@ -282,14 +282,14 @@ const services = await getServices();
     visibility: hidden;
     opacity: 0;
     translate: 0 -4px;
-    /* Osmo curve (slow start, soft landing); closing a bit quicker than opening */
-    transition: opacity 0.3s var(--ease-osmo), translate 0.3s var(--ease-osmo), visibility 0.3s;
+    /* Quick in, quicker out: it opens on hover, so it must not lag behind the pointer */
+    transition: opacity 0.15s var(--ease-out), translate 0.15s var(--ease-out), visibility 0.15s;
   }
   [data-nav-sub-status='active'] > .nav__dropdown {
     visibility: visible;
     opacity: 1;
     translate: 0 0;
-    transition-duration: 0.45s;
+    transition-duration: 0.2s;
   }
   .nav__dropdown-list {
     display: grid;
@@ -402,7 +402,7 @@ const services = await getServices();
     .nav__end {
       display: grid;
       grid-template-rows: 0fr;
-      transition: grid-template-rows 0.35s ease;
+      transition: grid-template-rows 0.3s var(--ease-out);
     }
     [data-nav-status='active'] .nav__end {
       grid-template-rows: 1fr;
@@ -414,7 +414,7 @@ const services = await getServices();
       min-height: 0;
       overflow: hidden;
       visibility: hidden;
-      transition: visibility 0.35s;
+      transition: visibility 0.3s;
     }
     [data-nav-status='active'] .nav__end-inner {
       visibility: visible;
@@ -441,7 +441,7 @@ const services = await getServices();
       visibility: visible;
       opacity: 1;
       translate: none;
-      transition: grid-template-rows 0.45s var(--ease-osmo);
+      transition: grid-template-rows 0.3s var(--ease-out);
     }
     [data-nav-sub-status='active'] > .nav__dropdown {
       grid-template-rows: 1fr;
@@ -450,7 +450,7 @@ const services = await getServices();
       min-height: 0;
       overflow: hidden;
       visibility: hidden;
-      transition: visibility 0.45s;
+      transition: visibility 0.3s;
     }
     [data-nav-sub-status='active'] .nav__dropdown-inner {
       visibility: visible;
