@@ -2,10 +2,7 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import CaseHero from '../../components/sections/CaseHero.astro';
 import CaseIntro from '../../components/sections/CaseIntro.astro';
-import VideoFan from '../../components/sections/VideoFan.astro';
 import CaseBoard from '../../components/sections/CaseBoard.astro';
-import CaseWide from '../../components/sections/CaseWide.astro';
-import CaseGallery from '../../components/sections/CaseGallery.astro';
 import CaseResults from '../../components/sections/CaseResults.astro';
 import StatsPanel from '../../components/sections/StatsPanel.astro';
 import CaseTestimonial from '../../components/sections/CaseTestimonial.astro';
@@ -15,12 +12,14 @@ import { getImage } from 'astro:assets';
 import { getCase, getCaseSlugs, getFounders, avatarsOf } from '../../lib/content';
 
 // Case detail (Figma 1:3140): one page per project whose Markdown has a `caseStudy` block.
+// Every case has the same skeleton: hero, intro, board, then results, stats and testimonial when present.
 export async function getStaticPaths() {
   return (await getCaseSlugs()).map((slug) => ({ params: { slug } }));
 }
 
 const { project, caseStudy: cs, review, Content, related, year } = await getCase(Astro.params.slug);
 const founders = avatarsOf(await getFounders());
+const alt = `Werk voor ${project.data.client}`; // shortcut: one label for every case photo; add per-photo descriptions to the schema when there is copy for them
 const share = await getImage({ src: cs.share ?? cs.hero, width: 1200, format: 'jpg' });
 ---
 
@@ -33,13 +32,9 @@ const share = await getImage({ src: cs.share ?? cs.hero, width: 1200, format: 'j
 >
   <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />
   <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
-  {cs.videos.length > 0 && <VideoFan posters={cs.videos} straddle={false} />}
-  {cs.wide.length > 0 && <CaseWide images={cs.wide} />}
-  {cs.board.length > 0 && <CaseBoard blocks={cs.board} avatars={founders} />}
-  {cs.gallery && <CaseGallery title={cs.gallery.title} ticker={serviceTicker} images={cs.gallery.images} />}
-  {cs.results && <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />}
+  {cs.board.length > 0 && <CaseBoard blocks={cs.board} alt={alt} />}
+  {cs.results && <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} alt={alt} />}
   {cs.stats && <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />}
-  {cs.visuals.length > 0 && <CaseWide images={cs.visuals} mixed />}
-  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} />}
+  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} alt={alt} />}
   <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
 </PageLayout>

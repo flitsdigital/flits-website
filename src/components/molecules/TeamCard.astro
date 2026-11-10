@@ -18,7 +18,7 @@ const { image, name, role, tagSide = 'left', class: className } = Astro.props;
 <figure class:list={['team-card', `team-card--tag-${tagSide}`, className]}>
   <!-- alt="" — the figcaption already names the person -->
   <Image src={image} alt="" width={1000} widths={[500, 1000]} sizes="492px" />
-  <span class="team-card__role"><Icon name="bolt-white" size={8} />{role}</span>
+  <span class="team-card__role"><Icon name="bolt" size={8} />{role}</span>
   <figcaption class="team-card__name">{name}</figcaption>
 </figure>
 
@@ -44,6 +44,9 @@ const { image, name, role, tagSide = 'left', class: className } = Astro.props;
     background: var(--color-overlay-light-20);
     color: var(--color-light-0);
     font: var(--text-caption);
+  }
+  .team-card__role :global(.icon) {
+    color: var(--color-brand-500);
   }
   .team-card--tag-left .team-card__role {
     left: var(--space-10);

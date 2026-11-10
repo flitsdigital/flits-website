@@ -3,10 +3,11 @@ import PageLayout from '../layouts/PageLayout.astro';
 import HeroPage from '../components/sections/HeroPage.astro';
 import ProjectsGrid from '../components/sections/ProjectsGrid.astro';
 import { serviceTicker } from '../data/site';
+import { featured } from '../lib/projects';
 import { getProjects } from '../lib/content';
 
 // 404: no Figma page. The page hero + the latest projects, so a lost visitor still lands somewhere useful.
-const projects = (await getProjects()).slice(0, 4);
+const projects = featured(await getProjects());
 ---
 
 <PageLayout title="Pagina niet gevonden — Flits" noindex>

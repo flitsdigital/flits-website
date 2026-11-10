@@ -17,7 +17,7 @@ export const contact = {
 };
 
 /** Google rating shown above the reviews. */
-export const rating = { score: '4.9', count: '30' };
+export const rating = { score: '4,9', count: '30' }; // Dutch notation; shortcut: typed from the Google profile, update by hand
 
 export const socials = [
   { icon: 'instagram', label: 'Instagram', href: '#' },
@@ -39,3 +39,6 @@ export const serviceTicker = [
   'Recruitmentvideo’s',
   'Online marketing',
 ];
+
+/** Review pages (noindex): plain page loads instead of Swup, and left out of the sitemap. */
+export const reviewPages = ['/styleguide', '/components', '/sections', '/widgets'];

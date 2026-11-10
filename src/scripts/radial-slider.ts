@@ -1,7 +1,7 @@
-import { gsap } from 'gsap';
-import { CustomEase } from 'gsap/CustomEase';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, CustomEase, osmo } from './gsap';
+import { reducedMotion, finePointer } from './media';
 import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './radial-geometry';
+import type { PageScope } from './page-scope';
 
 /**
  * Radial Slider — items ride along a large circle and tilt with it.
@@ -24,10 +24,6 @@ import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './
 /** Visible space between neighbours, the same in every slider on the site (feedback 2026-10-24). */
 const GAP = 96;
 
-gsap.registerPlugin(CustomEase, ScrollTrigger);
-/** The site's motion curve (--ease-osmo in tokens.css) */
-export const osmo = CustomEase.create('osmo', 'M0,0 C0.625,0.05 0,1 1,1');
-
 /** A GSAP ease from CSS: `cubic-bezier(a, b, c, d)` becomes a CustomEase, anything else is a GSAP ease name. */
 function easeFromCss(value: string) {
   const bezier = value.match(/cubic-bezier\(([^)]+)\)/);
@@ -36,10 +32,9 @@ function easeFromCss(value: string) {
   return CustomEase.create('radial-intro', `M0,0 C${a},${b} ${c},${d} 1,1`);
 }
 
-/** Starts every slider on the page; returns a cleanup for page transitions (ticker, observers, tweens). */
-export function initRadialSliders(): () => void {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const cleanups: (() => void)[] = [];
+/** Starts every slider on the page; ticker, observers and tweens go with the page scope. */
+export function initRadialSliders(scope: PageScope) {
+  const reduceMotion = reducedMotion();
 
   document.querySelectorAll<HTMLElement>('[data-radial-slider-init]').forEach((wrap) => {
     const track = wrap.querySelector<HTMLElement>('[data-radial-slider-track]');
@@ -112,7 +107,7 @@ export function initRadialSliders(): () => void {
     // Drift on the GSAP ticker. With a mouse: only while hovering. Touch screens have no hover, so there
     // it drifts by itself while on screen, and a tap toggles a lasting pause (WCAG 2.2.2).
     // The speed eases up and down over ~0.3s instead of jumping.
-    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const canHover = finePointer();
     let hovered = false;
     let paused = false;
     let inView = true;
@@ -127,7 +122,7 @@ export function initRadialSliders(): () => void {
         render();
       };
       gsap.ticker.add(drift);
-      cleanups.push(() => gsap.ticker.remove(drift));
+      scope.add(() => gsap.ticker.remove(drift));
       if (canHover) {
         wrap.addEventListener('pointerenter', () => (hovered = true));
         wrap.addEventListener('pointerleave', () => (hovered = false));
@@ -137,7 +132,7 @@ export function initRadialSliders(): () => void {
         });
         const visibility = new IntersectionObserver((e) => (inView = !!e[0]?.isIntersecting));
         visibility.observe(wrap);
-        cleanups.push(() => visibility.disconnect());
+        scope.add(() => visibility.disconnect());
       }
     }
 
@@ -156,6 +151,7 @@ export function initRadialSliders(): () => void {
     };
     wrap.querySelector('[data-radial-slider-prev]')?.addEventListener('click', () => go(-1));
     wrap.querySelector('[data-radial-slider-next]')?.addEventListener('click', () => go(1));
+    scope.add(() => stepping?.kill());
 
     layout();
     // Entry intro, switched on from CSS (--radial-intro: <steps>): the items glide in along their own
@@ -183,17 +179,15 @@ export function initRadialSliders(): () => void {
         ease: osmo,
         scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom -100%', scrub: 0.6 },
       });
-      cleanups.push(() => turn.scrollTrigger?.kill(), () => turn.kill());
+      scope.add(() => {
+        turn.scrollTrigger?.kill();
+        turn.kill();
+      });
     }
-    const resize = new ResizeObserver(() => requestAnimationFrame(layout));
+    const resize = new ResizeObserver(() => scope.frame(layout));
+    scope.add(() => resize.disconnect());
     resize.observe(wrap);
     document.fonts?.ready.then(layout); // card heights change once the web fonts arrive
     wrap.dataset.radialSliderReady = '';
-    cleanups.push(() => {
-      resize.disconnect();
-      stepping?.kill();
-    });
   });
-
-  return () => cleanups.forEach((fn) => fn());
 }

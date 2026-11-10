@@ -1,23 +1,21 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from './gsap';
+import { reducedMotion } from './media';
+import type { PageScope } from './page-scope';
 
 /**
  * Osmo "Logo Wall Cycle", unchanged except: GSAP from npm, started per page view from app.ts (Swup)
  * with a cleanup, and the cycle only plays while the wall is on screen and the tab is visible
- * (Osmo starts it at once, so a wall below the fold kept swapping until it was scrolled past).
+ * (Osmo starts it at once, so a wall below the fold kept swapping until it was scrolled past),
+ * the first logos stay in markup order, and with reduced motion the logos crossfade in place.
  */
-gsap.registerPlugin(ScrollTrigger);
-
-export function initLogoWallCycle(): () => void {
+export function initLogoWallCycle(scope: PageScope) {
   const loopDelay = 1.5; // Loop Duration
   const duration = 0.9; // Animation Duration
-  const cleanups: (() => void)[] = [];
+  const shift = reducedMotion() ? 0 : 50; // reduced motion: crossfade only
 
   document.querySelectorAll<HTMLElement>('[data-logo-wall-cycle-init]').forEach((root) => {
     const list = root.querySelector('[data-logo-wall-list]')!;
     const items = Array.from(list.querySelectorAll<HTMLElement>('[data-logo-wall-item]'));
-
-    const shuffleFront = root.getAttribute('data-logo-wall-shuffle') !== 'false';
     const originalTargets = items
       .map((item) => item.querySelector('[data-logo-wall-target]'))
       .filter((n): n is Element => Boolean(n));
@@ -61,16 +59,7 @@ export function initLogoWallCycle(): () => void {
 
       pool = originalTargets.map((n) => n.cloneNode(true) as Element);
 
-      let front: Element[], rest: Element[];
-      if (shuffleFront) {
-        const shuffledAll = shuffleArray(pool);
-        front = shuffledAll.slice(0, visibleCount);
-        rest = shuffleArray(shuffledAll.slice(visibleCount));
-      } else {
-        front = pool.slice(0, visibleCount);
-        rest = shuffleArray(pool.slice(visibleCount));
-      }
-      pool = front.concat(rest);
+      pool = pool.slice(0, visibleCount).concat(shuffleArray(pool.slice(visibleCount)));
 
       for (let i = 0; i < visibleCount; i++) {
         const parent = visibleItems[i].querySelector('[data-logo-wall-target-parent]') || visibleItems[i];
@@ -104,12 +93,12 @@ export function initLogoWallCycle(): () => void {
       const current = parent.querySelector('[data-logo-wall-target]');
       const incoming = pool.shift()!;
 
-      gsap.set(incoming, { yPercent: 50, autoAlpha: 0 });
+      gsap.set(incoming, { yPercent: shift, autoAlpha: 0 });
       parent.appendChild(incoming);
 
       if (current) {
         gsap.to(current, {
-          yPercent: -50,
+          yPercent: -shift,
           autoAlpha: 0,
           duration,
           ease: 'expo.inOut',
@@ -129,6 +118,7 @@ export function initLogoWallCycle(): () => void {
       });
     }
 
+    scope.add(() => tl?.kill());
     setup();
 
     const trigger = ScrollTrigger.create({
@@ -140,15 +130,8 @@ export function initLogoWallCycle(): () => void {
         playIfSeen();
       },
     });
+    scope.add(() => trigger.kill());
 
-    document.addEventListener('visibilitychange', playIfSeen);
-
-    cleanups.push(() => {
-      tl?.kill();
-      trigger.kill();
-      document.removeEventListener('visibilitychange', playIfSeen);
-    });
+    document.addEventListener('visibilitychange', playIfSeen, { signal: scope.signal });
   });
-
-  return () => cleanups.forEach((fn) => fn());
 }

@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 import Icon, { type IconName } from './Icon.astro';
 
 interface Props extends Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'> {
-  /** outline: only designed for dark surfaces (white whatsapp icon). */
+  /** outline: designed for dark surfaces (the nav also shows it on light sections). */
   variant?: 'primary' | 'secondary' | 'outline' | 'step';
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -46,7 +46,6 @@ const iconSize = variant === 'step' ? 20 : 18;
   .btn {
     --btn-hover-color: var(--color-bg);
     --btn-hover-bg: var(--color-text);
-    --btn-ease-hover: cubic-bezier(0.785, 0.135, 0.15, 0.86);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -57,23 +56,26 @@ const iconSize = variant === 'step' ? 20 : 18;
     white-space: nowrap;
     overflow: clip; /* hides the label copy below; the focus outline is drawn outside and stays visible */
     transition:
-      color 0.325s var(--btn-ease-hover),
-      background-color 0.325s var(--btn-ease-hover),
-      scale 0.15s var(--ease-out);
+      color var(--duration-m) var(--ease-in-out-strong),
+      background-color var(--duration-m) var(--ease-in-out-strong),
+      scale var(--duration-xs) var(--ease-out);
   }
   .btn:active {
     scale: 0.97;
   }
   .btn__label {
     text-shadow: 0 2lh 0 currentColor;
-    transition: translate 0.3s var(--btn-ease-hover);
+    transition: translate var(--duration-m) var(--ease-in-out-strong);
   }
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* The colour swap is feedback, not motion: it stays with reduced motion; only the label roll goes */
+  @media (hover: hover) and (pointer: fine) {
     .btn:is(:hover, :focus-visible),
     :global([data-hover]):is(:hover, :focus-visible) .btn {
       color: var(--btn-hover-color);
       background-color: var(--btn-hover-bg);
     }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .btn:is(:hover, :focus-visible) .btn__label,
     :global([data-hover]):is(:hover, :focus-visible) .btn .btn__label {
       translate: 0 -2lh;
@@ -103,23 +105,16 @@ const iconSize = variant === 'step' ? 20 : 18;
     border: 1px solid var(--color-border);
     color: var(--color-text);
   }
-  .btn--outline .btn__label,
-  .btn--outline :global(.icon) {
-    transition:
-      translate 0.3s var(--btn-ease-hover),
-      opacity 0.325s var(--btn-ease-hover),
-      filter 0.325s var(--btn-ease-hover);
-  }
   .btn--outline .btn__label {
     opacity: 0.6;
+    transition:
+      translate var(--duration-m) var(--ease-in-out-strong),
+      opacity var(--duration-m) var(--ease-in-out-strong);
   }
-  /* On the white hover fill the label goes full strength and the white icon turns ink */
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* On the hover fill the label goes full strength (the icon follows the colour swap) */
+  @media (hover: hover) and (pointer: fine) {
     .btn--outline:is(:hover, :focus-visible) .btn__label {
       opacity: 1;
-    }
-    .btn--outline:is(:hover, :focus-visible) :global(.icon) {
-      filter: brightness(0);
     }
   }
   /* Touch: 44px tall pills, the height of the step buttons */

@@ -1,10 +1,11 @@
+import type { PageScope } from './page-scope';
+
 /**
  * Osmo "Accordion CSS Animation": the script only flips data-accordion-status (plus aria-expanded
  * on the button); the CSS animates grid-template-rows 0fr → 1fr. With
  * [data-accordion-close-siblings="true"] opening one item closes the others.
- * Returns a cleanup for page transitions.
  */
-export function initAccordions(): (() => void) | void {
+export function initAccordions({ signal }: PageScope) {
   const accordions = [...document.querySelectorAll<HTMLElement>('[data-accordion-css-init]')];
   if (!accordions.length) return;
 
@@ -30,6 +31,5 @@ export function initAccordions(): (() => void) | void {
     }
   };
 
-  accordions.forEach((a) => a.addEventListener('click', onClick));
-  return () => accordions.forEach((a) => a.removeEventListener('click', onClick));
+  accordions.forEach((a) => a.addEventListener('click', onClick, { signal }));
 }

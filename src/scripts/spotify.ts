@@ -1,5 +1,6 @@
 import { neighbours } from '../lib/spotify-ids';
 import type { Track } from '../lib/spotify';
+import type { PageScope } from './page-scope';
 /**
  * Inline playback for the Spotify widget through Spotify's iFrame API: a hidden embed plays the track,
  * our own play button and progress bar drive and follow it. Nothing from Spotify loads (no script, no
@@ -29,12 +30,11 @@ const loadApi = () =>
     document.head.append(script);
   }));
 
-export function initSpotify(): (() => void) | void {
+export function initSpotify(scope: PageScope) {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-spotify]')];
   if (!widgets.length) return;
-  const controllers: Controller[] = [];
 
-  const offs = widgets.map((widget) => {
+  widgets.forEach((widget) => {
     const button = widget.querySelector<HTMLButtonElement>('[data-spotify-play]')!;
     const fill = widget.querySelector<HTMLElement>('[data-spotify-fill]')!;
     const tracks: Track[] = JSON.parse(widget.dataset.spotifyTracks ?? '[]');
@@ -42,21 +42,26 @@ export function initSpotify(): (() => void) | void {
     let controller: Promise<Controller> | undefined;
 
     const create = () =>
-      (controller ??= loadApi().then(
-        (API) =>
-          new Promise<Controller>((resolve) => {
-            const host = widget.querySelector<HTMLElement>('[data-spotify-embed]')!;
-            API.createController(host, { uri: widget.dataset.spotify, width: 300, height: 80 }, (c) => {
-              controllers.push(c);
-              c.addListener('ready', () => resolve(c));
-              c.addListener('playback_update', ({ data }) => {
-                widget.toggleAttribute('data-playing', !data.isPaused);
-                button.setAttribute('aria-pressed', String(!data.isPaused));
-                if (data.duration) fill.style.width = `${Math.min(100, (data.position / data.duration) * 100)}%`;
+      (controller ??= loadApi()
+        .then(
+          (API) =>
+            new Promise<Controller>((resolve) => {
+              const host = widget.querySelector<HTMLElement>('[data-spotify-embed]')!;
+              API.createController(host, { uri: widget.dataset.spotify, width: 300, height: 80 }, (c) => {
+                scope.add(() => c.destroy()); // stops the music before Swup swaps the page
+                c.addListener('ready', () => resolve(c));
+                c.addListener('playback_update', ({ data }) => {
+                  widget.toggleAttribute('data-playing', !data.isPaused);
+                  button.setAttribute('aria-pressed', String(!data.isPaused));
+                  if (data.duration) fill.style.width = `${Math.min(100, (data.position / data.duration) * 100)}%`;
+                });
               });
-            });
-          }),
-      ));
+            }),
+        )
+        .catch((error) => {
+          controller = undefined; // the next press tries again
+          throw error;
+        }));
 
     const onClick = () => {
       const first = !controller;
@@ -88,24 +93,18 @@ export function initSpotify(): (() => void) | void {
       widget.dataset.spotify = t.uri;
       fill.style.width = '0';
       const wasPlaying = widget.hasAttribute('data-playing');
-      controller?.then((c) => {
-        c.loadUri(t.uri);
-        if (wasPlaying) c.play();
-      });
+      controller?.then(
+        (c) => {
+          c.loadUri(t.uri);
+          if (wasPlaying) c.play();
+        },
+        () => {},
+      );
     };
     const steps = [...widget.querySelectorAll<HTMLButtonElement>('[data-spotify-step]')];
     const onStep = (e: Event) => show(((index + Number((e.currentTarget as HTMLElement).dataset.spotifyStep)) % tracks.length + tracks.length) % tracks.length);
-    if (tracks.length > 1) steps.forEach((b) => b.addEventListener('click', onStep));
+    if (tracks.length > 1) steps.forEach((b) => b.addEventListener('click', onStep, { signal: scope.signal }));
 
-    button.addEventListener('click', onClick);
-    return () => {
-      button.removeEventListener('click', onClick);
-      steps.forEach((b) => b.removeEventListener('click', onStep));
-    };
+    button.addEventListener('click', onClick, { signal: scope.signal });
   });
-
-  return () => {
-    offs.forEach((off) => off());
-    controllers.forEach((c) => c.destroy()); // stops the music before Swup swaps the page
-  };
 }

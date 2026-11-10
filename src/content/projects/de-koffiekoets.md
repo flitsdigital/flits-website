@@ -3,30 +3,31 @@ client: De Koffiekoets
 title: Van 0 naar 100 door een gave huisstijl en website
 date: 2026-03-01
 tags: [Short form video ads]
-badge: Nieuw!
 types: [Video, Advertenties]
 sector: Horeca
 cover: ../../assets/images/projects/koffiekoets.jpg
 caseStudy:
+  draft: true # placeholder text and link: publish once the real case is written
   heroTitle: Hoe wij video advertenties maakten voor de Koffiekoets
   hero: ../../assets/images/case/koffiekoets-hero.jpg
   website: https://example.com # placeholder: vervang door de echte site van de klant
   intro:
     title: Binnen 2 weken 5000,- omzet uit 500,- adspend
     services: [Scripts schrijven, Videografie, Video Editing, Meta Ads]
-  videos: # the first one plays in the centre
-    - ../../assets/social/video-center.jpg
-    - ../../assets/social/video-side.jpg
-    - ../../assets/social/video-center.jpg
-    - ../../assets/social/video-side.jpg
-    - ../../assets/social/video-side.jpg
-  gallery:
-    title: Een kijkje achter de schermen
-    images:
-      - ../../assets/images/gallery/koffiekoets-1.jpg
-      - ../../assets/images/gallery/koffiekoets-3.jpg
-      - ../../assets/images/gallery/koffiekoets-2.jpg
-      - ../../assets/images/gallery/koffiekoets-4.jpg
+  board:
+    - videos: # the first one plays in the centre
+        - ../../assets/social/video-center.jpg
+        - ../../assets/social/video-side.jpg
+        - ../../assets/social/video-center.jpg
+        - ../../assets/social/video-side.jpg
+        - ../../assets/social/video-side.jpg
+    - gallery:
+        title: Een kijkje achter de schermen
+        images:
+          - ../../assets/images/gallery/koffiekoets-1.jpg
+          - ../../assets/images/gallery/koffiekoets-3.jpg
+          - ../../assets/images/gallery/koffiekoets-2.jpg
+          - ../../assets/images/gallery/koffiekoets-4.jpg
   results:
     title: Binnen 2 weken 5000,- omzet uit 500,- adspend
     body:

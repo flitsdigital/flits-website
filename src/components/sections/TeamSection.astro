@@ -44,7 +44,7 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
 <style>
   .team {
     position: relative;
-    padding-block: 8.25rem 6.9375rem; /* 132px / 111px */
+    padding-block: var(--section-space-xl) var(--section-space-l);
   }
   .team--surface {
     border-radius: var(--radius-section) var(--radius-section) 0 0;
@@ -128,9 +128,6 @@ const { title, lead, members, theme = 'surface' } = Astro.props;
   }
   /* Phone (inferred): header, Joery, weather + clock, Jordi, map */
   @media (max-width: 767px) {
-    .team {
-      padding-block: var(--space-84) var(--space-64);
-    }
     .team__grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       grid-template-areas:

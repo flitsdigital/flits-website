@@ -5,7 +5,7 @@ import Input from '../atoms/Input.astro';
 import Label from '../atoms/Label.astro';
 import StepIndicator from '../molecules/StepIndicator.astro';
 import { contact } from '../../data/site';
-import bolt from '../../assets/images/contact/bolt.svg';
+import Bolt from '../../assets/icons/bolt.svg';
 import close from '../../assets/images/contact/close.svg';
 
 const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
@@ -16,8 +16,11 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
      Start asks name + e-mail up front; 03 only an optional phone number.
      shortcut: steps 02 and 03 and the Start fields are not designed yet. One instance, in BaseLayout,
      outside the Swup container. -->
-<dialog class="contact-modal" data-contact-modal data-email={contact.email} aria-labelledby="cm-title-0">
+<dialog class="contact-modal" data-theme="surface" data-contact-modal data-email={contact.email} aria-labelledby="cm-title-0">
   <form class="contact-modal__card" novalidate>
+    <input type="hidden" name="source" value="modal" />
+    <!-- Spam trap: people never see or fill it; /api/contact drops requests where it is filled -->
+    <label class="visually-hidden" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
     <StepIndicator steps={['Start', '01', '02', '03']} class="contact-modal__steps" />
     <button type="button" class="contact-modal__close" data-contact-modal-close aria-label="Sluiten">
       <img src={close.src} width={close.width} height={close.height} alt="" />
@@ -25,7 +28,7 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
 
     <div class="contact-modal__body">
       <section class="contact-modal__step contact-modal__step--intro" data-step="0">
-        <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
+        <Bolt class="contact-modal__bolt" width={15.6375} height={21} aria-hidden="true" />
         <Heading as="h2" size="36" id="cm-title-0">Nieuw project?<br />Wij denken graag<br />met je mee</Heading>
         <p class="contact-modal__lead">
           Vul je naam en e-mail in en druk op “Volgende”. Liever een “normaal” contactformulier?{' '}
@@ -83,12 +86,18 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
       </section>
 
       <section class="contact-modal__step contact-modal__step--intro" data-step="done" hidden>
-        <img src={bolt.src} width={bolt.width} height={bolt.height} alt="" />
-        <Heading as="h2" size="36" id="cm-title-done">Bijna klaar!</Heading>
-        <p class="contact-modal__lead">
-          Je mailprogramma opent met je aanvraag. Verstuur die mail, dan hoor je snel van ons. Lukt dat niet? Mail
-          naar <a href={`mailto:${contact.email}`}>{contact.email}</a>.
-        </p>
+        <Bolt class="contact-modal__bolt" width={15.6375} height={21} aria-hidden="true" />
+        <div data-done="sent">
+          <Heading as="h2" size="36" id="cm-title-done">Bedankt!</Heading>
+          <p class="contact-modal__lead">We hebben je aanvraag. Binnen een werkdag hoor je van ons.</p>
+        </div>
+        <div data-done="mail-app" hidden>
+          <Heading as="h2" size="36" id="cm-title-mail">Bijna klaar!</Heading>
+          <p class="contact-modal__lead">
+            Versturen lukte niet, dus je mailprogramma opent met je aanvraag. Verstuur die mail, dan hoor je snel van
+            ons. Lukt dat ook niet? Mail naar <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+          </p>
+        </div>
       </section>
     </div>
 
@@ -114,13 +123,13 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
     overscroll-behavior: contain;
   }
   .contact-modal::backdrop {
-    background: rgb(0 0 0 / 0.6);
+    background: var(--color-overlay-dark-60);
   }
   .contact-modal[open] {
-    animation: contact-modal-in 0.5s var(--ease-osmo) both;
+    animation: contact-modal-in var(--duration-l) var(--ease-osmo) both;
   }
   .contact-modal[open]::backdrop {
-    animation: contact-modal-fade 0.3s ease-out both;
+    animation: contact-modal-fade var(--duration-m) var(--ease-out) both;
   }
   @keyframes contact-modal-in {
     from {
@@ -170,7 +179,7 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
     gap: var(--space-8);
     padding: 2.375rem 2.0625rem var(--space-32); /* 38px top; tiles 511px wide in 576 */
     text-align: center;
-    animation: contact-modal-step 0.4s var(--ease-osmo) both;
+    animation: contact-modal-step var(--duration-l) var(--ease-osmo) both;
   }
   .contact-modal__step[hidden] {
     display: none;
@@ -186,6 +195,9 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
     justify-content: center;
     gap: 1.0625rem;
     padding-inline: var(--space-48);
+  }
+  .contact-modal__bolt {
+    color: var(--color-brand-500);
   }
   .contact-modal__head {
     display: grid;
@@ -222,7 +234,7 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
     text-transform: uppercase;
     color: var(--color-dark-900);
     cursor: pointer;
-    transition: background-color 0.3s var(--ease-osmo);
+    transition: background-color var(--duration-m) var(--ease-osmo);
   }
   .contact-modal__tile input {
     position: absolute;
@@ -233,7 +245,7 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
     background: var(--color-brand-500);
   }
   .contact-modal__tile:has(input:focus-visible) {
-    outline: 2px solid var(--color-dark-800-60);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
 

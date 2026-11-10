@@ -27,7 +27,7 @@ const { proof, cta, logos } = Astro.props;
 
 <style>
   .logo-fan {
-    padding-block: 0 5.1875rem; /* 83px; the feature grid above brings 115px */
+    padding-block: 0 var(--section-space-s); /* the feature grid above brings the space on top */
     overflow-x: clip;
   }
   .logo-fan__cta {
@@ -49,7 +49,7 @@ const { proof, cta, logos } = Astro.props;
      stay clear of the CTA (feedback 2026-10-24). */
   .logo-fan :global(.logo-fan__slider) {
     height: 13.5rem; /* 216px */
-    margin-top: 8.375rem; /* 134px */
+    margin-top: var(--section-space-xl);
   }
   .logo-fan :global(.logo-fan__tile) {
     width: 17.25rem; /* 276px */

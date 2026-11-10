@@ -2,33 +2,29 @@
 /**
  * Osmo "Custom Bunny HLS Player (Advanced)", unchanged except: it only takes players marked
  * data-bunny-player-advanced (the basic script has the rest), hls.js comes from the shared on-demand loader,
- * and it starts per page view from app.ts (Swup) with a cleanup: every document/window listener hangs on one
- * AbortController, observers disconnect, playback stops and hls is destroyed.
+ * and it starts per page view from app.ts (Swup) with a cleanup: every document/window listener hangs on the
+ * page scope's signal, observers disconnect, playback stops and hls is destroyed.
  */
 import { loadHls } from './bunny-player';
+import type { PageScope } from './page-scope';
 
 const SELECTOR = '[data-bunny-player-init][data-bunny-player-advanced]';
 
-export function initBunnyPlayersAdvanced(): (() => void) | void {
+export function initBunnyPlayersAdvanced(scope: PageScope) {
   if (!document.querySelector(SELECTOR)) return;
-  const controller = new AbortController();
-  const observers = [];
-  let cancelled = false;
-  loadHls().then(() => {
-    if (!cancelled) initBunnyPlayer(controller.signal, observers);
-  });
-  return () => {
-    cancelled = true;
-    controller.abort();
-    observers.forEach((io) => io.disconnect());
+  scope.add(() => {
     document.querySelectorAll(SELECTOR).forEach((player) => {
       try { player.querySelector('video')?.pause(); } catch (_) {}
       if (player._hls) { try { player._hls.destroy(); } catch (_) {} player._hls = null; }
     });
-  };
+  });
+  loadHls().then(() => {
+    if (!scope.signal.aborted) initBunnyPlayer(scope);
+  });
 }
 
-function initBunnyPlayer(signal, observers) {
+function initBunnyPlayer(scope) {
+  var signal = scope.signal;
   document.querySelectorAll(SELECTOR).forEach(function(player) {
     var src = player.getAttribute('data-player-src');
     if (!src) return;
@@ -359,8 +355,8 @@ function initBunnyPlayer(signal, observers) {
         });
       }, { threshold: 0.1 });
 
+      scope.add(() => io.disconnect());
       io.observe(player);
-      observers.push(io);
     }
   });
 

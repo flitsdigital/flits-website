@@ -1,15 +1,12 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { osmo } from './radial-slider';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap, osmo } from './gsap';
+import { reducedMotion } from './media';
 
 /**
  * The footer wordmark's letters rise in one after another once it scrolls into view. The footer sits
  * outside #swup, but this starts per page view so the trigger is measured against the new page's height.
  */
 export function initFooterLogo(): (() => void) | void {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (reducedMotion()) return;
   const logo = document.querySelector<SVGSVGElement>('.footer__logo');
   if (!logo) return;
   // Left to right, so the bolt is the center letter (it is first in the SVG source)

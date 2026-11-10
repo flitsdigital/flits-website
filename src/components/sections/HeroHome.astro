@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import BgShapes from '../atoms/BgShapes.astro';
 import Heading from '../atoms/Heading.astro';
 import Highlight from '../atoms/Highlight.astro';
+import SplitChars from '../atoms/SplitChars.astro';
 import Text from '../atoms/Text.astro';
 import Eyebrow from '../molecules/Eyebrow.astro';
 import HeroMedia from '../atoms/HeroMedia.astro';
@@ -14,14 +15,12 @@ interface Props {
   highlight: string;
   /** Words the yellow bar rolls through (Osmo "Rotating Text"), starting with `highlight`. */
   rotatingWords?: string[];
-  /** Seconds each word stays. */
-  stepDuration?: number;
   intro: string[];
-  /** px the "media" slot (fan, phone…) reaches up into the hero. */
-  mediaOverlap?: number;
 }
 
-const { eyebrow, avatars, title, highlight, rotatingWords, stepDuration = 2.25, intro, mediaOverlap = 106 } = Astro.props;
+const stepDuration = 2.25;
+const mediaOverlap = 106; // px the media overlaps the hero (Figma)
+const { eyebrow, avatars, title, highlight, rotatingWords, intro } = Astro.props;
 ---
 
 <section class="hero" data-theme="dark" data-theme-section="dark" style={`--hero-overlap:${mediaOverlap}px`}>
@@ -29,41 +28,22 @@ const { eyebrow, avatars, title, highlight, rotatingWords, stepDuration = 2.25, 
   <div class="hero__content">
     <div class="hero__heading">
       <Eyebrow size="l" avatars={avatars} loading="eager">{eyebrow}</Eyebrow>
-      <!-- {' '}: flex hides it visually, but keeps "Wij maken Impact" readable for search and screen readers -->
-      <Heading as="h1" size="116" class="hero__title">
+      <!-- {' '}: flex hides it visually, but keeps "Wij maken Impact" readable for search. The yellow bar's
+           letters rise in one by one on the home entry (motion.css .hero__char), so screen readers get the
+           plain text from the label instead of the letter spans (or the words rotating through the bar). -->
+      <Heading as="h1" size="116" class="hero__title" aria-label={`${title} ${highlight}`}>
         <span>{title}</span>{' '}<Highlight class="hero__highlight"
           ><span
             class="hero__highlight-text"
+            aria-hidden="true"
             data-rotating-words={rotatingWords?.join(', ')}
-            data-step-duration={rotatingWords && stepDuration}>{highlight}</span
+            data-step-duration={rotatingWords && stepDuration}><SplitChars text={highlight.trim()} class="hero__char" /></span
           ></Highlight
         >
       </Heading>
     </div>
     <Text size="xl" class="hero__intro">{intro.map((line, i) => <>{i > 0 && ' '}<span>{line}</span></>)}</Text>
   </div>
-  <!-- Home entry (motion.css): the yellow bar's letters rise in one by one, so split it into .hero__char
-       spans with an index --c before first paint. The heading keeps the plain text as its aria-label. -->
-  <script is:inline>
-    (() => {
-      const h1 = document.querySelector('.hero__title');
-      const bar = h1?.querySelector('.hero__highlight-text');
-      if (!bar || h1.dataset.split) return;
-      h1.dataset.split = '1';
-      h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
-      bar.setAttribute('aria-hidden', 'true');
-      const text = bar.textContent.trim();
-      bar.textContent = '';
-      [...text].forEach((ch, c) => {
-        if (ch === ' ') return bar.append(' ');
-        const span = document.createElement('span');
-        span.className = 'hero__char';
-        span.style.setProperty('--c', String(c));
-        span.textContent = ch;
-        bar.append(span);
-      });
-    })();
-  </script>
 </section>
 {Astro.slots.has('media') && <HeroMedia overlap={mediaOverlap}><slot name="media" /></HeroMedia>}
 
@@ -105,7 +85,7 @@ const { eyebrow, avatars, title, highlight, rotatingWords, stepDuration = 2.25, 
   }
   /* Osmo "Rotating Text": the words are stacked and roll through the bar, which follows their width.
      The word box is the mask (Osmo masks the whole line with SplitText, which would clash with the
-     letter split above). Global: rotating-text.ts builds these. */
+     letter split above). Global: SplitChars and rotating-text.ts build these. */
   .hero :global([data-rotating-words]) {
     display: inline-block;
     position: relative;

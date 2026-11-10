@@ -27,6 +27,8 @@ import { initBunnyPlayers } from './bunny-player';
 import { initBunnyPlayersAdvanced } from './bunny-player-advanced';
 import { initFooterLogo } from './footer-logo';
 import { initCheckSectionThemeScroll } from './section-theme';
+import { createScope, type PageScope } from './page-scope';
+import { reviewPages } from '../data/site';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -34,24 +36,22 @@ import { initCheckSectionThemeScroll } from './section-theme';
  * Scripts inside new content are not run by Swup, so everything that belongs to page content
  * starts here on each page view and is cleaned up before the content is replaced.
  */
-const pageInits: (() => (() => void) | void)[] = [initCheckSectionThemeScroll, initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget, initOfficeWidget, initStoriesWidget, initStudioPosts, initBunnyPlayers, initBunnyPlayersAdvanced, initFooterLogo];
+const pageInits: ((scope: PageScope) => (() => void) | void)[] = [initCheckSectionThemeScroll, initWidgetSlots, initRadialSliders, initClocks, initProjectArchive, initProcessSteps, initLogoWallCycle, initAccordions, initQueuedScrollReveal, initNumberOdometer, initRotatingImageTrail, initRotatingText, initWeather, initChristmas, initSpotify, initPageSpeed, initReviewsWidget, initOfficeWidget, initStoriesWidget, initStudioPosts, initBunnyPlayers, initBunnyPlayersAdvanced, initFooterLogo];
 
-let cleanups: (() => void)[] = [];
-// One init at a time: a section that throws must not stop the others or lose their cleanups.
+let scope: PageScope;
+// One init at a time: a section that throws must not stop the others, and what it registered before throwing still goes.
 const mount = () => {
+  scope = createScope();
   for (const init of pageInits) {
     try {
-      const cleanup = init();
-      if (cleanup) cleanups.push(cleanup);
+      const cleanup = init(scope);
+      if (cleanup) scope.add(cleanup);
     } catch (error) {
       console.error(error);
     }
   }
 };
-const unmount = () => {
-  cleanups.forEach((fn) => fn());
-  cleanups = [];
-};
+const unmount = () => scope.dispose();
 
 mount();
 initAnimatedGrid(); // once: the overlay sits outside #swup
@@ -78,7 +78,7 @@ const swup = new Swup({
   ignoreVisit: (url, { el } = {}) =>
     !document.getElementById('swup') ||
     !!el?.closest('[data-no-swup]') ||
-    ['/styleguide', '/components', '/sections', '/widgets'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
+    reviewPages.some((p) => new URL(url, location.origin).pathname.startsWith(p)),
   plugins: [new SwupHeadPlugin({ awaitAssets: true }), new SwupA11yPlugin(), new SwupPreloadPlugin()],
 });
 

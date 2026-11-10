@@ -27,7 +27,7 @@ const { title, ticker, services } = Astro.props;
 
 <style>
   .services {
-    padding-bottom: 7.0625rem; /* 113px to the next section */
+    padding-bottom: var(--section-space-l);
   }
   .services__grid {
     display: grid;
@@ -38,9 +38,6 @@ const { title, ticker, services } = Astro.props;
   }
 
   @media (max-width: 767px) {
-    .services {
-      padding-bottom: var(--space-64);
-    }
     .services__grid {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--grid-gap);

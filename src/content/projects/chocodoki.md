@@ -3,7 +3,6 @@ client: Chocodoki
 title: Een webshop waarin klanten zelf hun bonbondoos samenstellen
 date: 2026-02-01
 tags: [Webshop, Shopify]
-badge: Nieuw!
 types: [Webshops]
 sector: Retail
 cover: ../../assets/images/projects/chocodoki.jpg
@@ -17,13 +16,6 @@ caseStudy:
   board:
     - ../../assets/images/case/chocodoki/website-home.jpg
     - [../../assets/images/case/chocodoki/iphone-beton.jpg, ../../assets/images/case/chocodoki/doosje-zijbalk.jpg]
-    - stats:
-        title: De configurator in cijfers
-        lead: Shopify verkoopt producten, geen doos die je zelf vult. Normaal los je dat op met apps. Dan ben je al snel 40 tot 60 euro per maand kwijt, en heb je het niet zelf in beheer. Daarom schreven we de configurator zelf. Een kleine aanpassing of een nieuwe feature is nu zo gedaan.
-        items:
-          - { label: Maandelijkse kosten, value: '€ 0,-' }
-          - { label: Regels code, value: '5000+' }
-          - { label: Smaken bonbons, value: '34+' }
     - ../../assets/images/case/chocodoki/productpagina.jpg
     - ../../assets/images/case/chocodoki/mobiel-schermen.jpg
     - ../../assets/images/case/chocodoki/doosje-states.jpg
@@ -35,13 +27,20 @@ caseStudy:
         - Daarom staan de allergenen als icoontjes op elke bonbon, en filter je met één klik op chocoladesoort of allergeen.
     - ../../assets/images/case/chocodoki/allergenen.jpg
     - ../../assets/images/case/chocodoki/bonbon-kaarten.jpg
-    - results:
-        title: Live, en klaar voor de kerst
-        body:
-          - De webshop staat live. Je kiest een doos van 6, 12 of 15 bonbons, vult hem met je eigen smaken, kiest een wrapper en schrijft er een boodschap bij. Filter op chocoladesmaak en allergenen, dan zie je meteen wat je kunt geven.
-        video:
-          src: https://vz-c3a5e4d9-74d.b-cdn.net/b1953260-4b69-4a9f-89c5-2086829b0b5f/playlist.m3u8
-          poster: https://vz-c3a5e4d9-74d.b-cdn.net/b1953260-4b69-4a9f-89c5-2086829b0b5f/thumbnail.jpg
+  results:
+    title: Live, en klaar voor de kerst
+    body:
+      - De webshop staat live. Je kiest een doos van 6, 12 of 15 bonbons, vult hem met je eigen smaken, kiest een wrapper en schrijft er een boodschap bij. Filter op chocoladesmaak en allergenen, dan zie je meteen wat je kunt geven.
+    video:
+      src: https://vz-c3a5e4d9-74d.b-cdn.net/b1953260-4b69-4a9f-89c5-2086829b0b5f/playlist.m3u8
+      poster: https://vz-c3a5e4d9-74d.b-cdn.net/b1953260-4b69-4a9f-89c5-2086829b0b5f/thumbnail.jpg
+  stats:
+    title: De configurator in cijfers
+    lead: Shopify verkoopt producten, geen doos die je zelf vult. Normaal los je dat op met apps. Dan ben je al snel 40 tot 60 euro per maand kwijt, en heb je het niet zelf in beheer. Daarom schreven we de configurator zelf. Een kleine aanpassing of een nieuwe feature is nu zo gedaan.
+    items:
+      - { label: Maandelijkse kosten, value: '€ 0,-' }
+      - { label: Regels code, value: '5000+' }
+      - { label: Smaken bonbons, value: '34+' }
 ---
 
 Chocodoki is een sociale chocolaterie in Emmen. Mensen met een afstand tot de arbeidsmarkt maken er met de hand bonbons. Die verkopen ze aan particulieren en aan bedrijven die relatiegeschenken zoeken.

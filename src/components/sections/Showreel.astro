@@ -1,9 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import BgShapes from '../atoms/BgShapes.astro';
 import Heading from '../atoms/Heading.astro';
-import phone from '../../assets/images/behind-the-scenes/iphone-17-pro-silver.png';
 import badge from '../../assets/images/behind-the-scenes/bolt-badge.svg';
 import trail1 from '../../assets/images/behind-the-scenes/koffiekoets-draaidag.jpg';
 import trail2 from '../../assets/images/behind-the-scenes/fpv-drone.jpg';
@@ -16,11 +14,9 @@ import trail8 from '../../assets/images/gallery/koffiekoets-4.jpg';
 
 interface Props {
   title: string;
-  /** What plays on the phone screen (photo now; a video can replace it later). */
-  screen: ImageMetadata;
 }
 
-const { title, screen } = Astro.props;
+const { title } = Astro.props;
 const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
 ---
 
@@ -43,16 +39,12 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
   <img class="showreel__badge showreel__badge--left" src={badge.src} width={badge.width} height={badge.height} alt="" />
   <img class="showreel__badge showreel__badge--right" src={badge.src} width={badge.width} height={badge.height} alt="" />
   <Heading size="96" class="showreel__title">{title}</Heading>
-  <!-- shortcut: phone hidden for now while the photo trail is tried out; remove `hidden` to bring it back -->
-  <div class="showreel__phone" hidden>
-    <div class="showreel__screen"><Image src={screen} alt="" width={1080} /></div>
-    <Image class="showreel__frame" src={phone} alt="" width={680} />
-  </div>
 </section>
 
 <style>
   .showreel {
     position: relative;
+    isolation: isolate; /* the trail and the title only layer among themselves */
     display: grid;
     place-items: center;
     width: calc(100% - 2 * 14px); /* runs full width with a 14px page margin; the content keeps to the 1412px frame */
@@ -77,7 +69,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
     display: flex;
   }
   .showreel :global(.rotating-image-trail__item) {
-    z-index: 10;
+    z-index: 1;
     pointer-events: none;
     -webkit-user-select: none;
     user-select: none;
@@ -102,7 +94,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
   }
   .showreel :global([data-trail-item='visible']) {
     transform: translate(-50%, -50%) scale(1) rotate(0.001deg);
-    transition: transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+    transition: transform var(--duration-l) var(--ease-osmo);
     position: absolute;
   }
   /* Calmer exit than Osmo's spin: a small shrink while it fades */
@@ -110,8 +102,8 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
     transform: translate(-50%, -50%) scale(0.85) rotate(0.001deg);
     opacity: 0;
     transition:
-      transform 0.6s var(--ease-osmo),
-      opacity 0.6s var(--ease-osmo);
+      transform var(--duration-xl) var(--ease-osmo),
+      opacity var(--duration-xl) var(--ease-osmo);
     position: absolute;
   }
   .showreel :global(.showreel__title) {
@@ -129,45 +121,8 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
   .showreel__badge--right {
     right: calc(max(0px, 50% - 44.125rem) + 36px);
   }
-  /* Phone sits on top of the title (Figma "Home Screen" 300.81 × 654) */
-  .showreel__phone {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 300.81px;
-    height: 654px;
-    translate: -50% -50%;
-  }
-  .showreel__screen {
-    position: absolute;
-    left: 50%;
-    top: calc(50% + 4.49px);
-    width: 315.776px;
-    height: 662.979px;
-    translate: -50% -50%;
-    border-radius: 45.645px;
-    overflow: hidden;
-  }
-  /* Figma crops the source photo (zoomed 162%) inside the screen */
-  .showreel__screen :global(img) {
-    position: absolute;
-    left: -31.28%;
-    top: -33.97%;
-    width: 162.56%;
-    height: 167.94%;
-    max-width: none;
-  }
-  .showreel__phone :global(.showreel__frame) {
-    position: absolute;
-    left: -17.96px;
-    top: -17.21px;
-    width: 336.728px;
-    height: 688.421px;
-    max-width: none;
-  }
 
-  /* Phone (inferred): the title is too narrow to peek out beside the phone, so it moves above it;
-     the phone at 75%, the badges left out */
+  /* Phone (inferred): the badges left out */
   @media (max-width: 767px) {
     .showreel {
       height: 36rem;
@@ -178,21 +133,11 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
       width: 34vw;
     }
     .showreel :global(.showreel__title) {
-      z-index: 11;
+      z-index: 2;
       width: var(--span-4);
     }
     .showreel__badge {
       display: none;
-    }
-    /* With the phone shown, the title moves above it */
-    .showreel:has(.showreel__phone:not([hidden])) {
-      place-items: start center;
-      height: 48rem;
-      padding-top: var(--space-48);
-    }
-    .showreel__phone {
-      top: calc(50% + 4.5rem);
-      scale: 0.75;
     }
   }
 </style>

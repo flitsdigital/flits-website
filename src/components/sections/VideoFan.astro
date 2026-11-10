@@ -15,7 +15,7 @@ const { posters } = Astro.props;
 <!-- Figma 1:2564–1:2573 / 1:3172: 400×500 cards on a ∪ arc tilted 18°, sides dimmed 40%,
      play controls on the centre card, hands either side. -->
 <div class="video-fan">
-  <RadialSlider label="Video's" shape="valley" angle={18} hands={{ item: 'video' }} class="video-fan__slider">
+  <RadialSlider label="Video's" shape="valley" angle={18} hands={{ item: 'video', belowOnPhone: true }} class="video-fan__slider">
     {
       posters.map((poster) => (
         <div class="video-fan__card">
@@ -30,7 +30,7 @@ const { posters } = Astro.props;
 <style>
   /* On service pages it sits in the hero's "media" slot (24px overlap); on cases it stands alone */
   .video-fan {
-    padding-bottom: 8.6875rem; /* 139px to the next header */
+    padding-bottom: var(--section-space-xl);
     overflow-x: clip;
   }
   .video-fan :global(.video-fan__slider) {
@@ -54,7 +54,7 @@ const { posters } = Astro.props;
     position: absolute;
     inset: 0;
     background: var(--color-overlay-dark-40);
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-m) var(--ease-out);
   }
   .video-fan__controls {
     position: absolute;
@@ -63,25 +63,12 @@ const { posters } = Astro.props;
     left: var(--space-10);
     width: calc(100% - 2 * var(--space-10));
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-m) var(--ease-out);
   }
   .video-fan__card[data-radial-slider-active]::after {
     opacity: 0;
   }
   .video-fan__card[data-radial-slider-active] .video-fan__controls {
     opacity: 1;
-  }
-  /* Phones: no gap beside the centre card, so the hands go under it (as in ReviewsCarousel) */
-  @media (max-width: 767px) {
-    .video-fan :global(.video-fan__slider .radial-slider__hand) {
-      top: calc(100% + 3.5rem);
-      scale: 0.6;
-    }
-    .video-fan :global(.video-fan__slider .radial-slider__hand--prev) {
-      margin-left: -2.75rem;
-    }
-    .video-fan :global(.video-fan__slider .radial-slider__hand--next) {
-      margin-left: 2.75rem;
-    }
   }
 </style>

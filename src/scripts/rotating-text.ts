@@ -1,5 +1,6 @@
-import { gsap } from 'gsap';
-import { osmo } from './radial-slider';
+import { gsap, osmo } from './gsap';
+import { reducedMotion } from './media';
+import type { PageScope } from './page-scope';
 
 /**
  * Osmo "Rotating Text", adapted to the home hero's yellow bar: no SplitText line mask (the word box
@@ -8,13 +9,10 @@ import { osmo } from './radial-slider';
  * view with a cleanup (Swup), and it stays on the first word with reduced motion. Each word rolls
  * up out of the bar while the next rolls in.
  */
-export function initRotatingText(): (() => void) | void {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+export function initRotatingText(scope: PageScope) {
+  if (reducedMotion()) return;
   const spans = [...document.querySelectorAll<HTMLElement>('[data-rotating-words]')];
   if (!spans.length) return;
-  let stopped = false;
-  const calls: gsap.core.Tween[] = [];
-  const targets: Element[] = [];
 
   spans.forEach((rotatingSpan) => {
     const stepDuration = parseFloat(rotatingSpan.getAttribute('data-step-duration') || '1.75');
@@ -44,10 +42,15 @@ export function initRotatingText(): (() => void) | void {
     // Replace the original content of the highlight span
     rotatingSpan.textContent = '';
     rotatingSpan.appendChild(wrapper);
-    targets.push(wrapper, ...wordEls);
+    // Only the pending step is kept: each one schedules the next
+    let next: gsap.core.Tween | undefined;
+    scope.add(() => {
+      next?.kill();
+      gsap.killTweensOf([wrapper, ...wordEls]);
+    });
 
     document.fonts.ready.then(() => {
-      if (stopped) return;
+      if (scope.signal.aborted) return;
 
       // Define duration of your in + out movement
       const inDuration = 0.75;
@@ -103,17 +106,11 @@ export function initRotatingText(): (() => void) | void {
 
         activeIndex = nextIndex;
 
-        calls.push(gsap.delayedCall(stepDuration, showNext));
+        next = gsap.delayedCall(stepDuration, showNext);
       }
 
       // First word is already visible, start rotating after a full step
-      calls.push(gsap.delayedCall(stepDuration, showNext));
+      next = gsap.delayedCall(stepDuration, showNext);
     });
   });
-
-  return () => {
-    stopped = true;
-    calls.forEach((c) => c.kill());
-    gsap.killTweensOf(targets);
-  };
 }

@@ -20,12 +20,12 @@ html.is-arriving #swup > .hero-media {
 html.is-arriving::after {
   content: '';
   position: fixed;
-  z-index: 200;
+  z-index: var(--z-flash);
   inset: 0 0 auto;
   height: 3px;
   background: var(--color-brand-500);
   transform-origin: left;
-  animation: flits-flash 0.5s var(--ease-in-out) both;
+  animation: flits-flash var(--duration-l) var(--ease-in-out) both;
   pointer-events: none;
 }
 @keyframes flits-flash {
@@ -163,7 +163,7 @@ html[data-landing] .hero + .hero-media .radial-slider {
   width: 100%;
   height: 0.0625em;
   background-color: currentColor;
-  transition: transform 0.735s var(--ease-osmo);
+  transition: transform var(--duration-2xl) var(--ease-osmo);
   transform-origin: right;
   transform: scaleX(0) rotate(0.001deg);
 }
@@ -171,7 +171,7 @@ html[data-landing] .hero + .hero-media .radial-slider {
 [data-underline-link='alt']::before {
   transform-origin: left;
   transform: scaleX(1) rotate(0.001deg);
-  transition-delay: 0.3s;
+  transition-delay: var(--duration-m);
 }
 
 [data-underline-link='alt']::after {
@@ -198,6 +198,6 @@ html[data-landing] .hero + .hero-media .radial-slider {
   [data-underline-link='alt']:hover::after {
     transform-origin: left;
     transform: scaleX(1) rotate(0.001deg);
-    transition-delay: 0.3s;
+    transition-delay: var(--duration-m);
   }
 }

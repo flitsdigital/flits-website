@@ -52,7 +52,7 @@ const { title, lead, faqs } = Astro.props;
     gap: var(--grid-gap);
     width: var(--grid-width);
     margin-inline: auto;
-    padding-block: 6.0625rem 4.75rem; /* 97px top, 76px under the CTA */
+    padding-block: var(--section-space-m) var(--section-space-s);
   }
   .faq__list,
   .faq__items {
@@ -76,7 +76,6 @@ const { title, lead, faqs } = Astro.props;
   @media (max-width: 767px) {
     .faq {
       grid-template-columns: minmax(0, 1fr);
-      padding-block: var(--space-64);
     }
   }
 </style>

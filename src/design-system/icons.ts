@@ -2,7 +2,6 @@
 export const iconNames = [
   'arrow-up-right',
   'bolt',
-  'bolt-white',
   'brush',
   'checklist-search',
   'chevron-bottom',

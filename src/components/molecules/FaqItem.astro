@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { question } = Astro.props;
-const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
+// From the question, so every build writes the same HTML (one question appears once per page)
+const id = `faq-${question.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
 ---
 
 <!-- Figma 1:2462: white 72px row, question 24px, yellow 58px chevron tile on the right.
@@ -54,7 +55,7 @@ const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
   }
   /* Only the chevron turns; the yellow tile stays put */
   .faq-item__icon > :global(.icon) {
-    transition: rotate 0.3s var(--ease-out);
+    transition: rotate var(--duration-m) var(--ease-out);
   }
   [data-accordion-status='active'] .faq-item__icon > :global(.icon) {
     rotate: 180deg;
@@ -64,7 +65,7 @@ const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
     grid-template-rows: 0fr;
     position: relative;
     overflow: hidden;
-    transition: grid-template-rows 0.3s var(--ease-out);
+    transition: grid-template-rows var(--duration-m) var(--ease-out);
   }
   [data-accordion-status='active'] .faq-item__bottom {
     grid-template-rows: 1fr;
@@ -76,7 +77,7 @@ const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
     position: relative;
     overflow: hidden;
     visibility: hidden; /* closed answers stay out of tab order and screen readers, after the close finishes */
-    transition: visibility 0s 0.3s;
+    transition: visibility 0s var(--duration-m);
   }
   [data-accordion-status='active'] .faq-item__bottom-wrap {
     visibility: visible;

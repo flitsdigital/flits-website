@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { PROJECT_TYPES, SECTORS } from './lib/taxonomy';
@@ -12,18 +12,10 @@ import { trackId } from './lib/spotify-ids';
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: ({ image }) => {
-    const statsBlock = z.object({
-      title: z.string(),
-      lead: z.string(),
-      items: z.array(z.object({ label: z.string(), value: z.string() })).min(1).max(3),
-    });
-    /** Case board blocks: a white text block, the stats panel, or the dark results band (photo or Bunny video). */
+    /** A white text block on the case board. */
     const text = z.object({ title: z.string(), body: z.array(z.string()) });
     /** Bunny Stream: HLS playlist + thumbnail; plays muted while in view. */
-    const video = z.object({ src: z.string().url(), poster: z.string().url() });
-    const results = z
-      .object({ title: z.string(), body: z.array(z.string()), image: image().optional(), video: video.optional() })
-      .refine((r) => r.image || r.video, 'results needs an image or a video');
+    const video = z.object({ src: z.url(), poster: z.url() });
     const half = z.union([image(), text]);
     return z.object({
       client: z.string(),
@@ -31,6 +23,7 @@ const projects = defineCollection({
       /** Sort order and the year pill (the year is taken from this date). */
       date: z.coerce.date(),
       tags: z.array(z.string()).default([]),
+      /** A hand-picked label ("Uitgelicht"); "Nieuw!" comes from the date (lib/projects.ts). */
       badge: z.string().optional(),
       /** Filters on /projecten: what we made and for which sector. */
       types: z.array(z.enum(PROJECT_TYPES)).default([]),
@@ -49,22 +42,38 @@ const projects = defineCollection({
           /** Share (Open Graph) image; defaults to the hero. */
           share: image().optional(),
           /** Live site: the yellow "Website bekijken" strip links here. */
-          website: z.string().url().optional(),
+          website: z.url().optional(),
           intro: z.object({ title: z.string(), services: z.array(z.string()).default([]) }),
-          /** Posters for the video fan; leave empty to skip the fan. */
-          videos: z.array(image()).default([]),
-          /** Landscape mockups shown full width under the intro; leave empty to skip. */
-          wide: z.array(image()).default([]),
-          /** Supporting design visuals after the gallery: one wide, two side by side; a { title, lead } entry is a text block in between. */
-          visuals: z.array(z.union([image(), z.object({ title: z.string(), lead: z.string() })])).default([]),
           /**
-           * Case board (Figma "Cases" file): the blocks after the intro, in order, in place of gallery, results,
-           * stats and visuals. An image or { video } runs full width; a [left, right] pair sits side by side.
+           * Case board (Figma "Cases" file): the body of every case, in order. An image or { video } runs full width,
+           * a [left, right] pair sits side by side, { gallery } is the photo block with the ticker, { videos } the video fan.
            */
-          board: z.array(z.union([image(), text, z.object({ video }), z.object({ stats: statsBlock }), z.object({ results }), z.tuple([half, half])])).default([]),
-          gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }).optional(),
-          results: z.object({ title: z.string(), body: z.array(z.string()), image: image() }).optional(),
-          stats: statsBlock.optional(),
+          board: z
+            .array(
+              z.union([
+                image(),
+                text,
+                z.object({ video }),
+                z.object({ gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }) }),
+                /** Video fan posters, the first one in the centre. */
+                z.object({ videos: z.array(image()).min(1) }),
+                z.tuple([half, half]),
+              ]),
+            )
+            .default([]),
+          /** The dark results band after the board: a photo or a Bunny video on the right. */
+          results: z
+            .object({ title: z.string(), body: z.array(z.string()), image: image().optional(), video: video.optional() })
+            .refine((r) => r.image || r.video, 'results needs an image or a video')
+            .optional(),
+          /** The numbers panel after the results. */
+          stats: z
+            .object({
+              title: z.string(),
+              lead: z.string(),
+              items: z.array(z.object({ label: z.string(), value: z.string() })).min(1).max(3),
+            })
+            .optional(),
           /** Leave out until the client has given a quote; the section is then skipped. */
           testimonial: z
             .object({
@@ -94,19 +103,6 @@ const reviews = defineCollection({
       author: z.string(),
       /** Only real photos; without one the card shows just the name. */
       avatar: image().optional(),
-    }),
-});
-
-/** Client logo tiles for the brand strip. */
-const clients = defineCollection({
-  loader: file('./src/content/clients.json'),
-  schema: ({ image }) =>
-    z.object({
-      name: z.string(),
-      logo: image(),
-      background: z.string().optional(),
-      logoWidth: z.number(),
-      logoHeight: z.number(),
     }),
 });
 
@@ -236,7 +232,8 @@ const faqs = defineCollection({
   schema: z.object({
     question: z.string(),
     answer: z.string(),
-    services: z.array(z.string()).optional(),
+    /** Checked against src/content/services: a renamed service fails the build instead of losing its FAQs. */
+    services: z.array(reference('services')).optional(),
   }),
 });
 
@@ -256,7 +253,7 @@ const tracks = defineCollection({
     url: z.string().refine((u) => trackId(u) !== null, 'Not a Spotify track link (album and playlist links do not work)'),
     artist: z.string(),
     title: z.string().optional(),
-    cover: z.string().url().optional(),
+    cover: z.url().optional(),
   }),
 });
 
@@ -287,4 +284,4 @@ const studioPosts = defineCollection({
     }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };
+export const collections = { projects, reviews, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };

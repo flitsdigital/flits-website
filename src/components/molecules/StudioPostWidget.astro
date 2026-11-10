@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import jordi from '../../assets/images/avatars/jordi.png';
 import joery from '../../assets/images/avatars/joery.png';
 import { relativeDay } from '../../lib/relative-day';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 type Post = { author: 'jordi' | 'joery'; date: Date; text: string; image?: ImageMetadata };
 
@@ -21,16 +22,16 @@ const now = new Date();
 
 <!-- Look: prototype 74 (feature/widget-ideas). Posts are added from chat (see src/content.config.ts). Behaviour: src/scripts/studio-posts.ts -->
 {posts.length > 0 && (
-<div class:list={['post', className]} data-studio-posts>
+<WidgetCard size="wide" class:list={['post', className]} data-studio-posts>
   {posts.map((p, i) => (
-    <article class:list={['post__slide', { 'is-active': i === 0, 'post__slide--photo': p.image }]} data-post aria-hidden={i === 0 ? undefined : 'true'}>
+    <article class:list={['post__slide', { 'is-active': i === 0, 'post__slide--photo': p.image }]} data-post inert={i !== 0}>
       {p.image && <Image class="post__photo" src={p.image} alt="" width={320} />}
       <div class="post__body">
         <p class="post__who">
           <Image class="post__avatar" src={people[p.author].photo} alt="" width={56} height={56} />
           <span>
-            <span class="post__name">{people[p.author].name}</span>
-            <time class="post__meta" datetime={p.date.toISOString()} data-post-date>{relativeDay(p.date, now)}</time>
+            <span class="widget__title">{people[p.author].name}</span>
+            <time class="widget__meta" datetime={p.date.toISOString()} data-post-date>{relativeDay(p.date, now)}</time>
           </span>
         </p>
         <p class="post__text">{p.text}</p>
@@ -39,31 +40,22 @@ const now = new Date();
   ))}
   {posts.length > 1 && (
     <div class="post__nav">
-      <span class="post__meta" data-post-pos>1/{posts.length}</span>
+      <span class="widget__meta" data-post-pos>1/{posts.length}</span>
       <button type="button" data-post-step="-1" aria-label="Nieuwer bericht" disabled>‹</button>
       <button type="button" data-post-step="1" aria-label="Ouder bericht">›</button>
     </div>
   )}
-</div>
+</WidgetCard>
 )}
 
 <style>
-  .post {
-    position: relative;
-    width: 21rem; /* 336px */
-    aspect-ratio: 2;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background: var(--color-light-0);
-    color: var(--color-dark-900);
-  }
   .post__slide {
     position: absolute;
     inset: 0;
     display: flex;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s;
+    transition: opacity var(--duration-m) var(--ease-out), visibility var(--duration-m);
   }
   .post__slide.is-active {
     opacity: 1;
@@ -96,13 +88,6 @@ const now = new Date();
   .post__who > span {
     display: grid;
     gap: 2px;
-  }
-  .post__name {
-    font: var(--text-widget-title);
-  }
-  .post__meta {
-    font: var(--text-widget-meta);
-    color: var(--color-dark-900-60);
   }
   .post__text {
     font: var(--text-widget-title);

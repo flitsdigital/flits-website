@@ -16,7 +16,10 @@ interface Props {
 
 const { title, description, theme = 'light', noindex = false, image } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = image ? new URL(image, Astro.site) : undefined;
+// Without a page image, links shared on WhatsApp still show the Flits logo
+const ogImage = new URL(image ?? '/og-default.jpg', Astro.site);
+// The nav intro plays on the home page only: on other landing pages the menu is there at once
+const landing = Astro.url.pathname === '/';
 import CursorMarquee from '../components/molecules/CursorMarquee.astro';
 import ProgressiveBlur from '../components/atoms/ProgressiveBlur.astro';
 import GridOverlay from '../components/atoms/GridOverlay.astro';
@@ -24,7 +27,7 @@ import ContactModal from '../components/sections/ContactModal.astro';
 ---
 
 <!doctype html>
-<html lang="nl" data-landing>
+<html lang="nl" data-landing={landing ? '' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,14 +37,15 @@ import ContactModal from '../components/sections/ContactModal.astro';
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
     <meta property="og:site_name" content="Flits" />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={canonical} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" href="/fonts/pp-right-grotesk-wide-black.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/gt-standard-l-semibold.woff2" as="font" type="font/woff2" crossorigin />
     <!-- Page width without the scrollbar for the column tokens (100vw counts the scrollbar on Windows) -->
@@ -55,7 +59,7 @@ import ContactModal from '../components/sections/ContactModal.astro';
     <slot />
     <CursorMarquee />
     <ProgressiveBlur />
-    <GridOverlay />
+    {import.meta.env.DEV && <GridOverlay />}
     <ContactModal />
     <script>
       import '../scripts/app';

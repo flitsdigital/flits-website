@@ -16,7 +16,6 @@ interface Props {
   align?: 'center' | 'start';
   /** Own 84px padding above and below (standalone section headers). Off inside a section that spaces itself. */
   spaced?: boolean;
-  as?: 'h1' | 'h2';
   class?: string;
 }
 
@@ -29,7 +28,6 @@ const {
   gap = 16,
   align = 'center',
   spaced = true,
-  as = 'h2',
   class: className,
 } = Astro.props;
 ---
@@ -43,7 +41,7 @@ const {
     {ticker && <Ticker items={ticker} class="section-header__ticker" />}
     <slot name="eyebrow" />
     <div class="section-header__copy">
-      <Heading as={as} size="64">{title}</Heading>
+      <Heading as="h2" size="64">{title}</Heading>
       {lead && <Text size="l" tone="secondary" class:list={{ 'section-header__lead--soft': softLead }}>{lead}</Text>}
     </div>
   </div>
@@ -58,7 +56,7 @@ const {
     margin-inline: auto;
   }
   .section-header--spaced {
-    padding-block: var(--space-84);
+    padding-block: var(--section-space-s);
   }
   .section-header--center {
     justify-items: center;
@@ -89,9 +87,6 @@ const {
     gap: var(--space-16);
   }
   @media (max-width: 767px) {
-    .section-header--spaced {
-      padding-block: var(--space-64);
-    }
     .section-header__actions {
       gap: var(--space-8);
     }
