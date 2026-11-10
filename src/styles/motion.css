@@ -104,7 +104,8 @@ html.is-arriving::after {
 }
 @keyframes flits-fade {
   from {
-    opacity: 0;
+    /* 0.01, not 0: Chrome skips elements first painted at opacity 0 for LCP, so the fan photo (the LCP) gave PageSpeed NO_LCP */
+    opacity: 0.01;
   }
 }
 html[data-landing] .hero {
