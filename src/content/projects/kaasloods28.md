@@ -14,19 +14,29 @@ caseStudy:
   intro:
     title: Een nieuwe winkel die je moet proeven
     services: [Website (Astro), Webdesign, Fotografie]
-  wide:
+  board:
     - ../../assets/images/case/kaasloods28/d02-site-op-sfeerfoto.jpg
-  gallery:
-    title: Fotoshoot in de winkel
-    images:
-      - ../../assets/images/case/kaasloods28/foto-DSC01457.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC01708.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC00483.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC00955.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC00514.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC01636.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC01652.jpg
-      - ../../assets/images/case/kaasloods28/foto-DSC01593.jpg
+    - gallery:
+        title: Fotoshoot in de winkel
+        images:
+          - ../../assets/images/case/kaasloods28/foto-DSC01457.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC01708.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC00483.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC00955.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC00514.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC01636.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC01652.jpg
+          - ../../assets/images/case/kaasloods28/foto-DSC01593.jpg
+    - title: Donker, geel en meteen herkenbaar als kaaswinkel
+      body:
+        - 'Eigen ontwerp, zonder AI. We ontwierpen de site zelf. Het kaasmotief komt overal terug: kaasstukken met gaten, gele vlakken en een grote 28.'
+    - ../../assets/images/case/kaasloods28/d03-sectie-favorietjes.jpg
+    - [../../assets/images/case/kaasloods28/v02-waaier-fotokaarten.jpg, ../../assets/images/case/kaasloods28/v01-closeup-favoriet.jpg]
+    - ../../assets/images/case/kaasloods28/v06-volledige-pagina.jpg
+    - title: Gebouwd in Astro
+      body:
+        - 'Een lichte, snelle site. De kaas van de maand is een vast blok dat elke maand een nieuwe kaas krijgt.'
+    - [../../assets/images/case/kaasloods28/m02-twee-schermen.jpg, ../../assets/images/case/kaasloods28/m03-mobiele-uitsnede.jpg]
   results:
     title: Live, met de eerste reacties binnen
     body:
@@ -38,17 +48,6 @@ caseStudy:
     lead: Rik kwam via via bij ons, toen hij een kaaswinkel ging beginnen. We kwamen langs en fotografeerden de kaas, de schappen en Rik zelf. Zo zie je online wat je in de winkel krijgt.
     items:
       - { label: Eigen foto's op de homepage, value: '14' }
-  visuals:
-    - title: Donker, geel en meteen herkenbaar als kaaswinkel
-      lead: 'Eigen ontwerp, zonder AI. We ontwierpen de site zelf. Het kaasmotief komt overal terug: kaasstukken met gaten, gele vlakken en een grote 28.'
-    - ../../assets/images/case/kaasloods28/d03-sectie-favorietjes.jpg
-    - ../../assets/images/case/kaasloods28/v02-waaier-fotokaarten.jpg
-    - ../../assets/images/case/kaasloods28/v01-closeup-favoriet.jpg
-    - ../../assets/images/case/kaasloods28/v06-volledige-pagina.jpg
-    - title: Gebouwd in Astro
-      lead: 'Een lichte, snelle site. De kaas van de maand is een vast blok dat elke maand een nieuwe kaas krijgt.'
-    - ../../assets/images/case/kaasloods28/m02-twee-schermen.jpg
-    - ../../assets/images/case/kaasloods28/m03-mobiele-uitsnede.jpg
 ---
 
 Kaasloods28 is de kaaswinkel van Rik Helmich, midden in Coevorden aan de Friesestraat 28. Rik verkoopt kaas van boeren die hij kent, en daarnaast noten, speciaalbier, wijn, droge worst en cadeaupakketten. In de winkel kun je alles proeven en krijg je persoonlijk advies.

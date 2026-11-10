@@ -14,19 +14,20 @@ caseStudy:
   intro:
     title: Binnen 2 weken 5000,- omzet uit 500,- adspend
     services: [Scripts schrijven, Videografie, Video Editing, Meta Ads]
-  videos: # the first one plays in the centre
-    - ../../assets/social/video-center.jpg
-    - ../../assets/social/video-side.jpg
-    - ../../assets/social/video-center.jpg
-    - ../../assets/social/video-side.jpg
-    - ../../assets/social/video-side.jpg
-  gallery:
-    title: Een kijkje achter de schermen
-    images:
-      - ../../assets/images/gallery/koffiekoets-1.jpg
-      - ../../assets/images/gallery/koffiekoets-3.jpg
-      - ../../assets/images/gallery/koffiekoets-2.jpg
-      - ../../assets/images/gallery/koffiekoets-4.jpg
+  board:
+    - videos: # the first one plays in the centre
+        - ../../assets/social/video-center.jpg
+        - ../../assets/social/video-side.jpg
+        - ../../assets/social/video-center.jpg
+        - ../../assets/social/video-side.jpg
+        - ../../assets/social/video-side.jpg
+    - gallery:
+        title: Een kijkje achter de schermen
+        images:
+          - ../../assets/images/gallery/koffiekoets-1.jpg
+          - ../../assets/images/gallery/koffiekoets-3.jpg
+          - ../../assets/images/gallery/koffiekoets-2.jpg
+          - ../../assets/images/gallery/koffiekoets-4.jpg
   results:
     title: Binnen 2 weken 5000,- omzet uit 500,- adspend
     body:
