@@ -16,14 +16,12 @@ const { src, poster, cover = false } = Astro.props;
 <div
   class="bunny-player"
   data-bunny-player-init=""
-  data-player-muted="true"
   data-player-activated="false"
   data-player-autoplay="true"
   data-player-hover="idle"
   data-player-src={src}
   data-player-status="idle"
   data-player-update-size={cover ? 'cover' : 'false'}
-  data-player-lazy="true"
 >
   <div data-player-before="" class="bunny-player__before"></div>
   <video preload="auto" width="1920" height="1080" playsinline="" class="bunny-player__video"></video>

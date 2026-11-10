@@ -11,7 +11,7 @@ const { logos, class: className } = Astro.props;
 
 <!-- Osmo "Logo Wall Cycle" (script: scripts/logo-wall.ts): one row of 4 places, every 2.4s one place
      swaps its logo for one from the rest. Data attributes and markup as Osmo. -->
-<div data-logo-wall-shuffle="false" data-logo-wall-cycle-init="" class:list={['logo-wall', className]}>
+<div data-logo-wall-cycle-init="" class:list={['logo-wall', className]}>
   <div class="logo-wall__collection">
     <div data-logo-wall-list="" class="logo-wall__list">
       {

@@ -28,6 +28,7 @@ import { initBunnyPlayersAdvanced } from './bunny-player-advanced';
 import { initFooterLogo } from './footer-logo';
 import { initCheckSectionThemeScroll } from './section-theme';
 import { createScope, type PageScope } from './page-scope';
+import { reviewPages } from '../data/site';
 
 /**
  * One script for every page. Swup swaps only #swup (the page content) and #nav-back; navbar and
@@ -77,7 +78,7 @@ const swup = new Swup({
   ignoreVisit: (url, { el } = {}) =>
     !document.getElementById('swup') ||
     !!el?.closest('[data-no-swup]') ||
-    ['/styleguide', '/components', '/sections', '/widgets'].some((p) => new URL(url, location.origin).pathname.startsWith(p)),
+    reviewPages.some((p) => new URL(url, location.origin).pathname.startsWith(p)),
   plugins: [new SwupHeadPlugin({ awaitAssets: true }), new SwupA11yPlugin(), new SwupPreloadPlugin()],
 });
 

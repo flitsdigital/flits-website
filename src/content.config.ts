@@ -23,6 +23,7 @@ const projects = defineCollection({
       /** Sort order and the year pill (the year is taken from this date). */
       date: z.coerce.date(),
       tags: z.array(z.string()).default([]),
+      /** A hand-picked label ("Uitgelicht"); "Nieuw!" comes from the date (lib/projects.ts). */
       badge: z.string().optional(),
       /** Filters on /projecten: what we made and for which sector. */
       types: z.array(z.enum(PROJECT_TYPES)).default([]),

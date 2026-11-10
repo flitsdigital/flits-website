@@ -10,6 +10,7 @@
     "test": "node --test 'src/**/*.test.ts'"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "^11.0.16",
     "@swup/a11y-plugin": "^5.2.1",
     "@swup/head-plugin": "^2.3.1",

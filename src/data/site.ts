@@ -39,3 +39,6 @@ export const serviceTicker = [
   'Recruitmentvideo’s',
   'Online marketing',
 ];
+
+/** Review pages (noindex): plain page loads instead of Swup, and left out of the sitemap. */
+export const reviewPages = ['/styleguide', '/components', '/sections', '/widgets'];

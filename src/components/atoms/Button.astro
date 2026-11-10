@@ -67,12 +67,15 @@ const iconSize = variant === 'step' ? 20 : 18;
     text-shadow: 0 2lh 0 currentColor;
     transition: translate var(--duration-m) var(--ease-in-out-strong);
   }
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* The colour swap is feedback, not motion: it stays with reduced motion; only the label roll goes */
+  @media (hover: hover) and (pointer: fine) {
     .btn:is(:hover, :focus-visible),
     :global([data-hover]):is(:hover, :focus-visible) .btn {
       color: var(--btn-hover-color);
       background-color: var(--btn-hover-bg);
     }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .btn:is(:hover, :focus-visible) .btn__label,
     :global([data-hover]):is(:hover, :focus-visible) .btn .btn__label {
       translate: 0 -2lh;
@@ -109,7 +112,7 @@ const iconSize = variant === 'step' ? 20 : 18;
       opacity var(--duration-m) var(--ease-in-out-strong);
   }
   /* On the hover fill the label goes full strength (the icon follows the colour swap) */
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (pointer: fine) {
     .btn--outline:is(:hover, :focus-visible) .btn__label {
       opacity: 1;
     }
