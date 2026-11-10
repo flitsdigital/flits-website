@@ -18,3 +18,8 @@ test('looks inside nested frontmatter, not at array brackets', () => {
   assert.equal(findPlaceholder({ tags: ['Website', 'Foto'], stats: { items: [{ value: '14' }] } }), null);
   assert.equal(findPlaceholder({ results: { body: ['Live.', 'Bijgewerkt [datum].'] } }), '[datum]');
 });
+
+test('an example.com link is a placeholder', () => {
+  assert.equal(findPlaceholder({ website: 'https://example.com' }), 'example.com');
+  assert.equal(findPlaceholder({ website: 'https://kaasloods28.nl' }), null);
+});

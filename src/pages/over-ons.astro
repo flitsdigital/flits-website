@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
-import { getFounders, avatarsOf } from '../lib/content';
+import { getFounders, avatarsOf, inFileOrder } from '../lib/content';
 import HeroPhoto from '../components/sections/HeroPhoto.astro';
 import ImageFan from '../components/sections/ImageFan.astro';
 import TextBlock from '../components/sections/TextBlock.astro';
@@ -21,8 +21,8 @@ const team = await getFounders();
 const [jordi, joery] = team;
 const founders = avatarsOf(team);
 const logos = await getCollection('logowall');
-const reviews = await getCollection('reviews');
-const moments = (await getCollection('behindTheScenes')).map((m) => m.data);
+const reviews = await inFileOrder('reviews');
+const moments = (await inFileOrder('behindTheScenes')).map((m) => m.data);
 const lorem = 'Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.';
 ---
 

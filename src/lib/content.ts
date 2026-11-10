@@ -1,10 +1,22 @@
 import { getCollection, getEntry, render, type CollectionEntry } from 'astro:content';
 import { findPlaceholder } from './placeholders';
+import { byFileOrder } from './slots';
+import reviewsFile from '../content/reviews.json';
+import behindTheScenesFile from '../content/behind-the-scenes.json';
+import storiesFile from '../content/stories.json';
+import tracksFile from '../content/tracks.json';
 
 // Sorted views on the collections, so ordering rules live in one place.
 
 export const getProjects = async () =>
   (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+/** JSON collections whose file order is the display order (carousels, sliders). */
+const fileOrder = { reviews: reviewsFile, behindTheScenes: behindTheScenesFile, stories: storiesFile, tracks: tracksFile };
+
+/** A JSON collection in the order of its file: getCollection sorts by id, which would reorder every slider. */
+export const inFileOrder = async <C extends keyof typeof fileOrder>(name: C) =>
+  byFileOrder(await getCollection(name), fileOrder[name].map((e) => e.id));
 
 export const getServices = async () =>
   (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);

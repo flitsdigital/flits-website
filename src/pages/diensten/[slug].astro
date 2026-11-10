@@ -15,7 +15,7 @@ import ProcessSteps from '../../components/sections/ProcessSteps.astro';
 import ProjectsGrid from '../../components/sections/ProjectsGrid.astro';
 import FaqSection from '../../components/sections/FaqSection.astro';
 import ContactSection from '../../components/sections/ContactSection.astro';
-import { getServices, getProjects, getFounders, avatarsOf } from '../../lib/content';
+import { getServices, getProjects, getFounders, avatarsOf, inFileOrder } from '../../lib/content';
 
 // Service pages (Figma 1:2397, 1:2884): one YAML file per service in src/content/services.
 // The file's `page.blocks` list is rendered top to bottom, one section per block.
@@ -27,7 +27,7 @@ const { service } = Astro.props;
 const { page } = service.data;
 const founders = avatarsOf(await getFounders());
 const logos = await getCollection('logowall');
-const moments = (await getCollection('behindTheScenes')).map((m) => m.data);
+const moments = (await inFileOrder('behindTheScenes')).map((m) => m.data);
 const projects = await getProjects();
 const faqs = (await getCollection('faqs'))
   .filter((f) => !f.data.services?.length || f.data.services.includes(service.id))

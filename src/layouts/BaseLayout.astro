@@ -55,7 +55,7 @@ import ContactModal from '../components/sections/ContactModal.astro';
     <slot />
     <CursorMarquee />
     <ProgressiveBlur />
-    <GridOverlay />
+    {import.meta.env.DEV && <GridOverlay />}
     <ContactModal />
     <script>
       import '../scripts/app';

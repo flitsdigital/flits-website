@@ -4,7 +4,9 @@ import { env, measure } from '../../lib/pagespeed';
 // Runs on Vercel, not at build. The CDN keeps the answer a day, so PSI is asked about once a day.
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ url }) => {
+  // The CDN caches per full URL: without this, ?x=1, ?x=2, … would each start a 25 s PSI run.
+  if (url.search) return Response.redirect(new URL(url.pathname, url), 301);
   const site = env('SITE_URL');
   const key = env('PSI_API_KEY');
   // A real Lighthouse run takes 10–30 s; the function may run 30 s (maxDuration in astro.config.mjs).

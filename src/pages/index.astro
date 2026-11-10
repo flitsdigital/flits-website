@@ -10,14 +10,14 @@ import ServicesTeaser from '../components/sections/ServicesTeaser.astro';
 import TeamSection from '../components/sections/TeamSection.astro';
 import Showreel from '../components/sections/Showreel.astro';
 import { serviceTicker } from '../data/site';
-import { getProjects, getTeaserServices, getFounders, avatarsOf } from '../lib/content';
+import { getProjects, getTeaserServices, getFounders, avatarsOf, inFileOrder } from '../lib/content';
 import fanLeft from '../assets/images/fan/truck-left.jpg';
 import fanCenter from '../assets/images/fan/kaasloods.jpg';
 import fanRight from '../assets/images/fan/truck-right.jpg';
 
 // Home (Figma 1:1176). Sections own their spacing, so a page is just the list in design order.
 const projects = await getProjects();
-const reviews = await getCollection('reviews');
+const reviews = await inFileOrder('reviews');
 // The over-ons logo wall lists some logos twice (grid layout); here each client once
 const logos = [...new Map((await getCollection('logowall')).map((l) => [l.data.logo.src, l.data])).values()];
 const services = await getTeaserServices();

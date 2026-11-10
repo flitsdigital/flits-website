@@ -8,6 +8,7 @@ types: [Video, Advertenties]
 sector: Horeca
 cover: ../../assets/images/projects/koffiekoets.jpg
 caseStudy:
+  draft: true # placeholder text and link: publish once the real case is written
   heroTitle: Hoe wij video advertenties maakten voor de Koffiekoets
   hero: ../../assets/images/case/koffiekoets-hero.jpg
   website: https://example.com # placeholder: vervang door de echte site van de klant
