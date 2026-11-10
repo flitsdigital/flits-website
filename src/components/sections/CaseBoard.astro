@@ -5,7 +5,8 @@ import Heading from '../atoms/Heading.astro';
 import Prose from '../atoms/Prose.astro';
 import StatsPanel from './StatsPanel.astro';
 import CaseResults from './CaseResults.astro';
-import BunnyPlayer from '../molecules/BunnyPlayer.astro';
+import BunnyLightbox from '../molecules/BunnyLightbox.astro';
+import BunnyLightboxButton from '../molecules/BunnyLightboxButton.astro';
 
 type Text = { title: string; body: string[] };
 type Half = ImageMetadata | Text;
@@ -31,6 +32,7 @@ for (const block of blocks) {
   else if (Array.isArray(groups.at(-1))) (groups.at(-1) as Tile[]).push(block);
   else groups.push([block]);
 }
+const hasVideo = blocks.some((block) => !Array.isArray(block) && 'video' in block);
 ---
 
 <!-- Figma "Flits Website V2 – Cases" 4:1223: mockups and white text blocks on the panels' edges, pairs side by side;
@@ -56,7 +58,7 @@ for (const block of blocks) {
               <Image src={tile} alt="" class="case-board__full" widths={[800, 1440, 2880]} sizes="100vw" />
             ) : 'video' in tile ? (
               <div class="case-board__full">
-                <BunnyPlayer {...tile.video} />
+                <BunnyLightboxButton {...tile.video} />
               </div>
             ) : (
               <div class="case-board__text case-board__full">
@@ -73,6 +75,7 @@ for (const block of blocks) {
       ),
     )
   }
+  {hasVideo && <BunnyLightbox />}
 </div>
 
 <style>

@@ -1,0 +1,75 @@
+---
+interface Props {
+  /** Bunny Stream HLS playlist (.m3u8). */
+  src: string;
+  /** Bunny thumbnail: shown here, and in the lightbox until the video plays. */
+  poster: string;
+}
+
+const { src, poster } = Astro.props;
+---
+
+<!-- Opens the page's BunnyLightbox with this video (Osmo: [data-bunny-lightbox-control="open"]); the play button looks like BunnyPlayer's -->
+<button type="button" class="bunny-lightbox-button" data-bunny-lightbox-control="open" data-bunny-lightbox-src={src} aria-label="Video afspelen">
+  <img data-bunny-lightbox-placeholder="" src={poster} alt="" width="1920" height="1080" loading="lazy" class="bunny-lightbox-button__poster" />
+  <span class="bunny-lightbox-button__btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none"
+      ><path
+        d="M6 12V5.01109C6 4.05131 7.03685 3.4496 7.87017 3.92579L14 7.42855L20.1007 10.9147C20.9405 11.3945 20.9405 12.6054 20.1007 13.0853L14 16.5714L7.87017 20.0742C7.03685 20.5503 6 19.9486 6 18.9889V12Z"
+        fill="currentColor"></path></svg
+    >
+  </span>
+</button>
+
+<style>
+  .bunny-lightbox-button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-dark-900);
+    color: #fff;
+    cursor: pointer;
+  }
+  .bunny-lightbox-button:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+  .bunny-lightbox-button__poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* BunnyPlayer's dark overlay (0.1) and its round blurred play button */
+  .bunny-lightbox-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: 0.1;
+    transition: opacity 0.3s linear;
+  }
+  .bunny-lightbox-button:hover::after {
+    opacity: 0.3;
+  }
+  .bunny-lightbox-button__btn {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 6em;
+    height: 6em;
+    padding: 2em;
+    border: 1px solid #ffffff1a;
+    border-radius: 50%;
+    background-color: #64646433;
+    -webkit-backdrop-filter: blur(1em);
+    backdrop-filter: blur(1em);
+  }
+</style>
