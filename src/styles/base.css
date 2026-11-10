@@ -14,6 +14,8 @@ html {
   text-size-adjust: 100%;
   /* no grey flash on tap; components give their own :active feedback */
   -webkit-tap-highlight-color: transparent;
+  /* room for the scrollbar is always kept, so short and long pages (Swup) do not shift sideways */
+  scrollbar-gutter: stable;
 }
 
 body {
