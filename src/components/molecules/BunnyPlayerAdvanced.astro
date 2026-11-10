@@ -1,0 +1,492 @@
+---
+interface Props {
+  /** Bunny Stream HLS playlist (.m3u8). */
+  src: string;
+  /** Bunny thumbnail, shown until the video plays. */
+  poster: string;
+}
+
+const { src, poster } = Astro.props;
+---
+
+<!-- Osmo "Custom Bunny HLS Player (Advanced)" (scripts/bunny-player-advanced.ts): plays with sound on click, with
+     timeline, mute and fullscreen. Lazy "meta": only duration and aspect ratio load before play.
+     Changes: the controls are <button>s with a label (keyboard), and data-bunny-player-advanced keeps the basic script off it. -->
+<div
+  data-player-muted="false"
+  class="bunny-player"
+  data-player-fullscreen="false"
+  data-player-activated="false"
+  data-player-autoplay="false"
+  data-bunny-player-init=""
+  data-bunny-player-advanced=""
+  data-player-hover="idle"
+  data-player-src={src}
+  data-player-status="idle"
+  data-player-update-size="true"
+  data-player-lazy="meta"
+>
+  <div data-player-before="" class="bunny-player__before"></div>
+  <video preload="auto" width="1920" height="1080" playsinline="" class="bunny-player__video"></video>
+  <img src={poster} alt="" width="1920" height="1080" loading="lazy" class="bunny-player__placeholder" />
+  <div class="bunny-player__dark"></div>
+  <button type="button" data-player-control="playpause" class="bunny-player__playpause" aria-label="Video afspelen of pauzeren">
+    <div class="bunny-player__big-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__pause-svg"
+        ><path d="M16 5V19" stroke="currentColor" stroke-width="3" stroke-miterlimit="10"></path><path
+          d="M8 5V19"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-miterlimit="10"></path></svg
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__play-svg"
+        ><path
+          d="M6 12V5.01109C6 4.05131 7.03685 3.4496 7.87017 3.92579L14 7.42855L20.1007 10.9147C20.9405 11.3945 20.9405 12.6054 20.1007 13.0853L14 16.5714L7.87017 20.0742C7.03685 20.5503 6 19.9486 6 18.9889V12Z"
+          fill="currentColor"></path></svg
+      >
+    </div>
+  </button>
+  <div class="bunny-player__interface">
+    <div class="bunny-player__interface-fade"></div>
+    <div class="bunny-player__interface-bottom">
+      <button type="button" data-player-control="playpause" class="bunny-player__toggle-playpause" aria-label="Afspelen of pauzeren">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__pause-svg"
+          ><path d="M16 5V19" stroke="currentColor" stroke-width="3" stroke-miterlimit="10"></path><path
+            d="M8 5V19"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-miterlimit="10"></path></svg
+        >
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__play-svg"
+          ><path
+            d="M6 12V5.01109C6 4.05131 7.03685 3.4496 7.87017 3.92579L14 7.42855L20.1007 10.9147C20.9405 11.3945 20.9405 12.6054 20.1007 13.0853L14 16.5714L7.87017 20.0742C7.03685 20.5503 6 19.9486 6 18.9889V12Z"
+            fill="currentColor"></path></svg
+        >
+      </button>
+      <div class="bunny-player__time">
+        <p data-player-time-progress="" class="bunny-player__text">00:00</p>
+        <p class="bunny-player__text is--transparent">/</p>
+        <p data-player-time-duration="" class="bunny-player__text is--transparent">00:00</p>
+      </div>
+      <div data-player-timeline="" class="bunny-player__timeline">
+        <div class="bunny-player__timeline-bar">
+          <div class="bunny-player__timeline-bg"></div>
+          <div data-player-buffered="" class="bunny-player__timeline-buffered"></div>
+          <div data-player-progress="" class="bunny-player__timeline-progress"></div>
+        </div>
+        <div data-player-timeline-handle="" class="bunny-player__timeline-handle"></div>
+      </div>
+      <div class="bunny-player__interface-btns">
+        <button type="button" data-player-control="mute" class="bunny-player__toggle-mute" aria-label="Geluid aan of uit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__volume-up-svg"
+            ><path
+              d="M3 8.99998V15H7L12 20V3.99998L7 8.99998H3ZM16.5 12C16.5 10.23 15.48 8.70998 14 7.96998V16.02C15.48 15.29 16.5 13.77 16.5 12ZM14 3.22998V5.28998C16.89 6.14998 19 8.82998 19 12C19 15.17 16.89 17.85 14 18.71V20.77C18.01 19.86 21 16.28 21 12C21 7.71998 18.01 4.13998 14 3.22998Z"
+              fill="currentColor"></path></svg
+          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__volume-mute-svg"
+            ><path
+              d="M16.5 12C16.5 10.23 15.48 8.71 14 7.97V10.18L16.45 12.63C16.48 12.43 16.5 12.22 16.5 12ZM19 12C19 12.94 18.8 13.82 18.46 14.64L19.97 16.15C20.63 14.91 21 13.5 21 12C21 7.72 18.01 4.14 14 3.23V5.29C16.89 6.15 19 8.83 19 12ZM4.27 3L3 4.27L7.73 9H3V15H7L12 20V13.27L16.25 17.52C15.58 18.04 14.83 18.45 14 18.7V20.76C15.38 20.45 16.63 19.81 17.69 18.95L19.73 21L21 19.73L12 10.73L4.27 3ZM12 4L9.91 6.09L12 8.18V4Z"
+              fill="currentColor"></path></svg
+          >
+        </button>
+        <button type="button" data-player-control="fullscreen" class="bunny-player__toggle-fullscreen" aria-label="Volledig scherm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__fullscreen-scale-svg"
+            ><rect x="3" y="14" width="2" height="7" fill="currentColor"></rect><rect x="3" y="3" width="2" height="7" fill="currentColor"
+            ></rect><rect x="19" y="3" width="2" height="7" fill="currentColor"></rect><rect x="19" y="14" width="2" height="7" fill="currentColor"
+            ></rect><rect x="3" y="19" width="7" height="2" fill="currentColor"></rect><rect x="14" y="19" width="7" height="2" fill="currentColor"
+            ></rect><rect x="3" y="3" width="7" height="2" fill="currentColor"></rect><rect x="14" y="3" width="7" height="2" fill="currentColor"
+            ></rect></svg
+          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" class="bunny-player__fullscreen-shrink-svg"
+            ><rect x="7" y="2" width="2" height="7" fill="currentColor"></rect><rect x="15" y="2" width="2" height="7" fill="currentColor"
+            ></rect><rect x="15" y="15" width="2" height="7" fill="currentColor"></rect><rect x="8" y="15" width="2" height="7" fill="currentColor"
+            ></rect><rect x="2" y="7" width="7" height="2" fill="currentColor"></rect><rect x="3" y="15" width="7" height="2" fill="currentColor"
+            ></rect><rect x="15" y="7" width="7" height="2" fill="currentColor"></rect><rect x="15" y="15" width="7" height="2" fill="currentColor"
+            ></rect></svg
+          >
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="bunny-player__loading">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" class="bunny-player__loading-svg" fill="none"
+      ><path fill="currentColor" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+        ><!-- On the path, not the <svg>: there "50 50" is the viewBox centre (as in BunnyPlayer) -->
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          dur="1s"
+          from="0 50 50"
+          to="360 50 50"
+          repeatCount="indefinite"></animateTransform></path
+      ></svg
+    >
+  </div>
+</div>
+
+<style>
+  /* Osmo CSS from here; changes: our radius, 16:9 until the stream's ratio is known, brand-yellow timeline,
+     a reset for the <button>s and a focus ring */
+  :where(.bunny-player button) {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .bunny-player button:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  .bunny-player {
+    pointer-events: none;
+    color: #fff;
+    isolation: isolate;
+    border-radius: var(--radius-md);
+    justify-content: center;
+    align-items: center;
+    /* never taller than the screen minus 2rem: the width follows from the stream's ratio (set by the script) */
+    width: min(100%, (100svh - 2rem) * var(--player-ratio, 16 / 9));
+    margin-inline: auto;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    transform: translateX(0);
+  }
+
+  .bunny-player__before {
+    padding-top: 56.25%;
+  }
+
+  /* Animation */
+  [data-bunny-player-init] :is(.bunny-player__placeholder, .bunny-player__dark, .bunny-player__playpause, .bunny-player__loading) {
+    transition:
+      opacity 0.3s linear,
+      visibility 0.3s linear;
+  }
+
+  /* Placeholder */
+  .bunny-player__placeholder {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__placeholder,
+  [data-bunny-player-init][data-player-status='paused'] .bunny-player__placeholder,
+  [data-bunny-player-init][data-player-activated='true'][data-player-status='ready'] .bunny-player__placeholder {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Dark Overlay */
+  .bunny-player__dark {
+    opacity: 0.1;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='paused'] .bunny-player__dark,
+  [data-bunny-player-init][data-player-status='playing'][data-player-hover='active'] .bunny-player__dark {
+    opacity: 0.3;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__dark {
+    opacity: 0;
+  }
+
+  .bunny-player__video {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 0;
+    padding-right: 0;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* Play/Pause */
+  .bunny-player__playpause {
+    pointer-events: auto;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__playpause,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__playpause {
+    opacity: 0;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'][data-player-hover='active'] .bunny-player__playpause,
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__playpause:focus-visible {
+    opacity: 1;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__play-svg,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__play-svg {
+    display: none;
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__pause-svg,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__pause-svg {
+    display: block;
+  }
+
+  /* Loading */
+  .bunny-player__loading {
+    opacity: 0;
+    visibility: hidden;
+    background-color: #00000054;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__loading {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Interface */
+  .bunny-player__interface {
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: baseline;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    transition: all 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+
+  [data-bunny-player-init][data-player-status='playing'] .bunny-player__interface,
+  [data-bunny-player-init][data-player-status='loading'] .bunny-player__interface {
+    opacity: 0;
+    transform: translateY(1em) rotate(0.001deg);
+  }
+
+  [data-bunny-player-init][data-player-status='playing'][data-player-hover='active'] .bunny-player__interface,
+  [data-bunny-player-init][data-player-status='loading'][data-player-hover='active'] .bunny-player__interface,
+  [data-bunny-player-init] .bunny-player__interface:focus-within {
+    opacity: 1;
+    transform: translateY(0em) rotate(0.001deg);
+  }
+
+  .bunny-player__interface-bottom {
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    pointer-events: auto;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: min(2em, 4vw);
+    display: flex;
+    position: relative;
+  }
+
+  .bunny-player__toggle-mute,
+  .bunny-player__toggle-fullscreen {
+    cursor: pointer;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .bunny-player__timeline {
+    cursor: pointer;
+    flex: 1;
+    align-items: center;
+    height: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    display: flex;
+    position: relative;
+  }
+
+  [data-bunny-player-init][data-player-status='idle'][data-player-activated='false'] .bunny-player__timeline,
+  [data-bunny-player-init][data-player-status='ready'][data-player-activated='false'] .bunny-player__timeline {
+    pointer-events: none;
+  }
+
+  .bunny-player__timeline-progress {
+    pointer-events: none;
+    background-color: var(--color-brand-500);
+    border-radius: 1em;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: translateX(-100%);
+  }
+
+  .bunny-player__timeline-buffered {
+    opacity: 0.2;
+    pointer-events: none;
+    background-color: #fff;
+    border-radius: 1em;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: translateX(-100%);
+  }
+
+  .bunny-player__timeline-handle {
+    transition: transform 0.15s ease-in-out;
+    pointer-events: none;
+    background-color: var(--color-brand-500);
+    border-radius: 1em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  [data-bunny-player-init][data-timeline-drag='true'] .bunny-player__timeline-handle {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .bunny-player__timeline-bar {
+    border-radius: 1em;
+    width: 100%;
+    height: 30%;
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .bunny-player__time {
+    grid-column-gap: 0.125em;
+    grid-row-gap: 0.125em;
+    flex: none;
+    justify-content: center;
+    align-items: center;
+    width: 5.75em;
+    display: flex;
+  }
+
+  .bunny-player__timeline-bg {
+    background-color: #ffffff26;
+    border-radius: 1em;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  .bunny-player__toggle-playpause {
+    cursor: pointer;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .bunny-player__text {
+    white-space: nowrap;
+    margin-bottom: 0;
+    font-size: 0.9375em;
+    line-height: 1;
+  }
+
+  .bunny-player__text.is--transparent {
+    opacity: 0.5;
+  }
+
+  .bunny-player__big-btn {
+    -webkit-backdrop-filter: blur(1em);
+    backdrop-filter: blur(1em);
+    cursor: pointer;
+    background-color: #64646433;
+    border: 1px solid #ffffff1a;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 6em;
+    height: 6em;
+    padding: 2em;
+    display: flex;
+    position: relative;
+  }
+
+  .bunny-player__loading-svg {
+    width: 6em;
+  }
+
+  .bunny-player__pause-svg {
+    display: none;
+  }
+
+  .bunny-player__interface-fade {
+    opacity: 0.5;
+    background-image: linear-gradient(#0000, #000);
+    width: 100%;
+    height: 25%;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .bunny-player__interface-btns {
+    grid-column-gap: 0.5em;
+    grid-row-gap: 0.5em;
+    align-items: center;
+    display: flex;
+  }
+
+  [data-bunny-player-init][data-player-muted='true'] .bunny-player__volume-mute-svg {
+    display: block;
+  }
+
+  [data-bunny-player-init][data-player-muted='true'] .bunny-player__volume-up-svg {
+    display: none;
+  }
+
+  .bunny-player__volume-mute-svg {
+    display: none;
+  }
+
+  .bunny-player__volume-up-svg {
+    display: block;
+  }
+
+  .bunny-player__fullscreen-shrink-svg {
+    display: none;
+  }
+
+  .bunny-player__fullscreen-scale-svg {
+    display: block;
+  }
+
+  [data-bunny-player-init][data-player-fullscreen='true'] .bunny-player__fullscreen-shrink-svg {
+    display: block;
+  }
+
+  [data-bunny-player-init][data-player-fullscreen='true'] .bunny-player__fullscreen-scale-svg {
+    display: none;
+  }
+
+  /* Cover Mode */
+  [data-bunny-player-init][data-player-update-size='cover'] {
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+  }
+
+  [data-bunny-player-init][data-player-update-size='cover'] [data-player-before] {
+    display: none;
+  }
+
+  [data-bunny-player-init][data-player-update-size='cover'][data-player-fullscreen='false'] .bunny-player__video {
+    object-fit: cover;
+  }
+</style>
