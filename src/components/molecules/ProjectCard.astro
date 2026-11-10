@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import Pill from '../atoms/Pill.astro';
 import ArrowTile from '../atoms/ArrowTile.astro';
 import { projectHref, hasCase } from '../../lib/content';
+import { isNew, yearOf } from '../../lib/projects';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -15,8 +16,9 @@ interface Props {
 }
 
 const { project, showYear = true, titleAs: Title = 'h3', class: className } = Astro.props;
-const { client, title, date, tags, badge, cover } = project.data;
-const pills = showYear ? [String(date.getFullYear()), ...tags] : tags;
+const { client, title, date, tags, cover } = project.data;
+const badge = project.data.badge ?? (isNew(date) ? 'Nieuw!' : undefined);
+const pills = showYear ? [yearOf(date), ...tags] : tags;
 // Only projects with a case page link through (and show the ↗ tile); the rest are a card only.
 const linked = hasCase(project);
 const Root = linked ? 'a' : 'div';

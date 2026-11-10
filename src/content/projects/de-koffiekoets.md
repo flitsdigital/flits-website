@@ -3,7 +3,6 @@ client: De Koffiekoets
 title: Van 0 naar 100 door een gave huisstijl en website
 date: 2026-03-01
 tags: [Short form video ads]
-badge: Nieuw!
 types: [Video, Advertenties]
 sector: Horeca
 cover: ../../assets/images/projects/koffiekoets.jpg

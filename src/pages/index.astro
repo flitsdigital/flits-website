@@ -10,6 +10,7 @@ import ServicesTeaser from '../components/sections/ServicesTeaser.astro';
 import TeamSection from '../components/sections/TeamSection.astro';
 import Showreel from '../components/sections/Showreel.astro';
 import { serviceTicker } from '../data/site';
+import { featured } from '../lib/projects';
 import { getProjects, getTeaserServices, getFounders, avatarsOf, inFileOrder } from '../lib/content';
 import fanLeft from '../assets/images/fan/truck-left.jpg';
 import fanCenter from '../assets/images/fan/kaasloods.jpg';
@@ -47,7 +48,7 @@ const founders = avatarsOf(team);
     lead="Flits bestaat al sinds 2024, dat betekent dat we al flink 2 jaar onderweg zijn. In die 2 jaar hebben we al veel bedrijven mogen helpen met hun website, social media of online marketing vraagstuk!"
     logos={logos}
   />
-  <ProjectsGrid title="Een verzameling aan projecten" ticker={serviceTicker} projects={projects.slice(0, 4)} />
+  <ProjectsGrid title="Een verzameling aan projecten" ticker={serviceTicker} projects={featured(projects)} />
   <ReviewsCarousel title="Waarom klanten met ons samenwerken" reviews={reviews} />
   <ServicesTeaser title="Waar kunnen we je mee helpen?" ticker={serviceTicker} services={services} />
   <TeamSection

@@ -3,7 +3,6 @@ client: Chocodoki
 title: Een webshop waarin klanten zelf hun bonbondoos samenstellen
 date: 2026-02-01
 tags: [Webshop, Shopify]
-badge: Nieuw!
 types: [Webshops]
 sector: Retail
 cover: ../../assets/images/projects/chocodoki.jpg

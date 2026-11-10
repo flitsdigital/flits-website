@@ -3,7 +3,6 @@ client: Frank van der Laan
 title: Een website en short form content voor een truckwerkplaats in Emmen
 date: 2026-10-28
 tags: [Website, Fotografie, Video]
-badge: Nieuw!
 types: [Websites, Foto, Video]
 sector: Automotive
 cover: ../../assets/images/projects/frank-van-der-laan.jpg

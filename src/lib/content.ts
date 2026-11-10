@@ -1,6 +1,7 @@
 import { getCollection, getEntry, render, type CollectionEntry } from 'astro:content';
 import { findPlaceholder } from './placeholders';
 import { byFileOrder } from './slots';
+import { featured, yearOf } from './projects';
 import reviewsFile from '../content/reviews.json';
 import behindTheScenesFile from '../content/behind-the-scenes.json';
 import storiesFile from '../content/stories.json';
@@ -61,6 +62,6 @@ export async function getCase(id: string) {
     throw new Error(`Unknown review "${reviewId}" in src/content/projects/${id}.md (see src/content/reviews.json)`);
   }
   const { Content } = await render(project);
-  const related = (await getProjects()).filter((p) => p.id !== id).slice(0, 4);
-  return { project, caseStudy, review, Content, related, year: String(project.data.date.getFullYear()) };
+  const related = featured(await getProjects(), { exclude: id });
+  return { project, caseStudy, review, Content, related, year: yearOf(project.data.date) };
 }

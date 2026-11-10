@@ -3,7 +3,6 @@ client: RPM Edelmetaal
 title: Een goudtour door heel Nederland, voor €0,20 per klik
 date: 2026-10-01
 tags: [Website, Advertenties]
-badge: Nieuw!
 types: [Websites, Advertenties]
 sector: Retail
 cover: ../../assets/images/projects/rpm-edelmetaal.jpg
