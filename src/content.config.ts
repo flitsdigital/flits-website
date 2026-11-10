@@ -15,7 +15,7 @@ const projects = defineCollection({
     /** A white text block on the case board. */
     const text = z.object({ title: z.string(), body: z.array(z.string()) });
     /** Bunny Stream: HLS playlist + thumbnail; plays muted while in view. */
-    const video = z.object({ src: z.string().url(), poster: z.string().url() });
+    const video = z.object({ src: z.url(), poster: z.url() });
     const half = z.union([image(), text]);
     return z.object({
       client: z.string(),
@@ -41,7 +41,7 @@ const projects = defineCollection({
           /** Share (Open Graph) image; defaults to the hero. */
           share: image().optional(),
           /** Live site: the yellow "Website bekijken" strip links here. */
-          website: z.string().url().optional(),
+          website: z.url().optional(),
           intro: z.object({ title: z.string(), services: z.array(z.string()).default([]) }),
           /**
            * Case board (Figma "Cases" file): the body of every case, in order. An image or { video } runs full width,
@@ -262,7 +262,7 @@ const tracks = defineCollection({
     url: z.string().refine((u) => trackId(u) !== null, 'Not a Spotify track link (album and playlist links do not work)'),
     artist: z.string(),
     title: z.string().optional(),
-    cover: z.string().url().optional(),
+    cover: z.url().optional(),
   }),
 });
 
