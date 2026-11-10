@@ -29,8 +29,8 @@ const founders = avatarsOf(await getFounders());
 const logos = await getCollection('logowall');
 const moments = (await inFileOrder('behindTheScenes')).map((m) => m.data);
 const projects = await getProjects();
-const faqs = (await getCollection('faqs'))
-  .filter((f) => !f.data.services?.length || f.data.services.includes(service.id))
+const faqs = (await inFileOrder('faqs'))
+  .filter((f) => !f.data.services?.length || f.data.services.some((s) => s.id === service.id))
   .map((f) => f.data);
 /** Projects of the block's type first, then the newest others: always 4 cards. */
 const matches = (p: (typeof projects)[number], type?: string) => (p.data.types as string[]).includes(type ?? '');

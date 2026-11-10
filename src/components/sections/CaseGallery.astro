@@ -10,9 +10,10 @@ interface Props {
   ticker: string[];
   /** Fills two columns left/right in turn; heights follow the Figma rhythm tall·short / short·tall. */
   images: ImageMetadata[];
+  alt: string;
 }
 
-const { title, ticker, images } = Astro.props;
+const { title, ticker, images, alt } = Astro.props;
 // Figma 1:3217–1:3220: 616px wide photos, heights 786 / 476 / 496 / 803, repeating.
 const ratios = ['616/786', '616/476', '616/496', '616/803'];
 const columns = [0, 1].map((col) => images.map((src, i) => ({ src, ratio: ratios[i % 4] })).filter((_, i) => i % 2 === col));
@@ -30,7 +31,7 @@ const columns = [0, 1].map((col) => images.map((src, i) => ({ src, ratio: ratios
         {
           columns.map((col) => (
             <div class="case-gallery__col">
-              {col.map((img) => <Image src={img.src} alt="" widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" style={`aspect-ratio:${img.ratio}`} />)}
+              {col.map((img) => <Image src={img.src} alt={alt} widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" style={`aspect-ratio:${img.ratio}`} />)}
             </div>
           ))
         }

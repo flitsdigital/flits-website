@@ -18,6 +18,14 @@ test('a long sentence is cut at a word with an ellipsis', () => {
   assert.ok(long.startsWith(q.slice(0, -1)));
 });
 
+test('an ellipsis does not end the sentence', () => {
+  assert.equal(shortQuote(['Ok... dit is top. Echt waar.']), 'Ok... dit is top.');
+});
+
+test('one long word is cut at the limit, not one letter short of it', () => {
+  assert.equal(shortQuote(['x'.repeat(100)], 10), `${'x'.repeat(10)}…`);
+});
+
 test('first name from the author line', () => {
   assert.equal(firstName('Rik, Kaasloods28'), 'Rik');
   assert.equal(firstName('Henk Jansen'), 'Henk');

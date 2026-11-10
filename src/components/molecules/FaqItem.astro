@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { question } = Astro.props;
-const id = `faq-${Math.random().toString(36).slice(2, 8)}`;
+// From the question, so every build writes the same HTML (one question appears once per page)
+const id = `faq-${question.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
 ---
 
 <!-- Figma 1:2462: white 72px row, question 24px, yellow 58px chevron tile on the right.

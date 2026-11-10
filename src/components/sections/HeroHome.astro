@@ -15,14 +15,12 @@ interface Props {
   highlight: string;
   /** Words the yellow bar rolls through (Osmo "Rotating Text"), starting with `highlight`. */
   rotatingWords?: string[];
-  /** Seconds each word stays. */
-  stepDuration?: number;
   intro: string[];
-  /** px the "media" slot (fan, phone…) reaches up into the hero. */
-  mediaOverlap?: number;
 }
 
-const { eyebrow, avatars, title, highlight, rotatingWords, stepDuration = 2.25, intro, mediaOverlap = 106 } = Astro.props;
+const stepDuration = 2.25;
+const mediaOverlap = 106; // px the media overlaps the hero (Figma)
+const { eyebrow, avatars, title, highlight, rotatingWords, intro } = Astro.props;
 ---
 
 <section class="hero" data-theme="dark" data-theme-section="dark" style={`--hero-overlap:${mediaOverlap}px`}>

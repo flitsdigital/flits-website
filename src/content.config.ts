@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { PROJECT_TYPES, SECTORS } from './lib/taxonomy';
@@ -100,19 +100,6 @@ const reviews = defineCollection({
       quote: z.array(z.string()),
       author: z.string(),
       avatar: image(),
-    }),
-});
-
-/** Client logo tiles for the brand strip. */
-const clients = defineCollection({
-  loader: file('./src/content/clients.json'),
-  schema: ({ image }) =>
-    z.object({
-      name: z.string(),
-      logo: image(),
-      background: z.string().optional(),
-      logoWidth: z.number(),
-      logoHeight: z.number(),
     }),
 });
 
@@ -242,7 +229,8 @@ const faqs = defineCollection({
   schema: z.object({
     question: z.string(),
     answer: z.string(),
-    services: z.array(z.string()).optional(),
+    /** Checked against src/content/services: a renamed service fails the build instead of losing its FAQs. */
+    services: z.array(reference('services')).optional(),
   }),
 });
 
@@ -293,4 +281,4 @@ const studioPosts = defineCollection({
     }),
 });
 
-export const collections = { projects, reviews, clients, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };
+export const collections = { projects, reviews, logowall, behindTheScenes, team, services, faqs, legal, tracks, officePhotos, stories, studioPosts };

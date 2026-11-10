@@ -4,13 +4,13 @@ import { contact } from '../../data/site';
 import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
-  city?: string;
   /** stack: 168×201 card · wide: 384×201, labels left and right of the face (contact, 1:2804) */
   layout?: 'stack' | 'wide';
   class?: string;
 }
 
-const { city = contact.city, layout = 'stack', class: className } = Astro.props;
+const city = contact.city;
+const { layout = 'stack', class: className } = Astro.props;
 ---
 
 <!-- Clock mechanics + data-attributes: Osmo Supply "Analog Clock". Look: Figma widget 1:1194. -->

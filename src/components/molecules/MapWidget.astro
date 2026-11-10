@@ -7,11 +7,11 @@ import { contact } from '../../data/site';
 import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
-  address?: string;
   class?: string;
 }
 
-const { address = contact.shortAddress, class: className } = Astro.props;
+const address = contact.shortAddress;
+const { class: className } = Astro.props;
 const href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 ---
 

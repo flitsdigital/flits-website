@@ -19,6 +19,7 @@ export async function getStaticPaths() {
 
 const { project, caseStudy: cs, review, Content, related, year } = await getCase(Astro.params.slug);
 const founders = avatarsOf(await getFounders());
+const alt = `Werk voor ${project.data.client}`; // shortcut: one label for every case photo; add per-photo descriptions to the schema when there is copy for them
 const share = await getImage({ src: cs.share ?? cs.hero, width: 1200, format: 'jpg' });
 ---
 
@@ -31,9 +32,9 @@ const share = await getImage({ src: cs.share ?? cs.hero, width: 1200, format: 'j
 >
   <CaseHero image={cs.hero} client={project.data.client} year={year} title={cs.heroTitle} />
   <CaseIntro title={cs.intro.title} services={cs.intro.services} website={cs.website}><Content /></CaseIntro>
-  {cs.board.length > 0 && <CaseBoard blocks={cs.board} />}
-  {cs.results && <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} />}
+  {cs.board.length > 0 && <CaseBoard blocks={cs.board} alt={alt} />}
+  {cs.results && <CaseResults avatars={founders} eyebrow="De resultaten spreken voor zich" {...cs.results} alt={alt} />}
   {cs.stats && <StatsPanel avatars={founders} eyebrow="Wat hebben we bereikt?" title={cs.stats.title} lead={cs.stats.lead} stats={cs.stats.items} />}
-  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} />}
+  {cs.testimonial && review && <CaseTestimonial {...cs.testimonial} review={review} alt={alt} />}
   <ProjectsGrid title="Bekijk deze projecten ook eens!" ticker={serviceTicker} projects={related} />
 </PageLayout>

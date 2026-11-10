@@ -17,9 +17,11 @@ type Section = { gallery: { title: string; images: ImageMetadata[] } } | { video
 interface Props {
   /** In order: an image runs full width, a [left, right] pair sits side by side; gallery and videos are sections of their own. */
   blocks: (Tile | Section)[];
+  /** Alt text for the work shown, e.g. "Werk voor Kaasloods28". */
+  alt: string;
 }
 
-const { blocks } = Astro.props;
+const { blocks, alt } = Astro.props;
 const isImage = (item: object): item is ImageMetadata => 'src' in item && 'width' in item;
 // Tiles that follow each other share one grid; a gallery or video fan is its own section in between
 const groups: (Tile[] | Section)[] = [];
@@ -40,7 +42,7 @@ for (const block of blocks) {
             Array.isArray(tile) ? (
               tile.map((half) =>
                 isImage(half) ? (
-                  <Image src={half} alt="" widths={[720, 1440]} sizes="(min-width: 768px) 50vw, 100vw" />
+                  <Image src={half} alt={alt} widths={[720, 1440]} sizes="(min-width: 768px) 50vw, 100vw" />
                 ) : (
                   <div class="case-board__text case-board__text--half">
                     <Heading>{half.title}</Heading>
@@ -49,7 +51,7 @@ for (const block of blocks) {
                 ),
               )
             ) : isImage(tile) ? (
-              <Image src={tile} alt="" class="case-board__full" widths={[800, 1440, 2880]} sizes="100vw" />
+              <Image src={tile} alt={alt} class="case-board__full" widths={[800, 1440, 2880]} sizes="100vw" />
             ) : 'video' in tile ? (
               <div class="case-board__full">
                 <BunnyPlayerAdvanced {...tile.video} />
@@ -63,7 +65,7 @@ for (const block of blocks) {
           )}
         </section>
       ) : 'gallery' in group ? (
-        <CaseGallery title={group.gallery.title} ticker={serviceTicker} images={group.gallery.images} />
+        <CaseGallery title={group.gallery.title} ticker={serviceTicker} images={group.gallery.images} alt={alt} />
       ) : (
         <VideoFan posters={group.videos} />
       ),

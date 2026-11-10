@@ -1,17 +1,15 @@
 ---
 interface Props {
   steps: string[];
-  /** Index of the current step. */
-  current?: number;
   class?: string;
 }
 
-const { steps, current = 0, class: className } = Astro.props;
+const { steps, class: className } = Astro.props;
 ---
 
 <!-- Figma 15:1324: grey pill, the current step on a white chip, the others at 40% -->
 <ol class:list={['steps', className]} aria-label="Stappen" data-step-indicator>
-  {steps.map((s, i) => <li aria-current={i === current ? 'step' : undefined}>{s}</li>)}
+  {steps.map((s, i) => <li aria-current={i === 0 ? 'step' : undefined}>{s}</li>)}
 </ol>
 
 <style>

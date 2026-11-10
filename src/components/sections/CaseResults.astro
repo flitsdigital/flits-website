@@ -16,9 +16,11 @@ interface Props {
   image?: ImageMetadata;
   /** …or a Bunny video in its place (plays muted while in view). */
   video?: { src: string; poster: string };
+  /** Alt text for the photo. */
+  alt?: string;
 }
 
-const { avatars, eyebrow, title, body, image, video } = Astro.props;
+const { avatars, eyebrow, title, body, image, video, alt = '' } = Astro.props;
 ---
 
 <!-- Figma 1:3221: dark full-width band, text left (541px), 616×786 photo right -->
@@ -38,7 +40,7 @@ const { avatars, eyebrow, title, body, image, video } = Astro.props;
           <BunnyPlayer {...video} cover />
         </div>
       ) : (
-        image && <Image class="case-results__img" src={image} alt="" widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" />
+        image && <Image class="case-results__img" src={image} alt={alt} widths={[616, 1232]} sizes="(min-width: 1440px) 616px, 45vw" />
       )
     }
   </div>
