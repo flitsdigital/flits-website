@@ -9,13 +9,32 @@ interface Props {
 }
 
 const { images } = Astro.props;
+// The loop copies are in the HTML, not cloned by the slider script: a copy made by the JS was a new, tilted
+// (so bigger) photo and became a late LCP. shortcut: 3 sets fill screens up to ~2300px; wider ones still clone in JS.
+const sets = [0, 1, 2];
 ---
 
 <!-- Figma: three photos 352×253, tilted 10° per neighbour. Made into a slowly
      drifting radial slider (pauses on hover/focus, off-screen and with reduced motion). -->
 <div class="fan">
   <RadialSlider label="Foto's van ons werk" speed={40} scroll={6} angle={10} class="fan__slider">
-    {images.map((src) => <Image class="fan__photo" src={src} alt="" width={704} loading="eager" />)}
+    {
+      sets.map((set) =>
+        images.map((src, i) => (
+          <Image
+            class="fan__photo"
+            src={src}
+            alt=""
+            widths={[480, 704]}
+            sizes="(max-width: 767px) 15.3rem, 22rem"
+            loading="eager"
+            fetchpriority={set === 0 && i === 0 ? 'high' : undefined}
+            aria-hidden={set > 0 ? 'true' : undefined}
+            inert={set > 0}
+          />
+        )),
+      )
+    }
   </RadialSlider>
 </div>
 
@@ -34,6 +53,14 @@ const { images } = Astro.props;
     height: 15.8125rem; /* 253px */
     object-fit: cover;
     border-radius: var(--radius-sm);
+  }
+  /* Before the slider script runs, the side photos sit stacked under the centre one instead of hidden,
+     so they paint with the HTML: hidden until the JS, they became a late LCP (render delay 4.7s on PageSpeed) */
+  .fan :global(.radial-slider:not([data-radial-slider-ready]) .radial-slider__track > .fan__photo:not(:first-child)) {
+    visibility: visible;
+  }
+  .fan :global(.radial-slider:not([data-radial-slider-ready]) .radial-slider__track > .fan__photo:first-child) {
+    z-index: 1;
   }
 
   @media (max-width: 767px) {

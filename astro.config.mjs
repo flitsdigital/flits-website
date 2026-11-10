@@ -6,4 +6,6 @@ export default defineConfig({
   site: 'https://flitsdigital.nl',
   // Pages stay prerendered; only routes with `export const prerender = false` (src/pages/api) run on Vercel.
   adapter: vercel({ maxDuration: 30 }),
+  // All CSS in the HTML: five small stylesheets were render-blocking requests (~340ms on PageSpeed mobile)
+  build: { inlineStylesheets: 'always' },
 });
