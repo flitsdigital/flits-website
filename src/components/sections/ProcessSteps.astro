@@ -37,14 +37,14 @@ const { title, lead, steps } = Astro.props;
     margin-bottom: var(--space-48); /* panels below sit 48px lower (Figma 49px) */
   }
   .steps__inner {
-    padding-block: 6.5625rem 5.6875rem; /* 105px / 91px */
+    padding-block: var(--section-space-l) var(--section-space-m);
   }
   .steps__track {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: var(--span-4);
     gap: var(--grid-gap);
-    margin-top: 5.3125rem; /* 85px */
+    margin-top: var(--section-space-s);
     padding-inline: calc((100% - var(--grid-width)) / 2); /* cards start on the first column */
     overflow-x: auto;
     scroll-snap-type: x mandatory;

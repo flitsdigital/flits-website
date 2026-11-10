@@ -41,7 +41,7 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
     overflow: hidden;
     /* Figma frame starts 129px above the header but overlaps the panel above by 99px */
     padding-top: 1.875rem; /* 30px */
-    padding-bottom: 4.1875rem; /* 67px: next section's header begins here */
+    padding-bottom: var(--section-space-xs); /* next section's header begins here */
   }
   /* Last on the page (over ons): room above the footer instead of the next header */
   .reviews:last-child {
@@ -79,7 +79,7 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
   /* Phone (inferred): the hands sit underneath the card (RadialSlider belowOnPhone) */
   @media (max-width: 767px) {
     .reviews {
-      padding-bottom: 8rem;
+      padding-bottom: calc(6rem + var(--section-space-xs)); /* the hands hang ~94px below the stage */
     }
     .reviews :global(.reviews__stage) {
       height: 36rem;

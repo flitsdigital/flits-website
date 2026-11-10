@@ -1,6 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import { daysUntilChristmas, christmasStage, christmasLabel, christmasPhoto } from '../../lib/christmas';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
   /** Pins a fixed state (no live countdown), e.g. for the widgets page. */
@@ -24,7 +25,7 @@ const photos = pinned
   : Object.fromEntries(await Promise.all(Object.entries(byKey).map(async ([key, src]) => [key, (await getImage({ src, width: 480 })).src])));
 ---
 
-<div class:list={['xmas', className]} data-christmas={photos && JSON.stringify(photos)}>
+<WidgetCard size="wide" class:list={['xmas', className]} data-christmas={photos && JSON.stringify(photos)}>
   <div class="xmas__count">
     <p class="xmas__text">Nog</p>
     <p class="xmas__digits" data-christmas-days aria-label={`${days} ${christmasLabel(days).toLowerCase()}`}>
@@ -33,7 +34,7 @@ const photos = pinned
     <p class="xmas__text" data-christmas-label>{christmasLabel(days)}</p>
   </div>
   <Image class="xmas__photo" src={photo} alt="" width={480} />
-</div>
+</WidgetCard>
 
 <!-- Behaviour: src/scripts/christmas.ts (started per page by src/scripts/app.ts) -->
 
@@ -41,12 +42,6 @@ const photos = pinned
   .xmas {
     display: grid;
     grid-template-columns: 1fr 1.53fr; /* Figma frame 361: count 416, photo 638 */
-    width: 21rem; /* 336px: 2:1 at the 168px height of the other widgets */
-    aspect-ratio: 2;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background: var(--color-light-0);
-    color: var(--color-dark-900);
   }
   .xmas__count {
     display: grid;

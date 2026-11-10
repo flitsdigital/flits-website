@@ -1,5 +1,6 @@
 ---
 import { band, env, measureAtBuild, type PageSpeed } from '../../lib/pagespeed';
+import WidgetCard from '../atoms/WidgetCard.astro';
 
 interface Props {
   /** Pins a result (no live update), e.g. for the widgets page. */
@@ -16,15 +17,16 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
 ---
 
 <!-- Look: prototype 11 (feature/widget-ideas). Behaviour: src/scripts/pagespeed.ts -->
-<div
+<WidgetCard
+  size="square"
   class:list={['speed', className]}
   data-pagespeed={pinned ? undefined : ''}
   data-mobile={result.mobile ?? ''}
   data-desktop={result.desktop ?? ''}
 >
   <div>
-    <p class="speed__title">PageSpeed</p>
-    <p class="speed__meta">{host}</p>
+    <p class="widget__title">PageSpeed</p>
+    <p class="widget__meta speed__meta">{host}</p>
   </div>
   <div class="speed__gauge" data-band={score === null ? 'none' : band(score)} data-speed-gauge role="img" aria-label={score === null ? 'PageSpeed-score: meting volgt' : `PageSpeed-score ${score} van 100`}>
     <svg viewBox="0 0 36 36" aria-hidden="true">
@@ -33,41 +35,30 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     </svg>
     <span class="speed__num" aria-hidden="true" data-speed-num>{score ?? '—'}</span>
   </div>
-  <p class="speed__meta speed__when" data-speed-when>{score === null ? 'meting volgt' : `gemeten op ${date}`}</p>
+  <p class="widget__meta speed__when" data-speed-when>{score === null ? 'meting volgt' : `gemeten op ${date}`}</p>
   <div class="speed__seg" role="group" aria-label="Apparaat">
     <button type="button" aria-pressed="true" data-speed-device="mobile">📱 Mobiel</button>
     <button type="button" aria-pressed="false" data-speed-device="desktop">🖥️ Desktop</button>
   </div>
-</div>
+</WidgetCard>
 
 <style>
   .speed {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 10.5rem; /* 168px */
-    aspect-ratio: 1;
     padding: var(--space-12);
-    border-radius: var(--radius-md);
-    background: var(--color-light-0);
-    color: var(--color-dark-900);
-  }
-  .speed__title {
-    font: var(--text-widget-title);
   }
   .speed__meta {
     margin-top: var(--space-4);
-    font: var(--text-widget-meta);
-    color: var(--color-text-muted);
   }
   .speed__when {
-    margin-top: 0;
     text-align: center;
   }
   /* Colour follows Lighthouse's bands, so it passes red → orange → green while counting */
   .speed__gauge {
-    --g: #0cce6b;
-    --gt: #0a7a40;
+    --g: var(--color-lighthouse-pass);
+    --gt: var(--color-lighthouse-pass-text);
     position: relative;
     display: grid;
     place-items: center;
@@ -76,12 +67,12 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     aspect-ratio: 1;
   }
   .speed__gauge[data-band='mid'] {
-    --g: #ffa400;
-    --gt: #a85d00;
+    --g: var(--color-lighthouse-average);
+    --gt: var(--color-lighthouse-average-text);
   }
   .speed__gauge[data-band='bad'] {
-    --g: #ff4e42;
-    --gt: #c5221f;
+    --g: var(--color-lighthouse-fail);
+    --gt: var(--color-lighthouse-fail-text);
   }
   .speed__gauge[data-band='none'] {
     --g: var(--color-dark-900-60);
@@ -129,12 +120,12 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     line-height: 1.3;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background var(--duration-s) var(--ease-out), color var(--duration-s) var(--ease-out);
   }
   .speed__seg button[aria-pressed='true'] {
     background: var(--color-light-0);
     color: var(--color-dark-900);
-    box-shadow: 0 1px 3px rgb(20 2 24 / 0.12);
+    box-shadow: var(--shadow-chip);
   }
   .speed__seg button:focus-visible {
     outline: 2px solid var(--color-focus);

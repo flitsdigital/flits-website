@@ -1,12 +1,13 @@
 ---
 import type { ImageMetadata } from 'astro';
+import type { SvgComponent } from 'astro/types';
 
-const icons = import.meta.glob<ImageMetadata>('../../assets/icons/*.svg', {
+const icons = import.meta.glob<SvgComponent & ImageMetadata>('../../assets/icons/*.svg', {
   eager: true,
   import: 'default',
 });
 const byName = Object.fromEntries(
-  Object.entries(icons).map(([path, meta]) => [path.split('/').pop()!.replace('.svg', ''), meta]),
+  Object.entries(icons).map(([path, svg]) => [path.split('/').pop()!.replace('.svg', ''), svg]),
 );
 
 import type { IconName } from '../../design-system/icons';
@@ -23,8 +24,11 @@ interface Props {
 const { name, size = 24, label, class: className } = Astro.props;
 // Figma draws 👈 as the 👉 asset mirrored (rotate 180° + flip Y), so it shares one file.
 const flip = name === 'hand-left';
-const icon = byName[flip ? 'hand-right' : name];
-if (!icon) throw new Error(`Icon "${name}" not found in src/assets/icons`);
+const file = flip ? 'hand-right' : name;
+const Svg = byName[file];
+if (!Svg) throw new Error(`Icon "${name}" not found in src/assets/icons`);
+// The rest are one colour (currentColor), inlined so they follow `color`; these keep their own colours.
+const multicolour = file === 'google' || file === 'hand-right';
 ---
 
 <span
@@ -34,7 +38,7 @@ if (!icon) throw new Error(`Icon "${name}" not found in src/assets/icons`);
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
 >
-  <img src={icon.src} width={icon.width} height={icon.height} alt="" />
+  {multicolour ? <img src={Svg.src} width={Svg.width} height={Svg.height} alt="" /> : <Svg />}
 </span>
 
 <style>

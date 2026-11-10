@@ -24,7 +24,7 @@ const { title, lead, features, variant = 'pains' } = Astro.props;
 
 <style>
   .feature-grid {
-    padding-bottom: 7.1875rem; /* 115px (website: 111px) */
+    padding-bottom: var(--section-space-l);
   }
   .feature-grid__cards {
     display: grid;

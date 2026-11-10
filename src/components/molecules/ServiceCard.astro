@@ -27,8 +27,8 @@ const { href, image, label, class: className } = Astro.props;
     overflow: hidden;
     background: var(--color-light-0);
     transition:
-      opacity 0.2s ease,
-      scale 0.15s var(--ease-out);
+      opacity var(--duration-s) var(--ease-out),
+      scale var(--duration-xs) var(--ease-out);
   }
   .service-card:active {
     scale: 0.98;

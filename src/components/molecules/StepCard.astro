@@ -42,7 +42,7 @@ const { step, image, title, text } = Astro.props;
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgb(0 0 0 / 0.2), rgb(0 0 0 / 0));
+    background: linear-gradient(var(--color-overlay-dark-20), transparent);
   }
   .step-card__media :global(img) {
     width: 100%;

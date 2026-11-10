@@ -34,7 +34,7 @@ const { title, logos, cta } = Astro.props;
   .logo-grid {
     display: grid;
     gap: 6.5625rem; /* 105px */
-    padding-block: 10.625rem 8.4375rem; /* 170px / 135px */
+    padding-block: var(--section-space-2xl) var(--section-space-xl);
   }
   .logo-grid :global(.logo-grid__title) {
     width: var(--span-8);

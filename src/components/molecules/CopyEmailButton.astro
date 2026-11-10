@@ -99,14 +99,14 @@ const { email, class: className } = Astro.props;
     border-radius: var(--radius-xs);
     background-color: color-mix(in srgb, currentColor 12%, transparent);
     overflow: hidden;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color var(--duration-s) var(--ease-out), color var(--duration-s) var(--ease-out);
   }
   .copy-email-icon {
     flex-shrink: 0;
     width: 100%;
     height: 100%;
     margin-bottom: 0.4em; /* the wrap's padding top + bottom, so the next icon lands exactly in view */
-    transition: transform 0.45s var(--ease-osmo);
+    transition: transform var(--duration-l) var(--ease-osmo);
   }
 
   /* Hover styling */

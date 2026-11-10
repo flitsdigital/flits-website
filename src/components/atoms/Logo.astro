@@ -25,7 +25,7 @@ const Svg = variant === 'footer' ? LogoFooter : LogoNav;
       animation: logo-flash-idle 7s steps(1, end) 2s infinite;
     }
     :global(:is(.logo:hover, a:hover > .logo) path:first-child) {
-      animation: logo-flash 0.6s steps(1, end);
+      animation: logo-flash var(--duration-xl) steps(1, end);
     }
   }
   @keyframes logo-flash {

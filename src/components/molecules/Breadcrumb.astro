@@ -34,6 +34,9 @@ const { items, class: className } = Astro.props;
     line-height: 0.9;
     color: var(--color-light-100-80);
   }
+  .breadcrumb > :global(.icon) {
+    color: var(--color-light-100);
+  }
   ol {
     display: flex;
     flex-wrap: wrap; /* a long trail wraps on narrow phones instead of widening the hero */
@@ -45,7 +48,7 @@ const { items, class: className } = Astro.props;
     gap: var(--space-16);
   }
   a {
-    transition: color 0.15s ease;
+    transition: color var(--duration-xs) var(--ease-out);
   }
   @media (pointer: coarse) {
     a {
@@ -57,7 +60,7 @@ const { items, class: className } = Astro.props;
     color: var(--color-light-0);
   }
   @media (hover: hover) and (pointer: fine) {
-    a:hover {
+    a:is(:hover, :focus-visible) {
       color: var(--color-light-0);
     }
   }

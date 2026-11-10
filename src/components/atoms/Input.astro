@@ -4,6 +4,8 @@ import type { HTMLAttributes } from 'astro/types';
 type Props = HTMLAttributes<'input'> & {
   /** A textarea with the same look (contact modal, step 02). */
   multiline?: boolean;
+  /** Visible lines of the multiline field. */
+  rows?: number;
 };
 
 const { class: className, type = 'text', multiline = false, ...rest } = Astro.props;

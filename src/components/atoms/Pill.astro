@@ -18,7 +18,7 @@ const Tag = isFilter ? 'button' : 'span';
 <Tag
   class:list={['pill', `pill--${variant}`, { 'pill--m': size === 'm', 'is-active': active }, className]}
   type={isFilter ? 'button' : undefined}
-  aria-pressed={isFilter ? String(active) : undefined}
+  aria-pressed={isFilter ? (active ? 'true' : 'false') : undefined}
   {...rest}
 >
   <slot />
@@ -63,7 +63,7 @@ const Tag = isFilter ? 'button' : 'span';
     }
   }
   .pill--filter {
-    transition: scale 0.15s var(--ease-out);
+    transition: scale var(--duration-xs) var(--ease-out);
   }
   .pill--filter:active {
     scale: 0.96;

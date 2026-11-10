@@ -44,6 +44,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
 <style>
   .showreel {
     position: relative;
+    isolation: isolate; /* the trail and the title only layer among themselves */
     display: grid;
     place-items: center;
     width: calc(100% - 2 * 14px); /* runs full width with a 14px page margin; the content keeps to the 1412px frame */
@@ -68,7 +69,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
     display: flex;
   }
   .showreel :global(.rotating-image-trail__item) {
-    z-index: 10;
+    z-index: 1;
     pointer-events: none;
     -webkit-user-select: none;
     user-select: none;
@@ -93,7 +94,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
   }
   .showreel :global([data-trail-item='visible']) {
     transform: translate(-50%, -50%) scale(1) rotate(0.001deg);
-    transition: transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+    transition: transform var(--duration-l) var(--ease-osmo);
     position: absolute;
   }
   /* Calmer exit than Osmo's spin: a small shrink while it fades */
@@ -101,8 +102,8 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
     transform: translate(-50%, -50%) scale(0.85) rotate(0.001deg);
     opacity: 0;
     transition:
-      transform 0.6s var(--ease-osmo),
-      opacity 0.6s var(--ease-osmo);
+      transform var(--duration-xl) var(--ease-osmo),
+      opacity var(--duration-xl) var(--ease-osmo);
     position: absolute;
   }
   .showreel :global(.showreel__title) {
@@ -132,7 +133,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
       width: 34vw;
     }
     .showreel :global(.showreel__title) {
-      z-index: 11;
+      z-index: 2;
       width: var(--span-4);
     }
     .showreel__badge {

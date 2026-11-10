@@ -1,0 +1,53 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'a'> {
+  as?: 'div' | 'a' | 'figure';
+  /** square: 168×168 · wide: 336×168 · none: the widget sizes itself */
+  size?: 'square' | 'wide';
+  /** light: white card, ink text · surface: the section's surface colour · photo: text on a full-bleed image */
+  tone?: 'light' | 'surface' | 'photo';
+}
+
+// ...rest carries the widget's own data-* hooks, link attributes and scope, so its styles reach this element.
+const { as: Tag = 'div', size, tone = 'light', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['widget', size && `widget--${size}`, `widget--${tone}`, className]} {...rest}><slot /></Tag>
+
+<style>
+  /* Global and one class deep, so a widget's own (scoped, stronger) rules can still override any of it */
+  :global(.widget) {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  :global(.widget--square) {
+    width: 10.5rem; /* 168px */
+    aspect-ratio: 1;
+  }
+  :global(.widget--wide) {
+    width: 21rem; /* 336px: 2:1 at the 168px height */
+    aspect-ratio: 2;
+  }
+  :global(.widget--light) {
+    background: var(--color-light-0);
+    color: var(--color-dark-900);
+  }
+  :global(.widget--surface) {
+    background: var(--color-surface);
+  }
+  :global(.widget--photo) {
+    color: var(--color-light-0);
+  }
+  :global(.widget__title) {
+    font: var(--text-widget-title);
+  }
+  :global(.widget__meta) {
+    font: var(--text-widget-meta);
+  }
+  :global(.widget--light .widget__meta) {
+    color: var(--color-dark-900-60);
+  }
+</style>
