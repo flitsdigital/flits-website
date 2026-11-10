@@ -28,7 +28,7 @@ const trail = [trail1, trail2, trail3, trail4, trail5, trail6, trail7, trail8];
         trail.map((src) => (
           <div data-trail-item class="rotating-image-trail__item">
             <div class="rotating-image-trail__card">
-              <Image src={src} alt="" width={400} loading="eager" class="rotating-image-trail__card-img" />
+              <Image src={src} alt="" width={400} loading="lazy" class="rotating-image-trail__card-img" />
             </div>
           </div>
         ))

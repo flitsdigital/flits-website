@@ -9,5 +9,5 @@ export function shortQuote(paragraphs: string[], max = 90): string {
   return `${(space > 0 ? cut.slice(0, space) : cut).replace(/[\s,;:.]+$/, '')}…`;
 }
 
-/** "Rik, Kaasloods28" → "Rik", "Henk Jansen" → "Henk". */
-export const firstName = (author: string) => author.split(/[,\s]/)[0];
+/** "Rik, Kaasloods28" → "Rik"; an author line without a comma is a company name and stays whole. */
+export const firstName = (author: string) => author.split(',')[0].trim();

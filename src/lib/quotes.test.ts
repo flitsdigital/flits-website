@@ -28,5 +28,5 @@ test('one long word is cut at the limit, not one letter short of it', () => {
 
 test('first name from the author line', () => {
   assert.equal(firstName('Rik, Kaasloods28'), 'Rik');
-  assert.equal(firstName('Henk Jansen'), 'Henk');
+  assert.equal(firstName('Car Rally Noord'), 'Car Rally Noord');
 });

@@ -15,6 +15,8 @@ export default defineConfig({
   // Pages stay prerendered; only routes with `export const prerender = false` (src/pages/api) run on Vercel.
   // Web Analytics is cookieless (no banner needed); turn it on in the Vercel project too.
   adapter: vercel({ maxDuration: 30, webAnalytics: { enabled: true } }),
+  // All CSS in the HTML: five small stylesheets were render-blocking requests (~340ms on PageSpeed mobile)
+  build: { inlineStylesheets: 'always' },
   // /sitemap-index.xml for Google; review pages and the 404 (noindex) stay out
   integrations: [
     sitemap({
