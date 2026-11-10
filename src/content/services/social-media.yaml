@@ -12,12 +12,23 @@ page:
     - Wij creëren op maat gemaakte websites die precies passen bij jouw bedrijf. Geen kant-en-klare templates, maar een uniek ontwerp en functies die werken voor jou.
   heroMedia:
     type: videoFan
-    posters: # the first one plays in the centre
-      - ../../assets/social/video-center.jpg
-      - ../../assets/social/video-side.jpg
-      - ../../assets/social/video-center.jpg
-      - ../../assets/social/video-side.jpg
-      - ../../assets/social/video-side.jpg
+    videos: # Bunny Stream (library "Flits Video's"); the first one starts in the centre
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/748d6d09-5f36-4c73-a7f5-146610e9dc19/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/748d6d09-5f36-4c73-a7f5-146610e9dc19/thumbnail.jpg } # YOURCOACH1
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c26efc1b-7f1f-4e72-992e-d0038c1ac7c9/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c26efc1b-7f1f-4e72-992e-d0038c1ac7c9/thumbnail.jpg } # KOFFIEKOETS1V2SUB
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/2d7e77ab-ac28-491e-a60b-af1e3c78bce9/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/2d7e77ab-ac28-491e-a60b-af1e3c78bce9/thumbnail.jpg } # SHORT1_MAMBOWOOD
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c96de742-f9eb-4dd4-8428-0d1b17f462f8/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c96de742-f9eb-4dd4-8428-0d1b17f462f8/thumbnail.jpg } # JLHOOGWERKER
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/9ddf0417-c9a8-43db-a9d3-388330bcc2fb/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/9ddf0417-c9a8-43db-a9d3-388330bcc2fb/thumbnail.jpg } # VUURBOOM_CTA3_V1
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/a8551b63-1496-44c7-8467-8a578ced11d0/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/a8551b63-1496-44c7-8467-8a578ced11d0/thumbnail.jpg } # ME6 V2
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c7386eb0-ab74-4bbf-a2f4-970e5306011c/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c7386eb0-ab74-4bbf-a2f4-970e5306011c/thumbnail.jpg } # YippieFinal
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/e751201a-6e0e-46d6-9cd8-0bfa2a928836/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/e751201a-6e0e-46d6-9cd8-0bfa2a928836/thumbnail.jpg } # MENGESBLURRED
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/7d4b89bb-229e-414a-b55a-a2ee29a4852b/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/7d4b89bb-229e-414a-b55a-a2ee29a4852b/thumbnail.jpg } # S8
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/914f96d2-fc04-410a-8897-7229e44bb115/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/914f96d2-fc04-410a-8897-7229e44bb115/thumbnail.jpg } # KOFFIEKOETS2V2SUB
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/9bd71abe-b129-4313-b204-88b4965e803f/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/9bd71abe-b129-4313-b204-88b4965e803f/thumbnail.jpg } # MECARCLEANING1
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/4d06f8a3-7f3f-4377-ac37-c3eaaf2664f2/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/4d06f8a3-7f3f-4377-ac37-c3eaaf2664f2/thumbnail.jpg } # SHORT3_MAMBOWOOD
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/037b323c-5f46-4aae-b585-37486e1e0178/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/037b323c-5f46-4aae-b585-37486e1e0178/thumbnail.jpg } # YOURCOACHVID2
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/e617fda2-107f-4ab4-bf66-99fedff55b1b/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/e617fda2-107f-4ab4-bf66-99fedff55b1b/thumbnail.jpg } # KOFFIEKOETS4V2SUB
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/2f1e77f2-5b53-4821-a461-f0995691dbef/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/2f1e77f2-5b53-4821-a461-f0995691dbef/thumbnail.jpg } # SHORT4_MAMBOWOOD
+      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/01e8e5cc-7357-418d-9e07-52d798a1799c/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/01e8e5cc-7357-418d-9e07-52d798a1799c/thumbnail.jpg } # SHORT5_MAMBOWOOD
   blocks:
     - type: features
       title: Misschien herken je dit wel...

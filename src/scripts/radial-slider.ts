@@ -16,7 +16,8 @@ import type { PageScope } from './page-scope';
  *   -scroll     degrees the whole fan turns while it scrolls through the viewport   default 0
  * [data-radial-slider-track]      direct children are the items, the first one starts in the centre
  *                                 (it is also the only one shown before the script runs); the centre one gets
- *                                 [data-radial-slider-active] (style it in the section)
+ *                                 [data-radial-slider-active] (style it in the section); a <video> in an item
+ *                                 pauses when the item leaves the centre
  * [data-radial-slider-prev|next]  optional buttons: move one item, with easing; the wrapper gets
  *                                 --radial-slider-hand-x (centre of the gap beside the middle item)
  * --radial-slider-gap             optional CSS override of GAP in px, e.g. smaller on phones
@@ -100,7 +101,16 @@ export function initRadialSliders(scope: PageScope) {
         const { x, y, rotation } = arcPosition(s, radius, shape);
         // z-index in tenths of a step, not px: a per-frame change forces a repaint instead of a cheap transform
         gsap.set(el, { x, y, rotation, xPercent: -50, yPercent: -50, zIndex: 1000 - Math.round((Math.abs(s) / step) * 10) });
-        el.toggleAttribute('data-radial-slider-active', Math.abs(s) < step / 2);
+        const active = Math.abs(s) < step / 2;
+        if (active === el.hasAttribute('data-radial-slider-active')) return;
+        el.toggleAttribute('data-radial-slider-active', active);
+        // A video stops once its item leaves the centre (video fan)
+        if (!active) el.querySelectorAll('video').forEach((v) => v.pause());
+        // A clone is only usable (e.g. its play button) while it is the centre item
+        if (!originals.includes(el)) {
+          el.inert = !active;
+          el.toggleAttribute('aria-hidden', !active);
+        }
       });
     };
 

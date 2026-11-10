@@ -12,7 +12,7 @@ type Text = { title: string; body: string[] };
 type Half = ImageMetadata | Text;
 type Video = { src: string; poster: string };
 type Tile = ImageMetadata | Text | { video: Video } | [Half, Half];
-type Section = { gallery: { title: string; images: ImageMetadata[] } } | { videos: ImageMetadata[] };
+type Section = { gallery: { title: string; images: ImageMetadata[] } } | { videos: { src: string; poster: string }[] };
 
 interface Props {
   /** In order: an image runs full width, a [left, right] pair sits side by side; gallery and videos are sections of their own. */
@@ -67,7 +67,7 @@ for (const block of blocks) {
       ) : 'gallery' in group ? (
         <CaseGallery title={group.gallery.title} ticker={serviceTicker} images={group.gallery.images} alt={alt} />
       ) : (
-        <VideoFan posters={group.videos} />
+        <VideoFan videos={group.videos} />
       ),
     )
   }

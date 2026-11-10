@@ -38,7 +38,7 @@ const media = page.heroMedia;
 
 <PageLayout title={`${service.data.label} — Flits`} description={page.description}>
   <HeroPage size="m" breadcrumb={[{ label: 'Diensten' }, { label: page.breadcrumb }]} title={page.title} intro={page.intro} mediaOverlap={media?.overlap}>
-    {media?.type === 'videoFan' && <VideoFan slot="media" posters={media.posters} />}
+    {media?.type === 'videoFan' && <VideoFan slot="media" videos={media.videos} />}
     {media?.type === 'photoPhone' && <PhotoPhone slot="media" photo={media.photo} screen={media.screen} />}
   </HeroPage>
   {
