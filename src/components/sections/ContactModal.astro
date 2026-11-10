@@ -190,6 +190,46 @@ const services = ['Website', 'Webshop', 'Foto / video', 'Social media'];
       filter: blur(6px);
     }
   }
+  /* Volgende comes in from the right, Vorige from the left (data-dir from contact-modal.ts) */
+  .contact-modal__card[data-dir='next'] .contact-modal__step {
+    animation-name: contact-modal-step-next;
+  }
+  .contact-modal__card[data-dir='prev'] .contact-modal__step {
+    animation-name: contact-modal-step-prev;
+  }
+  @keyframes contact-modal-step-next {
+    from {
+      opacity: 0;
+      filter: blur(6px);
+      translate: 1rem 0;
+    }
+  }
+  @keyframes contact-modal-step-prev {
+    from {
+      opacity: 0;
+      filter: blur(6px);
+      translate: -1rem 0;
+    }
+  }
+  /* Sent: the bolt strikes in. Seen once per request, so it may be a little bigger than the rest. */
+  .contact-modal__step[data-step='done'] > .contact-modal__bolt {
+    animation: contact-modal-bolt 0.5s var(--ease-osmo) both;
+  }
+  @keyframes contact-modal-bolt {
+    from {
+      opacity: 0;
+      scale: 0.85;
+      rotate: -12deg;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-modal__card[data-dir] .contact-modal__step {
+      animation-name: contact-modal-step;
+    }
+    .contact-modal__step[data-step='done'] > .contact-modal__bolt {
+      animation-name: contact-modal-fade;
+    }
+  }
   /* Start and the closing step sit in the middle of the body, the bolt 17px above the title */
   .contact-modal__step--intro {
     justify-content: center;

@@ -1,6 +1,7 @@
 import { studioTime, TIME_ZONE } from '../lib/time';
 import { WEATHER_URL, weatherScene } from '../lib/weather';
 import type { PageScope } from './page-scope';
+import { crossfade, enter } from './motion';
 
 type Current = { temperature_2m: number; weather_code: number; is_day: number };
 
@@ -30,9 +31,16 @@ export function initWeather({ signal }: PageScope) {
       widgets.forEach((w) => {
         const photos: Record<string, string> = JSON.parse(w.dataset.weather!);
         const img = w.querySelector('img')!;
-        if (photos[scene.key]) img.src = photos[scene.key];
-        w.querySelector('[data-weather-temp]')!.textContent = `${Math.round(c.temperature_2m)} °`;
-        w.querySelector('[data-weather-condition]')!.textContent = scene.label;
+        if (photos[scene.key]) crossfade(img, photos[scene.key]);
+        // The build-time values give way to the live ones; only what actually changed fades in.
+        const swap = (sel: string, text: string) => {
+          const el = w.querySelector<HTMLElement>(sel)!;
+          if (el.textContent === text) return;
+          el.textContent = text;
+          enter(el, 'translateY(0.25rem)', 0, 200);
+        };
+        swap('[data-weather-temp]', `${Math.round(c.temperature_2m)} °`);
+        swap('[data-weather-condition]', scene.label);
       });
     })
     .catch(() => {});

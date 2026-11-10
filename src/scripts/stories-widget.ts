@@ -1,4 +1,5 @@
 import { reducedMotion } from './media';
+import { easeOut } from './motion';
 import type { PageScope } from './page-scope';
 import { showOnly } from './show-only';
 
@@ -24,22 +25,39 @@ export function initStoriesWidget(scope: PageScope) {
     let at = -1;
     let frame = 0;
     let started = 0;
+    let closing: Animation | undefined;
 
     // Focus only moves back to a ring when it was inside the widget: an auto-ending story must not pull a
     // visitor out of the contact form they started typing in.
     const close = () => {
       cancelAnimationFrame(frame);
       const hadFocus = w.contains(document.activeElement);
-      viewer.hidden = true;
+      // Fades out over the rings (clicks already pass through), then hides; reopening cancels the fade.
+      viewer.style.pointerEvents = 'none';
+      closing = viewer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: easeOut(), fill: 'forwards' });
+      closing.finished.then(() => at === -1 && (viewer.hidden = true), () => {});
       row.inert = false;
       if (hadFocus) rings[Math.max(0, at)]?.focus({ preventScroll: true });
       at = -1;
     };
+    // Opening grows the viewer out of the ring that was tapped, so it is clear where it came from.
+    const grow = (ring: HTMLElement) => {
+      closing?.cancel();
+      const box = w.getBoundingClientRect();
+      const face = (ring.querySelector('.stories__face') ?? ring).getBoundingClientRect();
+      viewer.style.transformOrigin = `${face.left + face.width / 2 - box.left}px ${face.top + face.height / 2 - box.top}px`;
+      viewer.animate(reducedMotion() ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'none' }], {
+        duration: 220,
+        easing: easeOut(),
+      });
+    };
     const open = (i: number) => {
       if (i >= photos.length) return close();
-      const first = viewer.hidden;
+      const first = at === -1; // also true while the close fade still runs
       at = Math.max(0, i);
       viewer.hidden = false;
+      viewer.style.pointerEvents = '';
+      if (first) grow(rings[at]);
       row.inert = true; // the rings behind the viewer leave the tab order
       if (first) closeButton.focus({ preventScroll: true });
       rings[at].classList.add('is-seen');
