@@ -10,12 +10,12 @@ const projects = await getProjects();
 
 <PageLayout
   title="Projecten — Flits"
-  description="Websites, webshops, video en advertenties die we maakten voor ondernemers in Drenthe. Filter op type en branche."
+  description="Websites, webshops, video en advertenties die we maakten voor ondernemers in Drenthe."
 >
   <HeroPage
     breadcrumb={[{ label: 'Projecten' }]}
     title="Ons werk"
-    intro={['Websites, webshops, video en advertenties voor ondernemers in Drenthe.', 'Filter op type of branche.']}
+    intro={['Websites, webshops, video en advertenties voor ondernemers in Drenthe.']}
   />
   <ProjectArchive projects={projects} />
 </PageLayout>
