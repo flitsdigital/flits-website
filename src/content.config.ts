@@ -8,14 +8,15 @@ import { trackId } from './lib/spotify-ids';
 // Single entry point for content. Pages and sections only use getCollection()/getEntry(),
 // so swapping a loader (e.g. to Sanity) later does not touch components.
 
+/** Bunny Stream: HLS playlist + thumbnail. */
+const video = z.object({ src: z.url(), poster: z.url() });
+
 /** Case studies: one Markdown file per project. Add a new .md file to publish a case. */
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: ({ image }) => {
     /** A white text block on the case board. */
     const text = z.object({ title: z.string(), body: z.array(z.string()) });
-    /** Bunny Stream: HLS playlist + thumbnail; plays muted while in view. */
-    const video = z.object({ src: z.url(), poster: z.url() });
     const half = z.union([image(), text]);
     return z.object({
       client: z.string(),
@@ -55,8 +56,8 @@ const projects = defineCollection({
                 text,
                 z.object({ video }),
                 z.object({ gallery: z.object({ title: z.string(), images: z.array(image()).min(2) }) }),
-                /** Video fan posters, the first one in the centre. */
-                z.object({ videos: z.array(image()).min(1) }),
+                /** Video fan: Bunny videos, the first one in the centre. */
+                z.object({ videos: z.array(video).min(1) }),
                 z.tuple([half, half]),
               ]),
             )
@@ -216,7 +217,7 @@ const services = defineCollection({
         /** Media straddling the hero's bottom edge. */
         heroMedia: z
           .discriminatedUnion('type', [
-            z.object({ type: z.literal('videoFan'), posters: z.array(image()).min(1), overlap: z.number().default(24) }),
+            z.object({ type: z.literal('videoFan'), videos: z.array(video).min(1), overlap: z.number().default(24) }),
             z.object({ type: z.literal('photoPhone'), photo: image(), screen: image(), overlap: z.number().default(106) }),
           ])
           .optional(),

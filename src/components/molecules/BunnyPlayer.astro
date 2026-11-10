@@ -6,9 +6,11 @@ interface Props {
   poster: string;
   /** Fill the parent (which sets the size) and crop, instead of a 16:9 box. */
   cover?: boolean;
+  /** false: no autoplay; it plays (with sound) when someone presses play. */
+  autoplay?: boolean;
 }
 
-const { src, poster, cover = false } = Astro.props;
+const { src, poster, cover = false, autoplay = true } = Astro.props;
 ---
 
 <!-- Osmo "Custom Bunny HLS Player (Basic)" (scripts/bunny-player.ts): autoplays muted and looped while in view,
@@ -17,7 +19,7 @@ const { src, poster, cover = false } = Astro.props;
   class="bunny-player"
   data-bunny-player-init=""
   data-player-activated="false"
-  data-player-autoplay="true"
+  data-player-autoplay={String(autoplay)}
   data-player-hover="idle"
   data-player-src={src}
   data-player-status="idle"
