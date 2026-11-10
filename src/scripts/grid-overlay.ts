@@ -1,4 +1,4 @@
-import { gsap } from 'gsap';
+import { gsap } from './gsap';
 
 /**
  * Osmo "Animated Grid Overlay (Columns)", unchanged except: GSAP from npm, typed, storage wrapped

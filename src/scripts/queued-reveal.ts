@@ -1,32 +1,28 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from './gsap';
+import { reducedMotion } from './media';
 
 /**
  * Osmo "Queued Scroll Reveal", unchanged except: GSAP from npm, started per page view from app.ts (Swup)
  * with a cleanup, and nothing is hidden with reduced motion. Items entering the viewport join one
  * shared queue and fade/rise in one after another.
  */
-gsap.registerPlugin(ScrollTrigger);
-
 export function initQueuedScrollReveal(): (() => void) | void {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (reducedMotion()) return;
   const queue: Element[] = [];
   let isRunning = false;
-  const triggers: ScrollTrigger[] = [];
-  const revealed: Element[] = [];
 
-  document.querySelectorAll('[data-queued-reveal-group]').forEach((group) => {
-    const items = group.hasAttribute('data-queued-reveal-children') ? [...group.children] : [...group.querySelectorAll('[data-queued-reveal-item]')];
-    if (!items.length) return;
+  // The triggers' callbacks, and the delayed calls they start, run inside this context too
+  const ctx = gsap.context(() => {
+    document.querySelectorAll('[data-queued-reveal-group]').forEach((group) => {
+      const items = group.hasAttribute('data-queued-reveal-children') ? [...group.children] : [...group.querySelectorAll('[data-queued-reveal-item]')];
+      if (!items.length) return;
 
-    items.forEach((item) => {
-      if (item.getBoundingClientRect().bottom <= 0) return;
+      items.forEach((item) => {
+        if (item.getBoundingClientRect().bottom <= 0) return;
 
-      // Set items on load
-      gsap.set(item, { autoAlpha: 0, y: '4em' });
-      revealed.push(item);
+        // Set items on load
+        gsap.set(item, { autoAlpha: 0, y: '4em' });
 
-      triggers.push(
         ScrollTrigger.create({
           trigger: item,
           start: 'top 100%', // Reveal offset
@@ -40,8 +36,8 @@ export function initQueuedScrollReveal(): (() => void) | void {
               gsap.delayedCall(0.1, revealNext); // Delay
             }
           },
-        }),
-      );
+        });
+      });
     });
   });
 
@@ -62,9 +58,5 @@ export function initQueuedScrollReveal(): (() => void) | void {
     gsap.delayedCall(0.075, revealNext); // Stagger
   }
 
-  return () => {
-    triggers.forEach((t) => t.kill());
-    gsap.killTweensOf(revealNext);
-    gsap.killTweensOf(revealed);
-  };
+  return () => ctx.revert();
 }

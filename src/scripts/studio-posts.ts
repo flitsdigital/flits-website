@@ -1,4 +1,5 @@
 import { relativeDay } from '../lib/relative-day';
+import { showOnly } from './show-only';
 
 /** Bericht van de studio: ‹ › browse newer/older posts; dates are recomputed so a cached page stays right. */
 export function initStudioPosts() {
@@ -11,10 +12,7 @@ export function initStudioPosts() {
     let at = 0;
     const show = (i: number) => {
       at = Math.min(slides.length - 1, Math.max(0, i));
-      slides.forEach((s, n) => {
-        s.classList.toggle('is-active', n === at);
-        s.toggleAttribute('aria-hidden', n !== at);
-      });
+      showOnly(slides, at);
       if (pos) pos.textContent = `${at + 1}/${slides.length}`;
       if (newer) newer.disabled = at === 0;
       if (older) older.disabled = at === slides.length - 1;

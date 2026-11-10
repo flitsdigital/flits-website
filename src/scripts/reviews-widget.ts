@@ -1,3 +1,5 @@
+import { showOnly } from './show-only';
+
 /** Reviews widget: a new quote every 5 s, the dots jump, hover or focus pauses. */
 export function initReviewsWidget(): (() => void) | void {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-reviews-widget]')];
@@ -9,11 +11,7 @@ export function initReviewsWidget(): (() => void) | void {
     let paused = false;
     const show = (n: number) => {
       at = (n + quotes.length) % quotes.length;
-      quotes.forEach((q, i) => {
-        q.classList.toggle('is-active', i === at);
-        if (i === at) q.removeAttribute('aria-hidden');
-        else q.setAttribute('aria-hidden', 'true');
-      });
+      showOnly(quotes, at);
       dots.forEach((d, i) => d.setAttribute('aria-pressed', String(i === at)));
     };
     dots.forEach((d, i) => d.addEventListener('click', () => show(i)));

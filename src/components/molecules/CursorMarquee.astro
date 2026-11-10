@@ -15,7 +15,8 @@
 </div>
 
 <script>
-  import { gsap } from 'gsap';
+  import { gsap } from '../../scripts/gsap';
+  import { finePointer } from '../../scripts/media';
 
   function initCursorMarqueeEffect() {
     const hoverOutDelay = 0.4;
@@ -98,7 +99,7 @@
   }
 
   // Initialize Cursor with Marquee Effect (mouse/trackpad only: there is nothing to hover on touch)
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) initCursorMarqueeEffect();
+  if (finePointer()) initCursorMarqueeEffect();
 </script>
 
 <style>

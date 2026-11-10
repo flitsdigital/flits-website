@@ -1,5 +1,5 @@
-import { gsap } from 'gsap';
-import { osmo } from './radial-slider';
+import { gsap, osmo } from './gsap';
+import { reducedMotion } from './media';
 
 /**
  * Osmo "Rotating Text", adapted to the home hero's yellow bar: no SplitText line mask (the word box
@@ -9,7 +9,7 @@ import { osmo } from './radial-slider';
  * up out of the bar while the next rolls in.
  */
 export function initRotatingText(): (() => void) | void {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (reducedMotion()) return;
   const spans = [...document.querySelectorAll<HTMLElement>('[data-rotating-words]')];
   if (!spans.length) return;
   let stopped = false;

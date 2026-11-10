@@ -30,7 +30,7 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
     </p>}
   </SectionHeader>
   <!-- Figma: 600px cards, neighbours tilted 10° and raised (∪). Steps with the hands. -->
-  <RadialSlider label="Reviews van klanten" shape="valley" angle={10} equalHeight hands={{ item: 'review' }} class="reviews__stage">
+  <RadialSlider label="Reviews van klanten" shape="valley" angle={10} equalHeight hands={{ item: 'review', belowOnPhone: true }} class="reviews__stage">
     {centred.map((r) => <ReviewCard {...r.data} />)}
   </RadialSlider>
 </section>
@@ -76,7 +76,7 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
     margin: 0 0 6px; /* not tucked into the header's padding: the boxes would overlap; stage was 446px */
   }
 
-  /* Phone (inferred): no room beside the card, so the hands sit smaller underneath it */
+  /* Phone (inferred): the hands sit underneath the card (RadialSlider belowOnPhone) */
   @media (max-width: 767px) {
     .reviews {
       padding-bottom: 8rem;
@@ -84,16 +84,6 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
     .reviews :global(.reviews__stage) {
       height: 36rem;
       margin-top: 0;
-    }
-    .reviews :global(.reviews__stage .radial-slider__hand) {
-      top: calc(100% + 3.5rem);
-      scale: 0.6;
-    }
-    .reviews :global(.reviews__stage .radial-slider__hand--prev) {
-      margin-left: -2.75rem;
-    }
-    .reviews :global(.reviews__stage .radial-slider__hand--next) {
-      margin-left: 2.75rem;
     }
   }
 </style>

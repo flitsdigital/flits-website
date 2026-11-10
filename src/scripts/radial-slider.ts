@@ -1,6 +1,5 @@
-import { gsap } from 'gsap';
-import { CustomEase } from 'gsap/CustomEase';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, CustomEase, osmo } from './gsap';
+import { reducedMotion, finePointer } from './media';
 import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './radial-geometry';
 
 /**
@@ -24,10 +23,6 @@ import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './
 /** Visible space between neighbours, the same in every slider on the site (feedback 2026-10-24). */
 const GAP = 96;
 
-gsap.registerPlugin(CustomEase, ScrollTrigger);
-/** The site's motion curve (--ease-osmo in tokens.css) */
-export const osmo = CustomEase.create('osmo', 'M0,0 C0.625,0.05 0,1 1,1');
-
 /** A GSAP ease from CSS: `cubic-bezier(a, b, c, d)` becomes a CustomEase, anything else is a GSAP ease name. */
 function easeFromCss(value: string) {
   const bezier = value.match(/cubic-bezier\(([^)]+)\)/);
@@ -38,7 +33,7 @@ function easeFromCss(value: string) {
 
 /** Starts every slider on the page; returns a cleanup for page transitions (ticker, observers, tweens). */
 export function initRadialSliders(): () => void {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = reducedMotion();
   const cleanups: (() => void)[] = [];
 
   document.querySelectorAll<HTMLElement>('[data-radial-slider-init]').forEach((wrap) => {
@@ -112,7 +107,7 @@ export function initRadialSliders(): () => void {
     // Drift on the GSAP ticker. With a mouse: only while hovering. Touch screens have no hover, so there
     // it drifts by itself while on screen, and a tap toggles a lasting pause (WCAG 2.2.2).
     // The speed eases up and down over ~0.3s instead of jumping.
-    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const canHover = finePointer();
     let hovered = false;
     let paused = false;
     let inView = true;

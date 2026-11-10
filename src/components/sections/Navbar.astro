@@ -86,9 +86,11 @@ const services = await getServices();
 </header>
 
 <script>
+  import { mobileNav } from '../../scripts/media';
+
   const header = document.querySelector<HTMLElement>('[data-nav-status]');
   if (header) {
-    const mobile = window.matchMedia('(max-width: 991px)');
+    const mobile = mobileNav();
     const toggle = header.querySelector<HTMLButtonElement>('[data-nav-control="toggle"]')!;
 
     const setNav = (open: boolean) => {

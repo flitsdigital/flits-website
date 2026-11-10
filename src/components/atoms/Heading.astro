@@ -5,12 +5,13 @@ interface Props {
   size?: '116' | '96' | '76' | '64' | '48' | '36' | '24' | '16';
   id?: string;
   class?: string;
+  'aria-label'?: string;
 }
 
-const { as: Tag = 'h2', size = '64', id, class: className } = Astro.props;
+const { as: Tag = 'h2', size = '64', id, class: className, 'aria-label': label } = Astro.props;
 ---
 
-<Tag class:list={['heading', `heading--${size}`, className]} id={id}><slot /></Tag>
+<Tag class:list={['heading', `heading--${size}`, className]} id={id} aria-label={label}><slot /></Tag>
 
 <style>
   .heading {

@@ -1,7 +1,9 @@
+import { reducedMotion } from './media';
+
 /** 👈 👉 stepping through the process cards; returns a cleanup for page transitions. */
 export function initProcessSteps() {
   const observers: ResizeObserver[] = [];
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = reducedMotion();
 
   document.querySelectorAll<HTMLElement>('[data-steps]').forEach((root) => {
     const track = root.querySelector<HTMLElement>('[data-steps-track]')!;

@@ -23,7 +23,7 @@ const now = new Date();
 {posts.length > 0 && (
 <div class:list={['post', className]} data-studio-posts>
   {posts.map((p, i) => (
-    <article class:list={['post__slide', { 'is-active': i === 0, 'post__slide--photo': p.image }]} data-post aria-hidden={i === 0 ? undefined : 'true'}>
+    <article class:list={['post__slide', { 'is-active': i === 0, 'post__slide--photo': p.image }]} data-post inert={i !== 0}>
       {p.image && <Image class="post__photo" src={p.image} alt="" width={320} />}
       <div class="post__body">
         <p class="post__who">

@@ -1,4 +1,4 @@
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from './gsap';
 import { archiveView, type ArchiveSelection } from './project-filter';
 
 /** DOM adapter for /projecten: reads the cards once, keeps the selection, applies archiveView(). */
