@@ -106,12 +106,33 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     color: var(--gt);
   }
   .speed__seg {
+    position: relative;
     display: flex;
     padding: 2px;
     border-radius: var(--radius-pill);
     background: var(--color-light-100);
   }
+  /* The white pill under the chosen button slides across instead of jumping */
+  .speed__seg::before {
+    content: '';
+    position: absolute;
+    inset: 2px auto 2px 2px;
+    width: calc(50% - 2px);
+    border-radius: var(--radius-pill);
+    background: var(--color-light-0);
+    box-shadow: var(--shadow-chip);
+    transition: translate var(--duration-s) var(--ease-out);
+  }
+  .speed__seg:has(button:last-child[aria-pressed='true'])::before {
+    translate: 100% 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .speed__seg::before {
+      transition: none;
+    }
+  }
   .speed__seg button {
+    position: relative;
     flex: 1;
     padding: var(--space-4) 0;
     border: 0;
@@ -121,12 +142,10 @@ const date = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', 
     line-height: 1.3;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: background var(--duration-s) var(--ease-out), color var(--duration-s) var(--ease-out);
+    transition: color var(--duration-s) var(--ease-out);
   }
   .speed__seg button[aria-pressed='true'] {
-    background: var(--color-light-0);
     color: var(--color-dark-900);
-    box-shadow: var(--shadow-chip);
   }
   .speed__seg button:focus-visible {
     outline: 2px solid var(--color-focus);

@@ -1,3 +1,5 @@
+import { reducedMotion } from './media';
+import { easeOut } from './motion';
 import { sendLead } from './send-lead';
 
 /**
@@ -29,7 +31,11 @@ export function initContactModal() {
     nextLabel.textContent = step === 'done' ? 'Sluiten' : step === last ? 'Versturen' : 'Volgende';
   }
 
-  function show(s: number | 'done') {
+  // Forward steps come in from the right, back steps from the left (ContactModal.astro); the first view and a reset have no side.
+  const order = (s: number | 'done') => (s === 'done' ? last + 1 : s);
+  function show(s: number | 'done', directed = true) {
+    if (directed) form.dataset.dir = order(s) > order(step) ? 'next' : 'prev';
+    else delete form.dataset.dir;
     step = s;
     panels.forEach((p) => (p.hidden = p.dataset.step !== String(s)));
     dots.forEach((d, i) => (i === s ? d.setAttribute('aria-current', 'step') : d.removeAttribute('aria-current')));
@@ -45,12 +51,36 @@ export function initContactModal() {
     if (outcome === 'mail-app') dialog!.setAttribute('aria-labelledby', 'cm-title-mail');
   }
 
+  // Closing leaves the way it came in (CSS: rises in on desktop, slides up as a sheet on phones), then
+  // really closes. Opening again mid-way just cancels the exit.
+  let exit: Animation[] = [];
+  function stopExit() {
+    exit.forEach((a) => a.cancel());
+    exit = [];
+  }
+
   function open() {
+    stopExit();
     if (!dialog!.open) dialog!.showModal();
   }
 
   function close() {
-    dialog!.close();
+    if (!dialog!.open || exit.length) return;
+    const sheet = matchMedia('(max-width: 767px)').matches;
+    const card = reducedMotion()
+      ? [{ opacity: 1 }, { opacity: 0 }]
+      : sheet
+        ? [{ transform: 'none' }, { transform: 'translateY(100%)' }]
+        : [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(0.75rem) scale(0.98)' }];
+    const timing = { duration: sheet ? 240 : 180, easing: easeOut(), fill: 'forwards' as const };
+    exit = [dialog!.animate(card, timing), dialog!.animate([{ opacity: 1 }, { opacity: 0 }], { ...timing, duration: 150, pseudoElement: '::backdrop' })];
+    exit[0].finished.then(
+      () => {
+        dialog!.close();
+        stopExit(); // drop the faded-out end state, so the next open's CSS entrance shows
+      },
+      () => {},
+    );
   }
 
   next.addEventListener('click', () => {
@@ -68,11 +98,16 @@ export function initContactModal() {
   dialog.querySelector('[data-contact-modal-close]')!.addEventListener('click', close);
   // A click on the backdrop lands on the dialog itself, outside the card
   dialog.addEventListener('click', (e) => e.target === dialog && close());
+  // Escape: animate out too, instead of the browser's instant close
+  dialog.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    close();
+  });
   // Sent: start fresh next time
   dialog.addEventListener('close', () => {
     if (step !== 'done') return;
     form.reset();
-    show(0);
+    show(0, false);
   });
   // A page change (e.g. "Klik dan hier") closes it; the dialog itself stays across Swup visits
   document.addEventListener('flits:navigate', close);
@@ -92,5 +127,5 @@ export function initContactModal() {
     true,
   );
 
-  show(0);
+  show(0, false);
 }

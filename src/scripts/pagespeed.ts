@@ -17,13 +17,17 @@ export function initPageSpeed(scope: PageScope) {
     const num = w.querySelector<HTMLElement>('[data-speed-num]')!;
     const buttons = [...w.querySelectorAll<HTMLButtonElement>('[data-speed-device]')];
     let device: 'mobile' | 'desktop' = 'mobile';
+    let shown = 0; // the value on screen right now
     let frame = 0;
 
     const set = (v: number) => {
+      shown = v;
       arc.style.strokeDashoffset = String(100 - v);
       num.textContent = String(Math.round(v));
       gauge.dataset.band = band(v);
     };
+    // The first reveal counts up from 0 (1.4 s); switching device moves from the current score to the new one
+    // (0.6 s), so the ring never drops to 0 first. A new switch takes over from wherever the ring is.
     const show = () => {
       const raw = w.dataset[device];
       if (!raw) return; // no score yet: keep "—"
@@ -31,10 +35,12 @@ export function initPageSpeed(scope: PageScope) {
       const to = Number(raw);
       gauge.setAttribute('aria-label', `PageSpeed-score ${to} van 100`);
       if (reducedMotion()) return set(to);
+      const from = shown;
+      const duration = from === 0 ? 1400 : 600;
       const start = performance.now();
       const tick = (now: number) => {
-        const t = Math.min(1, (now - start) / 1400);
-        set(to * (1 - (1 - t) ** 3));
+        const t = Math.min(1, (now - start) / duration);
+        set(from + (to - from) * (1 - (1 - t) ** 3));
         if (t < 1) frame = scope.frame(tick);
       };
       frame = scope.frame(tick);

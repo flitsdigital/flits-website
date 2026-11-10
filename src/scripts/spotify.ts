@@ -1,6 +1,7 @@
 import { neighbours } from '../lib/spotify-ids';
 import type { Track } from '../lib/spotify';
 import type { PageScope } from './page-scope';
+import { enter, crossfade } from './motion';
 /**
  * Inline playback for the Spotify widget through Spotify's iFrame API: a hidden embed plays the track,
  * our own play button and progress bar drive and follow it. Nothing from Spotify loads (no script, no
@@ -72,13 +73,14 @@ export function initSpotify(scope: PageScope) {
         .finally(() => widget.removeAttribute('data-loading'));
     };
     // Previous / next: update the widget, and if Spotify is loaded, load the new track (and keep playing if it was).
-    const show = (i: number) => {
+    // dir is 1 for next, -1 for previous: the covers slide in from that side, like a carousel.
+    const show = (i: number, dir: number) => {
       index = i;
       const t = tracks[i];
       const { prev, next } = neighbours(i, tracks.length);
       const $ = <T extends HTMLElement>(sel: string) => widget.querySelector<T>(sel)!;
       $<HTMLImageElement>('[data-spotify-now]').src = t.cover;
-      $<HTMLImageElement>('[data-spotify-glow]').src = t.cover;
+      crossfade($<HTMLImageElement>('[data-spotify-glow]'), t.cover);
       $('[data-spotify-title]').textContent = t.title;
       $('[data-spotify-artist]').textContent = t.artist;
       const link = $<HTMLAnchorElement>('[data-spotify-link]');
@@ -90,8 +92,15 @@ export function initSpotify(scope: PageScope) {
         b.querySelector('img')!.src = side.cover;
         b.setAttribute('aria-label', `${b.dataset.spotifyStep === '-1' ? 'Vorig' : 'Volgend'} nummer: ${side.title}`);
       });
+      enter($('[data-spotify-now]'), `translateX(${dir * 25}%) scale(0.92)`);
+      steps.forEach((b) => enter(b, `translateX(${dir * 30}%)`));
+      enter($('[data-spotify-text]'), `translateX(${dir * 0.5}rem)`, 40);
       widget.dataset.spotify = t.uri;
+      // Straight back to 0: the bar's own transition is for following playback, not for rewinding.
+      fill.style.transition = 'none';
       fill.style.width = '0';
+      void fill.offsetWidth;
+      fill.style.transition = '';
       const wasPlaying = widget.hasAttribute('data-playing');
       controller?.then(
         (c) => {
@@ -102,7 +111,10 @@ export function initSpotify(scope: PageScope) {
       );
     };
     const steps = [...widget.querySelectorAll<HTMLButtonElement>('[data-spotify-step]')];
-    const onStep = (e: Event) => show(((index + Number((e.currentTarget as HTMLElement).dataset.spotifyStep)) % tracks.length + tracks.length) % tracks.length);
+    const onStep = (e: Event) => {
+      const dir = Number((e.currentTarget as HTMLElement).dataset.spotifyStep);
+      show(((index + dir) % tracks.length + tracks.length) % tracks.length, dir);
+    };
     if (tracks.length > 1) steps.forEach((b) => b.addEventListener('click', onStep, { signal: scope.signal }));
 
     button.addEventListener('click', onClick, { signal: scope.signal });

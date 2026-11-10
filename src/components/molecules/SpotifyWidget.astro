@@ -30,8 +30,8 @@ const right = tracks[next];
   <button class="spotify__cover spotify__cover--right" type="button" data-spotify-step="1" aria-label={`Volgend nummer: ${right.title}`}>
     <img src={right.cover} width="64" height="64" alt="" />
   </button>
-  <span class="spotify__text" aria-live="polite">
-    <span data-spotify-title>{now.title}</span>
+  <span class="spotify__text" aria-live="polite" data-spotify-text>
+    <span class="spotify__title" data-spotify-title>{now.title}</span>
     <span class="spotify__artist" data-spotify-artist>{now.artist}</span>
   </span>
   <img class="spotify__cover spotify__cover--now" src={now.cover} width="80" height="80" alt="" data-spotify-now />
@@ -145,10 +145,19 @@ const right = tracks[next];
     letter-spacing: -0.1px;
     text-align: center;
   }
+  /* One line each, so long titles ("… (feat. …)") never run into the player */
+  .spotify__text > span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   @media (max-width: 767px) {
     .spotify__text {
       font-size: 0.6875rem; /* 11px, like the other widget meta on phones */
     }
+  }
+  .spotify__title {
+    font-size: 0.75rem; /* 12px, also on phones */
   }
   .spotify__artist {
     opacity: 0.6;
@@ -223,18 +232,25 @@ const right = tracks[next];
     width: 0.5rem; /* 8px, the 24px icon scaled */
     height: 0.5rem;
   }
-  /* Pause: two bars, shown while playing */
+  /* Pause: two bars, shown while playing. Play and pause share one cell and swap with a quick scale-fade. */
   .spotify__pause {
-    display: none;
     width: 0.4375rem;
     height: 0.5rem;
     border-inline: 2px solid var(--color-dark-900);
   }
+  .spotify__play img,
+  .spotify__pause {
+    grid-area: 1 / 1;
+    transition: opacity 0.15s var(--ease-out), scale 0.15s var(--ease-out);
+  }
+  .spotify__pause,
   .spotify[data-playing] .spotify__play img {
-    display: none;
+    opacity: 0;
+    scale: 0.6;
   }
   .spotify[data-playing] .spotify__pause {
-    display: block;
+    opacity: 1;
+    scale: 1;
   }
   .spotify[data-loading] .spotify__play {
     animation: spotify-loading 0.8s var(--ease-in-out) infinite alternate;
@@ -267,6 +283,11 @@ const right = tracks[next];
     }
     .spotify[data-loading] .spotify__play {
       animation: none;
+    }
+    /* Icon swap: fade only (the scale jumps while invisible) */
+    .spotify__play img,
+    .spotify__pause {
+      transition: opacity 0.15s linear;
     }
   }
 </style>
