@@ -8,7 +8,7 @@
 const HLS_SRC = 'https://cdn.jsdelivr.net/npm/hls.js@1.6.11';
 let hlsLoading: Promise<void> | undefined;
 
-function loadHls() {
+export function loadHls() {
   hlsLoading ??= new Promise((resolve) => {
     const script = document.createElement('script');
     script.src = HLS_SRC;
