@@ -38,7 +38,83 @@ export function initBunnyPlayers(scope: PageScope) {
   });
 }
 
+/**
+ * Dock: a video someone started themselves (not the muted autoplay loops) keeps playing in a small card
+ * bottom-right once its player scrolls out of view, and goes home when the player is back in view.
+ * The <video> itself moves (same element, same hls.js stream); a synchronous move does not pause it.
+ * shortcut: the dock is per page (Swup cleanup closes it), upgrade if it should survive navigation.
+ */
+let dockEl = null;
+let docked = null; // { player, video, next }
+
+const PLAY_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="bunny-dock__play"><path d="M6 12V5.01c0-.96 1.04-1.56 1.87-1.08L14 7.43l6.1 3.48c.84.48.84 1.7 0 2.17L14 16.57l-6.13 3.5C7.04 20.55 6 19.95 6 18.99V12Z"/></svg>';
+const PAUSE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" class="bunny-dock__pause"><path d="M16 5v14M8 5v14"/></svg>';
+
+function syncDock() {
+  if (!docked || !dockEl) return;
+  const playing = !docked.video.paused;
+  dockEl.toggleAttribute('data-playing', playing);
+  dockEl.querySelector('[data-dock="toggle"]').setAttribute('aria-label', playing ? 'Video pauzeren' : 'Video afspelen');
+}
+
+function getDock() {
+  if (dockEl) return dockEl;
+  dockEl = document.createElement('div');
+  dockEl.className = 'bunny-dock';
+  dockEl.setAttribute('role', 'region');
+  dockEl.setAttribute('aria-label', 'Video');
+  dockEl.innerHTML =
+    '<button type="button" class="bunny-dock__back" data-dock="back" aria-label="Terug naar de video"></button>' +
+    '<button type="button" class="bunny-dock__btn bunny-dock__toggle" data-dock="toggle">' + PLAY_SVG + PAUSE_SVG + '</button>' +
+    '<button type="button" class="bunny-dock__btn bunny-dock__close" data-dock="close" aria-label="Video stoppen en sluiten">' +
+    '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button>';
+  dockEl.addEventListener('click', (e) => {
+    const action = e.target.closest('[data-dock]')?.dataset.dock;
+    if (!docked || !action) return;
+    const { player, video } = docked;
+    if (action === 'toggle') video.paused ? video.play().catch(() => {}) : video.pause();
+    else if (action === 'close') { video.pause(); undock(); }
+    else if (action === 'back') {
+      player.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' }); // in view again → it goes home
+    }
+  });
+  document.body.append(dockEl);
+  void dockEl.offsetWidth; // first frame hidden, so the first dock transitions in
+  return dockEl;
+}
+
+function dock(player, video) {
+  if (docked?.video === video) return;
+  if (docked) { docked.video.pause(); undock(); }
+  const dockBox = getDock();
+  const r = player.getBoundingClientRect();
+  dockBox.style.setProperty('--ar', String(r.width / r.height || 16 / 9)); // the crop the visitor was watching
+  docked = { player, video, next: video.nextSibling };
+  dockBox.prepend(video);
+  player.setAttribute('data-player-docked', '');
+  video.addEventListener('play', syncDock);
+  video.addEventListener('pause', syncDock);
+  syncDock();
+  dockBox.setAttribute('data-shown', '');
+}
+
+function undock() {
+  if (!docked) return;
+  const { player, video, next } = docked;
+  docked = null;
+  video.removeEventListener('play', syncDock);
+  video.removeEventListener('pause', syncDock);
+  player.insertBefore(video, next);
+  player.removeAttribute('data-player-docked');
+  dockEl?.removeAttribute('data-shown');
+}
+
 function initBunnyPlayerBasic(scope) {
+  scope.add(() => { // added after the pause-all cleanup, so it runs first: the video goes home, then pauses
+    undock();
+    dockEl?.remove();
+    dockEl = null;
+  });
   document.querySelectorAll(BASIC).forEach(function(player) {
     var src = player.getAttribute('data-player-src');
     if (!src) return;
@@ -141,7 +217,18 @@ function initBunnyPlayerBasic(scope) {
     video.addEventListener('pause', function() { pendingPlay = false; setStatus('paused'); });
     video.addEventListener('waiting', function() { setStatus('loading'); });
     video.addEventListener('canplay', function() { readyIfIdle(player, pendingPlay); });
-    video.addEventListener('ended', function() { pendingPlay = false; setStatus('paused'); setActivated(false); });
+    video.addEventListener('ended', function() { pendingPlay = false; setStatus('paused'); setActivated(false); if (docked?.video === video) undock(); });
+
+    // Played by hand (with sound): dock it while it plays and the player is (mostly) out of view
+    if (!autoplay) {
+      var dockIo = new IntersectionObserver(function(entries) {
+        var entry = entries[entries.length - 1];
+        if (entry.intersectionRatio >= 0.25) { if (docked?.video === video) undock(); }
+        else if (!video.paused) dock(player, video);
+      }, { threshold: [0, 0.25] }); // 0 too: started while already mostly out of view, it still docks on the way out
+      scope.add(() => dockIo.disconnect());
+      dockIo.observe(player);
+    }
 
     // Hover (basic: active on enter, idle on leave)
     function setHover(state) {
