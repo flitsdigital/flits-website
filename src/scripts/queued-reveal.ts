@@ -1,23 +1,23 @@
 import { gsap, ScrollTrigger } from './gsap';
 import { reducedMotion } from './media';
+import type { PageScope } from './page-scope';
 
 /**
  * Osmo "Queued Scroll Reveal", unchanged except: GSAP from npm, started per page view from app.ts (Swup)
- * with a cleanup, and nothing is hidden with reduced motion. Items entering the viewport join one
- * shared queue and fade/rise in one after another.
+ * with a cleanup, nothing is hidden with reduced motion, and the items are always the group's children.
+ * Items entering the viewport join one shared queue and fade/rise in one after another.
  */
-export function initQueuedScrollReveal(): (() => void) | void {
+export function initQueuedScrollReveal(scope: PageScope) {
   if (reducedMotion()) return;
   const queue: Element[] = [];
   let isRunning = false;
 
   // The triggers' callbacks, and the delayed calls they start, run inside this context too
-  const ctx = gsap.context(() => {
+  const ctx = gsap.context(() => {});
+  scope.add(() => ctx.revert());
+  ctx.add(() => {
     document.querySelectorAll('[data-queued-reveal-group]').forEach((group) => {
-      const items = group.hasAttribute('data-queued-reveal-children') ? [...group.children] : [...group.querySelectorAll('[data-queued-reveal-item]')];
-      if (!items.length) return;
-
-      items.forEach((item) => {
+      [...group.children].forEach((item) => {
         if (item.getBoundingClientRect().bottom <= 0) return;
 
         // Set items on load
@@ -57,6 +57,4 @@ export function initQueuedScrollReveal(): (() => void) | void {
     reveal(item);
     gsap.delayedCall(0.075, revealNext); // Stagger
   }
-
-  return () => ctx.revert();
 }

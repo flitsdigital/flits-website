@@ -1,8 +1,8 @@
 import { reducedMotion } from './media';
+import type { PageScope } from './page-scope';
 
-/** 👈 👉 stepping through the process cards; returns a cleanup for page transitions. */
-export function initProcessSteps() {
-  const observers: ResizeObserver[] = [];
+/** 👈 👉 stepping through the process cards. */
+export function initProcessSteps(scope: PageScope) {
   const reduceMotion = reducedMotion();
 
   document.querySelectorAll<HTMLElement>('[data-steps]').forEach((root) => {
@@ -28,8 +28,7 @@ export function initProcessSteps() {
     next.addEventListener('click', () => step(1));
     track.addEventListener('scroll', sync, { passive: true });
     const resize = new ResizeObserver(sync);
+    scope.add(() => resize.disconnect());
     resize.observe(track);
-    observers.push(resize);
   });
-  return () => observers.forEach((o) => o.disconnect());
 }

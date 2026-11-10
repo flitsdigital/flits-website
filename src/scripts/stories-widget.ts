@@ -1,4 +1,5 @@
 import { reducedMotion } from './media';
+import type { PageScope } from './page-scope';
 import { showOnly } from './show-only';
 
 const STORY_MS = 5000;
@@ -7,10 +8,9 @@ const STORY_MS = 5000;
  * Stories widget: a ring opens the viewer at that story; each runs 5 s with its bar, then the next;
  * after the last (or ×, or Escape) it closes and the rings it showed turn grey.
  */
-export function initStoriesWidget(): (() => void) | void {
+export function initStoriesWidget(scope: PageScope) {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-stories]')];
   if (!widgets.length) return;
-  const stops: (() => void)[] = [];
 
   widgets.forEach((w) => {
     const viewer = w.querySelector<HTMLElement>('[data-story-viewer]')!;
@@ -51,18 +51,15 @@ export function initStoriesWidget(): (() => void) | void {
       const tick = (now: number) => {
         const t = Math.min(1, (now - started) / STORY_MS);
         bars[at].style.width = `${still ? 100 : t * 100}%`;
-        if (t < 1) frame = requestAnimationFrame(tick);
+        if (t < 1) frame = scope.frame(tick);
         else open(at + 1);
       };
-      frame = requestAnimationFrame(tick);
+      frame = scope.frame(tick);
     };
 
     rings.forEach((r) => r.addEventListener('click', () => open(Number(r.dataset.story))));
     viewer.querySelectorAll<HTMLButtonElement>('[data-story-step]').forEach((b) => b.addEventListener('click', () => open(at + Number(b.dataset.storyStep))));
     closeButton.addEventListener('click', close);
     w.addEventListener('keydown', (e) => e.key === 'Escape' && !viewer.hidden && close());
-    stops.push(() => cancelAnimationFrame(frame));
   });
-
-  return () => stops.forEach((s) => s());
 }

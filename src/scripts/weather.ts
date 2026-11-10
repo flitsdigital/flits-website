@@ -1,5 +1,6 @@
 import { studioTime, TIME_ZONE } from '../lib/time';
 import { WEATHER_URL, weatherScene } from '../lib/weather';
+import type { PageScope } from './page-scope';
 
 type Current = { temperature_2m: number; weather_code: number; is_day: number };
 
@@ -17,15 +18,14 @@ const today = new Intl.DateTimeFormat('nl-NL', { timeZone: TIME_ZONE, day: 'nume
 const month = new Intl.DateTimeFormat('nl-NL', { timeZone: TIME_ZONE, month: 'numeric' });
 
 /** Live weather for Emmen in the weather widget; on a failed request the static design values stay. */
-export function initWeather(): (() => void) | void {
+export function initWeather({ signal }: PageScope) {
   const widgets = [...document.querySelectorAll<HTMLElement>('[data-weather]')];
   if (!widgets.length) return;
-  let stopped = false;
   widgets.forEach((w) => (w.querySelector('[data-weather-date]')!.textContent = today.format(new Date()).replace('.', '')));
 
   current()
     .then((c) => {
-      if (stopped) return;
+      if (signal.aborted) return; // the request is shared across views, so it is not aborted itself
       const scene = weatherScene(c.weather_code, c.temperature_2m, c.is_day === 1, studioTime().h, Number(month.format(new Date())));
       widgets.forEach((w) => {
         const photos: Record<string, string> = JSON.parse(w.dataset.weather!);
@@ -36,6 +36,4 @@ export function initWeather(): (() => void) | void {
       });
     })
     .catch(() => {});
-
-  return () => (stopped = true);
 }

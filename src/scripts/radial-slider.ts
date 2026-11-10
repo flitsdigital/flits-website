@@ -1,6 +1,7 @@
 import { gsap, CustomEase, osmo } from './gsap';
 import { reducedMotion, finePointer } from './media';
 import { radiusFor, arcPosition, wrapCentered, stepFor, rescaleOffset } from './radial-geometry';
+import type { PageScope } from './page-scope';
 
 /**
  * Radial Slider — items ride along a large circle and tilt with it.
@@ -31,10 +32,9 @@ function easeFromCss(value: string) {
   return CustomEase.create('radial-intro', `M0,0 C${a},${b} ${c},${d} 1,1`);
 }
 
-/** Starts every slider on the page; returns a cleanup for page transitions (ticker, observers, tweens). */
-export function initRadialSliders(): () => void {
+/** Starts every slider on the page; ticker, observers and tweens go with the page scope. */
+export function initRadialSliders(scope: PageScope) {
   const reduceMotion = reducedMotion();
-  const cleanups: (() => void)[] = [];
 
   document.querySelectorAll<HTMLElement>('[data-radial-slider-init]').forEach((wrap) => {
     const track = wrap.querySelector<HTMLElement>('[data-radial-slider-track]');
@@ -122,7 +122,7 @@ export function initRadialSliders(): () => void {
         render();
       };
       gsap.ticker.add(drift);
-      cleanups.push(() => gsap.ticker.remove(drift));
+      scope.add(() => gsap.ticker.remove(drift));
       if (canHover) {
         wrap.addEventListener('pointerenter', () => (hovered = true));
         wrap.addEventListener('pointerleave', () => (hovered = false));
@@ -132,7 +132,7 @@ export function initRadialSliders(): () => void {
         });
         const visibility = new IntersectionObserver((e) => (inView = !!e[0]?.isIntersecting));
         visibility.observe(wrap);
-        cleanups.push(() => visibility.disconnect());
+        scope.add(() => visibility.disconnect());
       }
     }
 
@@ -151,6 +151,7 @@ export function initRadialSliders(): () => void {
     };
     wrap.querySelector('[data-radial-slider-prev]')?.addEventListener('click', () => go(-1));
     wrap.querySelector('[data-radial-slider-next]')?.addEventListener('click', () => go(1));
+    scope.add(() => stepping?.kill());
 
     layout();
     // Entry intro, switched on from CSS (--radial-intro: <steps>): the items glide in along their own
@@ -178,17 +179,15 @@ export function initRadialSliders(): () => void {
         ease: osmo,
         scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom -100%', scrub: 0.6 },
       });
-      cleanups.push(() => turn.scrollTrigger?.kill(), () => turn.kill());
+      scope.add(() => {
+        turn.scrollTrigger?.kill();
+        turn.kill();
+      });
     }
-    const resize = new ResizeObserver(() => requestAnimationFrame(layout));
+    const resize = new ResizeObserver(() => scope.frame(layout));
+    scope.add(() => resize.disconnect());
     resize.observe(wrap);
     document.fonts?.ready.then(layout); // card heights change once the web fonts arrive
     wrap.dataset.radialSliderReady = '';
-    cleanups.push(() => {
-      resize.disconnect();
-      stepping?.kill();
-    });
   });
-
-  return () => cleanups.forEach((fn) => fn());
 }

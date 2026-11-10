@@ -1,4 +1,5 @@
 import { reducedMotion, finePointer } from './media';
+import type { PageScope } from './page-scope';
 
 /**
  * Osmo "Rotating Image Trail", unchanged except: fewer photos that stay longer and fade out instead of
@@ -8,9 +9,8 @@ import { reducedMotion, finePointer } from './media';
  * Touch screens have no cursor: there a virtual one drifts through the area in a slow figure eight
  * while it is on screen, and feeds the same trail.
  */
-export function initRotatingImageTrail(): (() => void) | void {
+export function initRotatingImageTrail(scope: PageScope) {
   if (reducedMotion()) return;
-  const cleanups: (() => void)[] = [];
 
   document.querySelectorAll<HTMLElement>('[data-trail-area]').forEach((area) => {
     const collection = area.querySelector('[data-trail-collection]');
@@ -27,6 +27,7 @@ export function initRotatingImageTrail(): (() => void) | void {
     const cardWidth = items[0].getBoundingClientRect().width;
     const stepDistance = cardWidth * 1.25; // Osmo 0.5: fewer photos
     const timers = new Set<number>();
+    scope.add(() => timers.forEach(clearTimeout));
     const later = (fn: () => void, ms: number) => {
       const id = window.setTimeout(() => {
         timers.delete(id);
@@ -84,10 +85,6 @@ export function initRotatingImageTrail(): (() => void) | void {
       trailTo(event.clientX - rect.left, event.clientY - rect.top, rect);
     };
     area.addEventListener('mousemove', onMove);
-    cleanups.push(() => {
-      area.removeEventListener('mousemove', onMove);
-      timers.forEach(clearTimeout);
-    });
 
     // Touch: a virtual cursor on a figure eight (one loop ≈ 9s), only while the area is on screen
     if (!finePointer()) {
@@ -100,19 +97,14 @@ export function initRotatingImageTrail(): (() => void) | void {
         const x = rect.width * (0.5 + 0.36 * Math.sin(t * 0.7));
         const y = rect.height * (0.55 + 0.3 * Math.sin(t * 1.4));
         trailTo(x, y, rect);
-        frame = requestAnimationFrame(drift);
+        frame = scope.frame(drift);
       };
       const visibility = new IntersectionObserver(([entry]) => {
         cancelAnimationFrame(frame);
-        if (entry?.isIntersecting) frame = requestAnimationFrame(drift);
+        if (entry?.isIntersecting) frame = scope.frame(drift);
       });
+      scope.add(() => visibility.disconnect());
       visibility.observe(area);
-      cleanups.push(() => {
-        visibility.disconnect();
-        cancelAnimationFrame(frame);
-      });
     }
   });
-
-  return () => cleanups.forEach((fn) => fn());
 }
