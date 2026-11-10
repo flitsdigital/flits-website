@@ -7,6 +7,8 @@
  */
 const HLS_SRC = 'https://cdn.jsdelivr.net/npm/hls.js@1.6.11';
 let hlsLoading: Promise<void> | undefined;
+// The Advanced player shares data-bunny-player-init (Osmo) but has its own script (bunny-player-advanced.ts)
+const BASIC = '[data-bunny-player-init]:not([data-bunny-player-advanced])';
 
 export function loadHls() {
   hlsLoading ??= new Promise((resolve) => {
@@ -19,7 +21,7 @@ export function loadHls() {
 }
 
 export function initBunnyPlayers(): (() => void) | void {
-  if (!document.querySelector('[data-bunny-player-init]')) return;
+  if (!document.querySelector(BASIC)) return;
   let cancelled = false;
   const observers = [];
   loadHls().then(() => {
@@ -28,7 +30,7 @@ export function initBunnyPlayers(): (() => void) | void {
   return () => {
     cancelled = true;
     observers.forEach((io) => io.disconnect());
-    document.querySelectorAll('[data-bunny-player-init]').forEach((player) => {
+    document.querySelectorAll(BASIC).forEach((player) => {
       try { player.querySelector('video')?.pause(); } catch (_) {}
       if (player._hls) { try { player._hls.destroy(); } catch (_) {} player._hls = null; }
     });
@@ -37,7 +39,7 @@ export function initBunnyPlayers(): (() => void) | void {
 
 function initBunnyPlayerBasic(observers) {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll('[data-bunny-player-init]').forEach(function(player) {
+  document.querySelectorAll(BASIC).forEach(function(player) {
     var src = player.getAttribute('data-player-src');
     if (!src) return;
 
