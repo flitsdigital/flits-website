@@ -27,7 +27,7 @@ export async function measure(siteUrl: string, key: string, { fetch: get = fetch
   return { mobile, desktop, measuredAt: new Date().toISOString(), stale: mobile === null && desktop === null };
 }
 
-/** Env at build (Astro loads .env into import.meta.env) and at runtime on Vercel (process.env). */
+/** Env at build (Astro loads .env into import.meta.env) and at runtime in the Worker (process.env, via nodejs_compat). */
 export const env = (name: string): string | undefined => process.env[name] ?? (import.meta as { env?: Record<string, string> }).env?.[name];
 
 /** One measurement per build, however many pages render the widget. Without key or URL: stale. */

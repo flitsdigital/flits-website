@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "flits-website-v2",
+  "compatibility_date": "2026-11-01",
+  // process.env holds vars and secrets (SITE_URL, PSI_API_KEY) with this flag.
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true }
+}

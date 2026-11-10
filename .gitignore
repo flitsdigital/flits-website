@@ -1,6 +1,7 @@
-node_modules/
-dist/
-.astro/
 .DS_Store
+.astro/
+.dev.vars*
 .env
-.vercel/
+.wrangler/
+dist/
+node_modules/
