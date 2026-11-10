@@ -1,5 +1,28 @@
 [
   {
+    "id": "de-koffiekoets",
+    "logo": "../assets/logos/koffiekoets.png",
+    "logoAlt": "De Koffiekoets",
+    "logoHeight": 79,
+    "quote": [
+      "Twee aardige jongemannen met veel kennis en expertise in hun vak! Ze hebben drie bedrijfsvideo’s voor mij opgenomen en nemen je daarbij volledig mee in het proces.",
+      "Ik ben ontzettend blij met de video’s voor mijn bedrijf én met de service die ze daarbij leveren. Absoluut een aanrader!"
+    ],
+    "author": "Thijs, De Koffiekoets",
+    "avatar": "../assets/images/reviews/thijs.jpg"
+  },
+  {
+    "id": "bioaktief",
+    "logo": "../assets/logos/bioaktief.svg",
+    "logoAlt": "Bioaktief",
+    "logoHeight": 36,
+    "quote": [
+      "Ik heb nu sinds een half jaar mijn webshop onder gebracht bij Flits voor de marketing en ben ontzettend tevreden!",
+      "De jongens zijn secuur, komen hun afspraken na, korte lijntjes, denken met je mee en dringen niks op. Een aanrader als je opzoek bent naar een professioneel en betrouwbaar marketingbureau."
+    ],
+    "author": "Patrick, Bioaktief"
+  },
+  {
     "id": "kaasloods28",
     "logo": "../assets/logos/kaasloods.svg",
     "logoAlt": "Kaasloods 28",
@@ -12,16 +35,14 @@
     "avatar": "../assets/images/fan/kaasloods.jpg"
   },
   {
-    "id": "oldenziel",
-    "logo": "../assets/logos/oldenziel.svg",
-    "logoAlt": "Oldenziel Koelen en Verwarmen",
-    "logoHeight": 52,
+    "id": "chaos-in-de-venen",
+    "logo": "../assets/logos/chaos-in-de-venen.png",
+    "logoAlt": "Chaos in de Venen",
+    "logoHeight": 40,
     "quote": [
-      "We zijn erg blij met het werk van de jongens van flits digital. Ook de prettige samenwerking tijdens onze contact momenten en het mooie ontwerp wat ze voor ons gemaakt hebben.",
-      "De reacties op onze nieuwe website zijn erg positief. Zeker een aanrader😁👍👍👍"
+      "Topservice! Zeer prettig samengewerkt met Flits Digital. Goed advies, goede begeleiding en leveren een topwebsite af!"
     ],
-    "author": "Janfred, Oldenziel Airco Service",
-    "avatar": "../assets/images/reviews/avatar-placeholder.jpg"
+    "author": "Niels, Chaos in de Venen"
   },
   {
     "id": "premiumcars",
@@ -32,19 +53,119 @@
       "Begin 2025 zijn wij gestart met PremiumCars nl Vanaf dag één heeft Flits ons geholpen met het ontwikkelen van onze complete huisstijl én het bouwen van onze website.",
       "Wat ik vooral waardeer, is hun betrokkenheid, creativiteit en bereikbaarheid. Je merkt dat hier een team zit dat echt met je meedenkt en net zo gedreven is om iets moois neer te zetten als jijzelf."
     ],
-    "author": "Martijn, PremiumCars.nl BV",
-    "avatar": "../assets/images/reviews/avatar-placeholder.jpg"
+    "author": "Martijn, PremiumCars.nl BV"
   },
   {
-    "id": "de-koffiekoets",
-    "logo": "../assets/logos/koffiekoets.png",
-    "logoAlt": "De Koffiekoets",
-    "logoHeight": 79,
+    "id": "raycruiting",
+    "logo": "../assets/logos/raycruiting.png",
+    "logoAlt": "Raycruiting",
+    "logoHeight": 36,
+    "quote": [
+      "2 serieuze ondernemers welke waarde geven aan kwaliteit, staan altijd klaar voor je, communicatie verloopt vlekkeloos en ik zou hun altijd aanraden. Tot snel heren!"
+    ],
+    "author": "Raycruiting"
+  },
+  {
+    "id": "menges-de-vries",
+    "logo": "../assets/logos/menges-de-vries.svg",
+    "logoAlt": "Menges & De Vries Verkoop",
+    "logoHeight": 44,
+    "quote": [
+      "Wij waren op zoek naar een manier om ons bedrijf op een aantrekkelijke manier te presenteren op social media, met behulp van korte filmpjes. Flits Digital heeft dit fantastisch opgepakt!",
+      "De video’s zien er professioneel uit, passen perfect bij onze uitstraling en we krijgen ontzettend leuke reacties van klanten en volgers. We zijn heel blij met het resultaat en de samenwerking — echt een aanrader!"
+    ],
+    "author": "Menges & De Vries Verkoop"
+  },
+  {
+    "id": "tjoba",
+    "logo": "../assets/logos/tjoba.svg",
+    "logoAlt": "Tjoba Klazienaveen",
+    "logoHeight": 56,
+    "quote": [
+      "Goed resultaat met duidelijke uitleg over de nieuwe website. En snelle service als er iets gewijzigd moet worden.",
+      "Hier kunnen wij van Tjoba weer jaren mee vooruit."
+    ],
+    "author": "Geert, Tjoba Klazienaveen"
+  },
+  {
+    "id": "oldenziel",
+    "logo": "../assets/logos/oldenziel.svg",
+    "logoAlt": "Oldenziel Koelen en Verwarmen",
+    "logoHeight": 52,
     "quote": [
       "We zijn erg blij met het werk van de jongens van flits digital. Ook de prettige samenwerking tijdens onze contact momenten en het mooie ontwerp wat ze voor ons gemaakt hebben.",
-      "De reacties op onze nieuwe website zijn erg positief. Zeker een aanrader😀👍👍👍"
+      "De reacties op onze nieuwe website zijn erg positief. Zeker een aanrader😁👍👍👍"
     ],
-    "author": "Thijs, De Koffiekoets",
-    "avatar": "../assets/images/reviews/thijs.jpg"
+    "author": "Janfred, Oldenziel Airco Service"
+  },
+  {
+    "id": "car-rally-noord",
+    "logo": "../assets/logos/cr-noord.svg",
+    "logoAlt": "Car Rally Noord",
+    "logoHeight": 56,
+    "quote": [
+      "Wij zijn erg tevreden over de samenwerking! Vooral de communicatie was uitstekend – duidelijk, snel en professioneel.",
+      "Dit maakte alles erg prettig en efficiënt. Zeker een aanrader"
+    ],
+    "author": "Car Rally Noord"
+  },
+  {
+    "id": "de-huyskamer",
+    "logo": "../assets/logos/de-huyskamer.svg",
+    "logoAlt": "De Huyskamer Klazienaveen",
+    "logoHeight": 22,
+    "quote": [
+      "Alles goed geregeld! Het contact met de jongens is ook super.",
+      "Ze denken met je mee, en maken daardoor een “persoonlijke” site!"
+    ],
+    "author": "Patricia, De Huyskamer"
+  },
+  {
+    "id": "uw-glazenwassers",
+    "logo": "../assets/logos/uw-glazenwassers.svg",
+    "logoAlt": "Uw Glazenwassers Emmen",
+    "logoHeight": 52,
+    "quote": [
+      "Bijna onwerkelijk hoe mooi het resultaat is geworden, echt boven verwachting! Jullie luisteren goed, pakken het snel op en zijn echte doeners. Geen lange praatjes, maar actie.",
+      "Daarnaast vind ik jullie ook nog eens super sociaal. Ga zo door, dan weet ik zeker dat jullie nog verder gaan groeien!"
+    ],
+    "author": "Ramon, Uw Glazenwassers Emmen"
+  },
+  {
+    "id": "jhl-automotive",
+    "logo": "../assets/logos/jh-automotive.svg",
+    "logoAlt": "JHL Automotive",
+    "logoHeight": 52,
+    "quote": [
+      "Zeer tevreden!",
+      "Communicatie is uitstekend, de mannen werken vlot, zijn altijd goed bereikbaar en komen met sterke ideeën. Een top ervaring!"
+    ],
+    "author": "Luca, JHL Automotive"
+  },
+  {
+    "id": "car-cleaning-joldersma",
+    "logoAlt": "Car Cleaning Joldersma",
+    "quote": [
+      "Top service, goede ideeën. Mooi eindproduct, persoonlijk contact. Echt een aanrader... Mijn website is fantastisch geworden past veel beter bij onze diensten."
+    ],
+    "author": "Car Cleaning Joldersma"
+  },
+  {
+    "id": "drentse-vloerverwarming-specialist",
+    "logo": "../assets/logos/drentse-vloerverwarming-specialist.svg",
+    "logoAlt": "Drentse Vloerverwarming Specialist",
+    "logoHeight": 40,
+    "quote": [
+      "Fijn bedrijf om mee te communiceren en doen wat ze zeggen!"
+    ],
+    "author": "Drentse Vloerverwarming Specialist"
+  },
+  {
+    "id": "assurantieservice-drenthe",
+    "logoAlt": "AssurantieService Drenthe",
+    "quote": [
+      "Enthousiaste mannen. Vakkundig, origineel en goed in wat ze doen! We hebben een mooie website door hun toedoen."
+    ],
+    "author": "Carla, AssurantieService Drenthe"
   }
 ]

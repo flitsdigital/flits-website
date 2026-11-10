@@ -20,5 +20,5 @@ test('a long sentence is cut at a word with an ellipsis', () => {
 
 test('first name from the author line', () => {
   assert.equal(firstName('Rik, Kaasloods28'), 'Rik');
-  assert.equal(firstName('Henk Jansen'), 'Henk');
+  assert.equal(firstName('Car Rally Noord'), 'Car Rally Noord');
 });

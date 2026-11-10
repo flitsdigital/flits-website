@@ -85,13 +85,15 @@ const reviews = defineCollection({
   loader: file('./src/content/reviews.json'),
   schema: ({ image }) =>
     z.object({
-      logo: image(),
+      /** Without a logo the card shows logoAlt as text. */
+      logo: image().optional(),
       logoAlt: z.string(),
       /** Rendered logo height in px; logos have no common size. */
       logoHeight: z.number().default(24),
       quote: z.array(z.string()),
       author: z.string(),
-      avatar: image(),
+      /** Only real photos; without one the card shows just the name. */
+      avatar: image().optional(),
     }),
 });
 
