@@ -25,8 +25,8 @@ interface Props {
 
 const { id, size, fallback, today, class: className } = Astro.props;
 
-// Every widget a slot can show. Add new ones here and in src/data/widgets.ts.
-const components: Partial<Record<WidgetId, typeof WeatherWidget>> = {
+// Every widget a slot can show. A complete Record: a new WidgetId without a component here fails `astro check`.
+const components: Record<WidgetId, typeof WeatherWidget> = {
   weather: WeatherWidget,
   spotify: SpotifyWidget,
   christmas: ChristmasWidget,
@@ -43,10 +43,12 @@ const counts: Partial<Record<WidgetId, number>> = {
   office: (await getCollection('officePhotos')).length,
   stories: (await getCollection('stories')).length,
   'studio-post': (await getCollection('studioPosts')).length,
+  spotify: (await getCollection('tracks')).length,
   pagespeed: (await measureAtBuild()).mobile === null ? 0 : 1, // no key / no score yet: not a "— meting volgt" card
 };
-const available = (w: WidgetId) => w in components && counts[w] !== 0;
-const pinned = fixed[pagePath(Astro.url.pathname)]?.[id];
+const available = (w: WidgetId) => counts[w] !== 0;
+// A pinned widget still needs something to show; without it the slot picks as if nothing were pinned.
+const pinned = [fixed[pagePath(Astro.url.pathname)]?.[id]].find((w) => w && available(w));
 // The fallback first, then the rest of the pool; only widgets that have something to show.
 const pool = pinned ? [] : candidates([fallback, ...pools[size].filter((w) => w !== fallback)], available);
 const seasons = Object.fromEntries(pool.map((w) => [w, widgets[w].season]).filter(([, s]) => s));
@@ -75,7 +77,7 @@ const live = templates.length > 0;
 >
   {Shown && <Shown />}
   {live && templates.map((w) => {
-    const C = components[w]!;
+    const C = components[w];
     return <template data-slot-option={w}><C /></template>;
   })}
 </div>
