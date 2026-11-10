@@ -3,13 +3,14 @@ import type { ImageMetadata } from 'astro';
 import Avatar from '../atoms/Avatar.astro';
 
 interface Props {
-  logo: ImageMetadata;
+  /** Without a logo, logoAlt is shown as the company name. */
+  logo?: ImageMetadata;
   /** Rendered logo height in px (Figma slot size). */
   logoHeight: number;
   logoAlt: string;
   quote: string[];
   author: string;
-  avatar: ImageMetadata;
+  avatar?: ImageMetadata;
   class?: string;
 }
 
@@ -17,17 +18,21 @@ const { logo, logoHeight, logoAlt, quote, author, avatar, class: className } = A
 ---
 
 <figure class:list={['review-card', className]}>
-  <img
-    class="review-card__logo"
-    src={logo.src}
-    width={logo.width}
-    height={logo.height}
-    alt={logoAlt}
-    style={`height:${logoHeight}px`}
-  />
+  {logo ? (
+    <img
+      class="review-card__logo"
+      src={logo.src}
+      width={logo.width}
+      height={logo.height}
+      alt={logoAlt}
+      style={`height:${logoHeight}px`}
+    />
+  ) : (
+    <p class="review-card__name">{logoAlt}</p>
+  )}
   <blockquote class="review-card__quote">{quote.map((p) => <p>{p}</p>)}</blockquote>
   <figcaption class="review-card__author">
-    <Avatar src={avatar} />
+    {avatar && <Avatar src={avatar} />}
     <span>{author}</span>
   </figcaption>
 </figure>
@@ -46,6 +51,9 @@ const { logo, logoHeight, logoAlt, quote, author, avatar, class: className } = A
   }
   .review-card__logo {
     width: auto;
+  }
+  .review-card__name {
+    font: var(--text-display-24);
   }
   .review-card__quote {
     display: grid;
