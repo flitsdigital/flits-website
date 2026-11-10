@@ -43,6 +43,10 @@ const centred = [...reviews.slice(1), ...reviews.slice(0, 1)];
     padding-top: 1.875rem; /* 30px */
     padding-bottom: 4.1875rem; /* 67px: next section's header begins here */
   }
+  /* Last on the page (over ons): room above the footer instead of the next header */
+  .reviews:last-child {
+    padding-bottom: 8rem;
+  }
   .reviews__bg {
     position: absolute;
     top: -199px;
