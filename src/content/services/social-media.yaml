@@ -40,7 +40,7 @@ page:
         - { icon: quote, title: Je staat niet graag voor de camera, text: 'Zodra de camera loopt, klinkt het ineens stijf.' }
         - { icon: quote, title: Je betaalde al eens voor content die niks opleverde, text: 'Mooie beelden, maar geen enkele nieuwe klant.' }
     - type: logoFan
-      proof: 25+ bedrijven gingen je al voor!
+      proof: '{clients} bedrijven gingen je al voor!' # {clients} = clients in data/site.ts
       cta: { label: 'Ja, ik herken mezelf hier in...', href: '#contact' }
     - type: behindTheScenes
       title: Een kijkje achter de schermen

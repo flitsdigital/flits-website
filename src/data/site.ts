@@ -19,11 +19,14 @@ export const contact = {
 /** Google rating shown above the reviews. */
 export const rating = { score: '4,9', count: '30' }; // Dutch notation; shortcut: typed from the Google profile, update by hand
 
+/** The one client count on the site (over ons, logo fan): the Google reviews make it checkable. */
+export const clients = `${rating.count}+`;
+
 export const socials = [
-  { icon: 'instagram', label: 'Instagram', href: '#' },
-  { icon: 'facebook', label: 'Facebook', href: '#' },
-  { icon: 'tiktok', label: 'TikTok', href: '#' },
-  { icon: 'linkedin', label: 'LinkedIn', href: '#' },
+  { icon: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/wijzijnflits/' },
+  { icon: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61566720772653' },
+  { icon: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@wijzijnflits' },
+  { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/flitsdigital/' },
 ] as const;
 
 export const legal = [
