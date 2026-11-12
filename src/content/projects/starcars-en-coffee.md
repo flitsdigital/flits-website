@@ -7,8 +7,6 @@ types: [Video]
 sector: Evenementen
 cover: ../../assets/images/projects/starcars-en-coffee.jpg
 caseStudy:
-  # Draft until the facts below are filled in and the Bunny video is encoded: the page only builds in `astro dev`
-  draft: true
   heroTitle: Voor het tweede jaar op rij de video van Starcars en Coffee
   hero: ../../assets/images/projects/starcars-en-coffee.jpg
   intro:
@@ -24,6 +22,6 @@ caseStudy:
         poster: https://vz-c3a5e4d9-74d.b-cdn.net/e50a1415-6a56-4d88-83ff-df5eef2bd314/thumbnail.jpg
 ---
 
-Starcars en Coffee is een evenement voor liefhebbers van mooie auto's. [Waar en wanneer was de editie van 2026, en hoeveel auto's en bezoekers kwamen er?]
+Starcars en Coffee is een evenement voor liefhebbers van mooie auto's.
 
 Voor het tweede jaar op rij maakten wij de video. Met een camera op de grond en een drone in de lucht.
