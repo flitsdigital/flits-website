@@ -10,7 +10,7 @@ import TeamSection from '../components/sections/TeamSection.astro';
 import ClientLogoGrid from '../components/sections/ClientLogoGrid.astro';
 import BehindTheScenes from '../components/sections/BehindTheScenes.astro';
 import ReviewsCarousel from '../components/sections/ReviewsCarousel.astro';
-import { serviceTicker } from '../data/site';
+import { serviceTicker, clients, rating } from '../data/site';
 import heroTeam from '../assets/images/about/hero-team.jpg';
 import fanLeft from '../assets/images/fan/truck-left.jpg';
 import fanCenter from '../assets/images/fan/kaasloods.jpg';
@@ -43,9 +43,9 @@ const lorem = 'Je concurreert niet met die ene zaak verderop. Je concurreert met
     title="Hét marketing bureau in emmen"
     lead={lorem}
     stats={[
-      { label: 'Tevreden opdrachtgevers', value: '50+' },
-      { label: 'Tevreden opdrachtgevers', value: '50+' },
-      { label: 'Tevreden opdrachtgevers', value: '50+' },
+      { label: 'Tevreden opdrachtgevers', value: clients },
+      { label: 'Google-beoordeling', value: rating.score },
+      { label: 'Actief sinds', value: '2024' },
     ]}
   />
   <TeamSection title="Wie zijn wij?" lead={lorem} members={[joery, jordi]} theme="light" />
