@@ -19,7 +19,6 @@ caseStudy:
         - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c26efc1b-7f1f-4e72-992e-d0038c1ac7c9/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c26efc1b-7f1f-4e72-992e-d0038c1ac7c9/thumbnail.jpg } # KOFFIEKOETS1V2SUB
         - { src: https://vz-c3a5e4d9-74d.b-cdn.net/914f96d2-fc04-410a-8897-7229e44bb115/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/914f96d2-fc04-410a-8897-7229e44bb115/thumbnail.jpg } # KOFFIEKOETS2V2SUB
         - { src: https://vz-c3a5e4d9-74d.b-cdn.net/e617fda2-107f-4ab4-bf66-99fedff55b1b/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/e617fda2-107f-4ab4-bf66-99fedff55b1b/thumbnail.jpg } # KOFFIEKOETS4V2SUB
-        - { src: https://vz-c3a5e4d9-74d.b-cdn.net/748d6d09-5f36-4c73-a7f5-146610e9dc19/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/748d6d09-5f36-4c73-a7f5-146610e9dc19/thumbnail.jpg } # YOURCOACH1
         - { src: https://vz-c3a5e4d9-74d.b-cdn.net/2d7e77ab-ac28-491e-a60b-af1e3c78bce9/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/2d7e77ab-ac28-491e-a60b-af1e3c78bce9/thumbnail.jpg } # SHORT1_MAMBOWOOD
         - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c96de742-f9eb-4dd4-8428-0d1b17f462f8/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c96de742-f9eb-4dd4-8428-0d1b17f462f8/thumbnail.jpg } # JLHOOGWERKER
         - { src: https://vz-c3a5e4d9-74d.b-cdn.net/9ddf0417-c9a8-43db-a9d3-388330bcc2fb/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/9ddf0417-c9a8-43db-a9d3-388330bcc2fb/thumbnail.jpg } # VUURBOOM_CTA3_V1

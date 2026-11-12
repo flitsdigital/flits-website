@@ -13,7 +13,6 @@ page:
   heroMedia:
     type: videoFan
     videos: # Bunny Stream (library "Flits Video's"); the first one starts in the centre
-      - { src: https://vz-c3a5e4d9-74d.b-cdn.net/748d6d09-5f36-4c73-a7f5-146610e9dc19/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/748d6d09-5f36-4c73-a7f5-146610e9dc19/thumbnail.jpg } # YOURCOACH1
       - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c26efc1b-7f1f-4e72-992e-d0038c1ac7c9/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c26efc1b-7f1f-4e72-992e-d0038c1ac7c9/thumbnail.jpg } # KOFFIEKOETS1V2SUB
       - { src: https://vz-c3a5e4d9-74d.b-cdn.net/2d7e77ab-ac28-491e-a60b-af1e3c78bce9/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/2d7e77ab-ac28-491e-a60b-af1e3c78bce9/thumbnail.jpg } # SHORT1_MAMBOWOOD
       - { src: https://vz-c3a5e4d9-74d.b-cdn.net/c96de742-f9eb-4dd4-8428-0d1b17f462f8/playlist.m3u8, poster: https://vz-c3a5e4d9-74d.b-cdn.net/c96de742-f9eb-4dd4-8428-0d1b17f462f8/thumbnail.jpg } # JLHOOGWERKER
@@ -34,15 +33,15 @@ page:
       title: Misschien herken je dit wel...
       lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.
       items:
-        - { icon: quote, title: Je weet dat je iets moet, maar niet precies wat, text: Iedereen roept iets anders. Dus wacht je, en gebeurt er niks. }
-        - { icon: quote, title: Iemand zou het doen, maar het komt er nooit van, text: Zelf je website beheren? Geen probleem! Wij zorgen voor een eenvoudig systeem. }
+        - { icon: quote, title: 'Je weet dat je iets moet, maar niet precies wat', text: 'Iedereen roept iets anders. Dus wacht je, en gebeurt er niks.' }
+        - { icon: quote, title: 'Iemand zou het doen, maar het komt er nooit van', text: Zelf je website beheren? Geen probleem! Wij zorgen voor een eenvoudig systeem. }
         - { icon: quote, title: Je hebt geen tijd voor social media, text: Klanten en offertes gaan voor. Filmen schiet er altijd bij in. }
-        - { icon: quote, title: Je post wel eens iets, maar er gebeurt niks, text: Drie likes, waarvan één van je moeder. }
-        - { icon: quote, title: Je staat niet graag voor de camera, text: Zodra de camera loopt, klinkt het ineens stijf. }
-        - { icon: quote, title: Je betaalde al eens voor content die niks opleverde, text: Mooie beelden, maar geen enkele nieuwe klant. }
+        - { icon: quote, title: 'Je post wel eens iets, maar er gebeurt niks', text: 'Drie likes, waarvan één van je moeder.' }
+        - { icon: quote, title: Je staat niet graag voor de camera, text: 'Zodra de camera loopt, klinkt het ineens stijf.' }
+        - { icon: quote, title: Je betaalde al eens voor content die niks opleverde, text: 'Mooie beelden, maar geen enkele nieuwe klant.' }
     - type: logoFan
       proof: 25+ bedrijven gingen je al voor!
-      cta: { label: Ja, ik herken mezelf hier in..., href: '#contact' }
+      cta: { label: 'Ja, ik herken mezelf hier in...', href: '#contact' }
     - type: behindTheScenes
       title: Een kijkje achter de schermen
     - type: split
@@ -58,10 +57,10 @@ page:
       title: Hoe gaan we te werk?
       lead: Je concurreert niet met die ene zaak verderop. Je concurreert met memes, kattenfilmpjes en de vakantiefoto’s van je neef. Allemaal in dezelfde feed, allemaal binnen één duim-swipe.
       items:
-        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je doet met je bedrijf }
-        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: Waar staat je bedrijf in de markt, wat doet de concurrentie en hoe kunnen we hier van leren? }
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: 'We kijken eerst naar wie jij bent, en wat je doet met je bedrijf' }
+        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: 'Waar staat je bedrijf in de markt, wat doet de concurrentie en hoe kunnen we hier van leren?' }
         - { image: ../../assets/steps/step-3.jpg, title: Ideeën op papier, text: We beginnen met een ontwerp voor jouw website. }
-        - { image: ../../assets/steps/step-1.jpg, title: Opnamedag, text: We komen langs met camera, licht en een plan. }
+        - { image: ../../assets/steps/step-1.jpg, title: Opnamedag, text: 'We komen langs met camera, licht en een plan.' }
     - type: projects
       title: Short form content
       ticker: [Short form content]

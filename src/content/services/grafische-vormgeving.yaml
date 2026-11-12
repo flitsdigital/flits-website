@@ -16,7 +16,7 @@ page:
       title: Hoe gaan we te werk?
       lead: Van eerste schets tot bestanden die je overal kunt gebruiken, met een persoonlijke en duidelijke aanpak.
       items:
-        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je doet met je bedrijf }
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: 'We kijken eerst naar wie jij bent, en wat je doet met je bedrijf' }
         - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: Waar staat je bedrijf in de markt en hoe onderscheid je je? }
         - { image: ../../assets/steps/step-3.jpg, title: Ontwerp, text: We werken een paar richtingen uit en kiezen samen. }
     - type: faq

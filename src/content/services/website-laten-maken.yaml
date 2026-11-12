@@ -57,8 +57,8 @@ page:
       title: Hoe gaan we te werk?
       lead: We doen meer dan alleen websites bouwen. Wij bieden op maat gemaakte oplossingen die jouw bedrijf daadwerkelijk verder helpen, met een persoonlijke en duidelijke aanpak.
       items:
-        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je doet met je bedrijf }
-        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: Waar staat je bedrijf in de markt, wat doet de concurrentie en hoe kunnen we hier van leren? }
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: 'We kijken eerst naar wie jij bent, en wat je doet met je bedrijf' }
+        - { image: ../../assets/steps/step-2.jpg, title: Onderzoek, text: 'Waar staat je bedrijf in de markt, wat doet de concurrentie en hoe kunnen we hier van leren?' }
         - { image: ../../assets/steps/step-3.jpg, title: Ontwerp, text: We beginnen met een ontwerp voor jouw website. }
         - { image: ../../assets/steps/step-1.jpg, title: Bouwen, text: We bouwen je website en testen alles op mobiel en desktop. }
     - type: faq

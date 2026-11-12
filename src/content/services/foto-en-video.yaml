@@ -17,9 +17,9 @@ page:
       title: Hoe gaan we te werk?
       lead: Van idee tot montage, met een persoonlijke en duidelijke aanpak.
       items:
-        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: We kijken eerst naar wie jij bent, en wat je wilt laten zien }
+        - { image: ../../assets/steps/step-1.jpg, title: Ontdekkingsgesprek, text: 'We kijken eerst naar wie jij bent, en wat je wilt laten zien' }
         - { image: ../../assets/steps/step-2.jpg, title: Draaiplan, text: We schrijven het script en plannen de opnamedag. }
-        - { image: ../../assets/steps/step-3.jpg, title: Opnamedag, text: We komen langs met camera, licht en een plan. }
+        - { image: ../../assets/steps/step-3.jpg, title: Opnamedag, text: 'We komen langs met camera, licht en een plan.' }
     - type: faq
       title: Vragen die we vaak krijgen
       lead: Staat je vraag er niet bij? Stuur ons gerust een appje.
